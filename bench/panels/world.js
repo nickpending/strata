@@ -41,7 +41,12 @@ export async function mount(root, api) {
     viewer: null,
     received: [],
     form: { actor: null, verb: null, fields: {} },
+    /** A rule's refusal of the last action (422): `{ code, message }`, code from the closed set. */
     refusal: null,
+    /** Why the last action was malformed (400); never shown as a refusal and carries no code. */
+    invalid: null,
+    /** Why the last reset could not boot; the current world kept running. */
+    resetRefusal: null,
   };
   const view = h("div");
   root.append(view);
@@ -167,6 +172,13 @@ export async function mount(root, api) {
       h("button", { onclick: () => void runStep() }, "Step"),
       " ",
       h("button", { onclick: () => void runReset() }, "Reset"),
+      state.resetRefusal === null
+        ? null
+        : h(
+            "div",
+            { class: "refused" },
+            `reset refused (${state.resetRefusal.rule}), the current world is still running: ${state.resetRefusal.message}`,
+          ),
       h("h3", {}, "Schedule"),
       views.due.length === 0
         ? h("div", { class: "muted" }, "empty")
@@ -256,6 +268,13 @@ export async function mount(root, api) {
             { class: "refused" },
             `refused: ${state.refusal.code}: ${state.refusal.message}`,
           ),
+      state.invalid === null
+        ? null
+        : h(
+            "div",
+            { class: "invalid" },
+            `invalid action, not checked by any rule: ${state.invalid}`,
+          ),
     );
   }
 
@@ -324,12 +343,9 @@ export async function mount(root, api) {
     const action = { actor: form.actor, verb: form.verb };
     for (const field of verb?.fields ?? []) action[field] = form.fields[field] ?? "";
     const { status, body } = await api.act(action);
-    if (status === 422) state.refusal = body.refused;
-    else if (status !== 200) state.refusal = { code: "invalid", message: body.error ?? status };
-    else {
-      state.refusal = null;
-      form.fields.words = "";
-    }
+    state.refusal = status === 422 ? body.refused : null;
+    state.invalid = status !== 200 && status !== 422 ? (body.error ?? `HTTP ${status}`) : null;
+    if (status === 200) form.fields.words = "";
     await refresh();
   }
 
@@ -339,9 +355,16 @@ export async function mount(root, api) {
   }
 
   async function runReset() {
-    await api.reset();
+    const { status, body } = await api.reset();
+    if (status !== 200) {
+      state.resetRefusal = body.refusal ?? { rule: `HTTP ${status}`, message: body.error ?? "" };
+      await refresh();
+      return;
+    }
+    state.resetRefusal = null;
     state.events = [];
     state.refusal = null;
+    state.invalid = null;
     await refresh();
   }
 

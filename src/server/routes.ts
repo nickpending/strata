@@ -94,14 +94,19 @@ class Bench {
     }
   }
 
+  /**
+   * Reboot the world. The replacement boots first; the current world is closed only once the
+   * replacement is ready, so a reset that boot refuses (422) keeps serving the current world.
+   */
   private reset(): Response {
-    this.engine.close();
     const booted = boot(this.options.world, {
       tickMinutes: this.options.tickMinutes,
       dbPath: this.options.dbPath,
     });
-    if (!booted.ok) return json({ refusal: booted.refusal }, 500);
+    if (!booted.ok) return json({ refusal: booted.refusal }, 422);
+    const previous = this.engine;
     this.engine = booted.engine;
+    previous.close();
     return json({ snapshot: this.engine.snapshot() });
   }
 }

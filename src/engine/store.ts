@@ -1,5 +1,5 @@
 import { Database } from "bun:sqlite";
-import { rmSync } from "node:fs";
+import { renameSync, rmSync } from "node:fs";
 import type { Copy, WorldEvent } from "./events.ts";
 import type { PartName, StateRow } from "./things.ts";
 
@@ -25,25 +25,43 @@ CREATE TABLE witnessed (
 );
 `;
 
+/** Delete the database file at `path` and its journal files, if any. */
+function removeDatabase(path: string): void {
+  for (const suffix of ["", "-journal", "-wal", "-shm"])
+    rmSync(`${path}${suffix}`, { force: true });
+}
+
 /** The database file of one world: the event log, the live state rows and the witnessed copies. */
 export class Store {
   private constructor(private readonly db: Database) {}
 
   /**
-   * Create the database at `path` afresh. Any file already at `path` (and its journal files) is
-   * deleted first: a world is never resumed, every boot replaces the previous run.
+   * Create the database at `path` afresh: a world is never resumed, every boot replaces the
+   * previous run. The new database is built beside `path` and renamed over it only once it is
+   * complete, so a create that fails leaves whatever was at `path` untouched.
    */
   static create(path: string, rows: StateRow[]): Store {
-    for (const suffix of ["", "-journal", "-wal", "-shm"])
-      rmSync(`${path}${suffix}`, { force: true });
-    const db = new Database(path, { create: true, strict: true });
+    const next = `${path}.next`;
+    removeDatabase(next);
+    try {
+      const building = new Store(new Database(next, { create: true, strict: true }));
+      try {
+        building.db.exec(SCHEMA);
+        building.transaction(() => {
+          for (const row of rows) building.writeState(row);
+        });
+      } finally {
+        building.close();
+      }
+      removeDatabase(path);
+      renameSync(next, path);
+    } catch (error) {
+      removeDatabase(next);
+      throw error;
+    }
+    const db = new Database(path, { strict: true });
     db.exec("PRAGMA foreign_keys = ON;");
-    db.exec(SCHEMA);
-    const store = new Store(db);
-    store.transaction(() => {
-      for (const row of rows) store.writeState(row);
-    });
-    return store;
+    return new Store(db);
   }
 
   transaction<T>(fn: () => T): T {
