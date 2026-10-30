@@ -1,0 +1,153 @@
+{
+ "workOrder": "world-bench",
+ "what": "A runnable world engine with a UI bench: typed definitions of two rooms, three NPCs and their items and relationships boot into live state; the operator authors movement, speech and give actions for any NPC and steps the clock from a local web page; the engine validates each action into events of the first-block kinds, applies each event only to the parts it concerns, fires scheduled arrivals and offer windows from the clock, and the bench shows every thing's state and the history after each step, with no model anywhere.",
+ "why": "Every later layer of strata (relationships, perception, minds, conversation, speech, memory, plans) reads events and keeps live state current from them; reverie showed what building those layers without one record of what happened costs: seventeen verb handlers writing eight records, witnesses decided four ways, a mind assembled per path that invents things, and a whisper loop traced to a missing conversation object. The first block is that backbone, small enough to be watched event by event in a bench.",
+ "criteria": [
+  {
+   "id": "C1",
+   "given": "the committed world files and no tick length",
+   "when": "boot() is called, and separately the CLI is run, without --tick-minutes",
+   "then": "each refuses with a message naming --tick-minutes, and no database file is created"
+  },
+  {
+   "id": "C2",
+   "given": "a copy of world/ with one definition broken (an item whose holder names no person; a room exit whose to names no room; a person whose location names no room; a ties target naming no person; a missing required field)",
+   "when": "boot runs on each broken copy in turn",
+   "then": "each refuses naming the file, the path inside it and the rule it broke, and no database file is created"
+  },
+  {
+   "id": "C3",
+   "given": "the booted world (Rogue and Glitch in the Chrome Cassette, Mux in the Back Room)",
+   "when": "each forbidden action is submitted: Rogue departs west; a person in transit says anything; Rogue whispers to Mux; Rogue says-to Rogue; Glitch offers the data shard; Rogue offers the data shard twice; Mux accepts an offer made to Glitch; Glitch accepts after Rogue has departed",
+   "then": "each is refused with, in order, the codes no-such-exit, in-transit, not-in-room, self-target, not-holding, already-offered, not-offered-to-you and giver-absent; the events table has no new row and every state row is unchanged after each refusal",
+   "mutations": [
+    {
+     "id": "C3-M1",
+     "change": "remove the giver-absent check from the accept rule so an accept with the giver gone is allowed; the C3 refusal test must go red"
+    }
+   ]
+  },
+  {
+   "id": "C4",
+   "given": "the committed world files and a tick length",
+   "when": "the world is booted twice into two separate database files",
+   "then": "each has Rogue and Glitch located in the Chrome Cassette, Mux in the Back Room, stimpak held by glitch, charge-cell by mux, data-shard by rogue, every authored tie present on its person, zero events, the clock at tick 0 with an empty schedule, and the two state tables are byte-identical row for row"
+  },
+  {
+   "id": "C5",
+   "given": "the booted world",
+   "when": "Glitch departs east, then the clock steps once",
+   "then": "the depart is recorded at tick 0 with to back-room, travelTicks from the exit and arrivesAt 1, Glitch is in transit and absent from both rooms' presence views, the depart's witnesses are Glitch and Rogue; after the step the tick event and then the arrive (cause = the depart's id) are recorded in that order, Glitch is located in the Back Room, and the arrive's witnesses are Glitch and Mux",
+   "mutations": [
+    {
+     "id": "C5-M1",
+     "change": "compute witnesses from the state before the event is applied instead of after; the C5 witness assertions must go red"
+    }
+   ]
+  },
+  {
+   "id": "C6",
+   "given": "the booted world with Mux moved into the Chrome Cassette by a depart and a step",
+   "when": "Rogue whispers to Glitch, then Rogue says aloud",
+   "then": "the whisper's copies to Rogue and to Glitch carry the words, Mux's copy of the whisper carries the envelope and no words field, nobody outside the room has a copy; the say's copies to all three carry the words; every copy is read back through the engine's received view",
+   "mutations": [
+    {
+     "id": "C6-M1",
+     "change": "drop the narrow rule from speech.whisper's registry entry; the C6 redaction test must go red"
+    }
+   ]
+  },
+  {
+   "id": "C7",
+   "given": "the booted world, Rogue holding the data shard with Glitch present",
+   "when": "three runs: Rogue offers it to Glitch and Glitch accepts; Rogue offers and Glitch refuses; Rogue offers and nobody answers while the clock steps to the offer's until",
+   "then": "in every run the offer records until = tick + offer_window_ticks from world.toml and the holder stays rogue while pending; the accept moves the holder to glitch, clears the offer and leaves no lapse in the schedule; the refuse leaves the holder rogue and clears the offer and the lapse; the unanswered run records a lapse at until with cause = the offer's id, the holder rogue and the offer cleared"
+  },
+  {
+   "id": "C8",
+   "given": "the booted world with a depart whose arrive is due at tick 2 and an offer whose lapse is due at tick 2, scheduled in that order",
+   "when": "the clock steps twice",
+   "then": "after the first step only the tick event is new; after the second the tick event, the arrive and the lapse are recorded in that order with consecutive seqs"
+  },
+  {
+   "id": "C9",
+   "given": "every part reducer in the registry and an event of every subkind",
+   "when": "each reducer is applied to each event that does not concern it",
+   "then": "it returns a value equal to its input state, and each reducer's signature takes only its own state and the event"
+  },
+  {
+   "id": "C10",
+   "given": "the server started with the committed world and a tick length on an ephemeral port",
+   "when": "the test fetches /, /bench/app.js, /bench/panels/world.js and /api/verbs, then posts the C5 and C7 sequences through /api/actions and /api/step and one forbidden action",
+   "then": "each file returns 200 with its content type; /api/verbs lists the eight verbs with their fields from the action schemas; /api/snapshot and /api/events?since= reflect each step; the forbidden action returns 422 carrying the refusal's code; /api/reset returns the world to the C4 state"
+  },
+  {
+   "id": "C11",
+   "given": "the server started",
+   "when": "its bound hostname is read from the server object",
+   "then": "it is 127.0.0.1"
+  },
+  {
+   "id": "C12",
+   "given": "the booted world after the C5 and C7 sequences",
+   "when": "the world/ files are hashed before boot and after the sequences",
+   "then": "the hashes are identical"
+  },
+  {
+   "id": "C13",
+   "given": "the repository at the job's commit",
+   "when": "bun run verify runs (tsc --noEmit, biome check, bun test)",
+   "then": "it exits 0 with no finding"
+  }
+ ],
+ "issues": [],
+ "outOfScope": [
+  {
+   "kind": "cost",
+   "summary": "No resume: a restart boots afresh from the definitions and the previous run's database is replaced, so a run is not continued across launches.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "the bench has no runs to continue: the repository holds no code yet and every run is a fresh boot by design"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "No push channel: the page refetches after each action or step, so a second viewer of the same world would see changes only on its own next action.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "one operator views the bench on one machine bound to loopback; no second viewer exists to miss an update"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "Rooms carry no live part in this block, so a later block that gives rooms state (a brownout, a door) adds the first room part rather than extending one.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "no first-block event changes a room, so there is no room state to hold"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "No voice prose in the definitions yet; the prose layer arrives with the block that speaks.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "nothing speaks in this block: no model runs and no event carries per-NPC wording"
+   }
+  }
+ ],
+ "walks": [
+  {
+   "criterion": "C10",
+   "when": "after merge, `bun run src/server/main.ts --tick-minutes <n>` and http://127.0.0.1:4800/ opened in a browser",
+   "then": "the world panel shows both rooms with their people, holdings and ties, the clock, the act form, the step and reset buttons and the history; a depart, a step, a whisper and a give authored from the form appear in the panel and in the per-person received view, and a forbidden action shows its code inline"
+  }
+ ],
+ "stakes": [
+  "One language and one process: the engine is a TypeScript library on Bun that the server and the tests call identically, and the bench page is served by the same process that holds the world, bound to the loopback address.",
+  "Each fact has exactly one owning part and one home, a row in the state table; every other view of it is computed from the snapshot and never stored twice.",
+  "Parts are pure reducers over events and never read another part; rules are pure functions over the snapshot and never write state; the engine alone appends, applies, witnesses and persists, in one transaction.",
+  "Every event in the log passed its subkind's schema, and every witness holds a redacted copy made by code from the subkind's visibility, so what a thing may know is enforced before any mind exists.",
+  "Definitions are TOML validated by zod at boot and never written at runtime; the operator changes the world only through actions, and the tick length is a required launch flag with no default.",
+  "Adding an event subkind is one registry entry and one rule; no part, reader or page changes, and the page's act form is built from the action schemas the engine serves."
+ ]
+}
