@@ -37,17 +37,11 @@
    "id": "C5",
    "given": "the booted world",
    "when": "Glitch departs east, then the clock steps once",
-   "then": "the depart is recorded at tick 0 with to back-room, travelTicks from the exit and arrivesAt 1, Glitch is in transit and absent from both rooms' presence views, the depart's witnesses are Glitch and Rogue; after the step the tick event and then the arrive (cause = the depart's id) are recorded in that order, Glitch is located in the Back Room, and the arrive's witnesses are Glitch and Mux",
-   "mutations": [
-    {
-     "id": "C5-M1",
-     "change": "compute witnesses from the state before the event is applied instead of after; the C5 witness assertions must go red"
-    }
-   ]
+   "then": "the depart is recorded at tick 0 with to back-room, travelTicks from the exit and arrivesAt 1, Glitch is in transit and absent from both rooms' presence views, the depart's witnesses are Glitch and Rogue; after the step the tick event and then the arrive (cause = the depart's id) are recorded in that order, Glitch is located in the Back Room, and the arrive's witnesses are Glitch and Mux"
   },
   {
    "id": "C6",
-   "given": "the booted world with Mux moved into the Chrome Cassette by a depart and a step",
+   "given": "the booted world with Mux moved into the Chrome Cassette by a depart west and the clock stepped to its arrive (the exit's travel_ticks steps)",
    "when": "Rogue whispers to Glitch, then Rogue says aloud",
    "then": "the whisper's copies to Rogue and to Glitch carry the words, Mux's copy of the whisper carries the envelope and no words field, nobody outside the room has a copy; the say's copies to all three carry the words; every copy is read back through the engine's received view",
    "mutations": [
@@ -79,7 +73,7 @@
    "id": "C10",
    "given": "the server started with the committed world and a tick length on an ephemeral port",
    "when": "the test fetches /, /bench/app.js, /bench/panels/world.js and /api/verbs, then posts the C5 and C7 sequences through /api/actions and /api/step and one forbidden action",
-   "then": "each file returns 200 with its content type; /api/verbs lists the eight verbs with their fields from the action schemas; /api/snapshot and /api/events?since= reflect each step; the forbidden action returns 422 carrying the refusal's code; /api/reset returns the world to the C4 state"
+   "then": "each file returns 200 with its content type; /api/verbs lists the seven verbs (depart, say, say-to, whisper, offer, accept, refuse) with their fields from the action schemas; /api/snapshot and /api/events?since= reflect each step; the forbidden action returns 422 carrying the refusal's code; /api/reset returns the world to the C4 state"
   },
   {
    "id": "C11",
@@ -132,6 +126,17 @@
    "frequency": {
     "kind": "not-a-case",
     "reason": "nothing speaks in this block: no model runs and no event carries per-NPC wording"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The witness rule reads presence after the event is applied, plus actor and targets, but in this block no test can tell that from reading presence before: only the actor's own location changes and the actor is always a witness, so the rule is pinned by reading until an event moves someone other than its actor.",
+   "frequency": {
+    "kind": "measured",
+    "command": "grep -n 'event.actor !== self' src/engine/things.ts; grep -c '^  \"[a-z]*\\.[a-z-]*\": {' src/engine/events.ts",
+    "records": "the ten registered subkinds in src/engine/events.ts against the one location reducer in src/engine/things.ts",
+    "count": 0,
+    "total": 10
    }
   }
  ],
