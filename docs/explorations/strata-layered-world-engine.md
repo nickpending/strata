@@ -132,6 +132,9 @@ each playable on its own, so that a change to one stops at its boundary.
   enforced by code, not by a prompt.
 - An action is a request; the world's rules validate it into an event or refuse it to the actor
   alone. The event log records only what actually happened.
+- A thing's own acts are never new to it: its received copy names it in the actor field, and no
+  reader treats an event it caused as a stimulus. Reverie's whisper loop came from NPCs treating
+  their own lines as new input.
 - Adding an event kind never changes existing readers.
 - Movement is two events, depart and arrive, linked by cause. The mover is in transit until a
   clock-scheduled arrive; each exit has a typed travel time in ticks.
