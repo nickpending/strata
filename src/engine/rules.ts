@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { type EventDraft, OPERATOR } from "./events.ts";
-import { roomOf, type Snapshot } from "./snapshot.ts";
+import { lookup, roomOf, type Snapshot } from "./snapshot.ts";
 
 const actor = z.string().min(1);
 const words = z.string().min(1);
@@ -75,7 +75,8 @@ export function rule(snapshot: Snapshot, action: Action): RuleResult {
 
   switch (action.verb) {
     case "depart": {
-      const exit = snapshot.rooms[here]?.exits[action.exit];
+      const room = lookup(snapshot.rooms, here);
+      const exit = room === undefined ? undefined : lookup(room.exits, action.exit);
       if (exit === undefined) {
         return refused("no-such-exit", `${here} has no exit "${action.exit}"`);
       }
@@ -116,7 +117,7 @@ export function rule(snapshot: Snapshot, action: Action): RuleResult {
       };
     }
     case "offer": {
-      const item = snapshot.items[action.item];
+      const item = lookup(snapshot.items, action.item);
       if (item === undefined || item.holder !== action.actor) {
         return refused("not-holding", `${action.actor} does not hold "${action.item}"`);
       }
@@ -138,7 +139,7 @@ export function rule(snapshot: Snapshot, action: Action): RuleResult {
     }
     case "accept":
     case "refuse": {
-      const item = snapshot.items[action.item];
+      const item = lookup(snapshot.items, action.item);
       if (item === undefined || item.offer === "none" || item.offer.to !== action.actor) {
         return refused("not-offered-to-you", `${action.item} is not offered to ${action.actor}`);
       }

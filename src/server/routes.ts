@@ -22,9 +22,52 @@ export type Started =
   | { ok: true; server: Bun.Server<undefined>; stop: () => void }
   | { ok: false; refusal: BootRefusal };
 
+/** The names the bench answers to; a request carrying any other Host is a rebinding page. */
+const LOOPBACK_NAMES = new Set([HOSTNAME, "localhost"]);
+
 function json(body: unknown, status = 200): Response {
   return Response.json(body, { status });
 }
+
+function sameHost(origin: string, host: string): boolean {
+  try {
+    return new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Refuse what crosses the loopback boundary from a browser: a Host that is not a loopback name
+ * (DNS rebinding), a POST from another origin, and a POST that is not JSON, which no other page can
+ * send without a CORS preflight the bench never answers. Null when the request may proceed.
+ */
+function boundaryRefusal(request: Request): Response | null {
+  const host = request.headers.get("host");
+  if (host === null || !LOOPBACK_NAMES.has(host.replace(/:\d+$/, ""))) {
+    return json({ error: "the bench answers only on its loopback address" }, 403);
+  }
+  if (request.method !== "POST") return null;
+  const origin = request.headers.get("origin");
+  if (origin !== null && !sameHost(origin, host)) {
+    return json({ error: "requests from another origin are refused" }, 403);
+  }
+  if (!/^application\/json\s*(;|$)/i.test(request.headers.get("content-type") ?? "")) {
+    return json({ error: "a POST must be sent as application/json" }, 415);
+  }
+  return null;
+}
+
+/** A path segment decoded, or null when its percent-encoding is malformed. */
+function decoded(segment: string): string | null {
+  try {
+    return decodeURIComponent(segment);
+  } catch {
+    return null;
+  }
+}
+
+const MALFORMED_PATH = { error: "the path is not valid percent-encoding" };
 
 function staticFile(path: string): Response {
   const file = resolve(BENCH_DIR, path);
@@ -46,16 +89,22 @@ class Bench {
   }
 
   async handle(request: Request): Promise<Response> {
+    const refusal = boundaryRefusal(request);
+    if (refusal !== null) return refusal;
     const url = new URL(request.url);
     const path = url.pathname;
     if (request.method === "GET") {
       if (path === "/") return staticFile("index.html");
-      if (path.startsWith("/bench/")) return staticFile(decodeURIComponent(path.slice(7)));
+      if (path.startsWith("/bench/")) {
+        const file = decoded(path.slice(7));
+        return file === null ? json(MALFORMED_PATH, 400) : staticFile(file);
+      }
       if (path === "/api/snapshot") return json(this.engine.snapshot());
       if (path === "/api/verbs") return json({ verbs: verbs() });
       if (path === "/api/events") return this.events(url.searchParams.get("since"));
       if (path.startsWith("/api/received/")) {
-        const thing = decodeURIComponent(path.slice(14));
+        const thing = decoded(path.slice(14));
+        if (thing === null) return json(MALFORMED_PATH, 400);
         if (!this.engine.isPerson(thing)) return json({ error: `no person "${thing}"` }, 404);
         return json({ thing, copies: this.engine.received(thing) });
       }
@@ -119,7 +168,13 @@ export function startServer(options: ServeOptions): Started {
   const server = Bun.serve({
     hostname: HOSTNAME,
     port: options.port,
+    // Bun's development error page carries the cwd, source paths and source lines; never serve it.
+    development: false,
     fetch: (request) => bench.handle(request),
+    error: (error) => {
+      console.error("strata: request failed:", error);
+      return json({ error: "internal error" }, 500);
+    },
   });
   return {
     ok: true,

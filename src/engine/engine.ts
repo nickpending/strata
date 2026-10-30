@@ -46,7 +46,7 @@ export function witnessesOf(event: WorldEvent, snapshot: Snapshot): string[] {
     for (const person of snapshot.views.presence[event.place] ?? []) witnesses.add(person);
   }
   for (const id of participants(event)) {
-    if (id in snapshot.people) witnesses.add(id);
+    if (Object.hasOwn(snapshot.people, id)) witnesses.add(id);
   }
   return [...witnesses].sort();
 }

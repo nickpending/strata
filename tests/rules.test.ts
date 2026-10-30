@@ -123,3 +123,27 @@ describe("actions the schemas reject", () => {
     expect(tables(engine)).toEqual(before);
   });
 });
+
+describe("names that are inherited object keys name nothing", () => {
+  const inherited = ["constructor", "__proto__", "toString", "hasOwnProperty"];
+
+  test("an exit, a target or an item named like an Object member is refused by its rule", () => {
+    const engine = fresh();
+    record(engine, { actor: "rogue", verb: "offer", target: "glitch", item: "data-shard" });
+    for (const name of inherited) {
+      expectRefused(engine, { actor: "rogue", verb: "depart", exit: name }, "no-such-exit");
+      expectRefused(
+        engine,
+        { actor: "rogue", verb: "say-to", target: name, words: "hi" },
+        "not-in-room",
+      );
+      expectRefused(
+        engine,
+        { actor: "rogue", verb: "offer", target: "glitch", item: name },
+        "not-holding",
+      );
+      expectRefused(engine, { actor: "glitch", verb: "accept", item: name }, "not-offered-to-you");
+      expectRefused(engine, { actor: "glitch", verb: "refuse", item: name }, "not-offered-to-you");
+    }
+  });
+});

@@ -6,7 +6,8 @@ const panels = [world];
 async function request(method, path, body) {
   const response = await fetch(path, {
     method,
-    headers: body === undefined ? {} : { "content-type": "application/json" },
+    // The server takes a POST only as JSON, which a page of another origin cannot send unasked.
+    headers: method === "POST" ? { "content-type": "application/json" } : {},
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   return { status: response.status, body: await response.json() };

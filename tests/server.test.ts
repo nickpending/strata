@@ -1,3 +1,4 @@
+import { Database } from "bun:sqlite";
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -11,7 +12,13 @@ import { startServer } from "../src/server/routes.ts";
 const ROOT = join(import.meta.dir, "..");
 const WORLD = join(ROOT, "world");
 
-type Served = { base: string; hostname: string | undefined; world: string; stop: () => void };
+type Served = {
+  base: string;
+  hostname: string | undefined;
+  world: string;
+  dbPath: string;
+  stop: () => void;
+};
 
 const temps: string[] = [];
 const stops: (() => void)[] = [];
@@ -25,18 +32,15 @@ function serve(copyWorld: boolean): Served {
     world = join(dir, "world");
     cpSync(WORLD, world, { recursive: true });
   }
-  const started = startServer({
-    world,
-    dbPath: join(dir, "world.sqlite"),
-    tickMinutes: 10,
-    port: 0,
-  });
+  const dbPath = join(dir, "world.sqlite");
+  const started = startServer({ world, dbPath, tickMinutes: 10, port: 0 });
   if (!started.ok) throw new Error(started.refusal.message);
   stops.push(started.stop);
   return {
     base: `http://127.0.0.1:${started.server.port}`,
     hostname: started.server.hostname,
     world,
+    dbPath,
     stop: started.stop,
   };
 }
@@ -246,6 +250,103 @@ describe("a reset that cannot boot keeps the current world", () => {
     writeFileSync(file, text);
     expect((await api.post("/api/reset")).status).toBe(200);
     expect(await api.events(0)).toEqual([]);
+  });
+});
+
+describe("only the loopback page can drive or read the bench", () => {
+  const evil = "http://evil.example";
+
+  test("a cross-origin or non-JSON POST is refused and changes nothing", async () => {
+    const served = serve(true);
+    const api = client(served);
+    const say = JSON.stringify({ actor: "rogue", verb: "say", words: "pwned from evil.example" });
+    const attempts: { path: string; headers: Record<string, string>; body?: string }[] = [
+      { path: "/api/actions", headers: { "content-type": "text/plain;charset=UTF-8" }, body: say },
+      {
+        path: "/api/actions",
+        headers: { "content-type": "text/plain;charset=UTF-8", origin: evil },
+        body: say,
+      },
+      {
+        path: "/api/actions",
+        headers: { "content-type": "application/json", origin: evil },
+        body: say,
+      },
+      { path: "/api/step", headers: { origin: evil } },
+      { path: "/api/step", headers: { "content-type": "text/plain" } },
+      { path: "/api/reset", headers: { origin: evil } },
+      { path: "/api/reset", headers: { "content-type": "application/json", origin: evil } },
+    ];
+    for (const { path, headers, body } of attempts) {
+      const response = await fetch(`${served.base}${path}`, { method: "POST", headers, body });
+      expect({ path, headers, status: response.status }).toEqual({
+        path,
+        headers,
+        status: headers.origin === undefined ? 415 : 403,
+      });
+    }
+    expect(await api.events(0)).toEqual([]);
+    expect((await api.snapshot()).tick).toBe(0);
+
+    const sameOrigin = await fetch(`${served.base}/api/actions`, {
+      method: "POST",
+      headers: { "content-type": "application/json", origin: served.base },
+      body: say,
+    });
+    expect(sameOrigin.status).toBe(200);
+  });
+
+  test("a request whose Host is not the loopback address is refused", async () => {
+    const served = serve(true);
+    const port = new URL(served.base).port;
+    for (const path of ["/", "/api/snapshot", "/api/events?since=0", "/api/received/rogue"]) {
+      const response = await fetch(`${served.base}${path}`, {
+        headers: { host: `evil.example:${port}` },
+      });
+      expect({ path, status: response.status }).toEqual({ path, status: 403 });
+    }
+    for (const host of [`127.0.0.1:${port}`, `localhost:${port}`]) {
+      const response = await fetch(`${served.base}/api/snapshot`, { headers: { host } });
+      expect({ host, status: response.status }).toEqual({ host, status: 200 });
+    }
+  });
+
+  test("an inherited-key name is a 422 refusal, not a server error", async () => {
+    const api = client(serve(true));
+    for (const [action, code] of [
+      [{ actor: "rogue", verb: "depart", exit: "constructor" }, "no-such-exit"],
+      [{ actor: "rogue", verb: "depart", exit: "__proto__" }, "no-such-exit"],
+      [{ actor: "glitch", verb: "accept", item: "toString" }, "not-offered-to-you"],
+    ] as const) {
+      const response = await api.post("/api/actions", action);
+      expect(response.status).toBe(422);
+      expect(await response.json()).toMatchObject({ refused: { code } });
+    }
+  });
+
+  test("a malformed path is a 400 and a failure is a 500 that names no internals", async () => {
+    const served = serve(true);
+    for (const path of ["/bench/%E0", "/api/received/%E0"]) {
+      const response = await fetch(`${served.base}${path}`);
+      expect({ path, status: response.status }).toEqual({ path, status: 400 });
+      expect(response.headers.get("content-type")).toStartWith("application/json");
+    }
+
+    const lock = new Database(served.dbPath);
+    lock.exec("BEGIN EXCLUSIVE");
+    try {
+      const response = await client(served).post("/api/step");
+      expect(response.status).toBe(500);
+      expect(response.headers.get("content-type")).toStartWith("application/json");
+      const body = await response.text();
+      expect(JSON.parse(body)).toEqual({ error: "internal error" });
+      for (const leak of [ROOT, process.cwd(), "routes.ts", "engine.ts", "__bunfallback"]) {
+        expect(body).not.toContain(leak);
+      }
+    } finally {
+      lock.exec("ROLLBACK");
+      lock.close();
+    }
   });
 });
 

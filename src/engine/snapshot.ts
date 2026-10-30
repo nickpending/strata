@@ -87,9 +87,17 @@ export function buildSnapshot(rows: StateRow[], defs: WorldDefs, tickMinutes: nu
   };
 }
 
-/** The room a person is in, or null while in transit. */
+/**
+ * The entry `key` names in `record`, or undefined. Only the record's own keys count, so a name an
+ * operator supplies, such as "constructor" or "__proto__", never reaches an inherited member.
+ */
+export function lookup<T>(record: Record<string, T>, key: string): T | undefined {
+  return Object.hasOwn(record, key) ? record[key] : undefined;
+}
+
+/** The room a person is in, or null while in transit or when `person` names nobody. */
 export function roomOf(snapshot: Snapshot, person: string): string | null {
-  const location = snapshot.people[person]?.location;
+  const location = lookup(snapshot.people, person)?.location;
   if (location === undefined || !("room" in location)) return null;
   return location.room;
 }
