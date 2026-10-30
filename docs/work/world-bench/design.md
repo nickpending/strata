@@ -52,10 +52,11 @@ Acts on the gap: It builds the engine the gap names: typed definitions boot into
 - No push channel: the page refetches after each action or step, so a second viewer of the same world would see changes only on its own next action. (not a case: one operator views the bench on one machine bound to loopback; no second viewer exists to miss an update)
 - Rooms carry no live part in this block, so a later block that gives rooms state (a brownout, a door) adds the first room part rather than extending one. (not a case: no first-block event changes a room, so there is no room state to hold)
 - No voice prose in the definitions yet; the prose layer arrives with the block that speaks. (not a case: nothing speaks in this block: no model runs and no event carries per-NPC wording)
+- The witness rule reads presence after the event is applied, plus actor and targets, but in this block no test can tell that from reading presence before: only the actor's own location changes and the actor is always a witness, so the rule is pinned by reading until an event moves someone other than its actor. (0 of 10 the ten registered subkinds in src/engine/events.ts against the one location reducer in src/engine/things.ts)
 
 ## Risk
 
-If the seam leaks, a rule writing state, a part reading another, a view stored instead of computed, the engine becomes reverie again: state written in several places by several paths, and the next layer cannot trust the log. The tests pin purity per part and per rule, but a builder can still route around them; the review reads for it. Lesser: a wrong witness rule (presence computed before application rather than after) would give the departing mover the room's next events or deny the arriver its own arrival, visible immediately in the bench's per-person received view.
+If the seam leaks, a rule writing state, a part reading another, a view stored instead of computed, the engine becomes reverie again: state written in several places by several paths, and the next layer cannot trust the log. The tests pin purity per part and per rule, but a builder can still route around them; the review reads for it. Lesser: the witness rule reads presence after application, plus actor and targets; in this block only the actor's own location changes and the actor is always a witness, so reading presence before application yields the same witnesses for every first-block event and no test here can tell the two apart. The rule matters, and earns its mutation test, in the first block whose event moves someone other than its actor.
 
 ## Licensed by
 
