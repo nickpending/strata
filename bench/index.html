@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>strata bench</title>
+    <style>
+      body { font: 14px/1.4 ui-monospace, Menlo, monospace; margin: 1rem; background: #111; color: #ddd; }
+      h1 { font-size: 1.1rem; margin: 0 0 1rem; }
+      h2 { font-size: 1rem; margin: 1rem 0 0.4rem; color: #9cf; }
+      h3 { font-size: 0.95rem; margin: 0.4rem 0; }
+      section { border: 1px solid #333; padding: 0.5rem 0.8rem; margin-bottom: 0.8rem; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr)); gap: 0.8rem; }
+      .muted { color: #888; }
+      .refused { color: #f88; }
+      .event { border-top: 1px solid #222; padding: 0.3rem 0; }
+      label { margin-right: 0.6rem; }
+      input, select, button { font: inherit; background: #222; color: #ddd; border: 1px solid #444; }
+      button { cursor: pointer; padding: 0.1rem 0.6rem; }
+      pre { margin: 0.2rem 0; white-space: pre-wrap; }
+      ul { margin: 0.2rem 0; padding-left: 1.2rem; }
+    </style>
+  </head>
+  <body>
+    <h1>strata bench</h1>
+    <main id="panels"></main>
+    <script type="module" src="/bench/app.js"></script>
+  </body>
+</html>

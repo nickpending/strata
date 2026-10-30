@@ -13,3 +13,6 @@ docs/work/*/journal.jsonl
 docs/work/*/.journal.checksum
 docs/work/*/results/
 docs/work/*/shape/
+node_modules/
+strata.sqlite
+strata.sqlite-*

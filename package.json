@@ -1,0 +1,22 @@
+{
+  "name": "strata",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/server/main.ts",
+    "check": "bun node_modules/.bin/biome check .",
+    "check:fix": "bun node_modules/.bin/biome check --fix .",
+    "typecheck": "bun node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
+    "test": "bun test",
+    "verify": "bun run typecheck && bun run check && bun test"
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.16",
+    "bun-types": "1.4.2",
+    "typescript": "7.0.2"
+  }
+}

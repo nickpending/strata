@@ -1,0 +1,8 @@
+id = "rogue"
+name = "Rogue"
+location = "chrome-cassette"
+
+[[ties]]
+target = "glitch"
+kind = "wary tolerance"
+note = "The hot runner lying low in her grid. She lets him, for now, and weighs the whole time whether he is worth the heat he drags toward her door."

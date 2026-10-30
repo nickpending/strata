@@ -1,0 +1,8 @@
+id = "mux"
+name = "Mux"
+location = "back-room"
+
+[[ties]]
+target = "glitch"
+kind = "a regular for parts"
+note = "The netrunner who keeps his failing refurb gear limping: one of Mux's regulars for cells and parts, and the closest thing he has to a friend who talks back."
