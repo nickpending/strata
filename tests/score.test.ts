@@ -11,16 +11,16 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { useAccountBrowsers } from "harness/page.ts";
+import { RULE_AUTHOR, T_ACT, T_DONE } from "harness/rule.ts";
+import type { LoopRecord } from "harness/run.ts";
+import { GRID, type ScoreFile } from "harness/score.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
-import { useAccountBrowsers } from "../src/player/page.ts";
-import { RULE_AUTHOR, T_ACT, T_DONE } from "../src/player/rule.ts";
-import type { LoopRecord } from "../src/player/run.ts";
-import { GRID, type ScoreFile } from "../src/player/score.ts";
 
 const ROOT = join(import.meta.dir, "..");
 // Every score run below is a child process; each inherits where the account's browsers are.
 useAccountBrowsers();
-const SCORE = join(ROOT, "src", "player", "score.ts");
+const SCORE = join(ROOT, "src", "adapter", "score.ts");
 const CALIBRATION = join(ROOT, "corpus", "goals", "calibration.json");
 
 const MODEL_COST = 0.0002;

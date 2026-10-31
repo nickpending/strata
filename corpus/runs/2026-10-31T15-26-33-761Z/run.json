@@ -1,0 +1,83 @@
+{
+  "runId": "2026-10-31T15-26-33-761Z",
+  "instruction": "have Rogue say something about the heat on her door",
+  "startedAt": "2026-10-31T15:26:33.761Z",
+  "endedAt": "2026-10-31T15:26:39.415Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/.claude/worktrees/agent-a1dca8a279e3289cc/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "say",
+        "fields": {}
+      }
+    ]
+  },
+  "words": "Feel that? The door's hot again, so somebody's on the other side with a torch, and I'm not waiting to find out who.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002921
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000548
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.00005691
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00005691
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000057414
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.00005775
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000068544
+    }
+  ],
+  "costUsd": 0.0006444280000000001,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

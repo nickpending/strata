@@ -1,0 +1,85 @@
+{
+  "runId": "2026-10-31T15-27-59-821Z",
+  "instruction": "Glitch has something for Rogue's ears only. Let him tell her without anyone else catching the words.",
+  "startedAt": "2026-10-31T15:27:59.821Z",
+  "endedAt": "2026-10-31T15:28:05.488Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/.claude/worktrees/agent-a1dca8a279e3289cc/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "glitch",
+        "subkind": "speech.whisper"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "whisper",
+        "fields": {
+          "target": "rogue"
+        }
+      }
+    ]
+  },
+  "words": "Rogue, the guard's keys are hanging on the hook behind the bar, and I need you to create a distraction before he turns around.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003109
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000603
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000057582
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000061404
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000061404
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000061656
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000074466
+    }
+  ],
+  "costUsd": 0.000687712,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

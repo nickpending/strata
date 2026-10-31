@@ -1,0 +1,24 @@
+{
+  "name": "harness",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "check": "biome check .",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@voidwire/apiconf": "catalog:",
+    "playwright": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "catalog:",
+    "bun-types": "catalog:",
+    "typescript": "catalog:"
+  }
+}

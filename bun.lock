@@ -5,19 +5,41 @@
     "": {
       "name": "strata",
       "dependencies": {
-        "@voidwire/apiconf": "0.2.0",
-        "playwright": "1.64.1",
-        "zod": "4.6.7",
+        "harness": "workspace:*",
+        "playwright": "catalog:",
+        "zod": "catalog:",
       },
       "devDependencies": {
-        "@biomejs/biome": "2.4.16",
-        "bun-types": "1.4.2",
-        "typescript": "7.0.2",
+        "@biomejs/biome": "catalog:",
+        "bun-types": "catalog:",
+        "typescript": "catalog:",
+      },
+    },
+    "harness": {
+      "name": "harness",
+      "version": "0.0.1",
+      "dependencies": {
+        "@voidwire/apiconf": "catalog:",
+        "playwright": "catalog:",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@biomejs/biome": "catalog:",
+        "bun-types": "catalog:",
+        "typescript": "catalog:",
       },
     },
   },
   "overrides": {
     "smol-toml": "1.9.1",
+  },
+  "catalog": {
+    "@biomejs/biome": "2.4.16",
+    "@voidwire/apiconf": "0.2.0",
+    "bun-types": "1.4.2",
+    "playwright": "1.64.1",
+    "typescript": "7.0.2",
+    "zod": "4.6.7",
   },
   "packages": {
     "@biomejs/biome": ["@biomejs/biome@2.4.16", "", { "optionalDependencies": { "@biomejs/cli-darwin-arm64": "2.4.16", "@biomejs/cli-darwin-x64": "2.4.16", "@biomejs/cli-linux-arm64": "2.4.16", "@biomejs/cli-linux-arm64-musl": "2.4.16", "@biomejs/cli-linux-x64": "2.4.16", "@biomejs/cli-linux-x64-musl": "2.4.16", "@biomejs/cli-win32-arm64": "2.4.16", "@biomejs/cli-win32-x64": "2.4.16" }, "bin": { "biome": "bin/biome" } }, "sha512-x9ajFh1zChVybCiM3TN6OD4phAqLgtPZjFrZF+aTMYCPjwBO+k529TX7PPsAqtGNLeV4UgzwQnowEgS7bGmzcA=="],
@@ -83,6 +105,8 @@
     "@voidwire/apiconf": ["@voidwire/apiconf@0.2.0", "", { "dependencies": { "smol-toml": "1.6.0" } }, "sha512-5XZaKJkdw7RNXdkVDNqLfTCWKbsh9nXgJFhsyKUM8nfeeOJBJCV6g4GN4XffCNxfDODENKCKGgaJ6fVYWvpkKA=="],
 
     "bun-types": ["bun-types@1.4.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-bxV1FgK7yBIzjRe5zBozIM4Bem11ZJcCXSrjWRG3YWLt8yFDePu4cLjpebO8OvPeIE9trbyPF4fuj3Cia4Fj3w=="],
+
+    "harness": ["harness@workspace:harness"],
 
     "playwright": ["playwright@1.64.1", "", { "dependencies": { "playwright-core": "1.64.1" }, "bin": { "playwright": "cli.js" } }, "sha512-HCrVhHr5QQuwYoswEUGTb7gGp522yflbv/ST8nF4sFWGuLjQCt17Q/EubpGGSNKYn1tsTCPZxqHhHCfVURu7UA=="],
 

@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import {
   existsSync,
   mkdirSync,
@@ -10,17 +10,20 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import type { WorldEvent } from "../src/engine/events.ts";
-import { described, type EndState } from "../src/player/goal.ts";
-import { useAccountBrowsers } from "../src/player/page.ts";
-import { T_ACT, T_DONE } from "../src/player/rule.ts";
-import type { LoopRecord, RunRecord } from "../src/player/run.ts";
-import { startServer } from "../src/server/routes.ts";
+import { described, type EndState } from "harness/goal.ts";
+import { type Control, readPage, useAccountBrowsers } from "harness/page.ts";
+import { T_ACT, T_DONE } from "harness/rule.ts";
+import type { DriveResult, LoopRecord, RunRecord } from "harness/run.ts";
+import type { Browser } from "playwright";
+import { hostBench } from "../src/adapter/host.ts";
+import { kindOf, subkinds, type WorldEvent } from "../src/engine/events.ts";
+import { verbs } from "../src/engine/rules.ts";
 
 const ROOT = join(import.meta.dir, "..");
-// Every player run below is a child process; each inherits where the account's browsers are.
+// Every run below is a child process, or loads playwright only after this; each finds the
+// account's browsers.
 useAccountBrowsers();
-const MAIN = join(ROOT, "src", "player", "main.ts");
+const MAIN = join(ROOT, "src", "adapter", "main.ts");
 
 const MODEL_COST = 0.0002;
 const JEV_COST = 0.00002;
@@ -132,7 +135,7 @@ type Ran = { exitCode: number; stdout: string; stderr: string; runDir: string; r
 
 /** Run the player CLI as the operator does, against the stand-ins, into a fresh corpus. */
 async function play(instruction: string, flags: string[]): Promise<Ran> {
-  const dir = mkdtempSync(join(tmpdir(), "strata-player-test-"));
+  const dir = mkdtempSync(join(tmpdir(), "strata-harness-test-"));
   temps.push(dir);
   const corpus = join(dir, "runs");
   const proc = Bun.spawn(
@@ -199,17 +202,10 @@ function proxied(
   rewrite: (path: string, text: string) => string = (_path, text) => text,
   fails: (path: string) => Response | null = () => null,
 ): string {
-  const dir = mkdtempSync(join(tmpdir(), "strata-player-bench-"));
-  temps.push(dir);
-  const bench = startServer({
-    world: join(ROOT, "world"),
-    dbPath: join(dir, "world.sqlite"),
-    tickMinutes: 10,
-    port: 0,
-  });
-  if (!bench.ok) throw new Error(bench.refusal.message);
+  const bench = hostBench({ worldDir: join(ROOT, "world"), tickMinutes: 10 });
+  if (!bench.ok) throw new Error(bench.message);
   stops.push(bench.stop);
-  const benchBase = `http://127.0.0.1:${bench.server.port}`;
+  const benchBase = new URL(bench.base).origin;
   const proxy = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
@@ -361,14 +357,14 @@ describe("C6: the player ends without inventing an end state", () => {
     expect(j.bodies).toHaveLength(0);
   }, 60_000);
 
-  test("a said end state naming a speech kind the registry lacks ends no-such-action naming it", async () => {
+  test("a said end state naming a speech kind the bench does not serve ends no-such-action naming it", async () => {
     const j = preferring([]);
     const m = model(goal({ said: { person: "rogue", subkind: "speech.threat" } }, true));
     const ran = await play(ATTACK, endpoints(m, j));
     expect(ran.exitCode).toBe(1);
     expect(ran.record.outcome?.kind).toBe("no-such-action");
     expect(JSON.stringify(ran.record.outcome)).toContain(
-      'the registry has no speech kind \\"speech.threat\\"',
+      'the bench serves no speech kind \\"speech.threat\\"',
     );
     expect(ran.record.loops).toBe(0);
     expect(j.bodies).toHaveLength(0);
@@ -823,7 +819,7 @@ describe("the key goes only where it is named, never in the clear, and never int
       `[keys.sable-openrouter]\nvalue = "${FAKE_SECRET}"\nnote = "personal key\n`,
     );
     const code = [
-      `import { DECISIONS_URL, postJson } from ${JSON.stringify(join(ROOT, "src", "player", "jev.ts"))};`,
+      `import { DECISIONS_URL, postJson } from ${JSON.stringify(join(ROOT, "harness", "src", "jev.ts"))};`,
       `console.log(JSON.stringify(await postJson(DECISIONS_URL, "decisions", {}, {})));`,
     ].join("\n");
     const ran = await spawned([process.execPath, "-e", code], { ...process.env, HOME: home });
@@ -840,7 +836,7 @@ describe("the key goes only where it is named, never in the clear, and never int
   }, 30_000);
 
   test("there is no flag that takes a key on the command line", async () => {
-    const dir = mkdtempSync(join(tmpdir(), "strata-player-test-"));
+    const dir = mkdtempSync(join(tmpdir(), "strata-harness-test-"));
     temps.push(dir);
     const corpus = join(dir, "runs");
     const ran = await spawned([
@@ -901,5 +897,232 @@ describe("a bench read that fails after the run is its own failure, kept apart f
     expect(existsSync(join(ran.runDir, "received.jsonl"))).toBe(false);
     expect(ran.stderr).toContain("bench");
     expect(ran.stderr).toContain("/api/events");
+  }, 60_000);
+});
+
+/** The prompt the chat completions stand-in received on its first call: the target's. */
+function targetPrompt(m: { bodies: unknown[] }): string {
+  const first = m.bodies[0] as { messages: { content: string }[] } | undefined;
+  return first?.messages[0]?.content ?? "";
+}
+
+/** The verb lines of a target prompt, between their heading and the people line. */
+function verbLines(prompt: string): string[] {
+  const all = prompt.split("\n");
+  const from = all.indexOf("Verbs the page offers, each with the fields it takes besides actor:");
+  const to = all.findIndex((line) => line.startsWith("People (actors and targets): "));
+  return all.slice(from + 1, to);
+}
+
+/** A verb line as the prompt writes it from a verb and its fields. */
+function verbLine({ verb, fields }: { verb: string; fields: string[] }): string {
+  return `  ${verb}${fields.length > 0 ? ` (fields: ${fields.join(", ")})` : ""}`;
+}
+
+describe("H2: every engine fact the target uses is read from the bench's routes during the run", () => {
+  const RUNS = [
+    {
+      instruction: "have Mux say something funny",
+      answers: [goal(MUX_SAYS, true), { words: LINE }],
+      jev: () => preferring(MUX_SAY_MOVES),
+    },
+    {
+      instruction: "have Glitch give Rogue the stimpak",
+      answers: [
+        {
+          ...goal({ holder: { item: "stimpak", person: "rogue" } }),
+          steps: [
+            step("glitch", "offer", { target: "rogue", item: "stimpak" }),
+            step("rogue", "accept", { item: "stimpak" }),
+          ],
+        },
+      ],
+      jev: () => preferring([]),
+    },
+  ];
+
+  for (const run of RUNS) {
+    test(`${run.instruction}: the prompt's verbs and speech kinds are the ones the bench serves`, async () => {
+      /** The paths of the harness's own reads of the bench (the page's carry a Chrome agent). */
+      const read: string[] = [];
+      const base = proxied(undefined, (path) => {
+        read.push(path);
+        return null;
+      });
+      const m = model(...run.answers);
+      const ran = await play(run.instruction, [...endpoints(m, run.jev()), "--url", base]);
+      expect(ran.record.outcome?.kind).toBe("reached");
+      // Each was read once, at the run's start, before the target was asked for.
+      expect(read.filter((path) => path === "/api/verbs")).toEqual(["/api/verbs"]);
+      expect(read.filter((path) => path === "/api/subkinds")).toEqual(["/api/subkinds"]);
+      expect(read.slice(0, 2)).toEqual(["/api/verbs", "/api/subkinds"]);
+
+      const served = {
+        verbs: (
+          (await (await fetch(new URL("/api/verbs", base))).json()) as {
+            verbs: { verb: string; fields: string[] }[];
+          }
+        ).verbs,
+        subkinds: (
+          (await (await fetch(new URL("/api/subkinds", base))).json()) as {
+            subkinds: { subkind: string; kind: string }[];
+          }
+        ).subkinds,
+      };
+      const prompt = targetPrompt(m);
+      // The verbs with their fields are the served body's, which are the engine's verbs.
+      expect(verbLines(prompt)).toEqual(served.verbs.map(verbLine));
+      expect(served.verbs.map(verbLine)).toEqual(verbs().map(verbLine));
+      // The speech kinds are the served entries whose kind is speech, the registry's speech kinds.
+      const speech = served.subkinds.filter((s) => s.kind === "speech").map((s) => s.subkind);
+      expect(prompt).toContain(`\nSpeech kinds: ${speech.join(", ")}\n`);
+      expect(speech).toEqual(subkinds.filter((subkind) => kindOf(subkind) === "speech"));
+    }, 60_000);
+  }
+
+  test("a failed /api/subkinds read stops the run as a bench stop at the target", async () => {
+    const base = proxied(undefined, (path) =>
+      path === "/api/subkinds" ? new Response("subkinds unavailable", { status: 500 }) : null,
+    );
+    const m = model(goal(MUX_SAYS, true), { words: LINE });
+    const j = preferring(MUX_SAY_MOVES);
+    const ran = await play("have Mux say something funny", [...endpoints(m, j), "--url", base]);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.record.outcome).toMatchObject({
+      kind: "stopped",
+      stopped: { kind: "bench", call: "target" },
+    });
+    expect(ran.record.stopped?.message).toContain("/api/subkinds");
+    expect(ran.record.stopped?.message).toContain("500");
+    expect(ran.record.loops).toBe(0);
+    expect([m.bodies.length, j.bodies.length]).toEqual([0, 0]);
+    expect(ran.stderr).toContain("stopped: bench at target");
+  }, 60_000);
+});
+
+describe("H4: a headed run performs nothing until the operator steps it", () => {
+  let browser: Browser;
+  beforeAll(async () => {
+    const { chromium } = await import("playwright");
+    browser = await chromium.launch();
+  }, 30_000);
+  // Chromium takes about ten seconds to exit after close on this platform.
+  afterAll(async () => {
+    await browser?.close();
+  }, 30_000);
+
+  /** One hold call: the action, what had been printed and appended, and the page's controls. */
+  type HoldCall = { action: string; printed: string; loops: LoopRecord[]; controls: Control[] };
+
+  /** Drive toward Mux's say in this process, with a hold that records each call and answers. */
+  async function heldRun(
+    headed: boolean,
+    answer: (call: number) => "go" | "end",
+    j: { url: string },
+  ): Promise<{ result: DriveResult; calls: HoldCall[]; printed: string[] }> {
+    const { drive } = await import("harness/run.ts");
+    const corpus = join(mkdtempSync(join(tmpdir(), "strata-harness-test-")), "runs");
+    temps.push(dirname(corpus));
+    const printed: string[] = [];
+    const calls: HoldCall[] = [];
+    const result = await drive({
+      instruction: "have Mux say something funny",
+      worldDir: join(ROOT, "world"),
+      tickMinutes: 10,
+      headed,
+      maxLoops: 24,
+      corpusDir: corpus,
+      jev: { endpoint: j.url },
+      model: { endpoint: model(goal(MUX_SAYS, true), { words: LINE }).url },
+      host: hostBench,
+      browser,
+      print: (text) => printed.push(text),
+      hold: async (action) => {
+        const page = browser.contexts()[0]?.pages()[0];
+        if (page === undefined) throw new Error("the run has no page open");
+        const runDir = join(corpus, readdirSync(corpus)[0] ?? "");
+        calls.push({
+          action,
+          printed: printed.join("\n"),
+          loops: lines<LoopRecord>(join(runDir, "loops.jsonl")),
+          controls: (await readPage(page)).controls,
+        });
+        return answer(calls.length);
+      },
+    });
+    return { result, calls, printed };
+  }
+
+  test("each hold comes after its loop is printed and appended, with the page as that loop read it", async () => {
+    const { result, calls } = await heldRun(true, () => "go", preferring(MUX_SAY_MOVES));
+    const loops = lines<LoopRecord>(join(result.runDir, "loops.jsonl"));
+    expect(result.record.outcome).toEqual({ kind: "reached", loop: 5, done: NO_DONE });
+    // Once per performed action, and never on the reached loop.
+    expect(loops.map((entry) => entry.action)).toEqual([...MUX_SAY_MOVES, null]);
+    expect(calls.map((call) => call.action)).toEqual(MUX_SAY_MOVES);
+    calls.forEach((call, i) => {
+      const entry = loops[i] as LoopRecord;
+      // That loop is the last one appended to loops.jsonl, and the last one printed whole.
+      expect(call.loops).toEqual(loops.slice(0, i + 1));
+      const shown = call.printed.slice(call.printed.lastIndexOf("--- loop "));
+      expect(shown.startsWith(`--- loop ${entry.loop}\nstate:\n${entry.state}\nquestions:\n`)).toBe(
+        true,
+      );
+      for (const [key, question] of Object.entries(entry.questions)) {
+        const score =
+          key === "done"
+            ? entry.answers.done
+            : entry.answers.scored.find((scored) => scored.key === key)?.score;
+        expect(shown).toContain(`  ${key}: ${question.instructions} -> ${score}\n`);
+      }
+      expect(shown).toContain(`decision: ${entry.decision.kind}`);
+      expect(shown.endsWith(`action: ${call.action}`)).toBe(true);
+      // Nothing was performed yet: the page's controls are as that loop read them.
+      expect(call.controls).toEqual(entry.controls);
+    });
+  }, 60_000);
+
+  test("a hold answering end on its second call stops the run there, the action not performed", async () => {
+    const { result, calls } = await heldRun(
+      true,
+      (call) => (call === 2 ? "end" : "go"),
+      preferring(["press Step"]),
+    );
+    expect(calls.map((call) => call.action)).toEqual(["press Step", "press Step"]);
+    expect(result.record.outcome).toMatchObject({
+      kind: "stopped",
+      stopped: { kind: "hold", call: "loop 2" },
+    });
+    expect(result.record.stopped).toMatchObject({ kind: "hold", call: "loop 2" });
+    expect(result.record.loops).toBe(2);
+    // The first loop's Step was performed and the second's was not: the clock ticked once.
+    const events = lines<WorldEvent>(join(result.runDir, "events.jsonl"));
+    expect(events.map((e) => e.subkind)).toEqual(["time.tick"]);
+    expect(RUN_FILES.filter((file) => !existsSync(join(result.runDir, file)))).toEqual([]);
+  }, 60_000);
+
+  test("a headless run never calls the hold", async () => {
+    const { result, calls } = await heldRun(false, () => "end", preferring(MUX_SAY_MOVES));
+    expect(result.record.outcome).toEqual({ kind: "reached", loop: 5, done: NO_DONE });
+    expect(calls).toEqual([]);
+  }, 60_000);
+});
+
+describe("H6: a fresh run's files carry the committed run's keys", () => {
+  const COMMITTED = join(ROOT, "corpus", "runs", "2026-10-31T14-36-50-377Z");
+
+  test("run.json, its parameters, and every loops.jsonl line have the committed run's key sets", async () => {
+    const m = model(goal(MUX_SAYS, true), { words: LINE });
+    const ran = await play("have Mux say something funny", endpoints(m, preferring(MUX_SAY_MOVES)));
+    const committed = JSON.parse(readFileSync(join(COMMITTED, "run.json"), "utf8")) as RunRecord;
+    const keys = (value: object) => Object.keys(value).sort();
+    expect(keys(ran.record)).toEqual(keys(committed));
+    expect(keys(ran.record.parameters)).toEqual(keys(committed.parameters));
+    const committedLoops = lines<LoopRecord>(join(COMMITTED, "loops.jsonl"));
+    const loopKeys = [...new Set(committedLoops.map((entry) => keys(entry).join(",")))];
+    expect(loopKeys).toHaveLength(1);
+    const fresh = lines<LoopRecord>(join(ran.runDir, "loops.jsonl"));
+    expect(fresh.length).toBeGreaterThan(0);
+    expect([...new Set(fresh.map((entry) => keys(entry).join(",")))]).toEqual(loopKeys);
   }, 60_000);
 });

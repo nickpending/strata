@@ -1,6 +1,7 @@
 import { existsSync, statSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { type BootRefusal, boot, type Engine } from "../engine/engine.ts";
+import { type Copy, kindOf, type Subkind, subkinds, type WorldEvent } from "../engine/events.ts";
 import type { Pending } from "../engine/pending.ts";
 import { verbs } from "../engine/rules.ts";
 import type { Snapshot } from "../engine/snapshot.ts";
@@ -22,6 +23,18 @@ export type ServeOptions = {
 
 /** The body of GET /api/snapshot: the snapshot's fields, and every pending state beside them. */
 export type SnapshotBody = Snapshot & { pending: Pending[] };
+
+/** The body of GET /api/verbs: each verb as JSON Schema, with the fields it takes. */
+export type VerbsBody = { verbs: ReturnType<typeof verbs> };
+
+/** The body of GET /api/subkinds: every registry subkind, in registry order, with its family. */
+export type SubkindsBody = { subkinds: { subkind: Subkind; kind: string }[] };
+
+/** The body of GET /api/events: every event after the `since` seq, in order. */
+export type EventsBody = { events: WorldEvent[] };
+
+/** The body of GET /api/received/<person>: the copies that person has received. */
+export type ReceivedBody = { thing: string; copies: Copy[] };
 
 export type Started =
   | { ok: true; server: Bun.Server<undefined>; stop: () => void }
@@ -105,15 +118,23 @@ class Bench {
         return file === null ? json(MALFORMED_PATH, 400) : staticFile(file);
       }
       if (path === "/api/snapshot") {
-        return json({ ...this.engine.snapshot(), pending: this.engine.pending() });
+        return json({
+          ...this.engine.snapshot(),
+          pending: this.engine.pending(),
+        } satisfies SnapshotBody);
       }
-      if (path === "/api/verbs") return json({ verbs: verbs() });
+      if (path === "/api/verbs") return json({ verbs: verbs() } satisfies VerbsBody);
+      if (path === "/api/subkinds") {
+        return json({
+          subkinds: subkinds.map((subkind) => ({ subkind, kind: kindOf(subkind) })),
+        } satisfies SubkindsBody);
+      }
       if (path === "/api/events") return this.events(url.searchParams.get("since"));
       if (path.startsWith("/api/received/")) {
         const thing = decoded(path.slice(14));
         if (thing === null) return json(MALFORMED_PATH, 400);
         if (!this.engine.isPerson(thing)) return json({ error: `no person "${thing}"` }, 404);
-        return json({ thing, copies: this.engine.received(thing) });
+        return json({ thing, copies: this.engine.received(thing) } satisfies ReceivedBody);
       }
     }
     if (request.method === "POST") {
@@ -129,7 +150,7 @@ class Bench {
     if (!Number.isInteger(seq) || seq < 0) {
       return json({ error: "since must be a non-negative integer" }, 400);
     }
-    return json({ events: this.engine.events(seq) });
+    return json({ events: this.engine.events(seq) } satisfies EventsBody);
   }
 
   private async act(request: Request): Promise<Response> {

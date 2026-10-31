@@ -1,35 +1,20 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { mkdtempSync, rmSync } from "node:fs";
-import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { nameOf, type PageRead, readPage, unlabeled, useAccountBrowsers } from "harness/page.ts";
 import type { Browser } from "playwright";
-import {
-  nameOf,
-  type PageRead,
-  readPage,
-  unlabeled,
-  useAccountBrowsers,
-} from "../src/player/page.ts";
-import { startServer } from "../src/server/routes.ts";
+import { hostBench } from "../src/adapter/host.ts";
 
 const WORLD = join(import.meta.dir, "..", "world");
 
 let browser: Browser;
 let base: string;
 let stop: () => void = () => {};
-let dir: string;
 
 beforeAll(async () => {
-  dir = mkdtempSync(join(tmpdir(), "strata-page-"));
-  const started = startServer({
-    world: WORLD,
-    dbPath: join(dir, "world.sqlite"),
-    tickMinutes: 10,
-    port: 0,
-  });
-  if (!started.ok) throw new Error(started.refusal.message);
-  stop = started.stop;
-  base = `http://127.0.0.1:${started.server.port}/`;
+  const hosted = hostBench({ worldDir: WORLD, tickMinutes: 10 });
+  if (!hosted.ok) throw new Error(hosted.message);
+  stop = hosted.stop;
+  base = hosted.base;
   try {
     // Playwright fixes where it looks for browsers when first imported: find the account's first.
     useAccountBrowsers();
@@ -46,7 +31,6 @@ beforeAll(async () => {
 afterAll(async () => {
   await browser?.close();
   stop();
-  rmSync(dir, { recursive: true, force: true });
 }, 30_000);
 
 async function post(path: string, body: unknown): Promise<void> {

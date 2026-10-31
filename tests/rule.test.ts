@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { RULE_AUTHOR, T_ACT, T_DONE } from "../src/player/rule.ts";
-import type { RunRecord } from "../src/player/run.ts";
-import { type GoalFile, GRID, type ScoreFile } from "../src/player/score.ts";
+import { RULE_AUTHOR, T_ACT, T_DONE } from "harness/rule.ts";
+import type { RunRecord } from "harness/run.ts";
+import { type GoalFile, GRID, type ScoreFile } from "harness/score.ts";
 
 const GOALS = join(import.meta.dir, "..", "corpus", "goals");
 const RUN_FILES = ["events.jsonl", "loops.jsonl", "received.jsonl", "run.json"];
