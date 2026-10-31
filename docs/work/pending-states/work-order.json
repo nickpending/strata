@@ -1,0 +1,174 @@
+{
+ "workOrder": "pending-states",
+ "what": "Typed pending states served by the engine and shown on the bench page, and a player whose goal is a typed end state checked by code, which derives the resolving move for any pending state that stands between now and the goal before the clock's expiry and lets the model's candidates lead only when nothing is pending.",
+ "why": "docs/work/pending-states/design.md: every multi-step action shares one shape, an action opens a wait a named resolver must close before a deadline, and the player failed blind-1 on exactly that shape by stepping the clock past an offer's window; serving the shape once in the engine and deriving the move in code fixes the class, not the give.",
+ "criteria": [
+  {
+   "id": "C5",
+   "given": "a bench hosted on an ephemeral port, chromium launched, and local stand-ins for the decisions endpoint and the chat completions endpoint returning scripted answers",
+   "when": "the player runs the instruction 'have Mux say something funny' with the stand-in target {kind: goal, expect: {said: {person: mux, subkind: speech.say}}, needsWords: true} and scripted nouls that favour setting actor, then verb, then typing, then pressing Act, with the done noul scripted at 0.0 on every loop",
+   "then": "each loop's Jev call carries exactly one done noul and one noul per candidate the page offers and nothing else; the candidates in every loop are the page's own controls and options as read that loop; the browser performs the select, the typing and the press; the run ends reached on the loop after the Act, when the end state holds on the bench, though the done noul never passed T_DONE; every loop was printed to stdout and appended to loops.jsonl with its state text, questions, answers (the done noul included), held and action; and corpus/runs/<run-id>/run.json, loops.jsonl, events.jsonl and received.jsonl exist, the history holding the speech.say by mux with the stand-in's words and the total cost equal to the sum of the answered costs"
+  },
+  {
+   "id": "C6",
+   "given": "the hosted bench and the stand-ins",
+   "when": "the player runs 'have Rogue attack Glitch', with the stand-in model answering no-such-action for one run, an end state naming an item the page does not show for another, and a said end state naming a speech kind the registry lacks for a third; and separately runs with nouls that never pass T_ACT; and with a loop ceiling of 2",
+   "then": "the first three runs end no-such-action before any loop, the second naming the item the page lacks and the third the speech kind the registry lacks; the fourth ends stuck naming the best candidate and its score; the fifth ends at the ceiling after two loops; each writes run.json with that outcome and exits 1"
+  },
+  {
+   "id": "C8",
+   "given": "the goal file corpus/goals/calibration.json committed with author equal to RULE_AUTHOR, a goal file with another author, and the stand-ins",
+   "when": "score runs on each, and with --sweep on the second",
+   "then": "the first is refused naming both authors and writes nothing; the second runs every goal on its own fresh bench, checks each typed expectation (holder, location, said, no-such-action) against the bench's final snapshot and history, writes <set>.score.json with reached { held, of }, loops and cost per goal matching values derived by hand from the scripted answers, and --sweep replays the recorded loops over a stated T_ACT grid, reached taken from each loop's recorded held and resolve loops followed as recorded, T_DONE equal to its calibrated value in every result row, and prints the pair with the highest reached count"
+  },
+  {
+   "id": "C9",
+   "given": "the committed world and corpus/goals/calibration.json with corpus/goals/calibration.score.json and its runs, committed by the first build of this job with the real endpoints at tick length 10",
+   "when": "the rebuilt rule is in place and no sweep is re-run on the calibration set",
+   "then": "rule.ts exports RULE_AUTHOR, T_DONE and T_ACT unchanged and equal to the pair calibration.score.json records as best, the score file holds reached, loops and cost per goal, every run directory it names exists with its four files, and a test reads the constants and the score file and checks they agree"
+  },
+  {
+   "id": "C13",
+   "given": "the committed world booted at tick length 10, after rogue offers data-shard to glitch at tick 0, and separately after glitch departs east",
+   "when": "engine.pending() is read, GET /api/snapshot and POST /api/reset's body are read on a hosted bench in the same states, each listed resolution is performed through act() on its own fresh engine, and the offer's engine steps to its due tick",
+   "then": "pending equals values derived by hand: the offer's entry is opened by its exchange.offer event (actor rogue, target glitch, item data-shard), its due fires exchange.lapse at tick 2 with after holding data-shard by rogue, and its resolutions are exactly glitch accept {item: data-shard} (after: glitch holds it) and glitch refuse {item: data-shard} (after: rogue holds it); the transit's entry has no resolutions and its due fires physical.arrive at the arrivesAt tick with after locating glitch in back-room; /api/snapshot's body carries the same pending beside the snapshot's fields, the reset's body carries pending (empty on the fresh world), and engine.snapshot() carries no pending; each resolution performed is recorded and leaves its after holding; stepping to tick 2 records exchange.lapse and leaves pending empty",
+   "mutations": [
+    {
+     "id": "C13-M1",
+     "change": "drop the check that the schedule entry is gone after a candidate action, so every action rule() records counts as a resolution; C13 must go red listing resolutions beyond accept and refuse"
+    },
+    {
+     "id": "C13-M2",
+     "change": "derive pending inside Engine.snapshot() instead of its own accessor; C13 must go red on engine.snapshot() carrying pending"
+    }
+   ]
+  },
+  {
+   "id": "C14",
+   "given": "a bench hosted on an ephemeral port and chromium launched, after an offer of data-shard by rogue to glitch and a depart by glitch",
+   "when": "the page is read as text the way the player reads it",
+   "then": "a Pending section shows one line per pending state naming what opened it, each resolver with its verb, and what the clock fires at which tick (for the offer: rogue's offer of data-shard to glitch, glitch accept and glitch refuse, exchange.lapse at tick 2), the section adds no control, and the labelled-control test (tests/page.test.ts) still passes on the page"
+  },
+  {
+   "id": "C15",
+   "given": "the hosted bench, chromium and the stand-ins, the stand-in model answering the goal {holder: {item: stimpak, person: rogue}} for one run and {holder: {item: data-shard, person: glitch}} for another, and scripted nouls that favour the giver's offer moves until the offer is recorded and then score press Step above every other candidate on every later loop",
+   "when": "the player runs each",
+   "then": "each run ends reached with the item held by the goal's person; its history holds exchange.offer then exchange.accept and no exchange.lapse; no loop between the offer and reached pressed Step; each loop after the offer is recorded with decision kind resolve naming the pending state's opening event; and a run whose derived move is absent from the page stops stuck naming the pending state",
+   "mutations": [
+    {
+     "id": "C15-M1",
+     "change": "remove the resolve step, so the rule's choice always leads; C15 must go red with exchange.lapse in the history and the run not reached"
+    },
+    {
+     "id": "C15-M2",
+     "change": "leave press Step among the candidates while a resolution that satisfies the goal stands, with the resolve step also removed; C15 must go red naming the loop that pressed Step while the offer stood"
+    }
+   ]
+  },
+  {
+   "id": "C16",
+   "given": "the hosted bench and the stand-ins, the stand-in target {said: {person: mux, subkind: speech.say}}, scripted nouls that favour setting actor, verb, typing and Act, and the done noul scripted at 0.99 on every loop",
+   "when": "the player runs",
+   "then": "the run does not end reached on any loop before the end state holds on the bench, and ends reached on the first loop where it holds, the done noul recorded as 0.99 on every loop",
+   "mutations": [
+    {
+     "id": "C16-M1",
+     "change": "decide reached by the done noul against T_DONE again; C16 must go red with the run reached on loop 1 before any say is in the history"
+    }
+   ]
+  },
+  {
+   "id": "C17",
+   "given": "the committed world booted at tick length 10",
+   "when": "fieldIds() is read for exit, target, item and words, and the driver draws 400 actions with seed 3",
+   "then": "fieldIds returns exactly east and west for exit, glitch, mux and rogue for target, charge-cell, data-shard and stimpak for item, and null for words; every field value the driver draws is one of the snapshot's ids for that field, a words line, or one of its deliberate odd draws (absent, empty or an inherited key), and draws of 50 with seed 11 are identical twice",
+   "mutations": [
+    {
+     "id": "C17-M1",
+     "change": "make fieldIds('item') also return a name no item has; C17 must go red naming the drawn value that is no item"
+    },
+    {
+     "id": "C17-M2",
+     "change": "make fieldIds('item') leave out data-shard; C13 must go red with the offer's resolutions empty"
+    }
+   ]
+  }
+ ],
+ "issues": [],
+ "outOfScope": [
+  {
+   "kind": "cost",
+   "summary": "The blind goal set and its score come after the merge, as a walk: a blind set that exists while the rule is written is not blind, so the worktree proves scoring on the calibration set and the blind score runs once the rule is on main.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "no blind set can exist before the rule is on main: the rule's author is the builder, and the set is written against the merged rule by another agent"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "Jev and the model are not deterministic, so a player run is not reproducible from its parameters; the corpus is committed because the run cannot be re-made.",
+   "frequency": {
+    "kind": "measured",
+    "command": "python3 over reverie/docs/work/npc-mind-frame/evidence/jev_round5_results.json: moments whose pre-registered verdict (touches >= 0.80 and change >= 0.55) differed across the three reps",
+    "records": "32 moments, 3 reps each, 96 answers",
+    "count": 0,
+    "total": 32
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The calibrated T_ACT was set under the rule before this change (no pending precedence, reached by the done noul) and is kept, not re-swept, by the operator's condition; the calibration score records the old rule's runs.",
+   "frequency": {
+    "kind": "measured",
+    "command": "python3 -c \"import json;print(len(json.load(open('corpus/goals/calibration.score.json'))['perGoal']))\"",
+    "records": "corpus/goals/calibration.score.json",
+    "count": 9,
+    "total": 9
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "Every snapshot the bench serves tries each verb by each person over the world's ids through the rules to find the pending states' resolutions; the cost grows with people, verbs and ids, bounded on the committed world and paid only while a schedule entry stands.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "a cost on every snapshot route read while a schedule entry stands, not a usage case: the committed world has three people, three items and two exits, so the tries are bounded by people times verbs times ids, and the engine's own apply path never pays it"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "A pending state is seen only when it has a schedule entry; a later wait with no deadline would need one before the player could see it.",
+   "frequency": {
+    "kind": "measured",
+    "command": "grep -n 'case \"' src/engine/clock.ts (the actions that open a wait: physical.depart and exchange.offer, each scheduling its deadline)",
+    "records": "src/engine/clock.ts schedulePart",
+    "count": 0,
+    "total": 2
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The said end state's speech kinds are read from the engine's registry, not from the page: the goal typing knows a subkind the page does not yet show.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "the registry read only types the goal and drives nothing: every action the player performs is still a control the page shows"
+   }
+  }
+ ],
+ "walks": [
+  {
+   "criterion": "C9",
+   "when": "after merge, a fresh agent that is not RULE_AUTHOR and has read neither src/player/rule.ts nor corpus/goals/blind-1.json writes corpus/goals/blind-2.json (its own author, set blind-2, at least ten goals with typed expectations, at least one no-such-action and at least two whose end state is reached through an offer), and bun run src/player/score.ts --goals corpus/goals/blind-2.json --tick-minutes 10 runs on main with the real endpoints",
+   "then": "the score file reports reached on at least nine of every ten goals with loops and cost per goal, and the blind set, its score and its runs are committed under corpus/",
+   "by": "driver"
+  }
+ ],
+ "stakes": [
+  "A pending state is a clock schedule entry, and its resolutions and their results are derived by running the engine's own rules and reducers on a copy of the rows, served by its own engine accessor through the bench's routes, never on the engine's apply path, and shown on the page; nothing about a pending state is stated a second time and no verb, subkind or part is named in deriving it.",
+  "The player's goal is a typed end state from the closed set (holder, location, said, no-such-action), checked by code against the bench; reached is that check, never a model's claim, and the done noul is recorded but decides nothing.",
+  "While a pending state whose resolution leaves the goal's end state stands, the next action is derived by code from that resolution and the clock is never stepped past its expiry; no action kind is named in that derivation.",
+  "An end state naming a person, item or room the page does not show, or a speech kind the registry lacks, ends in no-such-action naming it; nothing invents a person, item, room or speech kind.",
+  "The ids a verb's field ranges over have one home, fieldIds() beside verbs(), read by the pending sweep and the driver alike.",
+  "Every loop's request, answers and decision are printed as they happen and recorded, the done noul included.",
+  "T_DONE and T_ACT keep their calibrated values; nothing is re-tuned against a blind set, and the blind walk uses a fresh set written by an agent that has read neither the rule nor an earlier blind set."
+ ]
+}
