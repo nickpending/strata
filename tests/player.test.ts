@@ -259,7 +259,8 @@ describe("C5: the player works the bench toward a typed end state", () => {
     expect(ran.record.outcome).toEqual({ kind: "reached", loop: 5, done: 0 });
     expect(loops.map((entry) => entry.held)).toEqual([false, false, false, false, true]);
     expect(loops.map((entry) => entry.answers.done)).toEqual([0, 0, 0, 0, 0]);
-    expect(ran.record.target).toEqual(goal(MUX_SAYS, true));
+    // A target with no steps records an empty plan, and the run is led by Jev from its first loop.
+    expect(ran.record.target).toEqual({ ...goal(MUX_SAYS, true), steps: [] });
     expect(ran.record.words).toBe(LINE);
 
     const requests = j.bodies as JevRequest[];
@@ -518,6 +519,164 @@ describe("C15: code resolves a pending offer before the clock lapses it", () => 
   }, 60_000);
 });
 
+/** A plan's step as the model writes it. */
+function step(actor: string, verb: string, fields: Record<string, string> = {}) {
+  return { actor, verb, fields };
+}
+
+/** The decision kinds of a run's loops, in order. */
+function kinds(loops: LoopRecord[]): string[] {
+  return loops.map((entry) => entry.decision.kind);
+}
+
+describe("the plan: code performs the target's typed steps, resolving and waiting out what stands between them", () => {
+  test("each give reaches its end state through plan and resolve loops alone, every noul below T_ACT", async () => {
+    const gives = [
+      {
+        instruction: "have Glitch give Rogue the stimpak",
+        expect: { holder: { item: "stimpak", person: "rogue" } },
+        steps: [
+          step("glitch", "offer", { target: "rogue", item: "stimpak" }),
+          step("rogue", "accept", { item: "stimpak" }),
+        ],
+        actions: [
+          "set verb to offer",
+          "set target to rogue",
+          "set item to stimpak",
+          "press Act",
+          "set actor to rogue",
+          "set verb to accept",
+          "press Act",
+          null,
+        ],
+      },
+      {
+        instruction: "have Rogue give Glitch the data shard",
+        expect: { holder: { item: "data-shard", person: "glitch" } },
+        steps: [
+          step("rogue", "offer", { target: "glitch", item: "data-shard" }),
+          step("glitch", "accept", { item: "data-shard" }),
+        ],
+        actions: [
+          "set actor to rogue",
+          "set verb to offer",
+          "set item to data-shard",
+          "press Act",
+          "set actor to glitch",
+          "set verb to accept",
+          "press Act",
+          null,
+        ],
+      },
+    ];
+    for (const give of gives) {
+      const target = { ...goal(give.expect), steps: give.steps };
+      const ran = await play(give.instruction, endpoints(model(target), preferring([])));
+      const loops = lines<LoopRecord>(join(ran.runDir, "loops.jsonl"));
+      const history = lines<WorldEvent>(join(ran.runDir, "events.jsonl")).map((e) => e.subkind);
+      expect({ outcome: ran.record.outcome?.kind, history, kinds: kinds(loops) }).toEqual({
+        outcome: "reached",
+        history: ["exchange.offer", "exchange.accept"],
+        kinds: ["plan", "plan", "plan", "plan", "resolve", "resolve", "resolve", "reached"],
+      });
+      expect(loops.map((entry) => entry.action)).toEqual(give.actions);
+      // Every plan loop names the step it serves: the offer, the plan's first.
+      for (const entry of loops.filter((l) => l.decision.kind === "plan")) {
+        expect(entry.decision).toMatchObject({ kind: "plan", step: 0 });
+      }
+      expect(ran.record.target).toEqual(target);
+      expect(ran.exitCode).toBe(0);
+    }
+  }, 60_000);
+
+  test("a walk then a say-to: Step is pressed through wait loops until Mux arrives, then the say-to", async () => {
+    const said = { said: { person: "mux", subkind: "speech.say-to" } };
+    const target = {
+      ...goal(said),
+      steps: [step("mux", "depart", { exit: "west" }), step("mux", "say-to", { target: "glitch" })],
+    };
+    const ran = await play(
+      "have Mux go out front and ask Glitch about the cell",
+      endpoints(model(target, { words: LINE }), preferring([])),
+    );
+    const loops = lines<LoopRecord>(join(ran.runDir, "loops.jsonl"));
+    const history = lines<WorldEvent>(join(ran.runDir, "events.jsonl")).map((e) => e.subkind);
+    expect({ outcome: ran.record.outcome?.kind, kinds: kinds(loops) }).toEqual({
+      outcome: "reached",
+      kinds: ["plan", "plan", "wait", "wait", "plan", "plan", "plan", "reached"],
+    });
+    expect(loops.map((entry) => entry.action)).toEqual([
+      "set actor to mux",
+      "press Act",
+      "press Step",
+      "press Step",
+      "set verb to say-to",
+      "type the words into words",
+      "press Act",
+      null,
+    ]);
+    expect(loops[2]?.decision).toMatchObject({
+      kind: "wait",
+      pending: { event: "e1", subkind: "physical.depart" },
+    });
+    expect(loops.slice(4, 7).map((entry) => entry.decision)).toEqual(
+      loops.slice(4, 7).map(() => expect.objectContaining({ kind: "plan", step: 1 })),
+    );
+    expect(history).toEqual([
+      "physical.depart",
+      "time.tick",
+      "time.tick",
+      "physical.arrive",
+      "speech.say-to",
+    ]);
+    // Code decided the run writes words: the end state is of kind said; the model said it needs none.
+    expect(ran.record.words).toBe(LINE);
+    expect(ran.exitCode).toBe(0);
+  }, 60_000);
+
+  test("a step naming an exit the page lacks ends no-such-action naming the exit", async () => {
+    const j = preferring([]);
+    const target = {
+      ...goal({ location: { person: "glitch", room: "back-room" } }),
+      steps: [step("glitch", "depart", { exit: "north" })],
+    };
+    const ran = await play("send Glitch north", endpoints(model(target), j));
+    expect(ran.exitCode).toBe(1);
+    expect(ran.record.outcome?.kind).toBe("no-such-action");
+    expect(JSON.stringify(ran.record.outcome)).toContain('the page shows no exit \\"north\\"');
+    expect(ran.record.loops).toBe(0);
+    expect(j.bodies).toHaveLength(0);
+  }, 60_000);
+
+  test("a step the bench refuses ends the plan, and the next loop is led by choose()", async () => {
+    // Rogue holds no stimpak: the offer is refused, so the plan's accept is never tried.
+    const target = {
+      ...goal({ holder: { item: "stimpak", person: "rogue" } }),
+      steps: [
+        step("rogue", "offer", { target: "glitch", item: "stimpak" }),
+        step("glitch", "accept", { item: "stimpak" }),
+      ],
+    };
+    const ran = await play("have Rogue get the stimpak", [
+      ...endpoints(model(target), preferring(["press Step"])),
+      "--max-loops",
+      "6",
+    ]);
+    const loops = lines<LoopRecord>(join(ran.runDir, "loops.jsonl"));
+    expect(kinds(loops)).toEqual(["plan", "plan", "plan", "plan", "act", "act"]);
+    expect(loops.map((entry) => entry.action)).toEqual([
+      "set actor to rogue",
+      "set verb to offer",
+      "set item to stimpak",
+      "press Act",
+      "press Step",
+      "press Step",
+    ]);
+    expect(loops[4]?.state).toContain("refused: not-holding");
+    expect(ran.record.outcome).toEqual({ kind: "ceiling", loops: 6 });
+  }, 60_000);
+});
+
 describe("C16: reached is the bench's check, never the done noul", () => {
   test("a done noul of 0.99 on every loop does not end the run before Mux has spoken", async () => {
     const m = model(goal(MUX_SAYS, true), { words: LINE });
@@ -580,7 +739,7 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     const ran = await play("send Glitch east", endpoints(model(TARGET), { url }));
     expectStopped(ran, "network", "loop 1");
     expect(ran.record.calls.map((c) => c.purpose)).toEqual(["target"]);
-    expect(ran.record.target).toEqual(TARGET);
+    expect(ran.record.target).toEqual({ ...TARGET, steps: [] });
   }, 60_000);
 
   test("config: a key name that resolves to nothing stops before any request", async () => {

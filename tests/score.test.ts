@@ -136,6 +136,23 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
     target: { kind: "goal", expect: MUX_SAYS, needsWords: true },
     steps: [...OFFER_STEPS, ...MUX_SAY_STEPS],
   },
+  {
+    // The model's plan, the giver's offer then the receiver's accept, leads every move; Jev favours
+    // nothing, so a replay that chose by score on a plan loop would leave the recorded path.
+    id: "stimpak-by-plan",
+    instruction: "have Glitch give Rogue the stimpak",
+    expect: { holder: { item: "stimpak", person: "rogue" } },
+    target: {
+      kind: "goal",
+      expect: { holder: { item: "stimpak", person: "rogue" } },
+      needsWords: false,
+      steps: [
+        { actor: "glitch", verb: "offer", fields: { target: "rogue", item: "stimpak" } },
+        { actor: "rogue", verb: "accept", fields: { item: "stimpak" } },
+      ],
+    },
+    steps: [],
+  },
 ];
 
 function serve(answer: (body: Record<string, unknown>) => Response): {
@@ -303,13 +320,15 @@ describe("C8: scoring a goal set by expected end states", () => {
     expect(ran.exitCode).toBe(0);
 
     const written = JSON.parse(readFileSync(join(dir, "scripted.score.json"), "utf8")) as ScoreFile;
-    // Four goals hold; the last two reached the model's end state, but the file's does not hold.
-    expect(written.reached).toEqual({ held: 4, of: 6 });
+    // Five goals hold; two reached the model's end state, but the file's does not hold.
+    expect(written.reached).toEqual({ held: 5, of: 7 });
     // Loops and cost per goal, derived by hand from the scripted answers: one Jev call per loop
     // (each move, each move code derives, and the loop that finds the end state holding), one
     // model call for the target and one more for the words. The give: four offer moves, then set
     // actor to glitch, set verb to accept and press Act by resolve, then reached: 8 loops. The
-    // depart: press Act, then press Step by resolve, then reached: 3.
+    // depart: press Act, then press Step by resolve, then reached: 3. The plan's give: set verb to
+    // offer, set target to rogue, set item to stimpak and press Act by plan, then the accept's
+    // three moves by resolve, then reached: 8.
     const expected = {
       "give-shard": {
         outcome: "reached",
@@ -342,6 +361,12 @@ describe("C8: scoring a goal set by expected end states", () => {
         costUsd: 2 * MODEL_COST + 9 * JEV_COST,
         held: false,
       },
+      "stimpak-by-plan": {
+        outcome: "reached",
+        loops: 8,
+        costUsd: MODEL_COST + 8 * JEV_COST,
+        held: true,
+      },
     };
     expect(written.perGoal.map((g) => g.id)).toEqual(Object.keys(expected));
     for (const goal of written.perGoal) {
@@ -354,12 +379,12 @@ describe("C8: scoring a goal set by expected end states", () => {
       });
       expect(goal.costUsd).toBeCloseTo(want.costUsd, 12);
     }
-    expect(m.calls).toBe(8);
-    expect(j.calls).toBe(33);
+    expect(m.calls).toBe(9);
+    expect(j.calls).toBe(41);
 
     // Each goal ran on its own fresh bench: each history starts at e1 and holds only its own acts.
     const runs = readdirSync(corpus).sort();
-    expect(runs).toHaveLength(6);
+    expect(runs).toHaveLength(7);
     const histories = written.perGoal.map((goal) =>
       readFileSync(join(dir, goal.run, "events.jsonl"), "utf8")
         .split("\n")
@@ -373,6 +398,7 @@ describe("C8: scoring a goal set by expected end states", () => {
       [],
       ["exchange.offer", "exchange.accept"],
       ["exchange.offer", "speech.say"],
+      ["exchange.offer", "exchange.accept"],
     ]);
     for (const events of histories) {
       if (events.length > 0) expect(events[0]?.id).toBe("e1");
@@ -394,8 +420,9 @@ describe("C8: scoring a goal set by expected end states", () => {
       [],
       [...times(7, false), true],
       [...times(8, false), true],
+      [...times(7, false), true],
     ]);
-    // The loops code derived: the give's accept moves, and the depart's Step.
+    // The loops code derived: the give's accept moves, the depart's Step, and the plan's offer.
     expect(records.map((loops) => loops.map((entry): string => entry.decision.kind))).toEqual([
       ["act", "act", "act", "act", "resolve", "resolve", "resolve", "reached"],
       ["act", "resolve", "reached"],
@@ -403,25 +430,27 @@ describe("C8: scoring a goal set by expected end states", () => {
       [],
       ["act", "act", "act", "act", "resolve", "resolve", "resolve", "reached"],
       [...Array.from({ length: 8 }, () => "act"), "reached"],
+      ["plan", "plan", "plan", "plan", "resolve", "resolve", "resolve", "reached"],
     ]);
 
     // The sweep, by hand. T_DONE is its calibrated value in every row. The no-such-action goal
-    // holds at every T_ACT; the two goals whose runs reach the model's end state without the
-    // file's at none. Give-shard and glitch-east hold where their favoured moves reach the act
-    // threshold, their resolve loops followed as recorded (on the give's, Jev favoured press Step);
-    // mux-says needs its typing, scored lower, to reach it too.
+    // holds at every T_ACT, and so does the plan's give, its plan and resolve loops followed as
+    // recorded though Jev favoured nothing; the two goals whose runs reach the model's end state
+    // without the file's hold at none. Give-shard and glitch-east hold where their favoured moves
+    // reach the act threshold, their resolve loops followed as recorded (on the give's, Jev
+    // favoured press Step); mux-says needs its typing, scored lower, to reach it too.
     const heldAt = (act: number) =>
-      1 + (act <= FAVOURED ? 2 : 0) + (act <= FAVOURED && act <= MID_ACT ? 1 : 0);
-    const acts = GRID.act.filter((act) => heldAt(act) === 4);
+      2 + (act <= FAVOURED ? 2 : 0) + (act <= FAVOURED && act <= MID_ACT ? 1 : 0);
+    const acts = GRID.act.filter((act) => heldAt(act) === 5);
     const best = { done: T_DONE, act: acts[Math.floor((acts.length - 1) / 2)] as number };
     expect(acts.length).toBeGreaterThan(0);
     // The grid holds a T_ACT that the typing misses and the other moves pass.
-    expect(GRID.act.some((act) => heldAt(act) === 3)).toBe(true);
+    expect(GRID.act.some((act) => heldAt(act) === 4)).toBe(true);
     expect(written.sweep?.grid).toEqual({ done: [T_DONE], act: GRID.act });
     expect(written.sweep?.results.map((r) => r.done)).toEqual(GRID.act.map(() => T_DONE));
-    expect(written.sweep?.best).toEqual({ ...best, held: 4 });
+    expect(written.sweep?.best).toEqual({ ...best, held: 5 });
     expect(written.sweep?.method.length).toBeGreaterThan(0);
-    expect(ran.stdout).toContain(`best: T_DONE=${best.done} T_ACT=${best.act} (held 4 of 6)`);
+    expect(ran.stdout).toContain(`best: T_DONE=${best.done} T_ACT=${best.act} (held 5 of 7)`);
     for (const pair of written.sweep?.results ?? []) {
       expect({ ...pair, held: heldAt(pair.act) }).toEqual(pair);
     }

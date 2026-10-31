@@ -27,6 +27,9 @@ export const expectSchema = z.union([
 ]);
 export type Expectation = z.infer<typeof expectSchema>;
 
+/** The body of GET /api/events: every event after the `since` seq, in order. */
+export type EventsBody = { events: WorldEvent[] };
+
 /** GET a bench route's JSON; a non-2xx answer throws naming the route and the status. */
 export async function getJson<T>(base: string, path: string): Promise<T> {
   const response = await fetch(new URL(path, base));
@@ -54,7 +57,7 @@ export function satisfies(expectation: Expectation, after: After): boolean {
 /** Whether an end-state expectation holds on the bench at `base` now. */
 export async function holds(expectation: Expectation, base: string): Promise<boolean> {
   if ("said" in expectation) {
-    const { events } = await getJson<{ events: WorldEvent[] }>(base, "/api/events?since=0");
+    const { events } = await getJson<EventsBody>(base, "/api/events?since=0");
     const { person, subkind } = expectation.said;
     return events.some((event) => event.actor === person && event.subkind === subkind);
   }

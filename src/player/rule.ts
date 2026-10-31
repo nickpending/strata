@@ -1,22 +1,25 @@
 /**
  * The player's pre-registered rule. Each loop asks Jev, in one call over a state rendered by code
- * (the goal and its end state, then the page's text), one noul whether the end state is reached and
- * one noul per candidate whether it is the next step; the answers are recorded, and code decides:
- * reached when the end state holds on the bench, the done noul deciding nothing; else resolve, when
- * a pending state stands whose resolution (or, failing one, whose due firing) leaves the end state,
- * by that resolution's next form move, or stuck naming the pending state when the page lacks it;
- * else the highest-scored candidate at or above T_ACT, with press Step withheld while a resolution
- * that leaves the end state stands; stuck when none reaches it. The thresholds are set from the
- * calibration goal set and recorded with its score; a goal set by this rule's author is never a
- * blind test of it.
+ * (the goal, its end state and its plan's steps, then the page's text), one noul whether the end
+ * state is reached and one noul per candidate whether it is the next step; the answers are
+ * recorded, and code decides: reached when the end state holds on the bench, the done noul deciding
+ * nothing; else resolve, when a pending state stands whose resolution (or, failing one, whose due
+ * firing) leaves the end state, by that resolution's next form move; else wait, pressing Step while
+ * a pending state the plan's last performed step opened stands with no one to resolve it; else
+ * plan, the next form move of the plan's next unperformed step; else the highest-scored candidate
+ * at or above T_ACT, with press Step withheld while a resolution that leaves the end state stands;
+ * stuck when none reaches it, or when the move code derived is not on the page. The thresholds are
+ * set from the calibration goal set and recorded with its score; a goal set by this rule's author
+ * is never a blind test of it.
  */
+import type { WorldEvent } from "../engine/events.ts";
 import type { Opened, Pending } from "../engine/pending.ts";
-import type { Action } from "../engine/rules.ts";
+import { verbs } from "../engine/rules.ts";
 import type { Candidate } from "./candidates.ts";
 import { described, satisfies } from "./goal.ts";
 import { type ClientOptions, type DecideResult, decide, type NoulQuestion } from "./jev.ts";
 import type { Control } from "./page.ts";
-import type { GoalTarget } from "./target.ts";
+import { type GoalTarget, STEP_FIELDS, type Step } from "./target.ts";
 
 /** Who wrote this rule and its calibration set; a blind goal set must carry another author. */
 export const RULE_AUTHOR = "claude-opus-5-5 (bench-driver builder)";
@@ -43,6 +46,8 @@ export type Serving = { event: string; subkind: string };
 export type Decision =
   | { kind: "reached"; done: number }
   | { kind: "resolve"; done: number; pending: Serving; chosen: Scored }
+  | { kind: "wait"; done: number; pending: Serving; chosen: Scored }
+  | { kind: "plan"; done: number; step: number; chosen: Scored }
   | { kind: "act"; done: number; chosen: Scored }
   | {
       kind: "stuck";
@@ -50,16 +55,62 @@ export type Decision =
       best: Scored | null;
       /** Set when the move a pending state needs is not on the page: the state and the move. */
       pending?: Serving & { move: string };
+      /** Set when the move the plan's next step needs is not on the page: its index and the move. */
+      step?: { index: number; move: string };
     };
 
-/** What the loop read besides the answers: whether the end state holds, the pending states, the controls. */
-export type Seen = { held: boolean; pending: Pending[]; controls: Control[] };
+/**
+ * Where the run is in its plan: the index of the next unperformed step, whether a refused step
+ * ended the plan, and the event the last performed step recorded (null before any).
+ */
+export type PlanProgress = { next: number; ended: boolean; opened: string | null };
 
-/** The state Jev reads: the goal and its end state, rendered by code, then the page as text. */
-export function renderState(goal: Goal, pageText: string): string {
+export const PLAN_START: PlanProgress = { next: 0, ended: false, opened: null };
+
+/**
+ * What the loop read besides the answers: whether the end state holds, the pending states, the
+ * controls, and where the run is in its plan.
+ */
+export type Seen = { held: boolean; pending: Pending[]; controls: Control[]; plan: PlanProgress };
+
+/**
+ * The plan after a press Act its next step led to, from the events that press recorded: the step
+ * is performed when one of them is its actor's, and refused, ending the plan, when none is.
+ */
+export function advanced(plan: PlanProgress, steps: Step[], recorded: WorldEvent[]): PlanProgress {
+  const step = steps[plan.next];
+  const event = step === undefined ? undefined : recorded.find((e) => e.actor === step.actor);
+  if (event === undefined) return { ...plan, ended: true };
+  return { next: plan.next + 1, ended: false, opened: event.id };
+}
+
+/** A step in words: who, the verb, and the fields it names. */
+function stepText(step: Step): string {
+  const named = Object.entries(step.fields)
+    .filter(([, value]) => typeof value === "string")
+    .map(([key, value]) => `${key} ${value}`);
+  return `${step.actor} ${step.verb}${named.length > 0 ? ` (${named.join(", ")})` : ""}`;
+}
+
+/** The plan's steps in words, each marked done or not, or nothing when the plan has none. */
+function planLines(goal: Goal, plan: PlanProgress): string[] {
+  const { steps } = goal.target;
+  if (steps.length === 0) return [];
+  return [
+    "Plan:",
+    ...steps.map(
+      (step, i) => `  ${i + 1}. ${stepText(step)}: ${i < plan.next ? "done" : "not done"}`,
+    ),
+    ...(plan.ended ? [`  Step ${plan.next + 1} was refused; the plan ends there.`] : []),
+  ];
+}
+
+/** The state Jev reads: the goal, its end state and its plan, rendered by code, then the page. */
+export function renderState(goal: Goal, pageText: string, plan: PlanProgress): string {
   return [
     `Goal: ${goal.instruction}`,
     `End state: ${described(goal.target.expect)}`,
+    ...planLines(goal, plan),
     ...(goal.words === null ? [] : [`Words to use: ${goal.words}`]),
     "",
     "The page now:",
@@ -94,18 +145,42 @@ export function choose(done: number, scored: Scored[], thresholds: Thresholds): 
   return { kind: "stuck", done, best };
 }
 
+/** An action as the form fills it: the actor, the verb, and a value for each field it takes. */
+export type FormAction = { actor: string; verb: string } & Record<string, string>;
+
 /**
  * The next form move toward `action` over the controls as read: setting the first of actor, verb
- * and each of the action's fields whose control holds another value; pressing Act when all agree.
+ * and each of the action's fields whose select holds another value; then typing the run's words
+ * into a field that is a text box and does not hold them; pressing Act when all agree.
  */
-export function nextMove(action: Action, controls: Control[]): string {
+export function nextMove(action: FormAction, controls: Control[], words: string | null): string {
   const { actor, verb, ...fields } = action;
+  const typing: string[] = [];
   for (const [label, value] of [["actor", actor], ["verb", verb], ...Object.entries(fields)]) {
-    if (controls.find((control) => control.label === label)?.value !== value) {
-      return `set ${label} to ${value}`;
+    const control = controls.find((c) => c.label === label);
+    if (control !== undefined && (control.kind === "input" || control.kind === "textarea")) {
+      if (control.value !== words) typing.push(`type the words into ${label}`);
+    } else if (control?.value !== value) return `set ${label} to ${value}`;
+  }
+  return typing[0] ?? PRESS_ACT;
+}
+
+/**
+ * A plan's step as the form fills it: the fields its verb takes, each id-ranged one as the step
+ * names it (left as the form holds it when the step names none) and each free-text one with the
+ * run's words.
+ */
+function stepAction(step: Step, words: string | null): FormAction {
+  const action: FormAction = { actor: step.actor, verb: step.verb };
+  const named: Record<string, string | null | undefined> = step.fields;
+  for (const field of verbs().find((v) => v.verb === step.verb)?.fields ?? []) {
+    if (!STEP_FIELDS.includes(field)) action[field] = words ?? "";
+    else {
+      const value = named[field];
+      if (typeof value === "string") action[field] = value;
     }
   }
-  return PRESS_ACT;
+  return action;
 }
 
 /**
@@ -117,13 +192,18 @@ function serving(goal: Goal, seen: Seen): { opened: Opened; move: string } | nul
   for (const entry of seen.pending) {
     const resolution = entry.resolutions.find((r) => satisfies(goal.target.expect, r.after));
     if (resolution !== undefined) {
-      return { opened: entry.opened, move: nextMove(resolution.action, seen.controls) };
+      return { opened: entry.opened, move: nextMove(resolution.action, seen.controls, goal.words) };
     }
     if (satisfies(goal.target.expect, entry.due.after)) {
       return { opened: entry.opened, move: PRESS_STEP };
     }
   }
   return null;
+}
+
+/** The candidate `move` names among the scored ones, if the page offers it. */
+function offered(scored: Scored[], move: string): Scored | undefined {
+  return scored.find((candidate) => candidate.description === move);
 }
 
 /** The rule over one loop: what it read and Jev's answers, in the order the rule decides. */
@@ -138,11 +218,32 @@ export function decideLoop(
   const serves = serving(goal, seen);
   if (serves !== null) {
     const pending = { event: serves.opened.id, subkind: serves.opened.subkind };
-    const chosen = scored.find((candidate) => candidate.description === serves.move);
+    const chosen = offered(scored, serves.move);
     if (chosen === undefined) {
       return { kind: "stuck", done, best: null, pending: { ...pending, move: serves.move } };
     }
     return { kind: "resolve", done, pending, chosen };
+  }
+  const { plan } = seen;
+  const waiting = seen.pending.find(
+    (entry) => entry.opened.id === plan.opened && entry.resolutions.length === 0,
+  );
+  if (waiting !== undefined) {
+    const pending = { event: waiting.opened.id, subkind: waiting.opened.subkind };
+    const chosen = offered(scored, PRESS_STEP);
+    if (chosen === undefined) {
+      return { kind: "stuck", done, best: null, pending: { ...pending, move: PRESS_STEP } };
+    }
+    return { kind: "wait", done, pending, chosen };
+  }
+  const step = plan.ended ? undefined : goal.target.steps[plan.next];
+  if (step !== undefined) {
+    const move = nextMove(stepAction(step, goal.words), seen.controls, goal.words);
+    const chosen = offered(scored, move);
+    if (chosen === undefined) {
+      return { kind: "stuck", done, best: null, step: { index: plan.next, move } };
+    }
+    return { kind: "plan", done, step: plan.next, chosen };
   }
   const resolvable = seen.pending.some((entry) =>
     entry.resolutions.some((r) => satisfies(goal.target.expect, r.after)),

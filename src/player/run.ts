@@ -10,10 +10,9 @@ import { appendFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSy
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { type Browser, type BrowserContext, chromium, type Page } from "playwright";
-import type { WorldEvent } from "../engine/events.ts";
 import { type SnapshotBody, startServer } from "../server/routes.ts";
 import { type Candidate, candidates } from "./candidates.ts";
-import { getJson, holds } from "./goal.ts";
+import { type EventsBody, getJson, holds } from "./goal.ts";
 import { type ClientOptions, JEV_MODEL, type Refusal } from "./jev.ts";
 import {
   type Control,
@@ -25,17 +24,20 @@ import {
   unlabeled,
 } from "./page.ts";
 import {
+  advanced,
   ask,
   type Decision,
   decideLoop,
   type Goal,
+  PLAN_START,
+  PRESS_ACT,
   REGISTERED,
   renderState,
   type Scored,
   type Seen,
   type Thresholds,
 } from "./rule.ts";
-import { askTarget, type RecordedTarget } from "./target.ts";
+import { askTarget, type RecordedTarget, writesWords } from "./target.ts";
 import { words as askWords, WORDS_MODEL } from "./words.ts";
 
 export type PlayerOptions = {
@@ -78,6 +80,7 @@ export type Outcome =
       loop: number;
       best: Scored | null;
       pending?: Extract<Decision, { kind: "stuck" }>["pending"];
+      step?: Extract<Decision, { kind: "stuck" }>["step"];
     }
   | { kind: "no-such-action"; reason: string }
   | { kind: "ceiling"; loops: number }
@@ -206,7 +209,7 @@ function runIdFor(corpusDir: string, startedAt: Date): string {
  * are written only once every read has answered, so a history file present is a complete one.
  */
 async function writeHistory(base: string, runDir: string): Promise<void> {
-  const { events } = await getJson<{ events: WorldEvent[] }>(base, "/api/events?since=0");
+  const { events } = await getJson<EventsBody>(base, "/api/events?since=0");
   const snapshot = await getJson<SnapshotBody>(base, "/api/snapshot");
   const lines: string[] = [];
   for (const person of Object.keys(snapshot.people)) {
@@ -272,10 +275,18 @@ function printLoop(print: (text: string) => void, entry: LoopRecord): void {
   }
   const { decision } = entry;
   const serves = "pending" in decision && decision.pending !== undefined ? decision.pending : null;
+  const index =
+    decision.kind === "plan"
+      ? decision.step
+      : decision.kind === "stuck"
+        ? decision.step?.index
+        : undefined;
+  const why = [
+    ...(serves === null ? [] : [`pending ${serves.subkind} ${serves.event}`]),
+    ...(index === undefined ? [] : [`plan step ${index + 1}`]),
+  ];
   lines.push(`held: ${entry.held}`);
-  lines.push(
-    `decision: ${decision.kind}${serves === null ? "" : ` (pending ${serves.subkind} ${serves.event})`}`,
-  );
+  lines.push(`decision: ${decision.kind}${why.length === 0 ? "" : ` (${why.join("; ")})`}`);
   lines.push(`action: ${entry.action ?? `none (${entry.decision.kind})`}`);
   print(lines.join("\n"));
 }
@@ -452,7 +463,7 @@ async function play(
     return;
   }
   let words: string | null = null;
-  if (target.needsWords) {
+  if (writesWords(target)) {
     const written = await askWords(options.instruction, target.expect, options.model);
     if (!written.ok) {
       hooks.finish({ kind: "stopped", stopped: { ...written.refusal, call: "words" } });
@@ -464,21 +475,32 @@ async function play(
     hooks.print(`words: ${words}`);
   }
   const goal: Goal = { instruction: options.instruction, target, words };
+  let plan = PLAN_START;
+  /** The log's last seq before a press Act the plan led to, until the next loop reads what it recorded. */
+  let pressedAfter: number | null = null;
+  const benchStop = (error: unknown, loop: number) => {
+    const message = error instanceof Error ? error.message : String(error);
+    hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call: `loop ${loop}` } });
+  };
 
   for (let loop = 1; loop <= options.maxLoops; loop++) {
     const read = await labelledRead(page, hooks, `loop ${loop}`);
     if (read === null) return;
     const offered = candidates(read.controls, words);
-    const state = renderState(goal, read.text);
     let seen: Seen;
     try {
+      if (pressedAfter !== null) {
+        const since = `/api/events?since=${pressedAfter}`;
+        plan = advanced(plan, target.steps, (await getJson<EventsBody>(base, since)).events);
+        pressedAfter = null;
+      }
       const { pending } = await getJson<SnapshotBody>(base, "/api/snapshot");
-      seen = { held: await holds(target.expect, base), pending, controls: read.controls };
+      seen = { held: await holds(target.expect, base), pending, controls: read.controls, plan };
     } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call: `loop ${loop}` } });
+      benchStop(error, loop);
       return;
     }
+    const state = renderState(goal, read.text, plan);
     const answered = await ask(state, goal, offered, options.jev);
     if (!answered.ok) {
       hooks.finish({ kind: "stopped", stopped: { ...answered.refusal, call: `loop ${loop}` } });
@@ -487,9 +509,7 @@ async function play(
     hooks.call("jev", `loop ${loop}`, answered.costUsd);
     const decision = decideLoop(goal, seen, answered, thresholds);
     const chosen =
-      decision.kind === "act" || decision.kind === "resolve"
-        ? offered.find((c) => c.key === decision.chosen.key)
-        : undefined;
+      "chosen" in decision ? offered.find((c) => c.key === decision.chosen.key) : undefined;
     const entry: LoopRecord = {
       loop,
       state,
@@ -521,8 +541,18 @@ async function play(
         loop,
         best: stuck?.best ?? null,
         ...(stuck?.pending === undefined ? {} : { pending: stuck.pending }),
+        ...(stuck?.step === undefined ? {} : { step: stuck.step }),
       });
       return;
+    }
+    if (decision.kind === "plan" && chosen.description === PRESS_ACT) {
+      try {
+        const { events } = await getJson<EventsBody>(base, "/api/events?since=0");
+        pressedAfter = events.at(-1)?.seq ?? 0;
+      } catch (error) {
+        benchStop(error, loop);
+        return;
+      }
     }
     await perform(page, chosen);
   }

@@ -46,7 +46,7 @@ export const GRID = {
 };
 
 export const SWEEP_METHOD =
-  "Each T_ACT value, T_DONE held at its calibrated value, replays every goal's recorded loops in order: at a loop whose recorded held is true the run reached its end state there, and the goal holds when its expectation held at the run's end; a resolve loop is followed as recorded, and a loop stuck on a pending state's missing move stops as recorded, at every value; elsewhere the rule's choose() at the value must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every value. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.";
+  "Each T_ACT value, T_DONE held at its calibrated value, replays every goal's recorded loops in order: at a loop whose recorded held is true the run reached its end state there, and the goal holds when its expectation held at the run's end; a resolve, wait or plan loop, which code chose, is followed as recorded, and a loop stuck on the missing move of a pending state or a plan's step stops as recorded, at every value; elsewhere the rule's choose() at the value must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every value. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.";
 
 export type GoalScore = {
   id: string;
@@ -81,13 +81,19 @@ export type ScoreFile = {
   sweep?: { grid: typeof GRID; method: string; results: SweepResult[]; best: SweepResult };
 };
 
+/** The decisions code makes whatever the thresholds: a replay follows them as recorded. */
+const CODE_LED: string[] = ["resolve", "wait", "plan"];
+
 /** Whether `goal` holds at `thresholds`, replaying its recorded loops (see SWEEP_METHOD). */
 function heldAt(goal: GoalScore, loops: LoopRecord[], thresholds: Thresholds): boolean {
   if ("outcome" in goal.expect) return goal.held;
   for (const entry of loops) {
     if (entry.held) return goal.held;
-    if (entry.decision.kind === "resolve") continue;
-    if (entry.decision.kind === "stuck" && entry.decision.pending !== undefined) return false;
+    if (CODE_LED.includes(entry.decision.kind)) continue;
+    const { decision: recorded } = entry;
+    if (recorded.kind === "stuck" && (recorded.pending ?? recorded.step) !== undefined) {
+      return false;
+    }
     const decision = choose(entry.answers.done, entry.answers.scored, thresholds);
     if (decision.kind !== "act") return false;
     if (entry.decision.kind !== "act" || entry.decision.chosen.key !== decision.chosen.key) {
