@@ -1,0 +1,40 @@
+{
+  "runId": "2026-10-31T06-54-31-612Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-10-31T06:54:31.612Z",
+  "endedAt": "2026-10-31T06:54:34.295Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for using or injecting an item. Its verbs are depart, say, say-to, whisper, offer, accept, and refuse, and none of the allowed end states (holding an item, being in a room, or having said something) can express Glitch administering the stimpak to himself. Glitch already holds the stimpak, so 'holder' would not show the injection."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for using or injecting an item. Its verbs are depart, say, say-to, whisper, offer, accept, and refuse, and none of the allowed end states (holding an item, being in a room, or having said something) can express Glitch administering the stimpak to himself. Glitch already holds the stimpak, so 'holder' would not show the injection."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002996
+    }
+  ],
+  "costUsd": 0.0002996,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}
