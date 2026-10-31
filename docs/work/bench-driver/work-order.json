@@ -1,0 +1,178 @@
+{
+ "workOrder": "bench-driver",
+ "what": "A bench driver that fires random legal and illegal actions through the engine and proves replay-equals-state and the world invariants after each, and a browser player that drives the bench page toward an instruction by reading it as text and asking Jev one yes/no per candidate control, with a language model only for the target and the words, every loop shown, every history recorded as the corpus, and a labelled-control test for every strata page.",
+ "why": "The engine's parts are a projection kept current by reducers, and nothing today proves that projection matches the log on sequences nobody wrote; the mind blocks are calibrated on labelled moments, which need coherent histories at volume no person will type; and strata is web-based, so a driver that works the page as a person does is the harness every later panel is driven by, whose mechanics the operator wants to watch. Design: docs/work/bench-driver/design.md",
+ "criteria": [
+  {
+   "id": "C1",
+   "given": "the committed world, tick length 10 and seed 7",
+   "when": "bun run src/driver/main.ts --seed 7 --actions 400 --tick-minutes 10 runs with a step every 5 actions",
+   "then": "it exits 0 printing a JSON report with seed 7, actions 400, steps 80, a tally holding at least one recorded event of every subkind in the registry, at least one refusal of every code in the closed set and at least one invalid action, and 480 replay checks and 480 invariant checks passed; the same seed run twice prints the same tally",
+   "mutations": [
+    {
+     "id": "C1-M1",
+     "change": "make the engine's apply loop write only the rows whose thing is the event's actor; the C1 run must go red with a replay difference naming the thing, the part, the event and both values"
+    },
+    {
+     "id": "C1-M2",
+     "change": "make the location reducer ignore physical.arrive; the C1 run must go red with the location invariant naming the person left in transit with no arrive due"
+    },
+    {
+     "id": "C1-M3",
+     "change": "make act() record the rule's events even when the rule refused; the C1 run must go red with the refusal check naming the event count that changed"
+    },
+    {
+     "id": "C1-M4",
+     "change": "drop the narrow rule from speech.whisper's registry entry; the C1 run must go red with the redaction invariant naming the non-participant copy that carries words"
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "given": "the booted rows of the committed world and a hand-built log of a depart, a tick, its arrive, an offer and its accept in seq order",
+   "when": "project(defs, events) runs, and compare runs over the live rows and a copy with one item's holder changed",
+   "then": "project returns rows equal to values derived by hand (Glitch located in the Back Room, the item's holder moved, the offer cleared, the schedule empty), and compare returns the one difference naming the item, the holder part and both values, and null for identical rows"
+  },
+  {
+   "id": "C3",
+   "given": "a snapshot, log and copies built by hand holding an item whose holder names no person, a person in transit with no arrive due, a whisper copy held by a non-participant carrying words, and an event whose payload fails its subkind's schema",
+   "when": "check runs over them, and separately over the freshly booted committed world",
+   "then": "the first returns four violations typed holder, location, redaction and log, each naming its thing, and the second returns none"
+  },
+  {
+   "id": "C4",
+   "given": "the booted snapshot and the verb list",
+   "when": "400 actions are drawn with seed 3, and 50 are drawn twice with seed 11",
+   "then": "the 400 include at least one action whose actor is no person, at least one inherited-key name among exit, item or target, at least one empty field and at least one action of every verb, and the two draws of 50 are identical"
+  },
+  {
+   "id": "C5",
+   "given": "a bench hosted on an ephemeral port, chromium launched, and local stand-ins for the decisions endpoint and the chat completions endpoint returning scripted answers",
+   "when": "the player runs the instruction 'have Mux say something funny' with the stand-in target {mux, say, needsWords, done} and scripted nouls that favour setting actor, then verb, then typing, then pressing Act, then done",
+   "then": "each loop's Jev call carries exactly one done noul and one noul per candidate the page offers and nothing else; the candidates in every loop are the page's own controls and options as read that loop; the browser performs the select, the typing and the press; the run ends reached after the Act when done passes T_DONE; every loop was printed to stdout and appended to loops.jsonl with its state text, questions, answers and action; and corpus/runs/<run-id>/run.json, loops.jsonl, events.jsonl and received.jsonl exist, the history holding the speech.say by mux with the stand-in's words and the total cost equal to the sum of the answered costs"
+  },
+  {
+   "id": "C6",
+   "given": "the hosted bench and the stand-ins",
+   "when": "the player runs 'have Rogue attack Glitch', with the stand-in model answering no-such-action for one run and answering a verb the page lacks for another; and separately runs with nouls that never pass T_ACT; and with a loop ceiling of 2",
+   "then": "the first two runs end no-such-action before any loop, the second naming the verb the page lacks; the third ends stuck naming the best candidate and its score; the fourth ends at the ceiling after two loops; each writes run.json with that outcome and exits 1"
+  },
+  {
+   "id": "C7",
+   "given": "the hosted bench and stand-ins that answer, in turn, a 500, a body that is not the answer shape, and no server at all, and a run whose key name resolves to nothing",
+   "when": "the player runs each",
+   "then": "each run stops at that call with run.json carrying stopped { kind } of status, parse, network and config respectively, exits 1 naming the kind, and the files written before the stop remain"
+  },
+  {
+   "id": "C8",
+   "given": "the goal file corpus/goals/calibration.json committed with author equal to RULE_AUTHOR, a goal file with another author, and the stand-ins",
+   "when": "score runs on each, and with --sweep on the second",
+   "then": "the first is refused naming both authors and writes nothing; the second runs every goal on its own fresh bench, checks each typed expectation (holder, location, said, no-such-action) against the bench's final snapshot and history, writes <set>.score.json with reached { held, of }, loops and cost per goal matching values derived by hand from the scripted answers, and --sweep prints the (T_DONE, T_ACT) pair with the highest reached count on a stated grid"
+  },
+  {
+   "id": "C9",
+   "given": "the committed world, the real decisions endpoint and the real chat completions endpoint, tick length 10",
+   "when": "the builder writes corpus/goals/calibration.json (author RULE_AUTHOR, at least eight goals covering depart, say, whisper, offer and accept, and one no-such-action), runs score --sweep on it, sets T_DONE and T_ACT in src/player/rule.ts to the printed pair, and commits corpus/goals/calibration.score.json and the runs under corpus/runs/",
+   "then": "rule.ts exports RULE_AUTHOR, T_DONE and T_ACT equal to the pair calibration.score.json records as best, the score file holds reached, loops and cost per goal, every run directory it names exists with its four files, and a test reads the constants and the score file and checks they agree"
+  },
+  {
+   "id": "C10",
+   "given": "the hosted bench and chromium",
+   "when": "tests/page.test.ts reads every button, select, input and textarea on the page, and separately a page with one unlabeled button",
+   "then": "every control on the bench has a non-empty label, and the unlabeled page fails naming that button"
+  },
+  {
+   "id": "C11",
+   "given": "the booted world after a C1 run",
+   "when": "the world/ files are hashed before and after",
+   "then": "the hashes are identical"
+  },
+  {
+   "id": "C12",
+   "given": "the repository at the job's commit with chromium build 1248 installed",
+   "when": "bun run verify runs (tsc --noEmit, biome check, bun test)",
+   "then": "it exits 0 with no finding"
+  }
+ ],
+ "issues": [
+  1,
+  2
+ ],
+ "outOfScope": [
+  {
+   "kind": "cost",
+   "summary": "The blind goal set and its score come after the merge, as a walk: a blind set that exists while the rule is written is not blind, so the worktree proves scoring on the calibration set and the blind score runs once the rule is on main.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "no blind set can exist before the rule is on main: the rule's author is the builder, and the set is written against the merged rule by another agent"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The player's text is one model-written line per run, when the target needs words; there is no voice and no persona, so the corpus carries plain lines until the block that speaks.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "nothing speaks in a voice in this block: voice prose is the speaking block's layer, as world-bench's design records"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The driver's actions are drawn from a biased uniform grammar with no coverage feedback; it finds what random reaches, not what a search would.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "the block's paths are a closed set, ten subkinds and eight refusal codes, and the driver criterion requires each to appear in one seeded run's tally"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "Jev and the model are not deterministic, so a player run is not reproducible from its parameters; the corpus is committed because the run cannot be re-made.",
+   "frequency": {
+    "kind": "measured",
+    "command": "recomputed from reverie/docs/work/npc-mind-frame/evidence/jev_round5_results.json: moments whose pre-registered verdict differed across the three reps",
+    "records": "32 moments, 3 reps each, 96 answers",
+    "count": 0,
+    "total": 32
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The replay oracle cannot catch a wrong reducer, since live and replay share it; the invariants carry that case, and the mutations prove which oracle catches which break.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "a wrong reducer is the invariants' case by design, and the location-reducer mutation in the criteria proves an invariant catches it"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "The player sees only what the page shows; a fact the bench does not render is one the player cannot reach, so a later block's panel must show what its goals need.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "every first-block fact (rooms, presence, holdings, ties, transit, offers, clock, schedule, history, received copies) is on the page, read in verify.txt's snapshot"
+   }
+  }
+ ],
+ "walks": [
+  {
+   "criterion": "C9",
+   "when": "after merge, an agent that is not RULE_AUTHOR writes corpus/goals/blind-1.json (its own author, at least ten goals with typed expectations, at least one no-such-action) without reading rule.ts, and bun run src/player/score.ts --goals corpus/goals/blind-1.json runs on main with the real endpoints, tick length 10",
+   "then": "the score file reports reached on at least nine of every ten goals with loops and cost per goal, and the blind set, its score and its runs are committed under corpus/"
+  },
+  {
+   "criterion": "C5",
+   "when": "after merge, bun run src/player/main.ts \"have Mux say something funny\" --tick-minutes 10 --headed runs on main",
+   "then": "a browser window opens on the hosted bench, each loop's state text, questions, answers and action print as they happen, Mux's say appears in the history, and the run's four files are written under corpus/runs/"
+  }
+ ],
+ "stakes": [
+  "The driver calls the engine library (boot, act, step, events, received) and nothing lower; the player calls the page as a person does, through a real browser, and reads the history back through the bench's own routes; the definitions are never written.",
+  "The replay oracle composes the engine's own initialRows and applyPart over the log and compares state rows; it keeps no second copy of any fact and persists nothing.",
+  "The invariants read the registry, the schemas and the typed views; no subkind, field or code is listed a second time in the driver.",
+  "The player's candidates are read from the page each loop, one noul per candidate plus one goal-reached noul in one Jev call; Jev never writes text, and a language model writes only the typed target and the words, each checked by code against what the page offers.",
+  "An instruction with no matching action ends in no-such-action; nothing invents a verb, an actor, an item or an exit the page does not show.",
+  "Every loop's request and answer are printed as they happen and recorded, and the browser can be watched.",
+  "The rule's thresholds are constants committed with the calibration goal set and its score before any blind set exists; a blind goal set carries an author other than the rule's recorded author, which score enforces by refusal, and is scored by expected end states after the merge.",
+  "Every player run is recorded as typed files under corpus/runs/<run-id>/ as it happens, with every question, answer, model call and cost, so a later block reads the corpus without the engine that produced it.",
+  "A refusal from either client stops the player naming its kind; the driver needs no model at all.",
+  "Every control on a strata page carries a clear label, held by a test that fails naming any that does not."
+ ]
+}
