@@ -32,8 +32,11 @@ export const targetSchema = z.discriminatedUnion("kind", [
   z.object({
     kind: z.literal("goal"),
     expect: endStateSchema,
-    /** The model's say on words, kept so recorded targets parse; code decides (writesWords). */
-    needsWords: z.boolean(),
+    /**
+     * The model's say on words, taken when it gives one and recorded with the target. It decides
+     * nothing: writesWords does, so an answer without it is accepted.
+     */
+    needsWords: z.boolean().optional(),
     steps: z.array(stepSchema).default([]),
   }),
   z.object({ kind: z.literal("no-such-action"), reason: name }),
@@ -188,7 +191,7 @@ function prompt(instruction: string, offered: Vocabulary, pageText: string): str
     pageText,
     "",
     "Answer with one JSON object and nothing else, either",
-    '{"kind": "goal", "expect": <the end state>, "needsWords": <true when someone says something>, "steps": [<action>, ...]}',
+    '{"kind": "goal", "expect": <the end state>, "steps": [<action>, ...]}',
     "where the end state is one of",
     '{"holder": {"item": "<item>", "person": "<person>"}} (the person holds the item),',
     '{"location": {"person": "<person>", "room": "<room>"}} (the person is in the room),',

@@ -677,6 +677,18 @@ describe("the plan: code performs the target's typed steps, resolving and waitin
   }, 60_000);
 });
 
+describe("whether the run writes words is code's to decide, never the model's", () => {
+  test("a target that leaves needsWords out runs, and a said end state still gets its words", async () => {
+    const said = { said: { person: "mux", subkind: "speech.say" } };
+    const m = model({ kind: "goal", expect: said }, { words: LINE });
+    const ran = await play("have Mux say something funny", endpoints(m, preferring(MUX_SAY_MOVES)));
+    expect(ran.record.outcome).toMatchObject({ kind: "reached", loop: 5 });
+    expect(ran.record.target).toEqual({ kind: "goal", expect: said, steps: [] });
+    expect(ran.record.words).toBe(LINE);
+    expect(ran.exitCode).toBe(0);
+  }, 60_000);
+});
+
 describe("C16: reached is the bench's check, never the done noul", () => {
   test("a done noul of 0.99 on every loop does not end the run before Mux has spoken", async () => {
     const m = model(goal(MUX_SAYS, true), { words: LINE });
