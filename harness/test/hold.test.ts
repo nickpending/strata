@@ -32,6 +32,24 @@ describe("holdOnEnter: a headed run's hold over stdin", () => {
     expect(answers).toEqual(["go", "go", "go", "end"]);
   });
 
+  test("holds made for separate runs over one input share it, each line answering one call", async () => {
+    let opened = 0;
+    const once = stdin("\n\n\n");
+    const input = () => {
+      opened++;
+      return once();
+    };
+    const first = holdOnEnter(input, () => {});
+    const second = holdOnEnter(input, () => {});
+    expect([await first("a"), await first("b"), await second("c"), await second("d")]).toEqual([
+      "go",
+      "go",
+      "go",
+      "end",
+    ]);
+    expect(opened).toBe(1);
+  });
+
   test("stdin is not read before the first hold", () => {
     let opened = 0;
     holdOnEnter(() => {

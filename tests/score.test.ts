@@ -211,7 +211,7 @@ function jevStandIn() {
   });
 }
 
-async function score(goals: string, corpus: string, flags: string[]) {
+async function score(goals: string, corpus: string, flags: string[], stdin?: string) {
   const proc = Bun.spawn(
     [
       process.execPath,
@@ -225,7 +225,13 @@ async function score(goals: string, corpus: string, flags: string[]) {
       corpus,
       ...flags,
     ],
-    { cwd: ROOT, env: process.env, stdout: "pipe", stderr: "pipe" },
+    {
+      cwd: ROOT,
+      env: process.env,
+      stdin: stdin === undefined ? "ignore" : new Response(stdin),
+      stdout: "pipe",
+      stderr: "pipe",
+    },
   );
   const [stdout, stderr, exitCode] = await Promise.all([
     new Response(proc.stdout).text(),
@@ -455,4 +461,44 @@ describe("C8: scoring a goal set by expected end states", () => {
       expect({ ...pair, held: heldAt(pair.act) }).toEqual(pair);
     }
   }, 240_000);
+});
+
+describe("H4: a headed score holds before every action of every goal", () => {
+  test("two goals over one stdin: each performed action waits on its own line, goal after goal", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "strata-score-"));
+    temps.push(dir);
+    const goalsFile = join(dir, "headed.json");
+    const two = GOALS.filter((g) => g.id === "glitch-east" || g.id === "mux-says");
+    writeFileSync(
+      goalsFile,
+      JSON.stringify({
+        set: "headed",
+        author: "a test, not the rule's author",
+        goals: two.map(({ id, instruction, expect }) => ({ id, instruction, expect })),
+      }),
+    );
+    const m = modelStandIn();
+    const j = jevStandIn();
+    const corpus = join(dir, "runs");
+    // One line per action the two goals perform: glitch-east's Act and Step, mux-says's four moves.
+    const ran = await score(
+      goalsFile,
+      corpus,
+      ["--model-endpoint", m.url, "--jev-endpoint", j.url, "--headed"],
+      "\n".repeat(6),
+    );
+    expect(ran.stderr).toBe("");
+    expect(ran.exitCode).toBe(0);
+    const written = JSON.parse(readFileSync(join(dir, "headed.score.json"), "utf8")) as ScoreFile;
+    expect(written.perGoal.map((g) => [g.id, g.outcome, g.held])).toEqual([
+      ["glitch-east", "reached", true],
+      ["mux-says", "reached", true],
+    ]);
+    const holds = ran.stdout.split("\n").filter((line) => line.startsWith("hold: "));
+    expect(holds).toEqual([
+      'hold: press Enter to perform "press Act"',
+      'hold: press Enter to perform "press Step"',
+      ...MUX_SAY_STEPS.map((move) => `hold: press Enter to perform "${move}"`),
+    ]);
+  }, 120_000);
 });

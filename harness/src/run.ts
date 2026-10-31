@@ -312,28 +312,45 @@ function printLoop(print: (text: string) => void, entry: LoopRecord): void {
   print(lines.join("\n"));
 }
 
+/** A stream read line by line: its reader, once opened, the text not yet taken, and whether it ended. */
+type LineSource = {
+  reader: ReadableStreamDefaultReader<Uint8Array> | null;
+  decoder: TextDecoder;
+  buffered: string;
+  ended: boolean;
+};
+
+/** The process's stdin, one stream however many runs hold on it. */
+const STDIN = () => Bun.stdin.stream();
+
+/** Each input's one line source: a stream takes one reader, so every hold over it shares it. */
+const sources = new WeakMap<() => ReadableStream<Uint8Array>, LineSource>();
+
 /**
  * The hold a headed run uses when none is given: it prints the action it holds before, and answers
- * go on the next line `input` gives, end once `input` has ended. One reader serves every call.
+ * go on the next line `input` gives, end once `input` has ended. Every hold over the same `input`
+ * shares one reader, so every run of a process (each goal of a headed score) holds on stdin in
+ * turn, each line answering one call.
  */
 export function holdOnEnter(
-  input: () => ReadableStream<Uint8Array> = () => Bun.stdin.stream(),
+  input: () => ReadableStream<Uint8Array> = STDIN,
   print: (text: string) => void = (text) => console.log(text),
 ): Hold {
-  let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
-  const decoder = new TextDecoder();
-  let buffered = "";
-  let ended = false;
   return async (action) => {
     print(`hold: press Enter to perform "${action}"`);
-    reader ??= input().getReader();
-    while (!buffered.includes("\n")) {
-      if (ended) return "end";
-      const { done, value } = await reader.read();
-      if (done) ended = true;
-      else buffered += decoder.decode(value, { stream: true });
+    let source = sources.get(input);
+    if (source === undefined) {
+      source = { reader: null, decoder: new TextDecoder(), buffered: "", ended: false };
+      sources.set(input, source);
     }
-    buffered = buffered.slice(buffered.indexOf("\n") + 1);
+    source.reader ??= input().getReader();
+    while (!source.buffered.includes("\n")) {
+      if (source.ended) return "end";
+      const { done, value } = await source.reader.read();
+      if (done) source.ended = true;
+      else source.buffered += source.decoder.decode(value, { stream: true });
+    }
+    source.buffered = source.buffered.slice(source.buffered.indexOf("\n") + 1);
     return "go";
   };
 }

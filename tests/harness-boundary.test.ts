@@ -1,5 +1,13 @@
 import { afterAll, describe, expect, test } from "bun:test";
-import { cpSync, existsSync, mkdtempSync, realpathSync, rmSync, symlinkSync } from "node:fs";
+import {
+  cpSync,
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join, sep } from "node:path";
 
@@ -71,5 +79,62 @@ describe("H1: the harness package reaches nothing outside itself and its depende
 
   test("no file of the old player remains under src/player", () => {
     expect(existsSync(join(ROOT, "src", "player"))).toBe(false);
+  });
+});
+
+/** Every value a manifest gives under a key named `name`, with the path of keys that leads to it. */
+function named(value: unknown, name: string, path: string[] = []): [string, unknown][] {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) return [];
+  return Object.entries(value).flatMap(([key, inner]) => [
+    ...(key === name ? ([[[...path, key].join("."), inner]] as [string, unknown][]) : []),
+    ...named(inner, name, [...path, key]),
+  ]);
+}
+
+describe("H8: every version the root and the harness share has one home, the workspace catalog", () => {
+  const SHARED = [
+    "playwright",
+    "zod",
+    "@voidwire/apiconf",
+    "typescript",
+    "bun-types",
+    "@biomejs/biome",
+  ];
+  const read = (file: string): unknown => JSON.parse(readFileSync(join(ROOT, file), "utf8"));
+  const manifests = {
+    "package.json": read("package.json"),
+    "harness/package.json": read("harness/package.json"),
+  };
+
+  test("each shared dependency is versioned in the catalog alone and named as catalog: everywhere else", () => {
+    const catalog = (
+      manifests["package.json"] as { workspaces?: { catalog?: Record<string, string> } }
+    ).workspaces?.catalog;
+    for (const name of SHARED) {
+      expect({ name, version: catalog?.[name] }).toEqual({
+        name,
+        version: expect.stringMatching(/^\d/),
+      });
+    }
+    const elsewhere = Object.entries(manifests).flatMap(([file, manifest]) =>
+      SHARED.flatMap((name) =>
+        named(manifest, name)
+          .filter(([path]) => path !== `workspaces.catalog.${name}`)
+          .map(([path, value]) => ({ file, path, value })),
+      ),
+    );
+    // Every name both packages use is named by each, so each shared dependency is named somewhere.
+    for (const name of SHARED) {
+      expect(elsewhere.some((entry) => entry.path.endsWith(`.${name}`))).toBe(true);
+    }
+    expect(elsewhere.filter((entry) => entry.value !== "catalog:")).toEqual([]);
+  });
+
+  test("the install is hoisted: bunfig pins the linker and harness/ holds no node_modules", () => {
+    const bunfig = Bun.TOML.parse(readFileSync(join(ROOT, "bunfig.toml"), "utf8")) as {
+      install?: { linker?: string };
+    };
+    expect(bunfig.install?.linker).toBe("hoisted");
+    expect(existsSync(join(ROOT, "harness", "node_modules"))).toBe(false);
   });
 });
