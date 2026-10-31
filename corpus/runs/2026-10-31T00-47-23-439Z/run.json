@@ -66,5 +66,7 @@
     }
   ],
   "costUsd": 0.000550076,
-  "held": true
+  "unreportedCosts": 0,
+  "held": true,
+  "benchFailures": []
 }

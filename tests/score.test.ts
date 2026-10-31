@@ -52,9 +52,16 @@ const SHARD_STEPS = [
   "press Act",
 ];
 
+const MUX_SAY_STEPS = [
+  "set actor to mux",
+  "set verb to say",
+  "type the words into words",
+  "press Act",
+];
+
 /**
- * One goal per expectation type, each with its model target and scripted Jev answers, and one
- * whose run reaches done while its expectation does not hold on the bench.
+ * One goal per expectation type, each with its model target and scripted Jev answers, and two
+ * whose runs reach done while their expectations do not hold on the bench.
  */
 const GOALS: (Scripted & { id: string; expect: unknown })[] = [
   {
@@ -98,7 +105,7 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
       needsWords: true,
       done: "Has Mux spoken?",
     },
-    steps: ["set actor to mux", "set verb to say", "type the words into words", "press Act"],
+    steps: MUX_SAY_STEPS,
   },
   {
     id: "moon",
@@ -121,6 +128,21 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
       done: "Does Glitch hold the data shard?",
     },
     steps: SHARD_STEPS,
+  },
+  {
+    // Rogue offers the shard and Mux speaks, and Jev answers done: Rogue acted and someone said
+    // something, but Rogue never said anything, so the expectation holds at no loop.
+    id: "rogue-says-wrong-speaker",
+    instruction: "have Rogue say something",
+    expect: { said: { person: "rogue", subkind: "speech.say" } },
+    target: {
+      kind: "action",
+      actor: "rogue",
+      verb: "say",
+      needsWords: true,
+      done: "Has Rogue spoken?",
+    },
+    steps: [...SHARD_STEPS.slice(0, 4), ...MUX_SAY_STEPS],
   },
 ];
 
@@ -249,8 +271,8 @@ describe("C8: scoring a goal set by expected end states", () => {
     expect(ran.exitCode).toBe(0);
 
     const written = JSON.parse(readFileSync(join(dir, "scripted.score.json"), "utf8")) as ScoreFile;
-    // Four goals hold; the fifth reached done, but its expectation does not hold on the bench.
-    expect(written.reached).toEqual({ held: 4, of: 5 });
+    // Four goals hold; the last two reached done, but their expectations do not hold on the bench.
+    expect(written.reached).toEqual({ held: 4, of: 6 });
     // Loops and cost per goal, derived by hand from the scripted answers: one Jev call per step
     // plus the loop that answers done, one model call for the target, one more for the words.
     const expected = {
@@ -279,6 +301,12 @@ describe("C8: scoring a goal set by expected end states", () => {
         costUsd: MODEL_COST + 8 * JEV_COST,
         held: false,
       },
+      "rogue-says-wrong-speaker": {
+        outcome: "reached",
+        loops: 9,
+        costUsd: 2 * MODEL_COST + 9 * JEV_COST,
+        held: false,
+      },
     };
     expect(written.perGoal.map((g) => g.id)).toEqual(Object.keys(expected));
     for (const goal of written.perGoal) {
@@ -291,12 +319,12 @@ describe("C8: scoring a goal set by expected end states", () => {
       });
       expect(goal.costUsd).toBeCloseTo(want.costUsd, 12);
     }
-    expect(m.calls).toBe(6);
-    expect(j.calls).toBe(24);
+    expect(m.calls).toBe(8);
+    expect(j.calls).toBe(33);
 
     // Each goal ran on its own fresh bench: each history starts at e1 and holds only its own acts.
     const runs = readdirSync(corpus).sort();
-    expect(runs).toHaveLength(5);
+    expect(runs).toHaveLength(6);
     const histories = written.perGoal.map((goal) =>
       readFileSync(join(dir, goal.run, "events.jsonl"), "utf8")
         .split("\n")
@@ -309,13 +337,33 @@ describe("C8: scoring a goal set by expected end states", () => {
       ["speech.say"],
       [],
       ["exchange.offer", "exchange.accept"],
+      ["exchange.offer", "speech.say"],
     ]);
     for (const events of histories) {
       if (events.length > 0) expect(events[0]?.id).toBe("e1");
     }
 
-    // The sweep, by hand. The no-such-action goal holds at every pair; the wrong-holder goal at
-    // none. The give-shard and mux-says goals hold where done passes on their last loop alone and
+    // What each loop's probe found as it read the page: not held until the act that makes it so.
+    // Rogue holds the shard until Glitch accepts it, so the wrong-holder goal holds until its last
+    // loop; Rogue never speaks, so the wrong-speaker goal holds at no loop.
+    const heldPerLoop = written.perGoal.map((goal) =>
+      readFileSync(join(dir, goal.run, "loops.jsonl"), "utf8")
+        .split("\n")
+        .filter((line) => line !== "")
+        .map((line) => (JSON.parse(line) as { held?: boolean }).held),
+    );
+    const times = (n: number, held: boolean) => Array.from({ length: n }, () => held);
+    expect(heldPerLoop).toEqual([
+      [...times(7, false), true],
+      [...times(2, false), true],
+      [...times(4, false), true],
+      [],
+      [...times(7, true), false],
+      times(9, false),
+    ]);
+
+    // The sweep, by hand. The no-such-action goal holds at every pair; the two goals whose runs
+    // reach done without their expectations at none. The give-shard and mux-says goals hold where done passes on their last loop alone and
     // the favoured step still reaches the act threshold. Glitch-east also needs T_DONE above its
     // mid-run done answer: a pair at or below it stops while Glitch is in transit, where the
     // loop's probe found the expectation not yet held.
@@ -334,7 +382,7 @@ describe("C8: scoring a goal set by expected end states", () => {
     expect(written.sweep?.best).toEqual({ ...best, held: 4 });
     expect(written.sweep?.grid).toEqual(GRID);
     expect(written.sweep?.method.length).toBeGreaterThan(0);
-    expect(ran.stdout).toContain(`best: T_DONE=${best?.done} T_ACT=${best?.act} (held 4 of 5)`);
+    expect(ran.stdout).toContain(`best: T_DONE=${best?.done} T_ACT=${best?.act} (held 4 of 6)`);
     for (const pair of written.sweep?.results ?? []) {
       expect({ ...pair, held: heldAt(pair.done, pair.act) }).toEqual(pair);
     }

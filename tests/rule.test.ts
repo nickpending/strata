@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { RULE_AUTHOR, T_ACT, T_DONE } from "../src/player/rule.ts";
+import type { RunRecord } from "../src/player/run.ts";
 import { type GoalFile, GRID, type ScoreFile } from "../src/player/score.ts";
 
 const GOALS = join(import.meta.dir, "..", "corpus", "goals");
@@ -47,9 +48,17 @@ describe("C9: the rule's constants are the calibration set's best pair", () => {
       expect(goal.costUsd).toBeGreaterThan(0);
       const runDir = join(dirname(join(GOALS, "x")), goal.run);
       expect(RUN_FILES.filter((file) => !existsSync(join(runDir, file)))).toEqual([]);
-      const run = read<{ costUsd: number; loops: number }>(join(runDir, "run.json"));
+      const run = read<RunRecord>(join(runDir, "run.json"));
       expect(run.costUsd).toBe(goal.costUsd);
       expect(run.loops).toBe(goal.loops);
+      // The stored files carry every field their types declare, as the writer sets them.
+      expect(run.unreportedCosts).toBe(run.calls.filter((c) => c.costUsd === null).length);
+      expect(run.benchFailures).toEqual([]);
+      expect(goal.unreportedCosts).toBe(run.unreportedCosts);
+      expect(goal.benchFailures).toEqual(run.benchFailures);
     }
+    expect(scored.unreportedCosts).toBe(
+      scored.perGoal.reduce((sum, g) => sum + g.unreportedCosts, 0),
+    );
   });
 });

@@ -26,6 +26,8 @@
       "held": true,
       "loops": 3,
       "costUsd": 0.00044145,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-19-851Z"
     },
     {
@@ -41,6 +43,8 @@
       "held": true,
       "loops": 5,
       "costUsd": 0.000550076,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-23-439Z"
     },
     {
@@ -56,6 +60,8 @@
       "held": true,
       "loops": 7,
       "costUsd": 0.0007170760000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-27-311Z"
     },
     {
@@ -71,6 +77,8 @@
       "held": true,
       "loops": 5,
       "costUsd": 0.0005868259999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-33-064Z"
     },
     {
@@ -86,6 +94,8 @@
       "held": true,
       "loops": 5,
       "costUsd": 0.0006044239999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-38-574Z"
     },
     {
@@ -101,6 +111,8 @@
       "held": true,
       "loops": 5,
       "costUsd": 0.0005936580000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-43-819Z"
     },
     {
@@ -116,6 +128,8 @@
       "held": false,
       "loops": 16,
       "costUsd": 0.00149291,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-48-809Z"
     },
     {
@@ -131,6 +145,8 @@
       "held": true,
       "loops": 10,
       "costUsd": 0.0009137459999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-47-56-930Z"
     },
     {
@@ -143,10 +159,13 @@
       "held": true,
       "loops": 0,
       "costUsd": 0.0002168,
+      "unreportedCosts": 0,
+      "benchFailures": [],
       "run": "../runs/2026-10-31T00-48-02-570Z"
     }
   ],
   "costUsd": 0.006116966,
+  "unreportedCosts": 0,
   "sweep": {
     "grid": {
       "done": [
