@@ -1,0 +1,62 @@
+{
+  "runId": "2026-10-31T01-54-07-289Z",
+  "instruction": "walk Glitch over to the back room",
+  "startedAt": "2026-10-31T01:54:07.289Z",
+  "endedAt": "2026-10-31T01:54:10.818Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "action",
+    "actor": "glitch",
+    "verb": "depart",
+    "fields": {
+      "exit": "east"
+    },
+    "needsWords": false,
+    "done": "Is glitch in the back room?"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 3,
+    "done": 0.97
+  },
+  "loops": 3,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002408
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000054558
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00006762
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000080598
+    }
+  ],
+  "costUsd": 0.000443576,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

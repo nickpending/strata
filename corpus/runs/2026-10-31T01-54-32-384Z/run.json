@@ -1,0 +1,167 @@
+{
+  "runId": "2026-10-31T01-54-32-384Z",
+  "instruction": "Rogue should pass the data shard to Glitch",
+  "startedAt": "2026-10-31T01:54:32.384Z",
+  "endedAt": "2026-10-31T01:54:50.550Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "action",
+    "actor": "rogue",
+    "verb": "offer",
+    "fields": {
+      "target": "glitch",
+      "item": "data-shard"
+    },
+    "needsWords": false,
+    "done": "Is the data-shard held by glitch?"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "ceiling",
+    "loops": 24
+  },
+  "loops": 24,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002788
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000054978
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000060942
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000060942
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.0000609
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000072366
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000076482
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000091014
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000091014
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 9",
+      "costUsd": 0.000087696
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 10",
+      "costUsd": 0.000087696
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 11",
+      "costUsd": 0.000087696
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 12",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 13",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 14",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 15",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 16",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 17",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 18",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 19",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 20",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 21",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 22",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 23",
+      "costUsd": 0.000088662
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 24",
+      "costUsd": 0.000088662
+    }
+  ],
+  "costUsd": 0.0022631320000000006,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

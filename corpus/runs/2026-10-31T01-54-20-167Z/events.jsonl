@@ -1,0 +1,4 @@
+{"id":"e1","tick":0,"seq":1,"kind":"exchange","subkind":"exchange.offer","actor":"glitch","targets":["rogue"],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"operator","payload":{"item":"stimpak","until":2}}
+{"id":"e2","tick":1,"seq":2,"kind":"time","subkind":"time.tick","actor":"clock","targets":[],"place":null,"visibility":{"audience":"none"},"cause":"operator","payload":{}}
+{"id":"e3","tick":2,"seq":3,"kind":"time","subkind":"time.tick","actor":"clock","targets":[],"place":null,"visibility":{"audience":"none"},"cause":"operator","payload":{}}
+{"id":"e4","tick":2,"seq":4,"kind":"exchange","subkind":"exchange.lapse","actor":"glitch","targets":["rogue"],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"e1","payload":{"item":"stimpak","from":"glitch","to":"rogue"}}

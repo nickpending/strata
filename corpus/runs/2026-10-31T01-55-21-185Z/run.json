@@ -1,0 +1,40 @@
+{
+  "runId": "2026-10-31T01-55-21-185Z",
+  "instruction": "make Rogue drink a shot at the bar",
+  "startedAt": "2026-10-31T01:55:21.185Z",
+  "endedAt": "2026-10-31T01:55:23.215Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "None of the offered verbs (depart, say, say-to, whisper, offer, accept, refuse) can make Rogue drink, and the page has no shot or drink item. Speaking to or offering something to Rogue cannot make her drink."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "None of the offered verbs (depart, say, say-to, whisper, offer, accept, refuse) can make Rogue drink, and the page has no shot or drink item. Speaking to or offering something to Rogue cannot make her drink."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002496
+    }
+  ],
+  "costUsd": 0.0002496,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

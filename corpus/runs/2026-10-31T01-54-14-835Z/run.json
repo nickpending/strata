@@ -1,0 +1,77 @@
+{
+  "runId": "2026-10-31T01-54-14-835Z",
+  "instruction": "get Rogue into the back room",
+  "startedAt": "2026-10-31T01:54:14.835Z",
+  "endedAt": "2026-10-31T01:54:20.163Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "action",
+    "actor": "rogue",
+    "verb": "depart",
+    "fields": {
+      "exit": "east"
+    },
+    "needsWords": false,
+    "done": "Is rogue now in the back room (back-room)?"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 6,
+    "done": 0.97
+  },
+  "loops": 6,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003336
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000054768
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00006783
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000068208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000080808
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000088284
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000101178
+    }
+  ],
+  "costUsd": 0.000794676,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}
