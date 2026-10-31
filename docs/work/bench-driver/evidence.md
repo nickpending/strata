@@ -43,5 +43,11 @@ set, its score and its 13 runs were committed at 4a48f97.
 
 ## C5 headed walk
 
-The C5 walk, the headed browser run, is the operator's. Its outcome will be recorded here when the operator
-gives it.
+The C5 walk, the headed browser run, is the operator's. He ran
+`bun run src/player/main.ts "have Mux say something funny" --tick-minutes 10 --headed` on main.
+
+Outcome, failed, in his words: "I ran it -- it did something but was too fast for me to see anything."
+
+The run reached in 5 loops (`corpus/runs/2026-10-31T14-36-50-377Z`, committed with this note). Nothing paces a
+headed run, so its loops cannot be watched. The pacing fix ships as its own work order, and the C5 re-walk will
+be recorded here when it is given.
