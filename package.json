@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/server/main.ts",
+    "driver": "bun run src/driver/main.ts",
+    "player": "bun run src/player/main.ts",
+    "score": "bun run src/player/score.ts",
     "check": "bun node_modules/.bin/biome check .",
     "check:fix": "bun node_modules/.bin/biome check --fix .",
     "typecheck": "bun node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
@@ -12,6 +15,8 @@
     "verify": "bun run typecheck && bun run check && bun test"
   },
   "dependencies": {
+    "@voidwire/apiconf": "0.2.0",
+    "playwright": "1.64.1",
     "zod": "4.6.7"
   },
   "devDependencies": {

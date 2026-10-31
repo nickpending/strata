@@ -13,7 +13,7 @@ import {
 import { actionSchema, type Refusal, rule } from "./rules.ts";
 import { buildSnapshot, type Snapshot } from "./snapshot.ts";
 import { Store } from "./store.ts";
-import { applyPart, initialRows } from "./things.ts";
+import { applyPart, initialRows, type StateRow } from "./things.ts";
 
 /** The launch flag that carries the tick length; boot refuses without it. */
 export const TICK_MINUTES_FLAG = "--tick-minutes";
@@ -65,6 +65,11 @@ export class Engine {
 
   snapshot(): Snapshot {
     return buildSnapshot(this.store.readState(), this.defs, this.tickMinutes);
+  }
+
+  /** The live state rows, one per thing per part, as the database holds them. */
+  rows(): StateRow[] {
+    return this.store.readState();
   }
 
   /** Every event with a seq greater than `since`, in order. */

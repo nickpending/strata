@@ -1,0 +1,75 @@
+{
+  "runId": "2026-10-31T00-47-38-574Z",
+  "instruction": "have Rogue whisper a warning to Glitch",
+  "startedAt": "2026-10-31T00:47:38.574Z",
+  "endedAt": "2026-10-31T00:47:43.817Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/.claude/worktrees/agent-ae88ca86f880d2ce6/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.8,
+      "act": 0.4
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "action",
+    "actor": "rogue",
+    "verb": "whisper",
+    "fields": {
+      "target": "glitch"
+    },
+    "needsWords": true,
+    "done": "Has glitch received a whisper from rogue on the Received panel?"
+  },
+  "words": "Glitch, don't move yet, the guard just turned his head toward the stairs.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.97
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002743
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000268
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000055944
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000055944
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000059766
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.00005964
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.00007203
+    }
+  ],
+  "costUsd": 0.0006044239999999999,
+  "held": true
+}

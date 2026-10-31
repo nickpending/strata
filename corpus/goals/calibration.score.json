@@ -1,0 +1,1316 @@
+{
+  "set": "calibration",
+  "author": "claude-opus-5-5 (bench-driver builder)",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.8,
+      "act": 0.4
+    }
+  },
+  "reached": {
+    "held": 8,
+    "of": 9
+  },
+  "perGoal": [
+    {
+      "id": "glitch-to-back-room",
+      "instruction": "send Glitch to the Back Room",
+      "expect": {
+        "location": {
+          "person": "glitch",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 3,
+      "costUsd": 0.00044145,
+      "run": "../runs/2026-10-31T00-47-19-851Z"
+    },
+    {
+      "id": "mux-to-bar",
+      "instruction": "have Mux walk out to the Chrome Cassette",
+      "expect": {
+        "location": {
+          "person": "mux",
+          "room": "chrome-cassette"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000550076,
+      "run": "../runs/2026-10-31T00-47-23-439Z"
+    },
+    {
+      "id": "mux-says-funny",
+      "instruction": "have Mux say something funny",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 7,
+      "costUsd": 0.0007170760000000001,
+      "run": "../runs/2026-10-31T00-47-27-311Z"
+    },
+    {
+      "id": "rogue-says-heat",
+      "instruction": "have Rogue say something about the heat on her door",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0005868259999999999,
+      "run": "../runs/2026-10-31T00-47-33-064Z"
+    },
+    {
+      "id": "rogue-whispers-glitch",
+      "instruction": "have Rogue whisper a warning to Glitch",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.whisper"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0006044239999999999,
+      "run": "../runs/2026-10-31T00-47-38-574Z"
+    },
+    {
+      "id": "glitch-says-to-rogue",
+      "instruction": "have Glitch say thanks to Rogue",
+      "expect": {
+        "said": {
+          "person": "glitch",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0005936580000000001,
+      "run": "../runs/2026-10-31T00-47-43-819Z"
+    },
+    {
+      "id": "shard-to-glitch",
+      "instruction": "have Rogue offer the data shard to Glitch, and Glitch accept it",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "glitch"
+        }
+      },
+      "outcome": "stuck",
+      "held": false,
+      "loops": 16,
+      "costUsd": 0.00149291,
+      "run": "../runs/2026-10-31T00-47-48-809Z"
+    },
+    {
+      "id": "stimpak-offered",
+      "instruction": "have Glitch offer Rogue the stimpak, and Rogue take it",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 10,
+      "costUsd": 0.0009137459999999999,
+      "run": "../runs/2026-10-31T00-47-56-930Z"
+    },
+    {
+      "id": "rogue-attacks",
+      "instruction": "have Rogue attack Glitch",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0002168,
+      "run": "../runs/2026-10-31T00-48-02-570Z"
+    }
+  ],
+  "costUsd": 0.006116966,
+  "sweep": {
+    "grid": {
+      "done": [
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8,
+        0.85,
+        0.9,
+        0.95
+      ],
+      "act": [
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8
+      ]
+    },
+    "method": "Each pair replays every goal's recorded loops in order with the rule's choose(): at a loop where the pair says reached, the goal holds when its expectation held as that loop read the page; where the pair would act, it must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every pair. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.",
+    "results": [
+      {
+        "done": 0.3,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.3,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.3,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.3,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.3,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.3,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.35,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.35,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.35,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.35,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.35,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.35,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.4,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.4,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.4,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.4,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.4,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.4,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.45,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.45,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.45,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.45,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.45,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.45,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.5,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.5,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.5,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.5,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.5,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.5,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.55,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.55,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.55,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.55,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.55,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.55,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.6,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.6,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.6,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.6,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.6,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.6,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.65,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.65,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.65,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.65,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.65,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.65,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.7,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.7,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.7,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.7,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.7,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.7,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.75,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.75,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.75,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.75,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.75,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.75,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.8,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.8,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.8,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.8,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.8,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.8,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.85,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.85,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.85,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.85,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.85,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.85,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.9,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.9,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.9,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.9,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.9,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.9,
+        "act": 0.8,
+        "held": 5
+      },
+      {
+        "done": 0.95,
+        "act": 0.05,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.1,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.15,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.2,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.25,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.3,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.35,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.4,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.45,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.5,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.55,
+        "held": 8
+      },
+      {
+        "done": 0.95,
+        "act": 0.6,
+        "held": 6
+      },
+      {
+        "done": 0.95,
+        "act": 0.65,
+        "held": 6
+      },
+      {
+        "done": 0.95,
+        "act": 0.7,
+        "held": 5
+      },
+      {
+        "done": 0.95,
+        "act": 0.75,
+        "held": 5
+      },
+      {
+        "done": 0.95,
+        "act": 0.8,
+        "held": 5
+      }
+    ],
+    "best": {
+      "done": 0.6,
+      "act": 0.3,
+      "held": 8
+    }
+  }
+}
