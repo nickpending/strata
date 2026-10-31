@@ -32,3 +32,5 @@ None of the five misses recorded any event (every `events.jsonl` is empty), and 
 The fix reaches what happens before any pending state stands: the design derives the move only once a pending state exists, and nothing derives the action that opens one.
 
 Runs: corpus/runs/2026-10-31T06-53-09-254Z, 06-53-20-675Z, 06-53-31-779Z, 06-53-42-263Z and 06-54-16-479Z (the misses); score: corpus/goals/blind-2.score.json.
+
+The spent set and its score now live at corpus/goals/blind-2-spent.json and corpus/goals/blind-2-spent.score.json (set name still "blind-2", as scored); corpus/goals/blind-2.json is the fresh set the re-walk writes.
