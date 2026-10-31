@@ -1,0 +1,107 @@
+{
+  "runId": "2026-10-31T07-24-32-835Z",
+  "instruction": "Rogue has a warning for Mux. She should go and give it to him directly, out loud.",
+  "startedAt": "2026-10-31T07:24:32.835Z",
+  "endedAt": "2026-10-31T07:24:39.960Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say-to"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      },
+      {
+        "actor": "rogue",
+        "verb": "say-to",
+        "fields": {
+          "target": "mux"
+        }
+      }
+    ]
+  },
+  "words": "Mux, listen to me: the cellar door was left open last night, and someone has been watching who comes and goes, so keep your voice down and trust no one who asks about the stores.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 8,
+    "done": 0.98
+  },
+  "loops": 8,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0004025
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000429
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.00005859
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00005859
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000073668
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000079296
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000083076
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000083076
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000083874
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000089502
+    }
+  ],
+  "costUsd": 0.001055072,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}
