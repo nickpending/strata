@@ -141,13 +141,12 @@ export const PLAYER_FLAGS = {
   headed: { type: "boolean", default: false },
   "jev-endpoint": { type: "string" },
   "model-endpoint": { type: "string" },
+  /** The apiconf key to send; an endpoint override is sent a key only when this names one. */
   "key-name": { type: "string" },
-  /** A key sent in place of the apiconf key, for a stand-in endpoint. */
-  key: { type: "string" },
 } as const;
 
 export const PLAYER_USAGE =
-  "--tick-minutes <n> [--world world] [--corpus corpus/runs] [--max-loops 24] [--headed] [--jev-endpoint <url>] [--model-endpoint <url>] [--key-name sable-openrouter] [--key <key>]";
+  "--tick-minutes <n> [--world world] [--corpus corpus/runs] [--max-loops 24] [--headed] [--jev-endpoint <url>] [--model-endpoint <url>] [--key-name sable-openrouter]";
 
 type FlagValues = { [K in keyof typeof PLAYER_FLAGS]?: string | boolean | undefined };
 
@@ -174,7 +173,6 @@ export function optionsFromFlags(
   }
   const client = (endpoint: string | undefined): ClientOptions => ({
     endpoint,
-    key: text("key"),
     keyName: text("key-name"),
   });
   return {

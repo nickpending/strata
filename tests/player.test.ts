@@ -1,7 +1,15 @@
 import { afterAll, describe, expect, test } from "bun:test";
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import type { WorldEvent } from "../src/engine/events.ts";
 import { useAccountBrowsers } from "../src/player/page.ts";
 import { T_ACT, T_DONE } from "../src/player/rule.ts";
@@ -34,23 +42,29 @@ type JevRequest = {
   questions: Record<string, { type: string; instructions: string }>;
 };
 
-/** A local server standing in for an endpoint; each request's JSON body is kept, in order. */
+/**
+ * A local server standing in for an endpoint; each request's JSON body is kept, in order, and
+ * whether it carried an Authorization header.
+ */
 function standIn(answer: (body: unknown, n: number) => Response): {
   url: string;
   bodies: unknown[];
+  authorized: boolean[];
 } {
   const bodies: unknown[] = [];
+  const authorized: boolean[] = [];
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
     fetch: async (request) => {
       const body: unknown = await request.json();
       bodies.push(body);
+      authorized.push(request.headers.has("authorization"));
       return answer(body, bodies.length);
     },
   });
   stops.push(() => void server.stop(true));
-  return { url: `http://127.0.0.1:${server.port}/`, bodies };
+  return { url: `http://127.0.0.1:${server.port}/`, bodies, authorized };
 }
 
 /** The chat completions stand-in: answers each call with the next scripted JSON object. */
@@ -149,7 +163,7 @@ function lines<T>(file: string): T[] {
 }
 
 function endpoints(m: { url: string }, j: { url: string }): string[] {
-  return ["--model-endpoint", m.url, "--jev-endpoint", j.url, "--key", "stand-in-key"];
+  return ["--model-endpoint", m.url, "--jev-endpoint", j.url];
 }
 
 const RUN_FILES = ["events.jsonl", "loops.jsonl", "received.jsonl", "run.json"];
@@ -413,6 +427,101 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     expect(m.bodies).toHaveLength(0);
     expect(j.bodies).toHaveLength(0);
   }, 60_000);
+});
+
+describe("the key goes only where it is named, never in the clear, and never into a message", () => {
+  const DEPART = {
+    kind: "action",
+    actor: "glitch",
+    verb: "depart",
+    fields: { exit: "east" },
+    needsWords: false,
+    done: "Is Glitch in the Back Room?",
+  };
+  const FAKE_SECRET = "sk-or-v1-FAKESECRET0000000000";
+
+  async function spawned(cmd: string[], env: Record<string, string | undefined> = process.env) {
+    const proc = Bun.spawn(cmd, { cwd: ROOT, env, stdout: "pipe", stderr: "pipe" });
+    const [stdout, stderr, exitCode] = await Promise.all([
+      new Response(proc.stdout).text(),
+      new Response(proc.stderr).text(),
+      proc.exited,
+    ]);
+    return { stdout, stderr, exitCode };
+  }
+
+  test("an endpoint override is sent no key unless --key-name names one for it", async () => {
+    const m = model(DEPART);
+    const j = preferring([], () => true);
+    const ran = await play("send Glitch east", endpoints(m, j));
+    expect(ran.record.outcome?.kind).toBe("reached");
+    expect([m.authorized, j.authorized]).toEqual([[false], [false]]);
+  }, 60_000);
+
+  test("a named key is never sent over plain http to another machine", async () => {
+    const elsewhere = "http://strata-test.invalid/";
+    const ran = await play("send Glitch east", [
+      "--model-endpoint",
+      elsewhere,
+      "--jev-endpoint",
+      elsewhere,
+      "--key-name",
+      "strata-test-no-such-key",
+    ]);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.record.stopped).toMatchObject({ kind: "config", call: "target" });
+    expect(ran.record.stopped?.message).toContain("https");
+    expect(ran.record.stopped?.message).toContain("strata-test.invalid");
+  }, 60_000);
+
+  test("a malformed apiconf config is named without the parser's detail, which quotes key lines", async () => {
+    const home = mkdtempSync(join(tmpdir(), "strata-apiconf-"));
+    temps.push(home);
+    const config = join(home, ".config", "apiconf", "config.toml");
+    mkdirSync(dirname(config), { recursive: true });
+    // One typo, an unclosed quote, on the line after a key's value.
+    writeFileSync(
+      config,
+      `[keys.sable-openrouter]\nvalue = "${FAKE_SECRET}"\nnote = "personal key\n`,
+    );
+    const code = [
+      `import { DECISIONS_URL, postJson } from ${JSON.stringify(join(ROOT, "src", "player", "jev.ts"))};`,
+      `console.log(JSON.stringify(await postJson(DECISIONS_URL, "decisions", {}, {})));`,
+    ].join("\n");
+    const ran = await spawned([process.execPath, "-e", code], { ...process.env, HOME: home });
+    expect(ran.exitCode).toBe(0);
+    const posted = JSON.parse(ran.stdout) as {
+      ok: boolean;
+      refusal: { kind: string; message: string };
+    };
+    expect(posted).toMatchObject({ ok: false, refusal: { kind: "config" } });
+    expect(posted.refusal.message).toContain("sable-openrouter");
+    expect(posted.refusal.message).toContain(config);
+    expect(ran.stdout.includes("FAKESECRET")).toBe(false);
+    expect(ran.stderr.includes("FAKESECRET")).toBe(false);
+  }, 30_000);
+
+  test("there is no flag that takes a key on the command line", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "strata-player-test-"));
+    temps.push(dir);
+    const corpus = join(dir, "runs");
+    const ran = await spawned([
+      process.execPath,
+      "run",
+      MAIN,
+      "send Glitch east",
+      "--tick-minutes",
+      "10",
+      "--corpus",
+      corpus,
+      "--key",
+      "stand-in-key",
+    ]);
+    expect(ran.exitCode).toBe(2);
+    expect(ran.stderr).toContain("--key");
+    expect(ran.stderr).not.toContain("[--key <key>]");
+    expect(existsSync(corpus)).toBe(false);
+  }, 30_000);
 });
 
 describe("every call's cost is on record, and a cost the provider did not report is told apart", () => {

@@ -1,6 +1,14 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import type { WorldEvent } from "../src/engine/events.ts";
@@ -22,6 +30,13 @@ const NO_DONE = T_DONE * 0.3;
 const FAVOURED = Math.min(1, T_ACT + 0.05);
 const PASSED_OVER = T_ACT * 0.3;
 const LINE = "Nothing in this bar runs on time, least of all me.";
+/** Endpoints nothing answers at: a refused set that ran anyway would stop at its first call. */
+const NOWHERE = [
+  "--model-endpoint",
+  "http://127.0.0.1:1/",
+  "--jev-endpoint",
+  "http://127.0.0.1:1/",
+];
 
 const temps: string[] = [];
 const stops: (() => void)[] = [];
@@ -235,12 +250,50 @@ describe("C8: scoring a goal set by expected end states", () => {
     const dir = mkdtempSync(join(tmpdir(), "strata-score-"));
     temps.push(dir);
     const corpus = join(dir, "runs");
-    const ran = await score(CALIBRATION, corpus, ["--key", "stand-in-key"]);
+    const ran = await score(CALIBRATION, corpus, NOWHERE);
     expect(ran.exitCode).toBe(1);
     expect(ran.stderr).toContain(`goal file's author "${set.author}"`);
     expect(ran.stderr).toContain(`the rule's author "${RULE_AUTHOR}"`);
     expect(existsSync(corpus)).toBe(false);
     expect(hash(scoreFile)).toBe(before);
+  }, 30_000);
+
+  /** A one-goal set named `set`, by another author, written at <dir>/goals/<file>. */
+  function goalFileAt(file: string, set: string): { dir: string; goals: string } {
+    const dir = mkdtempSync(join(tmpdir(), "strata-score-"));
+    temps.push(dir);
+    const goals = join(dir, "goals", file);
+    mkdirSync(dirname(goals));
+    const goal = {
+      id: "moon",
+      instruction: "have Rogue fly to the moon",
+      expect: { outcome: "no-such-action" },
+    };
+    writeFileSync(goals, JSON.stringify({ set, author: "a test", goals: [goal] }));
+    return { dir, goals };
+  }
+
+  test("a set that is not a plain name is refused before any goal runs, writing nothing", async () => {
+    const { dir, goals } = goalFileAt("escape.json", "../escape");
+    const corpus = join(dir, "runs");
+    const ran = await score(goals, corpus, NOWHERE);
+    expect(ran.exitCode).toBe(2);
+    expect(ran.stderr).toContain("set");
+    expect(existsSync(join(dir, "escape.score.json"))).toBe(false);
+    expect(existsSync(corpus)).toBe(false);
+  }, 30_000);
+
+  test("a set named for another goal file is refused, leaving that file's score untouched", async () => {
+    const { dir, goals } = goalFileAt("blind-1.json", "calibration");
+    const recorded = join(dir, "goals", "calibration.score.json");
+    writeFileSync(recorded, "the calibration record\n");
+    const corpus = join(dir, "runs");
+    const ran = await score(goals, corpus, NOWHERE);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.stderr).toContain('"calibration"');
+    expect(ran.stderr).toContain('"blind-1"');
+    expect(readFileSync(recorded, "utf8")).toBe("the calibration record\n");
+    expect(existsSync(corpus)).toBe(false);
   }, 30_000);
 
   test("another author's set: every goal on its own bench, each expectation checked, the sweep's best pair", async () => {
@@ -263,8 +316,6 @@ describe("C8: scoring a goal set by expected end states", () => {
       m.url,
       "--jev-endpoint",
       j.url,
-      "--key",
-      "stand-in-key",
       "--sweep",
     ]);
     expect(ran.stderr).toBe("");

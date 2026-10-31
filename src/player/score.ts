@@ -3,10 +3,11 @@
  * and its typed expectation is checked by code against the bench's final snapshot and history.
  * With --sweep, a grid of (T_DONE, T_ACT) pairs is replayed over the recorded answers and the
  * pair holding the most goals is printed: how the rule's constants are set. A goal set whose
- * author is the rule's author is refused on a plain score: it is no blind test of the rule.
+ * author is the rule's author is refused on a plain score: it is no blind test of the rule. A set
+ * not named as its file is refused: its score would land on another file's.
  */
 import { readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, relative, resolve } from "node:path";
+import { basename, dirname, join, relative, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { type Browser, chromium } from "playwright";
 import { z } from "zod";
@@ -35,7 +36,10 @@ export const expectSchema = z.union([
 export type Expectation = z.infer<typeof expectSchema>;
 
 export const goalFileSchema = z.strictObject({
-  set: name,
+  /** The set's name, and its score file's: <set>.score.json beside the goals, so a plain name. */
+  set: z
+    .string()
+    .regex(/^[A-Za-z0-9][A-Za-z0-9_-]*$/, "set must be letters, digits, - and _ (a file name)"),
   author: name,
   goals: z.array(z.strictObject({ id: name, instruction: name, expect: expectSchema })).min(1),
 });
@@ -247,6 +251,13 @@ async function main(): Promise<void> {
     file = goalFileSchema.parse(JSON.parse(readFileSync(goalsPath, "utf8")));
   } catch (error) {
     usage(`${goalsPath} is not a goal file: ${error instanceof Error ? error.message : error}`);
+  }
+  const fileName = basename(goalsPath, ".json");
+  if (file.set !== fileName) {
+    console.error(
+      `score: refused: the goal file's set "${file.set}" is not its file's name "${fileName}"; the score is written to <set>.score.json, and a set named for another file would overwrite that file's score`,
+    );
+    process.exit(1);
   }
   const sweeping = values.sweep === true;
   if (!sweeping && file.author === RULE_AUTHOR) {
