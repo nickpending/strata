@@ -23,7 +23,7 @@
     },
     {
      "id": "C1-M4",
-     "change": "drop the narrow rule from speech.whisper's registry entry; the C1 run must go red with the redaction invariant naming the non-participant copy that carries words"
+     "change": "make redact() keep narrowed fields for non-participants, leaving the registry intact; the C1 run must go red with the redaction invariant naming the non-participant copy that carries words"
     }
    ]
   },
@@ -155,12 +155,14 @@
   {
    "criterion": "C9",
    "when": "after merge, an agent that is not RULE_AUTHOR writes corpus/goals/blind-1.json (its own author, at least ten goals with typed expectations, at least one no-such-action) without reading rule.ts, and bun run src/player/score.ts --goals corpus/goals/blind-1.json runs on main with the real endpoints, tick length 10",
-   "then": "the score file reports reached on at least nine of every ten goals with loops and cost per goal, and the blind set, its score and its runs are committed under corpus/"
+   "then": "the score file reports reached on at least nine of every ten goals with loops and cost per goal, and the blind set, its score and its runs are committed under corpus/",
+   "by": "driver"
   },
   {
    "criterion": "C5",
    "when": "after merge, bun run src/player/main.ts \"have Mux say something funny\" --tick-minutes 10 --headed runs on main",
-   "then": "a browser window opens on the hosted bench, each loop's state text, questions, answers and action print as they happen, Mux's say appears in the history, and the run's four files are written under corpus/runs/"
+   "then": "a browser window opens on the hosted bench, each loop's state text, questions, answers and action print as they happen, Mux's say appears in the history, and the run's four files are written under corpus/runs/",
+   "by": "operator"
   }
  ],
  "stakes": [
