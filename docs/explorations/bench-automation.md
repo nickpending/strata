@@ -77,6 +77,14 @@ driver prove?
 - The player's histories are the labelled corpus for the mind blocks; the engine's log and
   received copies are the record they are labelled from.
 - Both are built now, together.
+- The player drives the bench through a real browser (Playwright, TypeScript), not only the API,
+  because strata is web-based and the operator wants to learn the mechanics. The harness owns every
+  step: load the page, read it as text (each control's label, value and enabled state), ask Jev one
+  noul per candidate control plus whether the goal is reached, perform the winner, loop. A language
+  model only turns an instruction into a target and writes free-text words; Jev never writes text.
+  An instruction with no matching action ends in no-such-action, never an invented one. Every
+  strata control carries a clear label from now on. Built inside strata; it moves into its own tool
+  only when a second project needs it. Every loop's request and answer are shown.
 - A thing's own acts are never new to it (recorded in the founding exploration, Events).
 
 ## Candidate features
@@ -88,9 +96,10 @@ driver prove?
   that the world invariants hold, would catch that drift with no model.
 - **A Jev player whose histories are the labelled corpus.** The mind blocks need labelled moments
   made from coherent histories, and no history exists beyond what a person types into the form. A
-  player that chooses each next action for an NPC by narrow noul questions combined in code, with
-  thresholds set from blind labels, and records the histories it produces, would supply that corpus
-  and show, measured on labelled moments, how plausible its choices are.
+  player that works the bench page in a real browser toward an instruction, choosing each step by
+  narrow noul questions combined in code, with thresholds set from a goal set written by someone
+  else, and records the histories it produces, would supply that corpus and show, measured by the
+  goals it reaches, how well it drives the page.
 
 ## Deferred
 
