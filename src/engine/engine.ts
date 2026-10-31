@@ -10,6 +10,7 @@ import {
   registry,
   type WorldEvent,
 } from "./events.ts";
+import { type Pending, pendingOf } from "./pending.ts";
 import { actionSchema, type Refusal, rule } from "./rules.ts";
 import { buildSnapshot, type Snapshot } from "./snapshot.ts";
 import { Store } from "./store.ts";
@@ -52,6 +53,27 @@ export function witnessesOf(event: WorldEvent, snapshot: Snapshot): string[] {
 }
 
 /**
+ * The event `draft` becomes as the log's `seq`th: its payload validated by its subkind's schema,
+ * its id, kind and visibility assigned. Pure: it writes nothing.
+ */
+export function eventOf(draft: EventDraft, seq: number): WorldEvent {
+  const entry = registry[draft.subkind];
+  return {
+    id: `e${seq}`,
+    tick: draft.tick,
+    seq,
+    kind: kindOf(draft.subkind),
+    subkind: draft.subkind,
+    actor: draft.actor,
+    targets: draft.targets,
+    place: draft.place,
+    visibility: entry.visibility,
+    cause: draft.cause,
+    payload: entry.payload.parse(draft.payload),
+  } as WorldEvent;
+}
+
+/**
  * A booted world. Live state has one home, the database's state rows; the engine holds only the
  * read-only definitions and the tick length between calls.
  */
@@ -65,6 +87,14 @@ export class Engine {
 
   snapshot(): Snapshot {
     return buildSnapshot(this.store.readState(), this.defs, this.tickMinutes);
+  }
+
+  /**
+   * Every pending state, derived from the schedule by trying the rules on copies of the live rows.
+   * Its own accessor, never part of snapshot(): the apply path reads snapshots and never pays for it.
+   */
+  pending(): Pending[] {
+    return pendingOf(this.rows(), this.defs, this.tickMinutes, this.events());
   }
 
   /** The live state rows, one per thing per part, as the database holds them. */
@@ -125,22 +155,7 @@ export class Engine {
    * own row, then witness from the state after application. Callers run it inside a transaction.
    */
   private record(draft: EventDraft): WorldEvent {
-    const entry = registry[draft.subkind];
-    const payload = entry.payload.parse(draft.payload);
-    const seq = this.store.nextSeq();
-    const event = {
-      id: `e${seq}`,
-      tick: draft.tick,
-      seq,
-      kind: kindOf(draft.subkind),
-      subkind: draft.subkind,
-      actor: draft.actor,
-      targets: draft.targets,
-      place: draft.place,
-      visibility: entry.visibility,
-      cause: draft.cause,
-      payload,
-    } as WorldEvent;
+    const event = eventOf(draft, this.store.nextSeq());
     this.store.appendEvent(event);
     for (const row of this.store.readState()) {
       const next = applyPart(row.part, row.thing, row.state, event);

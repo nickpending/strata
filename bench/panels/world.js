@@ -1,7 +1,8 @@
 /**
  * The world panel: rooms with who is present, what they hold and their ties; who is in transit;
- * the items with any pending offer; the clock and its schedule; the act form built from the
- * served verbs; step and reset; the history; and one person's received copies.
+ * the items with any pending offer; the clock and its schedule; each pending state with who closes
+ * it and what the clock fires; the act form built from the served verbs; step and reset; the
+ * history; and one person's received copies.
  */
 
 function h(tag, attrs, ...children) {
@@ -196,6 +197,46 @@ export async function mount(root, api) {
     );
   }
 
+  /** `{ key: value, ... }` as `key value, ...`, the way a pending line names fields. */
+  function named(fields) {
+    return Object.entries(fields)
+      .map(([key, value]) => `${key} ${value}`)
+      .join(", ");
+  }
+
+  function resolverText({ action }) {
+    const { actor, verb, ...fields } = action;
+    const given = named(fields);
+    return `${actor} ${verb}${given === "" ? "" : ` (${given})`}`;
+  }
+
+  /** One pending state as one line, built from its fields: what opened it, who closes it, the clock. */
+  function pendingLine({ opened, due, resolutions }) {
+    const to = opened.targets.length > 0 ? ` to ${opened.targets.join(", ")}` : "";
+    const fields = named(opened.payload);
+    const resolvers =
+      resolutions.length === 0
+        ? "no one resolves it"
+        : `resolved by ${resolutions.map(resolverText).join(", ")}`;
+    return h(
+      "li",
+      {},
+      `${opened.subkind} ${opened.id} by ${opened.actor}${to}${fields === "" ? "" : ` (${fields})`}: ${resolvers}; at tick ${due.at} the clock fires ${due.fires}`,
+    );
+  }
+
+  function pendingSection() {
+    const { pending } = state.snapshot;
+    return h(
+      "section",
+      {},
+      h("h2", {}, "Pending"),
+      pending.length === 0
+        ? h("div", { class: "muted" }, "nothing pending")
+        : h("ul", {}, pending.map(pendingLine)),
+    );
+  }
+
   function fieldInput(field) {
     const { form, snapshot } = state;
     const set = (value) => {
@@ -329,6 +370,7 @@ export async function mount(root, api) {
     view.replaceChildren(
       actSection(),
       clockSection(),
+      pendingSection(),
       roomsSection(),
       transitSection(),
       itemsSection(),

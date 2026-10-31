@@ -58,6 +58,23 @@ export function verbs(): { verb: Verb; fields: string[]; schema: unknown }[] {
   });
 }
 
+/**
+ * The ids a verb's field ranges over in `snapshot`: every room's exits for `exit`, every person for
+ * `target`, every item for `item`; null for a field of free text (`words`).
+ */
+export function fieldIds(field: string, snapshot: Snapshot): string[] | null {
+  switch (field) {
+    case "exit":
+      return [...new Set(Object.values(snapshot.rooms).flatMap((room) => Object.keys(room.exits)))];
+    case "target":
+      return Object.keys(snapshot.people);
+    case "item":
+      return Object.keys(snapshot.items);
+    default:
+      return null;
+  }
+}
+
 function refused(code: RefusalCode, message: string): RuleResult {
   return { refused: { code, message } };
 }

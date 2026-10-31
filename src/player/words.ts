@@ -1,9 +1,10 @@
 /**
  * The language-model client: an OpenAI-shaped chat completion on OpenRouter, keyed as the Jev
  * client is, asking for one JSON object that a zod schema validates on return. The model writes
- * only the run's typed target and its one line of words; both are checked by code before use.
+ * only the run's typed end state and its one line of words; both are checked by code before use.
  */
 import { z } from "zod";
+import { described, type EndState } from "./goal.ts";
 import { type ClientOptions, costOf, isRecord, postJson, type Refusal } from "./jev.ts";
 
 export const COMPLETIONS_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -64,18 +65,18 @@ export async function complete<T>(
 const wordsSchema = z.object({ words: z.string().trim().min(1) });
 
 /**
- * The one line the run types into the words field: the model writes it for the goal, as the
- * actor would say it. Jev never writes text.
+ * The one line the run types into the words field: the model writes it for the goal's end state,
+ * as the speaker would say it. Jev never writes text.
  */
 export async function words(
   instruction: string,
-  goal: { actor: string; verb: string; fields: { target?: string | null | undefined } },
+  goal: EndState,
   options: ClientOptions = {},
 ): Promise<Completed<string>> {
   const prompt = [
     "You write the one line a character says in a small text world.",
     `The instruction: ${instruction}`,
-    `The action: ${goal.actor} will ${goal.verb}${typeof goal.fields.target === "string" ? ` to ${goal.fields.target}` : ""}.`,
+    `The end state: ${described(goal)}.`,
     'Answer with one JSON object {"words": "<the line, as the character says it, one sentence>"} and nothing else.',
   ].join("\n");
   const completed = await complete(prompt, wordsSchema, options);

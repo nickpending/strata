@@ -1,7 +1,9 @@
 import { existsSync, statSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { type BootRefusal, boot, type Engine } from "../engine/engine.ts";
+import type { Pending } from "../engine/pending.ts";
 import { verbs } from "../engine/rules.ts";
+import type { Snapshot } from "../engine/snapshot.ts";
 
 /** The loopback address the bench binds; it is never exposed beyond this machine. */
 export const HOSTNAME = "127.0.0.1";
@@ -17,6 +19,9 @@ export type ServeOptions = {
   /** 0 picks a free port. */
   port: number;
 };
+
+/** The body of GET /api/snapshot: the snapshot's fields, and every pending state beside them. */
+export type SnapshotBody = Snapshot & { pending: Pending[] };
 
 export type Started =
   | { ok: true; server: Bun.Server<undefined>; stop: () => void }
@@ -99,7 +104,9 @@ class Bench {
         const file = decoded(path.slice(7));
         return file === null ? json(MALFORMED_PATH, 400) : staticFile(file);
       }
-      if (path === "/api/snapshot") return json(this.engine.snapshot());
+      if (path === "/api/snapshot") {
+        return json({ ...this.engine.snapshot(), pending: this.engine.pending() });
+      }
       if (path === "/api/verbs") return json({ verbs: verbs() });
       if (path === "/api/events") return this.events(url.searchParams.get("since"));
       if (path.startsWith("/api/received/")) {
@@ -156,7 +163,7 @@ class Bench {
     const previous = this.engine;
     this.engine = booted.engine;
     previous.close();
-    return json({ snapshot: this.engine.snapshot() });
+    return json({ snapshot: this.engine.snapshot(), pending: this.engine.pending() });
   }
 }
 

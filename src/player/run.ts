@@ -1,18 +1,19 @@
 /**
  * The player's loop: host the bench (or open the one at `url`), open it in chromium, ask the model
- * for the target and the words, then read the page, ask Jev, perform the rule's choice in the
- * browser, and loop until reached, stuck, the ceiling, or a refusal. Every loop is printed as it
- * happens and appended to loops.jsonl; run.json is rewritten as the run goes; the history is read
- * back through the bench's own routes at the end.
+ * for the target end state and the words, then read the page, the snapshot route's pending states
+ * and whether the end state holds, ask Jev, perform the rule's choice in the browser, and loop until
+ * reached, stuck, the ceiling, or a refusal. Every loop is printed as it happens and appended to
+ * loops.jsonl; run.json is rewritten as the run goes; the history is read back through the bench's
+ * own routes at the end.
  */
 import { appendFileSync, existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { type Browser, type BrowserContext, chromium, type Page } from "playwright";
 import type { WorldEvent } from "../engine/events.ts";
-import type { Snapshot } from "../engine/snapshot.ts";
-import { startServer } from "../server/routes.ts";
+import { type SnapshotBody, startServer } from "../server/routes.ts";
 import { type Candidate, candidates } from "./candidates.ts";
+import { getJson, holds } from "./goal.ts";
 import { type ClientOptions, JEV_MODEL, type Refusal } from "./jev.ts";
 import {
   type Control,
@@ -25,15 +26,16 @@ import {
 } from "./page.ts";
 import {
   ask,
-  choose,
   type Decision,
+  decideLoop,
   type Goal,
   REGISTERED,
   renderState,
   type Scored,
+  type Seen,
   type Thresholds,
 } from "./rule.ts";
-import { askTarget, type Target } from "./target.ts";
+import { askTarget, type RecordedTarget } from "./target.ts";
 import { words as askWords, WORDS_MODEL } from "./words.ts";
 
 export type PlayerOptions = {
@@ -49,7 +51,7 @@ export type PlayerOptions = {
   jev: ClientOptions;
   model: ClientOptions;
   thresholds?: Thresholds;
-  /** Whether a goal's expectation holds on the bench at `base` now; asked every loop and at the end. */
+  /** Whether a goal file's expectation holds on the bench at `base`; asked once the run ends. */
   probe?: (base: string) => Promise<boolean>;
   /** Where each loop is printed as it happens; stdout by default. */
   print?: (text: string) => void;
@@ -60,7 +62,7 @@ export type PlayerOptions = {
 /**
  * Why a run stopped short: a client's refusal (config, network, status, parse), a bench that would
  * not boot, a page with an unlabeled control, a browser the player cannot work, or a bench route
- * the loop's probe could not read. `call` names where: boot, launch, target, words or the loop.
+ * the loop could not read. `call` names where: boot, launch, target, words or the loop.
  */
 export type Stopped = {
   kind: Refusal["kind"] | "boot" | "page" | "browser" | "bench";
@@ -71,7 +73,12 @@ export type Stopped = {
 
 export type Outcome =
   | { kind: "reached"; loop: number; done: number }
-  | { kind: "stuck"; loop: number; best: Scored | null }
+  | {
+      kind: "stuck";
+      loop: number;
+      best: Scored | null;
+      pending?: Extract<Decision, { kind: "stuck" }>["pending"];
+    }
   | { kind: "no-such-action"; reason: string }
   | { kind: "ceiling"; loops: number }
   | { kind: "stopped"; stopped: Stopped };
@@ -90,8 +97,8 @@ export type LoopRecord = {
   decision: Decision;
   /** The candidate performed, or null when the loop stopped. */
   action: string | null;
-  /** Whether the goal's expectation held when the loop read the page (scoring runs only). */
-  held?: boolean;
+  /** Whether the run's end state held on the bench when the loop read the page. */
+  held: boolean;
   costUsd: number | null;
 };
 
@@ -110,7 +117,7 @@ export type RunRecord = {
     jevModel: string;
     wordsModel: string;
   };
-  target: Target | null;
+  target: RecordedTarget | null;
   words: string | null;
   outcome: Outcome | null;
   /** Set when the run stopped at a call: the refusal's kind and message. */
@@ -121,7 +128,7 @@ export type RunRecord = {
   costUsd: number;
   /** How many calls came back with no reported cost: costUsd leaves them out. */
   unreportedCosts: number;
-  /** Whether the goal's expectation held at the end (scoring runs only). */
+  /** Whether the goal file's expectation held at the end (scoring runs only). */
   held?: boolean;
   /** Bench reads after the run that failed (the probe, the history), each naming its read. */
   benchFailures: BenchFailure[];
@@ -194,20 +201,13 @@ function runIdFor(corpusDir: string, startedAt: Date): string {
   return id;
 }
 
-/** GET a bench route's JSON; a non-2xx answer throws naming the route and the status. */
-export async function getJson<T>(base: string, path: string): Promise<T> {
-  const response = await fetch(new URL(path, base));
-  if (!response.ok) throw new Error(`GET ${path} answered ${response.status}`);
-  return (await response.json()) as T;
-}
-
 /**
  * The history and every person's received copies, read through the bench's routes. Both files
  * are written only once every read has answered, so a history file present is a complete one.
  */
 async function writeHistory(base: string, runDir: string): Promise<void> {
   const { events } = await getJson<{ events: WorldEvent[] }>(base, "/api/events?since=0");
-  const snapshot = await getJson<Snapshot>(base, "/api/snapshot");
+  const snapshot = await getJson<SnapshotBody>(base, "/api/snapshot");
   const lines: string[] = [];
   for (const person of Object.keys(snapshot.people)) {
     const { copies } = await getJson<{ copies: unknown[] }>(
@@ -270,6 +270,12 @@ function printLoop(print: (text: string) => void, entry: LoopRecord): void {
       key === "done" ? entry.answers.done : entry.answers.scored.find((s) => s.key === key)?.score;
     lines.push(`  ${key}: ${question.instructions} -> ${score}`);
   }
+  const { decision } = entry;
+  const serves = "pending" in decision && decision.pending !== undefined ? decision.pending : null;
+  lines.push(`held: ${entry.held}`);
+  lines.push(
+    `decision: ${decision.kind}${serves === null ? "" : ` (pending ${serves.subkind} ${serves.event})`}`,
+  );
   lines.push(`action: ${entry.action ?? `none (${entry.decision.kind})`}`);
   print(lines.join("\n"));
 }
@@ -447,7 +453,7 @@ async function play(
   }
   let words: string | null = null;
   if (target.needsWords) {
-    const written = await askWords(options.instruction, target, options.model);
+    const written = await askWords(options.instruction, target.expect, options.model);
     if (!written.ok) {
       hooks.finish({ kind: "stopped", stopped: { ...written.refusal, call: "words" } });
       return;
@@ -464,9 +470,10 @@ async function play(
     if (read === null) return;
     const offered = candidates(read.controls, words);
     const state = renderState(goal, read.text);
-    let held: boolean | undefined;
+    let seen: Seen;
     try {
-      held = options.probe === undefined ? undefined : await options.probe(base);
+      const { pending } = await getJson<SnapshotBody>(base, "/api/snapshot");
+      seen = { held: await holds(target.expect, base), pending, controls: read.controls };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call: `loop ${loop}` } });
@@ -478,9 +485,11 @@ async function play(
       return;
     }
     hooks.call("jev", `loop ${loop}`, answered.costUsd);
-    const decision = choose(answered.done, answered.scored, thresholds);
+    const decision = decideLoop(goal, seen, answered, thresholds);
     const chosen =
-      decision.kind === "act" ? offered.find((c) => c.key === decision.chosen.key) : undefined;
+      decision.kind === "act" || decision.kind === "resolve"
+        ? offered.find((c) => c.key === decision.chosen.key)
+        : undefined;
     const entry: LoopRecord = {
       loop,
       state,
@@ -495,7 +504,7 @@ async function play(
       answers: { done: answered.done, scored: answered.scored },
       decision,
       action: chosen?.description ?? null,
-      ...(held === undefined ? {} : { held }),
+      held: seen.held,
       costUsd: answered.costUsd,
     };
     record.loops = loop;
@@ -506,7 +515,13 @@ async function play(
       return;
     }
     if (chosen === undefined) {
-      hooks.finish({ kind: "stuck", loop, best: decision.kind === "stuck" ? decision.best : null });
+      const stuck = decision.kind === "stuck" ? decision : null;
+      hooks.finish({
+        kind: "stuck",
+        loop,
+        best: stuck?.best ?? null,
+        ...(stuck?.pending === undefined ? {} : { pending: stuck.pending }),
+      });
       return;
     }
     await perform(page, chosen);

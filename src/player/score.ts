@@ -1,22 +1,20 @@
 /**
  * Scoring the player on a goal set by expected end states: each goal runs on its own fresh bench,
  * and its typed expectation is checked by code against the bench's final snapshot and history.
- * With --sweep, a grid of (T_DONE, T_ACT) pairs is replayed over the recorded answers and the
- * pair holding the most goals is printed: how the rule's constants are set. A goal set whose
- * author is the rule's author is refused on a plain score: it is no blind test of the rule. A set
- * not named as its file is refused: its score would land on another file's.
+ * With --sweep, a grid of T_ACT values, T_DONE held at its calibrated value, is replayed over the
+ * recorded loops and the value holding the most goals is printed. A goal set whose author is the
+ * rule's author is refused on a plain score: it is no blind test of the rule. A set not named as
+ * its file is refused: its score would land on another file's.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { parseArgs } from "node:util";
 import { type Browser, chromium } from "playwright";
 import { z } from "zod";
-import type { WorldEvent } from "../engine/events.ts";
-import type { Snapshot } from "../engine/snapshot.ts";
-import { choose, REGISTERED, RULE_AUTHOR, type Thresholds } from "./rule.ts";
+import { type Expectation, expectSchema, holds } from "./goal.ts";
+import { choose, REGISTERED, RULE_AUTHOR, T_DONE, type Thresholds } from "./rule.ts";
 import {
   type BenchFailure,
-  getJson,
   type LoopRecord,
   optionsFromFlags,
   PLAYER_FLAGS,
@@ -26,14 +24,6 @@ import {
 } from "./run.ts";
 
 const name = z.string().trim().min(1);
-
-export const expectSchema = z.union([
-  z.strictObject({ holder: z.strictObject({ item: name, person: name }) }),
-  z.strictObject({ location: z.strictObject({ person: name, room: name }) }),
-  z.strictObject({ said: z.strictObject({ person: name, subkind: name }) }),
-  z.strictObject({ outcome: z.literal("no-such-action") }),
-]);
-export type Expectation = z.infer<typeof expectSchema>;
 
 export const goalFileSchema = z.strictObject({
   /** The set's name, and its score file's: <set>.score.json beside the goals, so a plain name. */
@@ -45,14 +35,18 @@ export const goalFileSchema = z.strictObject({
 });
 export type GoalFile = z.infer<typeof goalFileSchema>;
 
-/** The (T_DONE, T_ACT) grid the sweep tries, in hundredths. */
+/**
+ * The grid the sweep tries: T_DONE at its calibrated value alone, since the done noul decides
+ * nothing, and T_ACT in hundredths. A score file swept before T_DONE was fixed records a grid of
+ * the same shape with many T_DONE values.
+ */
 export const GRID = {
-  done: Array.from({ length: 14 }, (_, i) => (30 + 5 * i) / 100),
+  done: [T_DONE],
   act: Array.from({ length: 16 }, (_, i) => (5 + 5 * i) / 100),
 };
 
 export const SWEEP_METHOD =
-  "Each pair replays every goal's recorded loops in order with the rule's choose(): at a loop where the pair says reached, the goal holds when its expectation held as that loop read the page; where the pair would act, it must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every pair. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.";
+  "Each T_ACT value, T_DONE held at its calibrated value, replays every goal's recorded loops in order: at a loop whose recorded held is true the run reached its end state there, and the goal holds when its expectation held at the run's end; a resolve loop is followed as recorded, and a loop stuck on a pending state's missing move stops as recorded, at every value; elsewhere the rule's choose() at the value must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every value. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.";
 
 export type GoalScore = {
   id: string;
@@ -87,36 +81,15 @@ export type ScoreFile = {
   sweep?: { grid: typeof GRID; method: string; results: SweepResult[]; best: SweepResult };
 };
 
-/** Whether an end-state expectation holds on the bench at `base` now. */
-export async function holds(expectation: Expectation, base: string): Promise<boolean> {
-  if ("holder" in expectation) {
-    const snapshot = await getJson<Snapshot>(base, "/api/snapshot");
-    const { item, person } = expectation.holder;
-    return Object.hasOwn(snapshot.items, item) && snapshot.items[item]?.holder === person;
-  }
-  if ("location" in expectation) {
-    const snapshot = await getJson<Snapshot>(base, "/api/snapshot");
-    const { person, room } = expectation.location;
-    const location = Object.hasOwn(snapshot.people, person)
-      ? snapshot.people[person]?.location
-      : undefined;
-    return location !== undefined && "room" in location && location.room === room;
-  }
-  if ("said" in expectation) {
-    const { events } = await getJson<{ events: WorldEvent[] }>(base, "/api/events?since=0");
-    const { person, subkind } = expectation.said;
-    return events.some((event) => event.actor === person && event.subkind === subkind);
-  }
-  return false;
-}
-
 /** Whether `goal` holds at `thresholds`, replaying its recorded loops (see SWEEP_METHOD). */
 function heldAt(goal: GoalScore, loops: LoopRecord[], thresholds: Thresholds): boolean {
   if ("outcome" in goal.expect) return goal.held;
   for (const entry of loops) {
+    if (entry.held) return goal.held;
+    if (entry.decision.kind === "resolve") continue;
+    if (entry.decision.kind === "stuck" && entry.decision.pending !== undefined) return false;
     const decision = choose(entry.answers.done, entry.answers.scored, thresholds);
-    if (decision.kind === "reached") return entry.held === true;
-    if (decision.kind === "stuck") return false;
+    if (decision.kind !== "act") return false;
     if (entry.decision.kind !== "act" || entry.decision.chosen.key !== decision.chosen.key) {
       return false;
     }

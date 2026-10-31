@@ -29,7 +29,11 @@ describe("C9: the rule's constants are the calibration set's best pair", () => {
 
   test("T_DONE and T_ACT equal the pair the score file records as best", () => {
     expect(scored.sweep).toBeDefined();
-    expect(scored.sweep?.grid).toEqual(GRID);
+    // The calibration was swept over T_DONE as well; the sweep now holds T_DONE at the pair's value
+    // and tries the same T_ACT values.
+    expect(scored.sweep?.grid.done).toContain(T_DONE);
+    expect(scored.sweep?.grid.act).toEqual(GRID.act);
+    expect(GRID.done).toEqual([T_DONE]);
     expect({ done: T_DONE, act: T_ACT }).toEqual({
       done: scored.sweep?.best.done ?? Number.NaN,
       act: scored.sweep?.best.act ?? Number.NaN,

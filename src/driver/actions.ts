@@ -1,4 +1,4 @@
-import type { verbs } from "../engine/rules.ts";
+import { fieldIds, type verbs } from "../engine/rules.ts";
 import { lookup, roomOf, type Snapshot } from "../engine/snapshot.ts";
 import { chance, pick, type Rng } from "./rng.ts";
 
@@ -6,10 +6,11 @@ import { chance, pick, type Rng } from "./rng.ts";
 export type VerbList = ReturnType<typeof verbs>;
 
 /** Names every object inherits: an operator may type them, and none may reach an inherited member. */
-const INHERITED_KEYS = ["constructor", "__proto__", "toString", "hasOwnProperty", "valueOf"];
+export const INHERITED_KEYS = ["constructor", "__proto__", "toString", "hasOwnProperty", "valueOf"];
 /** Actors that name no person. */
 const STRANGERS = ["nobody", ...INHERITED_KEYS];
-const WORDS = ["hey", "the shard is hot", "watch the door", "you owe me", "not here"];
+/** The lines a free-text field is filled with. */
+export const WORDS = ["hey", "the shard is hot", "watch the door", "you owe me", "not here"];
 
 /** One in sixteen actions comes from someone who is no person. */
 const STRANGER_ODDS = 1 / 16;
@@ -37,35 +38,35 @@ function nearOrAll(rng: Rng, near: string[], all: string[]): string {
   return near.length > 0 && chance(rng, NEAR_ODDS) ? pick(rng, near) : pick(rng, all);
 }
 
-/** A value for `field` from the id space the snapshot gives, biased towards the actor. */
+/**
+ * A value for `field`: from the ids fieldIds() gives it over the snapshot, biased towards the actor,
+ * or a words line for a field of free text.
+ */
 function fill(field: string, actor: string, snapshot: Snapshot, rng: Rng): string {
+  const all = fieldIds(field, snapshot);
+  if (all === null) return pick(rng, WORDS);
   const here = roomOf(snapshot, actor);
-  const people = Object.keys(snapshot.people);
-  const items = Object.keys(snapshot.items);
   switch (field) {
     case "exit": {
-      const exits = Object.values(snapshot.rooms).flatMap((room) => Object.keys(room.exits));
       const room = here === null ? undefined : lookup(snapshot.rooms, here);
-      return nearOrAll(rng, room === undefined ? [] : Object.keys(room.exits), exits);
+      return nearOrAll(rng, room === undefined ? [] : Object.keys(room.exits), all);
     }
     case "target": {
       const present = here === null ? [] : (snapshot.views.presence[here] ?? []);
       return nearOrAll(
         rng,
         present.filter((person) => person !== actor),
-        people,
+        all,
       );
     }
     case "item": {
       const held = lookup(snapshot.views.holdings, actor) ?? [];
       const offered = snapshot.views.offers.filter((o) => o.to === actor).map((o) => o.item);
       if (offered.length > 0 && chance(rng, OFFERED_ODDS)) return pick(rng, offered);
-      return nearOrAll(rng, held, items);
+      return nearOrAll(rng, held, all);
     }
-    case "words":
-      return pick(rng, WORDS);
     default:
-      return pick(rng, [...people, ...items]);
+      return pick(rng, all);
   }
 }
 

@@ -1,36 +1,51 @@
 /**
- * The run's target: the model turns the instruction into one typed action over what the page
- * offers, or says there is none; code then checks every name it gave against the page, so the
- * player never chases a verb, actor, item or exit the page does not show.
+ * The run's target: the model turns the instruction into one typed end state over what the page
+ * shows, or says there is none; code then checks every name it gave against the page and the
+ * registry's speech kinds, so the player never chases a person, item, room or speech kind that is
+ * not there.
  */
 import { z } from "zod";
+import { kindOf, subkinds } from "../engine/events.ts";
+import { type EndState, endStateSchema } from "./goal.ts";
 import type { ClientOptions } from "./jev.ts";
 import type { PageRead } from "./page.ts";
 import { type Completed, complete } from "./words.ts";
 
 const name = z.string().trim().min(1);
-const field = name.nullish();
 
 export const targetSchema = z.discriminatedUnion("kind", [
-  z.object({
-    kind: z.literal("action"),
-    actor: name,
-    verb: name,
-    fields: z.object({ target: field, item: field, exit: field }).default({}),
-    needsWords: z.boolean(),
-    done: name,
-  }),
+  z.object({ kind: z.literal("goal"), expect: endStateSchema, needsWords: z.boolean() }),
   z.object({ kind: z.literal("no-such-action"), reason: name }),
 ]);
 
 export type Target = z.infer<typeof targetSchema>;
-export type ActionTarget = Extract<Target, { kind: "action" }>;
+export type GoalTarget = Extract<Target, { kind: "goal" }>;
 
-/** The names the page offers: verbs and people from its form, items and exits from its text. */
-export type Vocabulary = { verbs: string[]; people: string[]; items: string[]; exits: string[] };
+/**
+ * The target runs recorded before targets were end states: one action and a done question. Kept
+ * as a type only, so their run.json files still read as run records; the player never makes one.
+ */
+export type ActionTarget = {
+  kind: "action";
+  actor: string;
+  verb: string;
+  fields: { target?: string | null; item?: string | null; exit?: string | null };
+  needsWords: boolean;
+  done: string;
+};
 
-function optionsOf(read: PageRead, label: string): string[] {
-  return read.controls.find((control) => control.label === label)?.options ?? [];
+/** A target as a run.json records it. */
+export type RecordedTarget = Target | ActionTarget;
+
+/**
+ * The names a goal may use: the people, items and rooms the page shows, and the speech kinds the
+ * registry records.
+ */
+export type Vocabulary = { people: string[]; items: string[]; rooms: string[]; speech: string[] };
+
+/** Every subkind the registry records whose kind is speech. */
+export function speechKinds(): string[] {
+  return subkinds.filter((subkind) => kindOf(subkind) === "speech");
 }
 
 /** Every distinct first capture of `pattern` over `text`, in order. */
@@ -41,37 +56,51 @@ function captures(text: string, pattern: RegExp): string[] {
 }
 
 /**
- * What the page offers, as read from it: the verb and actor selects' options, every item the
- * Items section lists as held, and every exit a room lists.
+ * What the page shows, as read from it: the actor select's options, every item the Items section
+ * lists as held and every room the Rooms section heads; and the registry's speech kinds.
  */
 export function vocabulary(read: PageRead): Vocabulary {
-  const exitLists = captures(read.text, /exits: ([^"\n]*)/g);
   return {
-    verbs: optionsOf(read, "verb"),
-    people: optionsOf(read, "actor"),
+    people: read.controls.find((control) => control.label === "actor")?.options ?? [],
     items: captures(read.text, /listitem: "?([^\s:"]+): held by /g),
-    exits: [...new Set(exitLists.flatMap((list) => captures(list, /(?:^|; )([^\s;]+) -> /g)))],
+    rooms: captures(read.text, /heading "[^"\n]*\(([^()\s"]+)\)" \[level=3\]/g),
+    speech: speechKinds(),
   };
 }
 
+/** Each name `endState` gives: what it names, the name, and the names it must be one of. */
+function namesOf(endState: EndState, offered: Vocabulary): [string, string, string[]][] {
+  if ("holder" in endState) {
+    return [
+      ["item", endState.holder.item, offered.items],
+      ["person", endState.holder.person, offered.people],
+    ];
+  }
+  if ("location" in endState) {
+    return [
+      ["person", endState.location.person, offered.people],
+      ["room", endState.location.room, offered.rooms],
+    ];
+  }
+  return [
+    ["person", endState.said.person, offered.people],
+    ["speech kind", endState.said.subkind, offered.speech],
+  ];
+}
+
 /**
- * The target as the page allows it: an action naming anything the page does not offer becomes
- * no-such-action naming the mismatch, whatever the model said.
+ * The target as the page allows it: an end state naming anything the page does not show, or a
+ * speech kind the registry lacks, becomes no-such-action naming the mismatch, whatever the model
+ * said.
  */
 export function checked(target: Target, offered: Vocabulary): Target {
   if (target.kind === "no-such-action") return target;
-  const named: [kind: string, value: string | null | undefined, among: string[]][] = [
-    ["verb", target.verb, offered.verbs],
-    ["actor", target.actor, offered.people],
-    ["target", target.fields.target, offered.people],
-    ["item", target.fields.item, offered.items],
-    ["exit", target.fields.exit, offered.exits],
-  ];
-  for (const [kind, value, among] of named) {
-    if (value === null || value === undefined || among.includes(value)) continue;
+  for (const [kind, value, among] of namesOf(target.expect, offered)) {
+    if (among.includes(value)) continue;
+    const where = kind === "speech kind" ? "the registry has" : "the page shows";
     return {
       kind: "no-such-action",
-      reason: `the page offers no ${kind} "${value}" (it offers: ${among.join(", ") || "none"})`,
+      reason: `${where} no ${kind} "${value}" (it has: ${among.join(", ") || "none"})`,
     };
   }
   return target;
@@ -79,24 +108,27 @@ export function checked(target: Target, offered: Vocabulary): Target {
 
 function prompt(instruction: string, offered: Vocabulary, pageText: string): string {
   return [
-    "You turn an instruction into the action that carries it out on a small world's control page, or say there is none.",
+    "You turn an instruction into the end state that carries it out in a small world shown on a control page, or say there is none.",
     `Instruction: ${instruction}`,
-    `Verbs the page offers: ${offered.verbs.join(", ")}`,
-    `People (actors and targets): ${offered.people.join(", ")}`,
+    `People: ${offered.people.join(", ")}`,
     `Items: ${offered.items.join(", ")}`,
-    `Exits: ${offered.exits.join(", ")}`,
-    "The page as it reads now (each room lists its exits as <exit> -> <room it leads to>):",
+    `Rooms: ${offered.rooms.join(", ")}`,
+    `Speech kinds: ${offered.speech.join(", ")}`,
+    "The page as it reads now:",
     pageText,
     "",
-    "An instruction may take more than one action on the page: a depart is followed by stepping the clock until the person arrives; an offer is followed by the other person's accept. Name the first action, and make done ask about the end state the instruction wants.",
     "Answer with one JSON object and nothing else, either",
-    '{"kind": "action", "actor": "<person>", "verb": "<verb>", "fields": {"target": "<person, if the verb addresses one>", "item": "<item, if the verb names one>", "exit": "<exit of the actor\'s room, if the verb departs>"}, "needsWords": <true when the verb speaks words>, "done": "<one yes/no question about the page that is yes once the instruction is carried out>"}',
-    'or {"kind": "no-such-action", "reason": "<why no offered verb does it>"} when no verb above can carry the instruction out.',
-    "Use only the names listed above; leave out fields the verb does not take.",
+    '{"kind": "goal", "expect": <the end state>, "needsWords": <true when the end state is someone saying something>}',
+    "where the end state is one of",
+    '{"holder": {"item": "<item>", "person": "<person>"}} (the person holds the item),',
+    '{"location": {"person": "<person>", "room": "<room>"}} (the person is in the room),',
+    '{"said": {"person": "<person>", "subkind": "<speech kind>"}} (the person has said something of that kind);',
+    'or {"kind": "no-such-action", "reason": "<why no end state above is what the instruction wants>"} when none of them carries the instruction out.',
+    "Use only the names listed above.",
   ].join("\n");
 }
 
-/** Ask the model for the target, then check it against the page. */
+/** Ask the model for the target, then check it against the page and the registry. */
 export async function askTarget(
   instruction: string,
   read: PageRead,
