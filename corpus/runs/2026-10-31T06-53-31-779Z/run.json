@@ -1,0 +1,166 @@
+{
+  "runId": "2026-10-31T06-53-31-779Z",
+  "instruction": "Rogue's hands are shaking. I want her holding that stimpak by the end of this.",
+  "startedAt": "2026-10-31T06:53:31.779Z",
+  "endedAt": "2026-10-31T06:53:42.260Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "holder": {
+        "item": "stimpak",
+        "person": "rogue"
+      }
+    },
+    "needsWords": false
+  },
+  "words": null,
+  "outcome": {
+    "kind": "ceiling",
+    "loops": 24
+  },
+  "loops": 24,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0001799
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.00005481
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00005481
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000060774
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000060732
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 9",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 10",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 11",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 12",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 13",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 14",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 15",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 16",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 17",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 18",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 19",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 20",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 21",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 22",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 23",
+      "costUsd": 0.000061698
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 24",
+      "costUsd": 0.000061698
+    }
+  ],
+  "costUsd": 0.0016449860000000002,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

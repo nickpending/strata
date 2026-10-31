@@ -1,0 +1,77 @@
+{
+  "runId": "2026-10-31T06-54-10-899Z",
+  "instruction": "Glitch should lean in close and tell Rogue, for her ears only, that he'll be gone before sunrise.",
+  "startedAt": "2026-10-31T06:54:10.899Z",
+  "endedAt": "2026-10-31T06:54:16.477Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "glitch",
+        "subkind": "speech.whisper"
+      }
+    },
+    "needsWords": true
+  },
+  "words": "Leaning close, Glitch murmurs, \"Don't look at him, Rogue, but he'll be gone before sunrise, and I need you to decide whether you're coming with me.\"",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002502
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000852
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000057582
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000061404
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000061404
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000062202
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000075852
+    }
+  ],
+  "costUsd": 0.000653844,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}
