@@ -1,7 +1,7 @@
 {
  "workOrder": "bench-driver",
  "what": "A bench driver that fires random legal and illegal actions through the engine and proves replay-equals-state and the world invariants after each, and a browser player that drives the bench page toward an instruction by reading it as text and asking Jev one yes/no per candidate control, with a language model only for the target and the words, every loop shown, every history recorded as the corpus, and a labelled-control test for every strata page.",
- "why": "The engine's parts are a projection kept current by reducers, and nothing today proves that projection matches the log on sequences nobody wrote; the mind blocks are calibrated on labelled moments, which need coherent histories at volume no person will type; and strata is web-based, so a driver that works the page as a person does is the harness every later panel is driven by, whose mechanics the operator wants to watch. Design: docs/work/bench-driver/design.md",
+ "why": "The engine's parts are a projection kept current by reducers, and nothing today proves that projection matches the log on sequences nobody wrote; the mind blocks are calibrated on labelled moments, which need coherent histories at volume no person will type; and strata is web-based, so a driver that works the page as a person does is the harness every later panel is driven by, whose mechanics the operator wants to watch. The blind walk showed the player letting an offer lapse while its accept waited, so multi-step actions are served as pending states the engine derives and the player resolves before the clock kills them. Design: docs/work/bench-driver/design.md",
  "criteria": [
   {
    "id": "C1",
@@ -48,14 +48,14 @@
   {
    "id": "C5",
    "given": "a bench hosted on an ephemeral port, chromium launched, and local stand-ins for the decisions endpoint and the chat completions endpoint returning scripted answers",
-   "when": "the player runs the instruction 'have Mux say something funny' with the stand-in target {mux, say, needsWords, done} and scripted nouls that favour setting actor, then verb, then typing, then pressing Act, then done",
-   "then": "each loop's Jev call carries exactly one done noul and one noul per candidate the page offers and nothing else; the candidates in every loop are the page's own controls and options as read that loop; the browser performs the select, the typing and the press; the run ends reached after the Act when done passes T_DONE; every loop was printed to stdout and appended to loops.jsonl with its state text, questions, answers and action; and corpus/runs/<run-id>/run.json, loops.jsonl, events.jsonl and received.jsonl exist, the history holding the speech.say by mux with the stand-in's words and the total cost equal to the sum of the answered costs"
+   "when": "the player runs the instruction 'have Mux say something funny' with the stand-in target {kind: goal, expect: {said: {person: mux, subkind: speech.say}}, needsWords: true} and scripted nouls that favour setting actor, then verb, then typing, then pressing Act, with the done noul scripted at 0.0 on every loop",
+   "then": "each loop's Jev call carries exactly one done noul and one noul per candidate the page offers and nothing else; the candidates in every loop are the page's own controls and options as read that loop; the browser performs the select, the typing and the press; the run ends reached on the loop after the Act, when the end state holds on the bench, though the done noul never passed T_DONE; every loop was printed to stdout and appended to loops.jsonl with its state text, questions, answers (the done noul included), held and action; and corpus/runs/<run-id>/run.json, loops.jsonl, events.jsonl and received.jsonl exist, the history holding the speech.say by mux with the stand-in's words and the total cost equal to the sum of the answered costs"
   },
   {
    "id": "C6",
    "given": "the hosted bench and the stand-ins",
-   "when": "the player runs 'have Rogue attack Glitch', with the stand-in model answering no-such-action for one run and answering a verb the page lacks for another; and separately runs with nouls that never pass T_ACT; and with a loop ceiling of 2",
-   "then": "the first two runs end no-such-action before any loop, the second naming the verb the page lacks; the third ends stuck naming the best candidate and its score; the fourth ends at the ceiling after two loops; each writes run.json with that outcome and exits 1"
+   "when": "the player runs 'have Rogue attack Glitch', with the stand-in model answering no-such-action for one run and answering an end state naming an item the page does not show for another; and separately runs with nouls that never pass T_ACT; and with a loop ceiling of 2",
+   "then": "the first two runs end no-such-action before any loop, the second naming the item the page lacks; the third ends stuck naming the best candidate and its score; the fourth ends at the ceiling after two loops; each writes run.json with that outcome and exits 1"
   },
   {
    "id": "C7",
@@ -67,13 +67,13 @@
    "id": "C8",
    "given": "the goal file corpus/goals/calibration.json committed with author equal to RULE_AUTHOR, a goal file with another author, and the stand-ins",
    "when": "score runs on each, and with --sweep on the second",
-   "then": "the first is refused naming both authors and writes nothing; the second runs every goal on its own fresh bench, checks each typed expectation (holder, location, said, no-such-action) against the bench's final snapshot and history, writes <set>.score.json with reached { held, of }, loops and cost per goal matching values derived by hand from the scripted answers, and --sweep prints the (T_DONE, T_ACT) pair with the highest reached count on a stated grid"
+   "then": "the first is refused naming both authors and writes nothing; the second runs every goal on its own fresh bench, checks each typed expectation (holder, location, said, no-such-action) against the bench's final snapshot and history, writes <set>.score.json with reached { held, of }, loops and cost per goal matching values derived by hand from the scripted answers, and --sweep replays the recorded loops over a stated T_ACT grid, reached taken from each loop's recorded held and resolve loops followed as recorded, T_DONE equal to its calibrated value in every result row, and prints the pair with the highest reached count"
   },
   {
    "id": "C9",
-   "given": "the committed world, the real decisions endpoint and the real chat completions endpoint, tick length 10",
-   "when": "the builder writes corpus/goals/calibration.json (author RULE_AUTHOR, at least eight goals covering depart, say, whisper, offer and accept, and one no-such-action), runs score --sweep on it, sets T_DONE and T_ACT in src/player/rule.ts to the printed pair, and commits corpus/goals/calibration.score.json and the runs under corpus/runs/",
-   "then": "rule.ts exports RULE_AUTHOR, T_DONE and T_ACT equal to the pair calibration.score.json records as best, the score file holds reached, loops and cost per goal, every run directory it names exists with its four files, and a test reads the constants and the score file and checks they agree"
+   "given": "the committed world and corpus/goals/calibration.json with corpus/goals/calibration.score.json and its runs, committed by the first build of this job with the real endpoints at tick length 10",
+   "when": "the rebuilt rule is in place and no sweep is re-run on the calibration set",
+   "then": "rule.ts exports RULE_AUTHOR, T_DONE and T_ACT unchanged and equal to the pair calibration.score.json records as best, the score file holds reached, loops and cost per goal, every run directory it names exists with its four files, and a test reads the constants and the score file and checks they agree"
   },
   {
    "id": "C10",
@@ -92,6 +92,56 @@
    "given": "the repository at the job's commit with chromium build 1248 installed",
    "when": "bun run verify runs (tsc --noEmit, biome check, bun test)",
    "then": "it exits 0 with no finding"
+  },
+  {
+   "id": "C13",
+   "given": "the committed world booted at tick length 10, after rogue offers data-shard to glitch at tick 0, and separately after glitch departs east",
+   "when": "engine.pending() is read, GET /api/snapshot is read on a hosted bench in the same states, each listed resolution is performed through act() on its own fresh engine, and the offer's engine steps to its due tick",
+   "then": "pending equals values derived by hand: the offer's entry is opened by its exchange.offer event (actor rogue, target glitch, item data-shard), its due fires exchange.lapse at tick 2 with after holding data-shard by rogue, and its resolutions are exactly glitch accept {item: data-shard} (after: glitch holds it) and glitch refuse {item: data-shard} (after: rogue holds it); the transit's entry has no resolutions and its due fires physical.arrive at the arrivesAt tick with after locating glitch in back-room; /api/snapshot's body carries the same pending beside the snapshot's fields, and engine.snapshot() carries no pending; each resolution performed is recorded and leaves its after holding; stepping to tick 2 records exchange.lapse and leaves pending empty",
+   "mutations": [
+    {
+     "id": "C13-M1",
+     "change": "drop the check that the schedule entry is gone after a candidate action, so every action rule() records counts as a resolution; C13 must go red listing resolutions beyond accept and refuse"
+    },
+    {
+     "id": "C13-M2",
+     "change": "derive pending inside Engine.snapshot() instead of its own accessor; C13 must go red on engine.snapshot() carrying pending"
+    }
+   ]
+  },
+  {
+   "id": "C14",
+   "given": "a bench hosted on an ephemeral port and chromium launched, after an offer of data-shard by rogue to glitch and a depart by glitch",
+   "when": "the page is read as text the way the player reads it",
+   "then": "a Pending section shows one line per pending state naming what opened it, each resolver with its verb, and what the clock fires at which tick (for the offer: rogue's offer of data-shard to glitch, glitch accept and glitch refuse, exchange.lapse at tick 2), the section adds no control, and the labelled-control test of C10 still passes on the page"
+  },
+  {
+   "id": "C15",
+   "given": "the hosted bench, chromium and the stand-ins, the stand-in model answering the goal {holder: {item: stimpak, person: rogue}} for one run and {holder: {item: data-shard, person: glitch}} for another, and scripted nouls that favour the giver's offer moves until the offer is recorded and then score press Step above every other candidate on every later loop",
+   "when": "the player runs each",
+   "then": "each run ends reached with the item held by the goal's person; its history holds exchange.offer then exchange.accept and no exchange.lapse; no loop between the offer and reached pressed Step; each loop after the offer is recorded with decision kind resolve naming the pending state's opening event; and a run whose derived move is absent from the page stops stuck naming the pending state",
+   "mutations": [
+    {
+     "id": "C15-M1",
+     "change": "remove the resolve step, so the rule's choice always leads; C15 must go red with exchange.lapse in the history and the run not reached"
+    },
+    {
+     "id": "C15-M2",
+     "change": "leave press Step among the candidates while a resolution that satisfies the goal stands, with the resolve step also removed; C15 must go red naming the loop that pressed Step while the offer stood"
+    }
+   ]
+  },
+  {
+   "id": "C16",
+   "given": "the hosted bench and the stand-ins, the stand-in target {said: {person: mux, subkind: speech.say}}, scripted nouls that favour setting actor, verb, typing and Act, and the done noul scripted at 0.99 on every loop",
+   "when": "the player runs",
+   "then": "the run does not end reached on any loop before the end state holds on the bench, and ends reached on the first loop where it holds, the done noul recorded as 0.99 on every loop",
+   "mutations": [
+    {
+     "id": "C16-M1",
+     "change": "decide reached by the done noul against T_DONE again; C16 must go red with the run reached on loop 1 before any say is in the history"
+    }
+   ]
   }
  ],
  "issues": [
@@ -149,12 +199,42 @@
     "kind": "not-a-case",
     "reason": "every first-block fact (rooms, presence, holdings, ties, transit, offers, clock, schedule, history, received copies) is on the page, read in verify.txt's snapshot"
    }
+  },
+  {
+   "kind": "cost",
+   "summary": "The calibrated T_ACT was set under the rule before this change (no pending precedence, reached by the done noul) and is kept, not re-swept, by the operator's condition; the calibration score records the old rule's runs.",
+   "frequency": {
+    "kind": "measured",
+    "command": "python3 -c \"import json;print(len(json.load(open('corpus/goals/calibration.score.json'))['perGoal']))\"",
+    "records": "corpus/goals/calibration.score.json",
+    "count": 9,
+    "total": 9
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "Every snapshot the bench serves tries each verb by each person over the world's ids through the rules to find the pending states' resolutions; the cost grows with people, verbs and ids, bounded on the committed world and paid only while a schedule entry stands.",
+   "frequency": {
+    "kind": "not-a-case",
+    "reason": "a cost on every snapshot route read while a schedule entry stands, not a usage case: the committed world has three people, three items and two exits, so the tries are bounded by people times verbs times ids, and the engine's own apply path never pays it"
+   }
+  },
+  {
+   "kind": "cost",
+   "summary": "A pending state is seen only when it has a schedule entry; a later wait with no deadline would need one before the player could see it.",
+   "frequency": {
+    "kind": "measured",
+    "command": "grep -n 'case \"' src/engine/clock.ts (the actions that open a wait: physical.depart and exchange.offer, each scheduling its deadline)",
+    "records": "src/engine/clock.ts schedulePart",
+    "count": 0,
+    "total": 2
+   }
   }
  ],
  "walks": [
   {
    "criterion": "C9",
-   "when": "after merge, an agent that is not RULE_AUTHOR writes corpus/goals/blind-1.json (its own author, at least ten goals with typed expectations, at least one no-such-action) without reading rule.ts, and bun run src/player/score.ts --goals corpus/goals/blind-1.json runs on main with the real endpoints, tick length 10",
+   "when": "after merge, a fresh agent that is not RULE_AUTHOR and has read neither src/player/rule.ts nor corpus/goals/blind-1.json writes corpus/goals/blind-2.json (its own author, set blind-2, at least ten goals with typed expectations, at least one no-such-action and at least two whose end state is reached through an offer), and bun run src/player/score.ts --goals corpus/goals/blind-2.json --tick-minutes 10 runs on main with the real endpoints",
    "then": "the score file reports reached on at least nine of every ten goals with loops and cost per goal, and the blind set, its score and its runs are committed under corpus/",
    "by": "driver"
   },
@@ -169,12 +249,16 @@
   "The driver calls the engine library (boot, act, step, events, received) and nothing lower; the player calls the page as a person does, through a real browser, and reads the history back through the bench's own routes; the definitions are never written.",
   "The replay oracle composes the engine's own initialRows and applyPart over the log and compares state rows; it keeps no second copy of any fact and persists nothing.",
   "The invariants read the registry, the schemas and the typed views; no subkind, field or code is listed a second time in the driver.",
-  "The player's candidates are read from the page each loop, one noul per candidate plus one goal-reached noul in one Jev call; Jev never writes text, and a language model writes only the typed target and the words, each checked by code against what the page offers.",
+  "The player's candidates are read from the page each loop, one noul per candidate plus one goal-reached noul, recorded, in one Jev call; Jev never writes text, and a language model writes only the typed target and the words, each checked by code against what the page offers.",
   "An instruction with no matching action ends in no-such-action; nothing invents a verb, an actor, an item or an exit the page does not show.",
   "Every loop's request and answer are printed as they happen and recorded, and the browser can be watched.",
   "The rule's thresholds are constants committed with the calibration goal set and its score before any blind set exists; a blind goal set carries an author other than the rule's recorded author, which score enforces by refusal, and is scored by expected end states after the merge.",
   "Every player run is recorded as typed files under corpus/runs/<run-id>/ as it happens, with every question, answer, model call and cost, so a later block reads the corpus without the engine that produced it.",
   "A refusal from either client stops the player naming its kind; the driver needs no model at all.",
-  "Every control on a strata page carries a clear label, held by a test that fails naming any that does not."
+  "Every control on a strata page carries a clear label, held by a test that fails naming any that does not.",
+  "A pending state is a clock schedule entry, and its resolutions and their results are derived by running the engine's own rules and reducers on a copy of the rows, served by its own engine accessor through the bench's routes, never on the engine's apply path, and shown on the page; nothing about a pending state is stated a second time and no verb, subkind or part is named in deriving it.",
+  "The player's goal is a typed end state from the closed set (holder, location, said, no-such-action), checked by code against the bench; reached is that check, never a model's claim, and the done noul is recorded but decides nothing.",
+  "While a pending state whose resolution leaves the goal's end state stands, the next action is derived by code from that resolution and the clock is never stepped past its expiry; no action kind is named in that derivation.",
+  "T_DONE and T_ACT keep their calibrated values; nothing is re-tuned against a blind set, and the blind walk uses a fresh set written by an agent that has read neither the rule nor an earlier blind set."
  ]
 }
