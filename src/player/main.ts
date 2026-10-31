@@ -32,7 +32,10 @@ if ("error" in options) usage(options.error);
 const { runDir, record } = await runPlayer({ ...options, instruction, url: parsed.values.url });
 console.log(`run written to ${runDir}`);
 const { outcome } = record;
-if (outcome?.kind !== "reached") {
+for (const failure of record.benchFailures) {
+  console.error(`player: bench: the ${failure.call} read failed: ${failure.message}`);
+}
+if (outcome?.kind !== "reached" || record.benchFailures.length > 0) {
   const why =
     outcome === null
       ? "no outcome"

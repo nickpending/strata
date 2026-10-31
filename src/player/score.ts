@@ -14,6 +14,8 @@ import type { WorldEvent } from "../engine/events.ts";
 import type { Snapshot } from "../engine/snapshot.ts";
 import { choose, REGISTERED, RULE_AUTHOR, type Thresholds } from "./rule.ts";
 import {
+  type BenchFailure,
+  getJson,
   type LoopRecord,
   optionsFromFlags,
   PLAYER_FLAGS,
@@ -55,7 +57,12 @@ export type GoalScore = {
   outcome: string;
   held: boolean;
   loops: number;
+  /** The sum of the costs the providers reported for the run. */
   costUsd: number;
+  /** How many of the run's calls came back with no reported cost; costUsd leaves them out. */
+  unreportedCosts: number;
+  /** Bench reads after the run that failed; a failed probe leaves held false and is named here. */
+  benchFailures: BenchFailure[];
   /** The run directory, relative to the score file's directory. */
   run: string;
 };
@@ -69,14 +76,12 @@ export type ScoreFile = {
   rule: { author: string; thresholds: Thresholds };
   reached: { held: number; of: number };
   perGoal: GoalScore[];
+  /** The sum of every goal's reported cost. */
   costUsd: number;
+  /** How many calls across the set came back with no reported cost. */
+  unreportedCosts: number;
   sweep?: { grid: typeof GRID; method: string; results: SweepResult[]; best: SweepResult };
 };
-
-async function getJson<T>(base: string, path: string): Promise<T> {
-  const response = await fetch(new URL(path, base));
-  return (await response.json()) as T;
-}
 
 /** Whether an end-state expectation holds on the bench at `base` now. */
 export async function holds(expectation: Expectation, base: string): Promise<boolean> {
@@ -185,6 +190,8 @@ export async function score(
           held,
           loops: record.loops,
           costUsd: record.costUsd,
+          unreportedCosts: record.unreportedCosts,
+          benchFailures: record.benchFailures,
           run: relative(dirname(path), runDir),
         },
         loops: readLoops(runDir),
@@ -201,6 +208,7 @@ export async function score(
     reached: { held: perGoal.filter((g) => g.held).length, of: perGoal.length },
     perGoal,
     costUsd: perGoal.reduce((sum, g) => sum + g.costUsd, 0),
+    unreportedCosts: perGoal.reduce((sum, g) => sum + g.unreportedCosts, 0),
     ...(withSweep ? { sweep: sweep(goals) } : {}),
   };
   writeFileSync(path, `${JSON.stringify(scored, null, 2)}\n`);

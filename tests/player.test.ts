@@ -6,6 +6,7 @@ import type { WorldEvent } from "../src/engine/events.ts";
 import { useAccountBrowsers } from "../src/player/page.ts";
 import { T_ACT, T_DONE } from "../src/player/rule.ts";
 import type { LoopRecord, RunRecord } from "../src/player/run.ts";
+import { startServer } from "../src/server/routes.ts";
 
 const ROOT = join(import.meta.dir, "..");
 // Every player run below is a child process; each inherits where the account's browsers are.
@@ -236,8 +237,13 @@ describe("C5: the player works the bench toward an instruction", () => {
     // Every loop was printed as it happened: its state, each question with its answer, its action.
     for (const entry of loops) {
       expect(ran.stdout).toContain(`--- loop ${entry.loop}`);
-      for (const question of Object.values(entry.questions)) {
-        expect(ran.stdout).toContain(question.instructions);
+      for (const [key, question] of Object.entries(entry.questions)) {
+        const score =
+          key === "done"
+            ? entry.answers.done
+            : entry.answers.scored.find((scored) => scored.key === key)?.score;
+        expect(score).toBeDefined();
+        expect(ran.stdout).toContain(`  ${key}: ${question.instructions} -> ${score}\n`);
       }
       expect(ran.stdout).toContain(entry.state);
       if (entry.action !== null) expect(ran.stdout).toContain(`action: ${entry.action}`);
@@ -406,5 +412,86 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     expect(ran.record.stopped?.message).toContain("strata-test-no-such-key");
     expect(m.bodies).toHaveLength(0);
     expect(j.bodies).toHaveLength(0);
+  }, 60_000);
+});
+
+describe("every call's cost is on record, and a cost the provider did not report is told apart", () => {
+  test("a call answered without usage.cost is recorded as unreported, never as zero", async () => {
+    const m = standIn(() =>
+      Response.json({
+        choices: [
+          { message: { content: JSON.stringify({ kind: "no-such-action", reason: "x" }) } },
+        ],
+      }),
+    );
+    const ran = await play(
+      "have Rogue attack Glitch",
+      endpoints(
+        m,
+        preferring([], () => false),
+      ),
+    );
+    expect(ran.record.outcome?.kind).toBe("no-such-action");
+    expect(ran.record.calls).toEqual([{ client: "model", purpose: "target", costUsd: null }]);
+    expect(ran.record.unreportedCosts).toBe(1);
+    expect(ran.record.costUsd).toBe(0);
+  }, 60_000);
+});
+
+describe("a bench read that fails after the run is its own failure, kept apart from the outcome", () => {
+  test("a history route answering 500 keeps the run reached, names the route, and writes no history", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "strata-player-bench-"));
+    temps.push(dir);
+    const bench = startServer({
+      world: join(ROOT, "world"),
+      dbPath: join(dir, "world.sqlite"),
+      tickMinutes: 10,
+      port: 0,
+    });
+    if (!bench.ok) throw new Error(bench.refusal.message);
+    stops.push(bench.stop);
+    const benchBase = `http://127.0.0.1:${bench.server.port}`;
+    // A proxy that serves the page and its own reads, but fails the player's history read: the
+    // browser's requests carry Chrome's user agent, the player's own fetches do not.
+    const proxy = Bun.serve({
+      hostname: "127.0.0.1",
+      port: 0,
+      fetch: async (request) => {
+        const url = new URL(request.url);
+        const fromBrowser = (request.headers.get("user-agent") ?? "").includes("Chrome");
+        if (url.pathname === "/api/events" && !fromBrowser) {
+          return new Response("history unavailable", { status: 500 });
+        }
+        return fetch(`${benchBase}${url.pathname}${url.search}`, { method: request.method });
+      },
+    });
+    stops.push(() => void proxy.stop(true));
+    const m = model({
+      kind: "action",
+      actor: "glitch",
+      verb: "depart",
+      fields: { exit: "east" },
+      needsWords: false,
+      done: "Is Glitch in the Back Room?",
+    });
+    const ran = await play("send Glitch east", [
+      ...endpoints(
+        m,
+        preferring([], () => true),
+      ),
+      "--url",
+      `http://127.0.0.1:${proxy.port}/`,
+    ]);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.record.outcome).toEqual({ kind: "reached", loop: 1, done: YES_DONE });
+    expect(ran.record.stopped).toBeUndefined();
+    expect(ran.record.benchFailures).toHaveLength(1);
+    expect(ran.record.benchFailures[0]).toMatchObject({ kind: "bench", call: "history" });
+    expect(ran.record.benchFailures[0]?.message).toContain("/api/events");
+    expect(ran.record.benchFailures[0]?.message).toContain("500");
+    expect(existsSync(join(ran.runDir, "events.jsonl"))).toBe(false);
+    expect(existsSync(join(ran.runDir, "received.jsonl"))).toBe(false);
+    expect(ran.stderr).toContain("bench");
+    expect(ran.stderr).toContain("/api/events");
   }, 60_000);
 });

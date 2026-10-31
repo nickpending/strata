@@ -78,7 +78,8 @@ export type Asked =
       questions: Record<string, NoulQuestion>;
       done: number;
       scored: Scored[];
-      costUsd: number;
+      /** What Jev reported the call cost, or null when it reported none. */
+      costUsd: number | null;
     }
   | {
       ok: false;

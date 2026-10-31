@@ -10,7 +10,7 @@ export const COMPLETIONS_URL = "https://openrouter.ai/api/v1/chat/completions";
 export const WORDS_MODEL = "anthropic/claude-haiku-5.5";
 
 export type Completed<T> =
-  | { ok: true; value: T; costUsd: number }
+  | { ok: true; value: T; costUsd: number | null }
   | { ok: false; refusal: Refusal };
 
 function parseRefusal(message: string): { ok: false; refusal: Refusal } {

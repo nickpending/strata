@@ -48,7 +48,7 @@ export type ChoiceAnswer = {
 export type JevAnswer = NoulAnswer | ChoiceAnswer;
 
 export type DecideResult =
-  | { ok: true; answers: Record<string, JevAnswer>; costUsd: number }
+  | { ok: true; answers: Record<string, JevAnswer>; costUsd: number | null }
   | { ok: false; refusal: Refusal };
 
 export type Posted = { ok: true; body: unknown } | { ok: false; refusal: Refusal };
@@ -67,10 +67,13 @@ function refused(
 export const isRecord = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === "object" && !Array.isArray(value);
 
-/** The cost OpenRouter reports in a body's `usage.cost`, or 0 when it reports none. */
-export function costOf(body: unknown): number {
+/**
+ * The cost OpenRouter reports in a body's `usage.cost`, or null when it reports none: a missing
+ * cost is unknown, never a zero.
+ */
+export function costOf(body: unknown): number | null {
   const usage = isRecord(body) && isRecord(body.usage) ? body.usage : {};
-  return typeof usage.cost === "number" ? usage.cost : 0;
+  return typeof usage.cost === "number" ? usage.cost : null;
 }
 
 /**

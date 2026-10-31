@@ -59,11 +59,11 @@ export type PlayerOptions = {
 
 /**
  * Why a run stopped short: a client's refusal (config, network, status, parse), a bench that would
- * not boot, a page with an unlabeled control, or a browser the player cannot work. `call` names
- * where: boot, launch, target, words or the loop.
+ * not boot, a page with an unlabeled control, a browser the player cannot work, or a bench route
+ * the loop's probe could not read. `call` names where: boot, launch, target, words or the loop.
  */
 export type Stopped = {
-  kind: Refusal["kind"] | "boot" | "page" | "browser";
+  kind: Refusal["kind"] | "boot" | "page" | "browser" | "bench";
   message: string;
   call: string;
   status?: number;
@@ -76,8 +76,8 @@ export type Outcome =
   | { kind: "ceiling"; loops: number }
   | { kind: "stopped"; stopped: Stopped };
 
-/** One model or Jev call and what it cost. */
-export type Call = { client: "model" | "jev"; purpose: string; costUsd: number };
+/** One model or Jev call and what it cost: null when the provider reported no cost. */
+export type Call = { client: "model" | "jev"; purpose: string; costUsd: number | null };
 
 /** One loop as recorded in loops.jsonl. */
 export type LoopRecord = {
@@ -92,7 +92,7 @@ export type LoopRecord = {
   action: string | null;
   /** Whether the goal's expectation held when the loop read the page (scoring runs only). */
   held?: boolean;
-  costUsd: number;
+  costUsd: number | null;
 };
 
 export type RunRecord = {
@@ -117,10 +117,18 @@ export type RunRecord = {
   stopped?: Stopped;
   loops: number;
   calls: Call[];
+  /** The sum of the costs the providers reported. */
   costUsd: number;
+  /** How many calls came back with no reported cost: costUsd leaves them out. */
+  unreportedCosts: number;
   /** Whether the goal's expectation held at the end (scoring runs only). */
   held?: boolean;
+  /** Bench reads after the run that failed (the probe, the history), each naming its read. */
+  benchFailures: BenchFailure[];
 };
+
+/** A read of the bench's routes that failed after the run: the outcome stands, this read is missing. */
+export type BenchFailure = { kind: "bench"; call: "probe" | "history"; message: string };
 
 export type PlayerResult = { runDir: string; record: RunRecord };
 
@@ -188,16 +196,19 @@ function runIdFor(corpusDir: string, startedAt: Date): string {
   return id;
 }
 
-async function getJson<T>(base: string, path: string): Promise<T> {
+/** GET a bench route's JSON; a non-2xx answer throws naming the route and the status. */
+export async function getJson<T>(base: string, path: string): Promise<T> {
   const response = await fetch(new URL(path, base));
   if (!response.ok) throw new Error(`GET ${path} answered ${response.status}`);
   return (await response.json()) as T;
 }
 
-/** The history and every person's received copies, read through the bench's routes. */
+/**
+ * The history and every person's received copies, read through the bench's routes. Both files
+ * are written only once every read has answered, so a history file present is a complete one.
+ */
 async function writeHistory(base: string, runDir: string): Promise<void> {
   const { events } = await getJson<{ events: WorldEvent[] }>(base, "/api/events?since=0");
-  writeFileSync(join(runDir, "events.jsonl"), events.map((e) => `${JSON.stringify(e)}\n`).join(""));
   const snapshot = await getJson<Snapshot>(base, "/api/snapshot");
   const lines: string[] = [];
   for (const person of Object.keys(snapshot.people)) {
@@ -207,7 +218,40 @@ async function writeHistory(base: string, runDir: string): Promise<void> {
     );
     for (const copy of copies) lines.push(`${JSON.stringify({ thing: person, copy })}\n`);
   }
+  writeFileSync(join(runDir, "events.jsonl"), events.map((e) => `${JSON.stringify(e)}\n`).join(""));
   writeFileSync(join(runDir, "received.jsonl"), lines.join(""));
+}
+
+/**
+ * The reads after the run: the goal's probe, then the history. A failed read is recorded as its own
+ * bench failure naming the read; the run's outcome stands.
+ */
+async function readBench(
+  base: string,
+  options: PlayerOptions,
+  record: RunRecord,
+  runDir: string,
+): Promise<void> {
+  const reads: [BenchFailure["call"], () => Promise<void>][] = [
+    [
+      "probe",
+      async () => {
+        if (options.probe !== undefined) record.held = await options.probe(base);
+      },
+    ],
+    ["history", () => writeHistory(base, runDir)],
+  ];
+  for (const [call, read] of reads) {
+    try {
+      await read();
+    } catch (error) {
+      record.benchFailures.push({
+        kind: "bench",
+        call,
+        message: error instanceof Error ? error.message : String(error),
+      });
+    }
+  }
 }
 
 /** Perform one candidate in the browser and wait for the page to settle. */
@@ -241,9 +285,9 @@ export async function runPlayer(options: PlayerOptions): Promise<PlayerResult> {
   const runId = runIdFor(options.corpusDir, started);
   const runDir = join(options.corpusDir, runId);
   mkdirSync(runDir);
-  for (const file of ["loops.jsonl", "events.jsonl", "received.jsonl"]) {
-    writeFileSync(join(runDir, file), "");
-  }
+  // loops.jsonl grows as the run goes; events.jsonl and received.jsonl are written once the
+  // history has been read back whole, so their absence means it was never read.
+  writeFileSync(join(runDir, "loops.jsonl"), "");
   const record: RunRecord = {
     runId,
     instruction: options.instruction,
@@ -265,12 +309,15 @@ export async function runPlayer(options: PlayerOptions): Promise<PlayerResult> {
     loops: 0,
     calls: [],
     costUsd: 0,
+    unreportedCosts: 0,
+    benchFailures: [],
   };
   const save = () =>
     writeFileSync(join(runDir, "run.json"), `${JSON.stringify(record, null, 2)}\n`);
-  const call = (client: Call["client"], purpose: string, costUsd: number) => {
+  const call = (client: Call["client"], purpose: string, costUsd: number | null) => {
     record.calls.push({ client, purpose, costUsd });
-    record.costUsd = record.calls.reduce((sum, c) => sum + c.costUsd, 0);
+    record.costUsd = record.calls.reduce((sum, c) => sum + (c.costUsd ?? 0), 0);
+    record.unreportedCosts = record.calls.filter((c) => c.costUsd === null).length;
     save();
   };
   const finish = (outcome: Outcome) => {
@@ -285,6 +332,8 @@ export async function runPlayer(options: PlayerOptions): Promise<PlayerResult> {
   let host: { base: string; stop: () => void; dir: string } | null = null;
   let launched: Browser | null = null;
   let context: BrowserContext | null = null;
+  /** The bench the run reads back after it ends, once the page has been opened on it. */
+  let benchBase: string | null = null;
   try {
     if (options.url === undefined) {
       const dir = mkdtempSync(join(tmpdir(), "strata-player-"));
@@ -325,15 +374,21 @@ export async function runPlayer(options: PlayerOptions): Promise<PlayerResult> {
     await settled(page, async () => {
       await page.goto(base);
     });
+    benchBase = base;
     await play(page, base, options, thresholds, record, { print, call, finish, runDir });
-    if (options.probe !== undefined) record.held = await options.probe(base);
-    await writeHistory(base, runDir);
   } catch (error) {
-    finish({
-      kind: "stopped",
-      stopped: { kind: "browser", message: String(error), call: `loop ${record.loops + 1}` },
-    });
+    // Only a run play() has not finished stops on the browser; a finished outcome stands.
+    if (record.outcome === null) {
+      finish({
+        kind: "stopped",
+        stopped: { kind: "browser", message: String(error), call: `loop ${record.loops + 1}` },
+      });
+    }
   } finally {
+    if (benchBase !== null) await readBench(benchBase, options, record, runDir);
+    for (const failure of record.benchFailures) {
+      print(`bench: the ${failure.call} read failed: ${failure.message}`);
+    }
     record.endedAt = new Date().toISOString();
     save();
     await context?.close();
@@ -348,7 +403,7 @@ export async function runPlayer(options: PlayerOptions): Promise<PlayerResult> {
 
 type Hooks = {
   print: (text: string) => void;
-  call: (client: Call["client"], purpose: string, costUsd: number) => void;
+  call: (client: Call["client"], purpose: string, costUsd: number | null) => void;
   finish: (outcome: Outcome) => void;
   runDir: string;
 };
@@ -411,7 +466,14 @@ async function play(
     if (read === null) return;
     const offered = candidates(read.controls, words);
     const state = renderState(goal, read.text);
-    const held = options.probe === undefined ? undefined : await options.probe(base);
+    let held: boolean | undefined;
+    try {
+      held = options.probe === undefined ? undefined : await options.probe(base);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call: `loop ${loop}` } });
+      return;
+    }
     const answered = await ask(state, goal, offered, options.jev);
     if (!answered.ok) {
       hooks.finish({ kind: "stopped", stopped: { ...answered.refusal, call: `loop ${loop}` } });

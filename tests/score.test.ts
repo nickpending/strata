@@ -35,9 +35,27 @@ type Scripted = {
   target: unknown;
   /** The candidate Jev favours on each call, in order; once they run out, done is answered yes. */
   steps: string[];
+  /** Done answers for calls before the steps run out, by call index, in place of NO_DONE. */
+  doneAt?: Record<number, number>;
 };
 
-/** Four goals, one per expectation type, each with its model target and scripted Jev answers. */
+/** A done answer the run itself passes over, but a lower T_DONE in the sweep would stop at. */
+const MID_DONE = (NO_DONE + YES_DONE) / 2;
+
+const SHARD_STEPS = [
+  "set actor to rogue",
+  "set verb to offer",
+  "set item to data-shard",
+  "press Act",
+  "set actor to glitch",
+  "set verb to accept",
+  "press Act",
+];
+
+/**
+ * One goal per expectation type, each with its model target and scripted Jev answers, and one
+ * whose run reaches done while its expectation does not hold on the bench.
+ */
 const GOALS: (Scripted & { id: string; expect: unknown })[] = [
   {
     id: "give-shard",
@@ -51,15 +69,7 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
       needsWords: false,
       done: "Does Glitch hold the data shard?",
     },
-    steps: [
-      "set actor to rogue",
-      "set verb to offer",
-      "set item to data-shard",
-      "press Act",
-      "set actor to glitch",
-      "set verb to accept",
-      "press Act",
-    ],
+    steps: SHARD_STEPS,
   },
   {
     id: "glitch-east",
@@ -74,6 +84,8 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
       done: "Is Glitch in the Back Room?",
     },
     steps: ["press Act", "press Step"],
+    // Asked while Glitch is still in transit: not reached at the rule's T_DONE, and not held.
+    doneAt: { 1: MID_DONE },
   },
   {
     id: "mux-says",
@@ -94,6 +106,21 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
     expect: { outcome: "no-such-action" },
     target: { kind: "no-such-action", reason: "no verb flies" },
     steps: [],
+  },
+  {
+    // The run hands the shard over and Jev answers done, but the expectation names Rogue.
+    id: "shard-wrong-holder",
+    instruction: "have Rogue hand Glitch the data shard",
+    expect: { holder: { item: "data-shard", person: "rogue" } },
+    target: {
+      kind: "action",
+      actor: "rogue",
+      verb: "offer",
+      fields: { target: "glitch", item: "data-shard" },
+      needsWords: false,
+      done: "Does Glitch hold the data shard?",
+    },
+    steps: SHARD_STEPS,
   },
 ];
 
@@ -141,8 +168,9 @@ function jevStandIn() {
     const step = goal.steps[n];
     const answers: Record<string, { noul: number }> = {};
     for (const [key, q] of Object.entries(questions)) {
-      if (key === "done") answers[key] = { noul: step === undefined ? YES_DONE : NO_DONE };
-      else answers[key] = { noul: q.instructions.includes(`"${step}"`) ? FAVOURED : PASSED_OVER };
+      if (key === "done") {
+        answers[key] = { noul: step === undefined ? YES_DONE : (goal.doneAt?.[n] ?? NO_DONE) };
+      } else answers[key] = { noul: q.instructions.includes(`"${step}"`) ? FAVOURED : PASSED_OVER };
     }
     return Response.json({ answers, usage: { cost: JEV_COST } });
   });
@@ -221,14 +249,36 @@ describe("C8: scoring a goal set by expected end states", () => {
     expect(ran.exitCode).toBe(0);
 
     const written = JSON.parse(readFileSync(join(dir, "scripted.score.json"), "utf8")) as ScoreFile;
-    expect(written.reached).toEqual({ held: 4, of: 4 });
+    // Four goals hold; the fifth reached done, but its expectation does not hold on the bench.
+    expect(written.reached).toEqual({ held: 4, of: 5 });
     // Loops and cost per goal, derived by hand from the scripted answers: one Jev call per step
     // plus the loop that answers done, one model call for the target, one more for the words.
     const expected = {
-      "give-shard": { outcome: "reached", loops: 8, costUsd: MODEL_COST + 8 * JEV_COST },
-      "glitch-east": { outcome: "reached", loops: 3, costUsd: MODEL_COST + 3 * JEV_COST },
-      "mux-says": { outcome: "reached", loops: 5, costUsd: 2 * MODEL_COST + 5 * JEV_COST },
-      moon: { outcome: "no-such-action", loops: 0, costUsd: MODEL_COST },
+      "give-shard": {
+        outcome: "reached",
+        loops: 8,
+        costUsd: MODEL_COST + 8 * JEV_COST,
+        held: true,
+      },
+      "glitch-east": {
+        outcome: "reached",
+        loops: 3,
+        costUsd: MODEL_COST + 3 * JEV_COST,
+        held: true,
+      },
+      "mux-says": {
+        outcome: "reached",
+        loops: 5,
+        costUsd: 2 * MODEL_COST + 5 * JEV_COST,
+        held: true,
+      },
+      moon: { outcome: "no-such-action", loops: 0, costUsd: MODEL_COST, held: true },
+      "shard-wrong-holder": {
+        outcome: "reached",
+        loops: 8,
+        costUsd: MODEL_COST + 8 * JEV_COST,
+        held: false,
+      },
     };
     expect(written.perGoal.map((g) => g.id)).toEqual(Object.keys(expected));
     for (const goal of written.perGoal) {
@@ -237,16 +287,16 @@ describe("C8: scoring a goal set by expected end states", () => {
         id: goal.id,
         outcome: want.outcome,
         loops: want.loops,
-        held: true,
+        held: want.held,
       });
       expect(goal.costUsd).toBeCloseTo(want.costUsd, 12);
     }
-    expect(m.calls).toBe(5);
-    expect(j.calls).toBe(16);
+    expect(m.calls).toBe(6);
+    expect(j.calls).toBe(24);
 
     // Each goal ran on its own fresh bench: each history starts at e1 and holds only its own acts.
     const runs = readdirSync(corpus).sort();
-    expect(runs).toHaveLength(4);
+    expect(runs).toHaveLength(5);
     const histories = written.perGoal.map((goal) =>
       readFileSync(join(dir, goal.run, "events.jsonl"), "utf8")
         .split("\n")
@@ -258,27 +308,35 @@ describe("C8: scoring a goal set by expected end states", () => {
       ["physical.depart", "time.tick", "physical.arrive"],
       ["speech.say"],
       [],
+      ["exchange.offer", "exchange.accept"],
     ]);
     for (const events of histories) {
       if (events.length > 0) expect(events[0]?.id).toBe("e1");
     }
 
-    // The sweep: every goal holds exactly where done passes on the last loop alone and the
-    // favoured step still reaches the act threshold. Ties go to the median T_DONE among them
-    // (the lower middle), then the median T_ACT at that T_DONE.
-    const holdsAll = (done: number, act: number) =>
+    // The sweep, by hand. The no-such-action goal holds at every pair; the wrong-holder goal at
+    // none. The give-shard and mux-says goals hold where done passes on their last loop alone and
+    // the favoured step still reaches the act threshold. Glitch-east also needs T_DONE above its
+    // mid-run done answer: a pair at or below it stops while Glitch is in transit, where the
+    // loop's probe found the expectation not yet held.
+    const reaches = (done: number, act: number) =>
       NO_DONE < done && done <= YES_DONE && act <= FAVOURED;
-    const dones = GRID.done.filter((done) => GRID.act.some((act) => holdsAll(done, act)));
+    const heldAt = (done: number, act: number) =>
+      1 + (reaches(done, act) ? 2 : 0) + (reaches(done, act) && done > MID_DONE ? 1 : 0);
+    const holdsMost = (done: number, act: number) => heldAt(done, act) === 4;
+    const dones = GRID.done.filter((done) => GRID.act.some((act) => holdsMost(done, act)));
     const done = dones[Math.floor((dones.length - 1) / 2)] as number;
-    const acts = GRID.act.filter((act) => holdsAll(done, act));
+    const acts = GRID.act.filter((act) => holdsMost(done, act));
     const best = { done, act: acts[Math.floor((acts.length - 1) / 2)] as number };
     expect(dones.length).toBeGreaterThan(0);
+    // The grid holds pairs that stop glitch-east early, so the per-loop probe is what decides them.
+    expect(GRID.done.some((d) => GRID.act.some((a) => heldAt(d, a) === 3))).toBe(true);
     expect(written.sweep?.best).toEqual({ ...best, held: 4 });
     expect(written.sweep?.grid).toEqual(GRID);
     expect(written.sweep?.method.length).toBeGreaterThan(0);
-    expect(ran.stdout).toContain(`best: T_DONE=${best?.done} T_ACT=${best?.act} (held 4 of 4)`);
+    expect(ran.stdout).toContain(`best: T_DONE=${best?.done} T_ACT=${best?.act} (held 4 of 5)`);
     for (const pair of written.sweep?.results ?? []) {
-      expect(pair.held).toBe(holdsAll(pair.done, pair.act) ? 4 : 1);
+      expect({ ...pair, held: heldAt(pair.done, pair.act) }).toEqual(pair);
     }
   }, 240_000);
 });
