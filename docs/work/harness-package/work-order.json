@@ -1,0 +1,189 @@
+{
+  "workOrder": "harness-package",
+  "what": "Move the bench page's driver from src/player into its own bun workspace package harness/ that cannot resolve an import of the engine or the server and reads verbs, speech kinds, pending states, the snapshot and the history over the bench's routes (a new /api/subkinds serving the registry's subkinds with their families), with a thin strata adapter (src/adapter: the bench host, the route-body contract typecheck, one-call command lines), and make a headed run hold before each action until the operator presses Enter.",
+  "why": "The harness was designed as a page client but nine import lines weld it to the engine and the stake against that was prose no review tested, and the C5 operator walk failed because a headed run cannot be watched. Design: docs/work/harness-package/design.md",
+  "criteria": [
+    {
+      "id": "H1",
+      "given": "the harness package at harness/ with its own package.json, tsconfig.json, src/ and test/, the root's node_modules installed hoisted",
+      "when": "tests/harness-boundary.test.ts copies harness/ as it is on disk, without any node_modules, alone into a fresh temporary directory, links the root's node_modules into the copy as its node_modules, and runs the copy's bun run typecheck, bun test, and tsc --listFilesOnly -p tsconfig.json",
+      "then": "an import of the engine or the server from any harness file fails the test, naming the file or the import: as it stands the typecheck and the tests exit 0 in the copy and every file the program lists lies, by real path, under the copy or under the linked node_modules' real path; and no file under src/player remains",
+      "mutations": [
+        {
+          "id": "H1-M1",
+          "change": "add `import { kindOf } from \"../../src/engine/events.ts\";` and a use of it to harness/src/target.ts: tests/harness-boundary.test.ts goes red on the copy's typecheck"
+        },
+        {
+          "id": "H1-M2",
+          "change": "add an import of src/engine/events.ts by its absolute path to harness/src/goal.ts: tests/harness-boundary.test.ts goes red naming that file among the listed files outside the copy"
+        },
+        {
+          "id": "H1-M3",
+          "change": "add `import { startServer } from \"../../src/server/routes.ts\";` and a use of it to harness/src/run.ts: tests/harness-boundary.test.ts goes red"
+        }
+      ]
+    },
+    {
+      "id": "H2",
+      "given": "a bench hosted through src/adapter/host.ts, chromium, and local stand-ins for the decisions endpoint and the chat completions endpoint returning scripted answers",
+      "when": "the harness runs a said goal and a give goal, recording the model prompt each stand-in received; separately runs with the stand-in model naming a said subkind the bench does not serve; and separately runs against a bench whose /api/subkinds answers 500",
+      "then": "a speech kind the bench does not serve ends the run no-such-action before any loop, naming it as one the bench serves no speech kind of; a failed /api/subkinds read stops the run as a bench stop at call target; and otherwise the target prompt's verbs with their fields equal /api/verbs's body and its speech kinds equal the /api/subkinds entries whose kind is speech, both read from the routes during the run",
+      "mutations": [
+        {
+          "id": "H2-M1",
+          "change": "make /api/subkinds in src/server/routes.ts serve kind \"\" for every subkind: the H2 test asserting the prompt's speech kinds equal the served speech entries goes red, the said goal ending no-such-action"
+        },
+        {
+          "id": "H2-M2",
+          "change": "drop the say-to verb from the body /api/verbs serves in src/server/routes.ts: the H2 test asserting the prompt's verb lines equal the served verbs goes red"
+        }
+      ]
+    },
+    {
+      "id": "H3",
+      "given": "src/server/routes.ts exporting a body type per GET route it serves and building each body as that type, and src/adapter/contract.ts compiled by the root typecheck",
+      "when": "GET /api/subkinds is requested on a hosted bench, and the root typecheck runs",
+      "then": "a route body change that breaks what the harness declares fails the root typecheck at src/adapter/contract.ts: as it stands the root typecheck passes, and /api/subkinds answers every registry subkind once, in registry order, each with kindOf's family, equal to values written by hand from src/engine/events.ts's registry",
+      "mutations": [
+        {
+          "id": "H3-M1",
+          "change": "rename the served field `kind` to `family` in the /api/subkinds body type and handler in src/server/routes.ts: the root typecheck fails at src/adapter/contract.ts"
+        },
+        {
+          "id": "H3-M2",
+          "change": "rename After's `holders` to `holder` in src/engine/pending.ts (and its uses in the engine): the root typecheck fails at src/adapter/contract.ts on the /api/snapshot body"
+        }
+      ]
+    },
+    {
+      "id": "H4",
+      "given": "the hosted bench and the stand-ins scripted to reach 'have Mux say something funny' in several actions",
+      "when": "the harness runs it headed with an injected hold that records each call, the stdout text and the page's controls at that moment, and answers go; again headed with a hold that answers end on its second call; again headless with the same injected hold; and holdOnEnter is fed a stand-in stdin holding one line, then ended",
+      "then": "a headed run performs nothing until the operator steps it: the hold is called once per performed action and never on the reached loop, each call coming after that loop's state text, questions with their answers, decision and action are on stdout and appended to loops.jsonl and while the page's controls are still as that loop read them; the run whose hold answers end stops with outcome stopped, kind hold, call loop 2, that loop's action not performed and its four run files written; the headless run never calls the hold; and holdOnEnter answers go on the line and end once stdin has ended",
+      "mutations": [
+        {
+          "id": "H4-M1",
+          "change": "call the hold after perform instead of before it in harness/src/run.ts: the H4 test asserting the controls are unchanged at each hold goes red"
+        },
+        {
+          "id": "H4-M2",
+          "change": "call the hold in headless runs too in harness/src/run.ts: the H4 headless case goes red"
+        },
+        {
+          "id": "H4-M3",
+          "change": "ignore an end from the hold and perform anyway in harness/src/run.ts: the H4 end case goes red"
+        }
+      ]
+    },
+    {
+      "id": "H5",
+      "given": "the root scripts harness and score pointing at src/adapter/main.ts and src/adapter/score.ts, and the harness's own cli and scoreCli",
+      "when": "the harness's cli runs with neither --url nor a host, the harness's scoreCli runs a goal file with no host, and src/adapter/main.ts runs an instruction against the stand-ins with no --url",
+      "then": "a run with no bench to drive stops at once as kind boot naming that, writing its run.json; scoreCli with no host refuses before any goal runs, naming that each goal needs a hosted bench; and the adapter's run hosts a fresh bench through hostBench, drives it, and removes the bench's temporary directory when the run ends; src/adapter/main.ts and src/adapter/score.ts each hold one call into the harness"
+    },
+    {
+      "id": "H6",
+      "given": "the tests that drove src/player against a real bench (tests/player.test.ts, score.test.ts, page.test.ts, rule.test.ts) now importing the harness package by name and hosting through src/adapter/host.ts",
+      "when": "bun test runs at the root, and a fresh run's run.json and loops.jsonl are compared with corpus/runs/2026-10-31T14-36-50-377Z's",
+      "then": "every claim those tests made before the move still holds, with only the renamed names and the said refusal's wording changed in them, and no assertion removed or weakened; and the key sets of the fresh run.json (the parameters object's included) and of each loops.jsonl line equal those of the committed run's files"
+    },
+    {
+      "id": "H7",
+      "given": "the job's worktree before any move code, the real decisions and chat completions endpoints, and corpus/goals/blind-2.score.json made at 4a48f97",
+      "when": "bun run score --goals corpus/goals/calibration.json --sweep --tick-minutes 10 runs on the unmoved code and its score file and runs are committed as a commit of their own (the baseline), and after the move the same command and bun run score --goals corpus/goals/blind-2.json --tick-minutes 10 run and their score files and runs are committed",
+      "then": "a baseline whose sweep best is not T_DONE 0.6, T_ACT 0.3 halts the job to the orchestrator before any move code; otherwise the post-move calibration holds the baseline's held count with the same best pair and blind-2 holds 12 of 13; a held count that differs fails, the builder naming for each differing goal the first loop whose decision kind or chosen candidate departs from its baseline run's loops.jsonl and what decided it, a code-decided departure (reached, resolve, wait, plan, stuck on a missing move, or the target and vocabulary check) being a regression fixed before merge and one under choose() over Jev's nouls or from a different model target halting to the orchestrator with both runs named; T_DONE and T_ACT are unchanged in code"
+    },
+    {
+      "id": "H8",
+      "given": "the root package.json with workspaces { packages: [harness], catalog } and bunfig.toml pinning [install] linker = \"hoisted\"",
+      "when": "bun install --frozen-lockfile and ember verify run in the job's worktree",
+      "then": "a version shared by the root and the harness is written in one place: playwright, zod, @voidwire/apiconf, typescript, bun-types and @biomejs/biome appear with a version only in the catalog and as catalog: in every manifest naming them; the install passes with no harness/node_modules; and the gate passes with typecheck(harness), lint(harness) and tests(harness) among its rows"
+    },
+    {
+      "id": "H9",
+      "given": "the fuzzer under src/driver",
+      "when": "the job's diff is read and tests/driver.test.ts, replay.test.ts and invariants.test.ts run",
+      "then": "the diff touches no file under src/driver and those tests pass unchanged"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "H4",
+      "when": "after merge, bun run harness \"have Mux say something funny\" --tick-minutes 10 --headed runs on main with the real endpoints",
+      "then": "a browser window opens on the hosted bench; before each action the loop's state text, questions, answers, decision and action are printed and the run waits until the operator presses Enter; the operator can watch each step land on the page; Mux's say appears in the history and the run's four files are written under corpus/runs/",
+      "by": "operator"
+    }
+  ],
+  "issues": [
+    5
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "The harness's tests that drive a real bench live strata-side, since a real bench is strata's; the package's own tests prove its logic over fixtures and stand-ins, and the end-to-end claims are proved where the bench is.",
+      "frequency": {
+        "kind": "measured",
+        "command": "grep -lE 'startServer|runPlayer' tests/*.test.ts | wc -l",
+        "records": "tests/*.test.ts",
+        "count": 4,
+        "total": 17
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The harness's declared route bodies are cast, not parsed, as today; a body the bench serves wrongly at run time surfaces as a wrong decision or a thrown read, and drift is caught at strata's typecheck, not at run time.",
+      "frequency": {
+        "kind": "measured",
+        "command": "for f in corpus/runs/*/run.json; do jq -e '(.benchFailures // []) | length > 0' $f; done",
+        "records": "corpus/runs/*/run.json",
+        "count": 0,
+        "total": 48
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Jev and the model are not deterministic, so the re-scored calibration and blind-2 counts can differ with no code change; a differing count halts for a ruling rather than passing or being re-run until it matches.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "It bites only in this job's two re-scores, where a differing count halts for a ruling; no usage path re-scores a set to compare it."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A headed run cannot be left unattended: it waits on Enter before every action, and a headed score run waits before every action of every goal.",
+      "frequency": {
+        "kind": "measured",
+        "command": "for f in corpus/runs/*/run.json; do jq -e '.parameters.headed == true' $f; done",
+        "records": "corpus/runs/*/run.json",
+        "count": 1,
+        "total": 48
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The projection of a snapshot to its item holders and person locations is computed by the engine for pending afters and by the harness over the served body; the contract typecheck holds their shapes together, not their code.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "A structure of the code, two projections of one served shape held together by the contract typecheck; no run or usage exercises it as a case."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Calibration is scored twice in the job, a baseline on the unmoved code and again after the move, so the job pays two calibration runs to the real endpoints.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "A one-time cost of this job's proof, two calibration runs of nine goals each to the real endpoints, never paid by a later run."
+      }
+    }
+  ],
+  "stakes": [
+    "No file of the harness package names a path outside it; copied alone beside only its installed dependencies, it type-checks and its tests pass, so an import of the engine or the server cannot resolve.",
+    "Every fact the harness uses about verbs, their fields, speech kinds, pending states, the snapshot and the history is read from a bench route during the run; the harness holds no copy of an engine table.",
+    "The bench serves the subkinds with their families from the registry and kindOf, their one home; nothing states a subkind or a family a second time.",
+    "strata's adapter is the bench host and a typecheck that the bodies the bench serves satisfy what the harness declares for each route it reads, and its command lines are one call each into the harness.",
+    "A headed run prints each loop whole and then performs nothing until the operator presses Enter; a headless run never waits on the operator; there is no timing number.",
+    "The rule, the typed plan, pending resolution, reached by the code check, T_DONE and T_ACT, and every corpus file's fields are unchanged; calibration holds the held count and best pair of a baseline scored on the unmoved code, and blind-2 the count its committed score file records.",
+    "Every dependency version the root and the harness share has one home, the workspace catalog.",
+    "The fuzzer under src/driver is unchanged."
+  ]
+}
