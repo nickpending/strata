@@ -1,0 +1,1008 @@
+{
+  "baseline": "anthropic/claude-haiku-5.5",
+  "candidate": "z-ai/glm-5.3-flash",
+  "request": "json-schema-retry",
+  "sets": [
+    {
+      "set": "calibration",
+      "goals": "calibration.json",
+      "baseline": {
+        "scoreFile": "calibration.anthropic_claude-haiku-5.5.json-schema-retry.score.json",
+        "reached": {
+          "count": 9,
+          "of": 9
+        },
+        "targets": {
+          "valid": 9,
+          "asked": 9
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.006928924,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      },
+      "candidate": {
+        "scoreFile": "calibration.z-ai_glm-5.3-flash.json-schema-retry.score.json",
+        "reached": {
+          "count": 9,
+          "of": 9
+        },
+        "targets": {
+          "valid": 9,
+          "asked": 9
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.0046028399999999995,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      }
+    },
+    {
+      "set": "blind-1",
+      "goals": "blind-1.json",
+      "baseline": {
+        "scoreFile": "blind-1.anthropic_claude-haiku-5.5.json-schema-retry.score.json",
+        "reached": {
+          "count": 12,
+          "of": 12
+        },
+        "targets": {
+          "valid": 12,
+          "asked": 12
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.009305822,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      },
+      "candidate": {
+        "scoreFile": "blind-1.z-ai_glm-5.3-flash.json-schema-retry.score.json",
+        "reached": {
+          "count": 12,
+          "of": 12
+        },
+        "targets": {
+          "valid": 12,
+          "asked": 12
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.005947814000000001,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "goals": "blind-2-spent.json",
+      "baseline": {
+        "scoreFile": "blind-2-spent.anthropic_claude-haiku-5.5.json-schema-retry.score.json",
+        "reached": {
+          "count": 13,
+          "of": 13
+        },
+        "targets": {
+          "valid": 13,
+          "asked": 13
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.011616052,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      },
+      "candidate": {
+        "scoreFile": "blind-2-spent.z-ai_glm-5.3-flash.json-schema-retry.score.json",
+        "reached": {
+          "count": 11,
+          "of": 13
+        },
+        "targets": {
+          "valid": 13,
+          "asked": 13
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.008392014,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      }
+    },
+    {
+      "set": "blind-2",
+      "goals": "blind-2.json",
+      "baseline": {
+        "scoreFile": "blind-2.anthropic_claude-haiku-5.5.json-schema-retry.score.json",
+        "reached": {
+          "count": 13,
+          "of": 13
+        },
+        "targets": {
+          "valid": 13,
+          "asked": 13
+        },
+        "words": {
+          "written": 4,
+          "refused": 0
+        },
+        "costUsd": 0.012780651999999997,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      },
+      "candidate": {
+        "scoreFile": "blind-2.z-ai_glm-5.3-flash.json-schema-retry.score.json",
+        "reached": {
+          "count": 10,
+          "of": 13
+        },
+        "targets": {
+          "valid": 13,
+          "asked": 13
+        },
+        "words": {
+          "written": 3,
+          "refused": 0
+        },
+        "costUsd": 0.008947472000000001,
+        "unreportedCosts": 0,
+        "retries": {
+          "asked": 0,
+          "rescued": 0
+        }
+      }
+    }
+  ],
+  "losses": [
+    {
+      "set": "blind-2-spent",
+      "id": "glitch-slips-out-back",
+      "instruction": "Glitch needs to get out of sight for a while. Put him in the back room.",
+      "expect": {
+        "location": {
+          "person": "glitch",
+          "room": "back-room"
+        }
+      },
+      "baseline": {
+        "run": "../runs/2026-11-01T22-57-38-308Z",
+        "outcome": {
+          "kind": "reached",
+          "loop": 3,
+          "done": 0.98
+        },
+        "target": {
+          "kind": "goal",
+          "expect": {
+            "location": {
+              "person": "glitch",
+              "room": "back-room"
+            }
+          },
+          "steps": [
+            {
+              "actor": "glitch",
+              "verb": "depart",
+              "fields": {
+                "exit": "east"
+              }
+            }
+          ]
+        },
+        "stopped": null,
+        "refused": []
+      },
+      "candidate": {
+        "run": "../runs/2026-11-01T23-02-59-268Z",
+        "outcome": {
+          "kind": "no-such-action",
+          "reason": "วา"
+        },
+        "target": {
+          "kind": "no-such-action",
+          "reason": "วา"
+        },
+        "stopped": null,
+        "refused": []
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "read-the-shard",
+      "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "baseline": {
+        "run": "../runs/2026-11-01T22-58-23-285Z",
+        "outcome": {
+          "kind": "no-such-action",
+          "reason": "The page has no verb for jacking into the data shard, and none of the end states (holding an item, being in a room, or saying a speech kind) can express Glitch accessing the shard's contents."
+        },
+        "target": {
+          "kind": "no-such-action",
+          "reason": "The page has no verb for jacking into the data shard, and none of the end states (holding an item, being in a room, or saying a speech kind) can express Glitch accessing the shard's contents."
+        },
+        "stopped": null,
+        "refused": []
+      },
+      "candidate": {
+        "run": "../runs/2026-11-01T23-03-36-719Z",
+        "outcome": {
+          "kind": "reached",
+          "loop": 8,
+          "done": 0.95
+        },
+        "target": {
+          "kind": "goal",
+          "expect": {
+            "holder": {
+              "item": "data-shard",
+              "person": "glitch"
+            }
+          },
+          "steps": [
+            {
+              "actor": "rogue",
+              "verb": "offer",
+              "fields": {
+                "target": "glitch",
+                "item": "data-shard"
+              }
+            },
+            {
+              "actor": "glitch",
+              "verb": "accept",
+              "fields": {
+                "item": "data-shard"
+              }
+            }
+          ]
+        },
+        "stopped": null,
+        "refused": []
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "stimpak-to-rogue",
+      "instruction": "Glitch owes Rogue for letting him lie low. Have him pay her with his stimpak.",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "baseline": {
+        "run": "../runs/2026-11-01T22-58-42-014Z",
+        "outcome": {
+          "kind": "reached",
+          "loop": 8,
+          "done": 0.67
+        },
+        "target": {
+          "kind": "goal",
+          "expect": {
+            "holder": {
+              "item": "stimpak",
+              "person": "rogue"
+            }
+          },
+          "steps": [
+            {
+              "actor": "glitch",
+              "verb": "offer",
+              "fields": {
+                "target": "rogue",
+                "item": "stimpak"
+              }
+            },
+            {
+              "actor": "rogue",
+              "verb": "accept",
+              "fields": {
+                "item": "stimpak"
+              }
+            }
+          ]
+        },
+        "stopped": null,
+        "refused": []
+      },
+      "candidate": {
+        "run": "../runs/2026-11-01T23-03-53-965Z",
+        "outcome": {
+          "kind": "stuck",
+          "loop": 1,
+          "best": null,
+          "step": {
+            "index": 0,
+            "move": "set exit to west"
+          }
+        },
+        "target": {
+          "kind": "goal",
+          "expect": {
+            "holder": {
+              "item": "stimpak",
+              "person": "rogue"
+            }
+          },
+          "steps": [
+            {
+              "actor": "glitch",
+              "verb": "depart",
+              "fields": {
+                "exit": "west"
+              }
+            },
+            {
+              "actor": "glitch",
+              "verb": "offer",
+              "fields": {
+                "target": "rogue",
+                "item": "stimpak"
+              }
+            },
+            {
+              "actor": "rogue",
+              "verb": "accept",
+              "fields": {
+                "item": "stimpak"
+              }
+            }
+          ]
+        },
+        "stopped": null,
+        "refused": []
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "mux-mutters",
+      "instruction": "Have Mux grumble out loud about the dead screens. He doesn't need anyone in particular to hear it.",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say"
+        }
+      },
+      "baseline": {
+        "run": "../runs/2026-11-01T22-59-39-060Z",
+        "outcome": {
+          "kind": "reached",
+          "loop": 5,
+          "done": 0.99
+        },
+        "target": {
+          "kind": "goal",
+          "expect": {
+            "said": {
+              "person": "mux",
+              "subkind": "speech.say"
+            }
+          },
+          "steps": [
+            {
+              "actor": "mux",
+              "verb": "say",
+              "fields": {}
+            }
+          ]
+        },
+        "stopped": null,
+        "refused": []
+      },
+      "candidate": {
+        "run": "../runs/2026-11-01T23-04-41-328Z",
+        "outcome": {
+          "kind": "no-such-action",
+          "reason": "$ངঁন্দ"
+        },
+        "target": {
+          "kind": "no-such-action",
+          "reason": "$ངঁন্দ"
+        },
+        "stopped": null,
+        "refused": []
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "decrypt-the-shard",
+      "instruction": "Have Glitch plug the data shard into his deck and crack whatever is on it.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "baseline": {
+        "run": "../runs/2026-11-01T22-59-54-014Z",
+        "outcome": {
+          "kind": "no-such-action",
+          "reason": "The page has no verb for plugging a data shard into a deck or cracking what is on it. The verbs offered are depart, say, say-to, whisper, offer, accept and refuse, and none of the end states (holding an item, being in a room, or having said something) describes the instruction's outcome."
+        },
+        "target": {
+          "kind": "no-such-action",
+          "reason": "The page has no verb for plugging a data shard into a deck or cracking what is on it. The verbs offered are depart, say, say-to, whisper, offer, accept and refuse, and none of the end states (holding an item, being in a room, or having said something) describes the instruction's outcome."
+        },
+        "stopped": null,
+        "refused": []
+      },
+      "candidate": {
+        "run": "../runs/2026-11-01T23-04-51-978Z",
+        "outcome": {
+          "kind": "reached",
+          "loop": 8,
+          "done": 0.96
+        },
+        "target": {
+          "kind": "goal",
+          "expect": {
+            "holder": {
+              "item": "data-shard",
+              "person": "glitch"
+            }
+          },
+          "steps": [
+            {
+              "actor": "rogue",
+              "verb": "offer",
+              "fields": {
+                "target": "glitch",
+                "item": "data-shard"
+              }
+            },
+            {
+              "actor": "glitch",
+              "verb": "accept",
+              "fields": {
+                "item": "data-shard"
+              }
+            }
+          ]
+        },
+        "stopped": null,
+        "refused": []
+      }
+    }
+  ],
+  "gains": [],
+  "retries": [],
+  "words": [
+    {
+      "set": "calibration",
+      "id": "glitch-to-back-room",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "mux-to-bar",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "mux-says-funny",
+      "baseline": {
+        "kind": "written",
+        "text": "I told my circuits a joke about recursion, but they keep calling me back to hear the punchline again."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "I’ve just decided that all Mondays should be celebrated as National Glitter Appreciation Day."
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "rogue-says-heat",
+      "baseline": {
+        "kind": "written",
+        "text": "Somebody's been leaning on my door all night, and the heat coming off it tells me they're not here to knock."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "This heat on my door is getting out of hand."
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "rogue-whispers-glitch",
+      "baseline": {
+        "kind": "written",
+        "text": "Glitch, don't go near the eastern gate tonight, something is watching from the wall."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Careful, Glitch—the sentries in the east corridor just woke up."
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "glitch-says-to-rogue",
+      "baseline": {
+        "kind": "written",
+        "text": "Thanks a bunch, Rogue, you really saved my circuits back there!"
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Thanks, Rogue."
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "shard-to-glitch",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "stimpak-offered",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "calibration",
+      "id": "rogue-attacks",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "glitch-to-back-room",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "mux-to-bar",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "rogue-to-back-room",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "stimpak-to-rogue",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "shard-to-glitch",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "cell-to-glitch",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "rogue-announces",
+      "baseline": {
+        "kind": "written",
+        "text": "Listen up, everyone, last call is coming, so finish your drinks and settle your tabs before the bell rings!"
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Last call, everybody—get your drinks in now before I shut her down!"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "mux-speaks-up",
+      "baseline": {
+        "kind": "written",
+        "text": "Hey everyone, I've finally finished fixing the old generator, so the lights should stay on for good now!"
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Anyone else smell burning, or is that just my better judgment finally catching fire?"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "glitch-whispers-rogue",
+      "baseline": {
+        "kind": "written",
+        "text": "Rogue, quick, you need somewhere to hide, and I know a place nobody will find you."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "You might want to find a place to hide, Rogue."
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "rogue-addresses-glitch",
+      "baseline": {
+        "kind": "written",
+        "text": "Glitch, I'm going to be honest with you: your welcome is wearing thin."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Your welcome is wearing thin, Glitch, and frankly, I'm running out of patience with you."
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "hack-jukebox",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-1",
+      "id": "rogue-drinks",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "shard-into-glitchs-hands",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "fresh-cell-for-glitch",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "rogue-ends-up-with-the-stim",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "shard-back-to-mux",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "glitch-slips-out-back",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "mux-comes-out-front",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "rogue-goes-to-check-stock",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "rogue-calls-last-orders",
+      "baseline": {
+        "kind": "written",
+        "text": "Last orders, everyone, this is your last call before we close up!"
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Last orders, everyone! Drink up, the bar's closing soon!"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "rogue-warns-glitch-openly",
+      "baseline": {
+        "kind": "written",
+        "text": "Glitch, you need to hear this loud and clear: your welcome is wearing thin, so start packing your things and get out of here."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Listen up, Glitch, because I'm saying this loud and to your face—your welcome here is wearing thin."
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "glitch-confides-in-rogue",
+      "baseline": {
+        "kind": "written",
+        "text": "Glitch leans in close and murmurs, \"Rogue, you won't see the sun rise on this place, so listen: you'll be gone before dawn.\""
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Come sunrise, I'll be long gone, and this stays just between you and me."
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "mux-asks-glitch-about-the-cell",
+      "baseline": {
+        "kind": "written",
+        "text": "Hey Glitch, did the last cell hold up?"
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Glitch, did the last cell hold up?"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "read-the-shard",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2-spent",
+      "id": "glitch-takes-the-jolt",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "shard-to-glitch",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "stimpak-to-rogue",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "stimpak-for-mux",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "cell-for-rogue",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "shard-to-mux",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "rogue-checks-back",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "mux-comes-out-front",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "glitch-quiet-word",
+      "baseline": {
+        "kind": "written",
+        "text": "Rogue, don't look up yet, but the vault door's been unlocked since midnight, and somebody inside is waiting for us."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Rogue—lean close, love; what I've got to tell you isn't for anyone else's ears."
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "rogue-announces",
+      "baseline": {
+        "kind": "written",
+        "text": "Listen up, everyone: I'm closing early tonight, so finish your drinks and head out safely!"
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Listen up, everyone—we're closing early tonight, so finish your drinks and head on home!"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "mux-mutters",
+      "baseline": {
+        "kind": "written",
+        "text": "Ugh, every one of these dead screens is just staring back at me, and not one of them has the decency to light up."
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "rogue-faces-mux",
+      "baseline": {
+        "kind": "written",
+        "text": "Mux, listen to me: the bridge past the old mill is collapsing, so don't take the northern road tonight."
+      },
+      "candidate": {
+        "kind": "written",
+        "text": "Mux, don't touch that lever—it'll flood the whole tunnel."
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "decrypt-the-shard",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    },
+    {
+      "set": "blind-2",
+      "id": "fix-the-door",
+      "baseline": {
+        "kind": "none"
+      },
+      "candidate": {
+        "kind": "none"
+      }
+    }
+  ]
+}

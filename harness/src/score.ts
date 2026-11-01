@@ -6,7 +6,8 @@
  * rule's author is refused on a plain score: it is no blind test of the rule. A set not named as
  * its file is refused: its score would land on another file's. Each goal needs a bench hosted for
  * it, so a score with no host refuses before any goal runs. A score under a named --model asks that
- * model for every target and words, records it, and lands in a file of its own (scorePath).
+ * model for every target and words, records it, and lands in a file of its own, named for the model
+ * and the request (scorePath).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
@@ -27,7 +28,7 @@ import {
   type RunRecord,
   releaseHolds,
 } from "./run.ts";
-import { DEFAULT_MODEL } from "./words.ts";
+import { DEFAULT_MODEL, REQUEST } from "./words.ts";
 
 const name = z.string().trim().min(1);
 
@@ -77,9 +78,14 @@ export type GoalScore = {
   target: "valid" | "invalid" | "unanswered";
   /** The run's words: the line the model wrote, refused when its answer did not parse, or none. */
   words: GoalWords;
+  /** The run's retries: the model calls that were the retry, and those of them not refused. */
+  retries: Retries;
 };
 
 export type GoalWords = { kind: "written"; text: string } | { kind: "refused" } | { kind: "none" };
+
+/** Retries asked of the model, and those whose answer was not refused. */
+export type Retries = { asked: number; rescued: number };
 
 export type SweepResult = { done: number; act: number; held: number };
 
@@ -88,6 +94,8 @@ export type ScoreFile = {
   author: string;
   /** The model the runs were made with, as each run.json's wordsModel records it. */
   model: string;
+  /** The request the model was asked by (REQUEST). */
+  request: string;
   /** The rule the runs were made with. */
   rule: { author: string; thresholds: Thresholds };
   reached: { held: number; of: number };
@@ -95,6 +103,8 @@ export type ScoreFile = {
   targets: { valid: number; asked: number };
   /** The goals whose words were written, and those whose words were refused. */
   words: { written: number; refused: number };
+  /** Every goal's retries, summed. */
+  retries: Retries;
   perGoal: GoalScore[];
   /** The sum of every goal's reported cost. */
   costUsd: number;
@@ -180,6 +190,12 @@ function wordsOf(record: RunRecord): GoalWords {
     : { kind: "none" };
 }
 
+/** The run's retries, read from its calls: those marked the retry, and those of them not refused. */
+function retriesOf(record: RunRecord): Retries {
+  const retried = record.calls.filter((c) => c.client === "model" && c.retry === true);
+  return { asked: retried.length, rescued: retried.filter((c) => c.refused === undefined).length };
+}
+
 /** A model id as a file name: every character outside [A-Za-z0-9._-] becomes _. */
 export function modelSlug(model: string): string {
   return model.replace(/[^A-Za-z0-9._-]/g, "_");
@@ -187,11 +203,12 @@ export function modelSlug(model: string): string {
 
 /**
  * Where `set`'s score is written beside `goalsPath`: <set>.score.json when no model was named, and
- * <set>.<slug>.score.json when one was, even the default's id, so a named model's score never
- * writes, reads or replaces the registered one. The one place a score path is derived.
+ * <set>.<slug>.<REQUEST>.score.json when one was, even the default's id, so a named model's score
+ * never writes, reads or replaces the registered one, nor one made under another request. The one
+ * place a score path is derived.
  */
 export function scorePath(goalsPath: string, set: string, model: string | undefined): string {
-  const name = model === undefined ? set : `${set}.${modelSlug(model)}`;
+  const name = model === undefined ? set : `${set}.${modelSlug(model)}.${REQUEST}`;
   return join(dirname(goalsPath), `${name}.score.json`);
 }
 
@@ -235,6 +252,7 @@ export async function score(
           run: relative(dirname(path), runDir),
           target: targetOf(record),
           words: wordsOf(record),
+          retries: retriesOf(record),
         },
         loops: readLoops(runDir),
       });
@@ -247,6 +265,7 @@ export async function score(
     set: file.set,
     author: file.author,
     model: run.model.model ?? DEFAULT_MODEL,
+    request: REQUEST,
     rule: { author: RULE_AUTHOR, thresholds: run.thresholds ?? REGISTERED },
     reached: { held: perGoal.filter((g) => g.held).length, of: perGoal.length },
     targets: {
@@ -256,6 +275,10 @@ export async function score(
     words: {
       written: perGoal.filter((g) => g.words.kind === "written").length,
       refused: perGoal.filter((g) => g.words.kind === "refused").length,
+    },
+    retries: {
+      asked: perGoal.reduce((sum, g) => sum + g.retries.asked, 0),
+      rescued: perGoal.reduce((sum, g) => sum + g.retries.rescued, 0),
     },
     perGoal,
     costUsd: perGoal.reduce((sum, g) => sum + g.costUsd, 0),

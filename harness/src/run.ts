@@ -47,7 +47,13 @@ import {
   type Thresholds,
 } from "./rule.ts";
 import { askTarget, type RecordedTarget, type Served, writesWords } from "./target.ts";
-import { words as askWords, DEFAULT_MODEL, type ModelOptions } from "./words.ts";
+import {
+  type Attempt,
+  words as askWords,
+  DEFAULT_MODEL,
+  type ModelOptions,
+  REQUEST,
+} from "./words.ts";
 
 /** A bench hosted for one run: where it answers and how to stop it, or why it would not boot. */
 export type Hosted = { ok: true; base: string; stop: () => void } | { ok: false; message: string };
@@ -121,8 +127,21 @@ export type Outcome =
   | { kind: "ceiling"; loops: number }
   | { kind: "stopped"; stopped: Stopped };
 
-/** One model or Jev call and what it cost: null when the provider reported no cost. */
-export type Call = { client: "model" | "jev"; purpose: string; costUsd: number | null };
+/**
+ * One model or Jev call and what it cost: null when the provider reported no cost. A model call
+ * that was the retry is marked so; one whose answer was refused carries the refusal's message and
+ * the model's whole answer. Both are left out otherwise, so a run.json written before reads as one.
+ */
+export type Call = {
+  client: "model" | "jev";
+  purpose: string;
+  costUsd: number | null;
+  retry?: true;
+  refused?: { message: string; answer: string | null };
+};
+
+/** What marks a call beyond its client, purpose and cost. */
+type Marks = Pick<Call, "retry" | "refused">;
 
 /** One loop as recorded in loops.jsonl. */
 export type LoopRecord = {
@@ -154,6 +173,8 @@ export type RunRecord = {
     thresholds: Thresholds;
     jevModel: string;
     wordsModel: string;
+    /** The request the player's model was asked by (REQUEST); absent in a run made before it was named. */
+    request?: string;
   };
   target: RecordedTarget | null;
   words: string | null;
@@ -403,6 +424,21 @@ export async function releaseHolds(input: () => ReadableStream<Uint8Array> = STD
   await reader?.cancel();
 }
 
+/** What a run records it was made with: the bench, the rule, the models and the request. */
+function parametersOf(options: DriveOptions, thresholds: Thresholds): RunRecord["parameters"] {
+  return {
+    url: options.url ?? null,
+    world: options.worldDir,
+    tickMinutes: options.tickMinutes,
+    maxLoops: options.maxLoops,
+    headed: options.headed,
+    thresholds,
+    jevModel: JEV_MODEL,
+    wordsModel: options.model.model ?? DEFAULT_MODEL,
+    request: REQUEST,
+  };
+}
+
 /** Drive the bench once toward `options.instruction`, recording everything under a new run dir. */
 export async function drive(options: DriveOptions): Promise<DriveResult> {
   const print = options.print ?? ((text: string) => console.log(text));
@@ -420,16 +456,7 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
     instruction: options.instruction,
     startedAt: started.toISOString(),
     endedAt: null,
-    parameters: {
-      url: options.url ?? null,
-      world: options.worldDir,
-      tickMinutes: options.tickMinutes,
-      maxLoops: options.maxLoops,
-      headed: options.headed,
-      thresholds,
-      jevModel: JEV_MODEL,
-      wordsModel: options.model.model ?? DEFAULT_MODEL,
-    },
+    parameters: parametersOf(options, thresholds),
     target: null,
     words: null,
     outcome: null,
@@ -441,8 +468,13 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
   };
   const save = () =>
     writeFileSync(join(runDir, "run.json"), `${JSON.stringify(record, null, 2)}\n`);
-  const call = (client: Call["client"], purpose: string, costUsd: number | null) => {
-    record.calls.push({ client, purpose, costUsd });
+  const call = (
+    client: Call["client"],
+    purpose: string,
+    costUsd: number | null,
+    marks: Marks = {},
+  ) => {
+    record.calls.push({ client, purpose, costUsd, ...marks });
     record.costUsd = record.calls.reduce((sum, c) => sum + (c.costUsd ?? 0), 0);
     record.unreportedCosts = record.calls.filter((c) => c.costUsd === null).length;
     save();
@@ -529,12 +561,22 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
 
 type Hooks = {
   print: (text: string) => void;
-  call: (client: Call["client"], purpose: string, costUsd: number | null) => void;
+  call: (client: Call["client"], purpose: string, costUsd: number | null, marks?: Marks) => void;
   finish: (outcome: Outcome) => void;
   runDir: string;
   /** The headed run's hold; null in a headless run, which never holds. */
   hold: Hold | null;
 };
+
+/** Record each attempt of the model call for `purpose` as a call of its own, in order. */
+function recordAttempts(hooks: Hooks, purpose: string, attempts: Attempt[]): void {
+  for (const { costUsd, retry, refused } of attempts) {
+    hooks.call("model", purpose, costUsd, {
+      ...(retry ? { retry: true } : {}),
+      ...(refused === null ? {} : { refused }),
+    });
+  }
+}
 
 /** The page read, or null after stopping the run when it has a control with no label. */
 async function labelledRead(page: Page, hooks: Hooks, at: string): Promise<PageRead | null> {
@@ -577,11 +619,11 @@ async function play(
     return;
   }
   const asked = await askTarget(options.instruction, first, served, options.model);
+  recordAttempts(hooks, "target", asked.attempts);
   if (!asked.ok) {
     hooks.finish({ kind: "stopped", stopped: { ...asked.refusal, call: "target" } });
     return;
   }
-  hooks.call("model", "target", asked.costUsd);
   const target = asked.value;
   record.target = target;
   hooks.print(`target: ${JSON.stringify(target)}`);
@@ -606,11 +648,11 @@ async function play(
   let words: string | null = null;
   if (writesWords(target, served.verbs)) {
     const written = await askWords(options.instruction, target.expect, options.model);
+    recordAttempts(hooks, "words", written.attempts);
     if (!written.ok) {
       hooks.finish({ kind: "stopped", stopped: { ...written.refusal, call: "words" } });
       return;
     }
-    hooks.call("model", "words", written.costUsd);
     words = written.value;
     record.words = words;
     hooks.print(`words: ${words}`);

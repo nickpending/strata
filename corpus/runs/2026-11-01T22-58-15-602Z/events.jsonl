@@ -1,0 +1,5 @@
+{"id":"e1","tick":0,"seq":1,"kind":"physical","subkind":"physical.depart","actor":"mux","targets":[],"place":"back-room","visibility":{"audience":"place"},"cause":"operator","payload":{"from":"back-room","exit":"west","to":"chrome-cassette","travelTicks":2,"arrivesAt":2}}
+{"id":"e2","tick":1,"seq":2,"kind":"time","subkind":"time.tick","actor":"clock","targets":[],"place":null,"visibility":{"audience":"none"},"cause":"operator","payload":{}}
+{"id":"e3","tick":2,"seq":3,"kind":"time","subkind":"time.tick","actor":"clock","targets":[],"place":null,"visibility":{"audience":"none"},"cause":"operator","payload":{}}
+{"id":"e4","tick":2,"seq":4,"kind":"physical","subkind":"physical.arrive","actor":"mux","targets":[],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"e1","payload":{"from":"back-room","to":"chrome-cassette"}}
+{"id":"e5","tick":2,"seq":5,"kind":"speech","subkind":"speech.say-to","actor":"mux","targets":["glitch"],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"operator","payload":{"words":"Hey Glitch, did the last cell hold up?"}}

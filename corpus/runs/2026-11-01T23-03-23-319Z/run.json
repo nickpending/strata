@@ -1,0 +1,86 @@
+{
+  "runId": "2026-11-01T23-03-23-319Z",
+  "instruction": "Glitch should lean in close and tell Rogue, for her ears only, that he'll be gone before sunrise.",
+  "startedAt": "2026-11-01T23:03:23.319Z",
+  "endedAt": "2026-11-01T23:03:30.462Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/.claude/worktrees/agent-aef68952996e127b6/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "glitch",
+        "subkind": "speech.whisper"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "whisper",
+        "fields": {
+          "target": "rogue"
+        }
+      }
+    ]
+  },
+  "words": "Come sunrise, I'll be long gone, and this stays just between you and me.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00016266
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.00014466
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000057246
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000061068
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000061068
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.0000609
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000073206
+    }
+  ],
+  "costUsd": 0.000620808,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

@@ -11,10 +11,11 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Comparison } from "harness/compare.ts";
+import type { Comparison, RefusedCall } from "harness/compare.ts";
 import { useAccountBrowsers } from "harness/page.ts";
 import type { RunRecord } from "harness/run.ts";
 import type { ScoreFile } from "harness/score.ts";
+import { REQUEST } from "harness/words.ts";
 
 const ROOT = join(import.meta.dir, "..");
 // The fixture's scores are child processes; each inherits where the account's browsers are.
@@ -59,7 +60,7 @@ type Scripted = {
   instruction: string;
   expect: unknown;
   /** Each model's target answer, and its words answer when the run asks for words. */
-  answers: Record<string, { target: string; words?: string }>;
+  answers: Record<string, { target: string | string[]; words?: string | string[] }>;
 };
 
 /**
@@ -163,9 +164,13 @@ function serve(answer: (body: Record<string, unknown>) => Response): string {
   return `http://127.0.0.1:${server.port}/`;
 }
 
-/** The chat stand-in: each goal's answer for the model the request names. */
-function modelStandIn(): string {
-  const goals = SETS.flatMap((s) => s.goals);
+/**
+ * The chat stand-in: each goal's answer for the model the request names; a list of answers is
+ * given one per call, in order.
+ */
+function modelStandIn(sets: { goals: Scripted[] }[]): string {
+  const goals = sets.flatMap((s) => s.goals);
+  const asked = new Map<string, number>();
   return serve((body) => {
     const prompt = String((body.messages as { content: string }[])[0]?.content);
     const goal = goals.find(
@@ -174,7 +179,12 @@ function modelStandIn(): string {
         prompt.includes(`The instruction: ${g.instruction}\n`),
     );
     const scripted = goal?.answers[String(body.model)];
-    const content = prompt.includes('{"words"') ? scripted?.words : scripted?.target;
+    const kind = prompt.includes('{"words"') ? "words" : "target";
+    const key = `${body.model} ${goal?.id} ${kind}`;
+    const n = asked.get(key) ?? 0;
+    asked.set(key, n + 1);
+    const answer = scripted?.[kind];
+    const content = Array.isArray(answer) ? answer[n] : answer;
     if (content === undefined) return new Response("no such answer", { status: 400 });
     return Response.json({ choices: [{ message: { content } }], usage: { cost: MODEL_COST } });
   });
@@ -199,15 +209,13 @@ async function spawned(cmd: string[]) {
   return { stdout, stderr, exitCode };
 }
 
-/** The fixture: <dir>/goals/<set>.json and both models' scores of each, their runs in <dir>/runs. */
-let fixture = "";
-
-beforeAll(async () => {
-  fixture = tempDir();
+/** A fixture: <dir>/goals/<set>.json and both models' scores of each, their runs in <dir>/runs. */
+async function fixtureOf(sets: { set: string; goals: Scripted[] }[]): Promise<string> {
+  const fixture = tempDir();
   mkdirSync(join(fixture, "goals"));
-  const model = modelStandIn();
+  const model = modelStandIn(sets);
   const jev = jevStandIn();
-  for (const { set, goals } of SETS) {
+  for (const { set, goals } of sets) {
     const file = join(fixture, "goals", `${set}.json`);
     writeFileSync(
       file,
@@ -238,16 +246,24 @@ beforeAll(async () => {
       if (ran.exitCode !== 0) throw new Error(`score ${set} under ${named} failed: ${ran.stderr}`);
     }
   }
+  return fixture;
+}
+
+/** The fixture of SETS. */
+let fixture = "";
+
+beforeAll(async () => {
+  fixture = await fixtureOf(SETS);
 }, 300_000);
 
 const goalsOf = (dir: string, set: string) => join(dir, "goals", `${set}.json`);
 const scoreOf = (dir: string, set: string, model: string) =>
-  join(dir, "goals", `${set}.${model.replace("/", "_")}.score.json`);
-const COMPARE_JSON = "test_candidate.vs.test_baseline.compare.json";
-const COMPARE_MD = "test_candidate.vs.test_baseline.compare.md";
+  join(dir, "goals", `${set}.${model.replace("/", "_")}.${REQUEST}.score.json`);
+const COMPARE_JSON = `test_candidate.vs.test_baseline.${REQUEST}.compare.json`;
+const COMPARE_MD = `test_candidate.vs.test_baseline.${REQUEST}.compare.md`;
 
-/** `bun run compare` over the two sets of `dir`, as the operator runs it. */
-function compare(dir: string) {
+/** `bun run compare` over the sets of `dir` (SETS' two by default), as the operator runs it. */
+function compare(dir: string, sets = ["one", "two"]) {
   return spawned([
     process.execPath,
     "run",
@@ -256,11 +272,15 @@ function compare(dir: string) {
     BASELINE,
     "--candidate",
     CANDIDATE,
-    "--goals",
-    goalsOf(dir, "one"),
-    "--goals",
-    goalsOf(dir, "two"),
+    ...sets.flatMap((set) => ["--goals", goalsOf(dir, set)]),
   ]);
+}
+
+/** Every refused call of `record`, in call order, as compare must show it. */
+function refusedOf(record: RunRecord) {
+  return record.calls.flatMap(({ purpose, retry, refused }) =>
+    refused === undefined ? [] : [{ purpose, retry: retry === true, ...refused }],
+  );
 }
 
 /** Every key of `value`, at any depth. */
@@ -312,15 +332,16 @@ describe("M5: compare sets two models' scores side by side as a loss report, dec
         const file = scored(row.set, model);
         const shown = row[side];
         expect(shown).toEqual({
-          scoreFile: `${row.set}.${model.replace("/", "_")}.score.json`,
+          scoreFile: `${row.set}.${model.replace("/", "_")}.${REQUEST}.score.json`,
           reached: { count: file.reached.held, of: file.reached.of },
           targets: file.targets,
           words: file.words,
           costUsd: file.costUsd,
           unreportedCosts: file.unreportedCosts,
+          retries: file.retries,
         });
         expect(markdown).toContain(
-          `| ${row.set} | ${side} | ${model} | ${file.reached.held} of ${file.reached.of} | ${file.targets.valid} of ${file.targets.asked} | ${file.words.written} | ${file.words.refused} | ${file.costUsd} | ${file.unreportedCosts} |\n`,
+          `| ${row.set} | ${side} | ${model} | ${file.reached.held} of ${file.reached.of} | ${file.targets.valid} of ${file.targets.asked} | ${file.words.written} | ${file.words.refused} | ${file.retries.asked} | ${file.retries.rescued} | ${file.costUsd} | ${file.unreportedCosts} |\n`,
         );
       }
     }
@@ -350,6 +371,7 @@ describe("M5: compare sets two models' scores side by side as a loss report, dec
         outcome: record.outcome,
         target: record.target,
         stopped: record.stopped ?? null,
+        refused: refusedOf(record),
       };
     };
     const moved = (set: string, id: string) => {
@@ -406,10 +428,12 @@ describe("M5: compare sets two models' scores side by side as a loss report, dec
     for (const row of report.words) expect(markdown).toContain(`| ${row.set} | ${row.id} | `);
     expect(markdown).toContain(`written: "${LINE}"`);
 
-    // No verdict: no key and no line says a set or the whole held, holds or did not.
+    // No verdict: no key and no line says a set or the whole held, holds or did not. Only the
+    // retried goals state each model's held, as its score entry records it for that goal.
     const verdict = /\b(held|holds|did-not-hold|verdict)\b/i;
-    expect(keysOf(report).filter((key) => verdict.test(key))).toEqual([]);
-    expect(markdown.split("\n").filter((line) => verdict.test(line))).toEqual([]);
+    expect(keysOf({ ...report, retries: [] }).filter((key) => verdict.test(key))).toEqual([]);
+    const outsideRetries = markdown.replace(/\n## Retries\n.*?\n## /s, "\n## ");
+    expect(outsideRetries.split("\n").filter((line) => verdict.test(line))).toEqual([]);
   }, 60_000);
 });
 
@@ -485,5 +509,157 @@ describe("M6: compare refuses score files that are not like for like, writing no
       rmSync(file);
     });
     expect(stderr).toContain(file);
+  }, 30_000);
+});
+
+describe("S6: compare counts and lists the retries, on a path naming the request", () => {
+  /** The candidate's two refused targets, the second longer than a refusal's 80-character excerpt. */
+  const LOST = ["Let me think about the moon.", `No such trip: ${"the moon is far. ".repeat(6)}`];
+  const SAY = json({ kind: "goal", expect: MUX_SAYS, steps: [MUX_SAY] });
+  const NO_SUCH = json({ kind: "no-such-action", reason: "no verb flies" });
+  /**
+   * A goal nobody retried; one the baseline held and the candidate lost on a target refused twice;
+   * and one both held, the baseline's words only after a rescued retry.
+   */
+  const RETRIED: { set: string; goals: Scripted[] }[] = [
+    {
+      set: "retried",
+      goals: [
+        {
+          id: "steady",
+          instruction: "have Glitch fly home",
+          expect: { outcome: "no-such-action" },
+          answers: { [BASELINE]: { target: NO_SUCH }, [CANDIDATE]: { target: NO_SUCH } },
+        },
+        {
+          id: "lost",
+          instruction: "have Rogue fly to the moon",
+          expect: { outcome: "no-such-action" },
+          answers: { [BASELINE]: { target: NO_SUCH }, [CANDIDATE]: { target: LOST } },
+        },
+        {
+          id: "rescued",
+          instruction: "have Mux say something",
+          expect: MUX_SAYS,
+          answers: {
+            [BASELINE]: { target: SAY, words: [NOT_JSON, json({ words: LINE })] },
+            [CANDIDATE]: { target: SAY, words: json({ words: LINE }) },
+          },
+        },
+      ],
+    },
+  ];
+  let retried = "";
+  beforeAll(async () => {
+    retried = await fixtureOf(RETRIED);
+  }, 300_000);
+
+  test("the retries columns, both refused answers whole, and a Retries section of exactly the retried goals", async () => {
+    const dir = tempDir();
+    cpSync(retried, dir, { recursive: true });
+    const before = [".json", ".md"].map((ext) =>
+      join(dir, "goals", `test_candidate.vs.test_baseline.compare${ext}`),
+    );
+    for (const file of before) writeFileSync(file, `the json_object report at ${file}\n`);
+    const ran = await compare(dir, ["retried"]);
+    expect(ran.exitCode).toBe(0);
+    for (const file of before) {
+      expect(readFileSync(file, "utf8")).toBe(`the json_object report at ${file}\n`);
+    }
+    const report = readJson<Comparison>(join(dir, "goals", COMPARE_JSON));
+    const markdown = readFileSync(join(dir, "goals", COMPARE_MD), "utf8");
+    expect(report.request).toBe(REQUEST);
+
+    const [baseline, candidate] = [BASELINE, CANDIDATE].map((model) =>
+      readJson<ScoreFile>(scoreOf(dir, "retried", model)),
+    );
+    expect([baseline?.retries, candidate?.retries]).toEqual([
+      { asked: 1, rescued: 1 },
+      { asked: 1, rescued: 0 },
+    ]);
+    expect(report.sets.map((row) => [row.baseline.retries, row.candidate.retries])).toEqual([
+      [baseline?.retries, candidate?.retries],
+    ]);
+    expect(markdown).toContain(
+      "| words written | words refused | retries asked | retries rescued | costUsd |",
+    );
+    expect(markdown).toContain(
+      "| retried | baseline | test/baseline | 3 of 3 | 3 of 3 | 1 | 0 | 1 | 1 | ",
+    );
+    expect(markdown).toContain(
+      "| retried | candidate | test/candidate | 2 of 3 | 2 of 3 | 1 | 0 | 1 | 0 | ",
+    );
+
+    // The lost goal's candidate run, with both refused answers whole, in call order.
+    const notJson = (answer: string) => `the model's answer is not JSON: ${answer.slice(0, 80)}`;
+    const lostRefused = LOST.map((answer, i) => ({
+      purpose: "target",
+      retry: i === 1,
+      message: notJson(answer),
+      answer,
+    }));
+    expect(report.losses.map((g) => [g.id, g.candidate.refused])).toEqual([["lost", lostRefused]]);
+    const losses = markdown.slice(markdown.indexOf("## Losses"), markdown.indexOf("## Gains"));
+    for (const answer of LOST) expect(losses).toContain(JSON.stringify(answer));
+
+    // Retries: after Gains and before Words, exactly the two retried goals in goal-file order.
+    const at = (title: string) => markdown.indexOf(`\n## ${title}\n`);
+    expect([at("Gains") < at("Retries"), at("Retries") < at("Words")]).toEqual([true, true]);
+    expect(headingsUnder(markdown, "Retries")).toEqual(["retried / lost", "retried / rescued"]);
+    const rescuedRefused = [
+      { purpose: "words", retry: false, message: notJson(NOT_JSON), answer: NOT_JSON },
+    ];
+    const side = (held: boolean, asked: number, rescued: number, refused: RefusedCall[]) => ({
+      held,
+      retries: { asked, rescued },
+      refused,
+    });
+    expect(report.retries).toEqual([
+      {
+        set: "retried",
+        id: "lost",
+        instruction: "have Rogue fly to the moon",
+        baseline: side(true, 0, 0, []),
+        candidate: side(false, 1, 0, lostRefused),
+      },
+      {
+        set: "retried",
+        id: "rescued",
+        instruction: "have Mux say something",
+        baseline: side(true, 1, 1, rescuedRefused),
+        candidate: side(true, 0, 0, []),
+      },
+    ]);
+    const section = markdown.slice(at("Retries"), at("Words"));
+    const [lost, rescued] = section.split("\n### ").slice(1);
+    expect(lost).toContain("- baseline (test/baseline): held true; retries asked 0, rescued 0\n");
+    expect(lost).toContain(
+      "- candidate (test/candidate): held false; retries asked 1, rescued 0\n",
+    );
+    expect(rescued).toContain(
+      "- baseline (test/baseline): held true; retries asked 1, rescued 1\n",
+    );
+    expect(rescued).toContain(
+      "- candidate (test/candidate): held true; retries asked 0, rescued 0\n",
+    );
+    const shown = (r: { purpose: string; retry: boolean; message: string; answer: string }) =>
+      `  - refused ${r.purpose}${r.retry ? " (retry)" : ""}: \`${JSON.stringify(r.answer)}\`: ${r.message}\n`;
+    const [first, second] = lostRefused.map(shown);
+    expect((lost ?? "").indexOf(first ?? "-")).toBeGreaterThan(-1);
+    expect((lost ?? "").indexOf(second ?? "-")).toBeGreaterThan((lost ?? "").indexOf(first ?? "-"));
+    expect(rescued).toContain(shown(rescuedRefused[0] as (typeof rescuedRefused)[0]));
+  }, 60_000);
+
+  test("a candidate score file made under another request is refused, naming it, writing nothing", async () => {
+    const dir = tempDir();
+    cpSync(retried, dir, { recursive: true });
+    const file = scoreOf(dir, "retried", CANDIDATE);
+    const score = readJson<ScoreFile>(file);
+    writeFileSync(file, `${JSON.stringify({ ...score, request: "json-object" }, null, 2)}\n`);
+    const ran = await compare(dir, ["retried"]);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.stderr).toContain(file);
+    expect(ran.stderr).toContain('request is "json-object"');
+    expect(readdirSync(join(dir, "goals")).filter((f) => f.includes(".compare."))).toEqual([]);
   }, 30_000);
 });

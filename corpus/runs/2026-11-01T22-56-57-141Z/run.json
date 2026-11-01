@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-01T22-56-57-141Z",
+  "instruction": "make Rogue drink a shot at the bar",
+  "startedAt": "2026-11-01T22:56:57.141Z",
+  "endedAt": "2026-11-01T22:56:59.336Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/.claude/worktrees/agent-aef68952996e127b6/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page has no drink verb or shot item; the only end states are item possession, a person's location, or a speech kind, and none of them means Rogue drinking a shot at the bar."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page has no drink verb or shot item; the only end states are item possession, a person's location, or a speech kind, and none of them means Rogue drinking a shot at the bar."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003673
+    }
+  ],
+  "costUsd": 0.0003673,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

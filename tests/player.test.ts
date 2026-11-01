@@ -14,82 +14,46 @@ import { described, type EndState } from "harness/goal.ts";
 import { type Control, readPage, useAccountBrowsers } from "harness/page.ts";
 import { T_ACT } from "harness/rule.ts";
 import type { DriveResult, LoopRecord, RunRecord } from "harness/run.ts";
+import { targetSchema } from "harness/target.ts";
+import { REQUEST, wireSchema, wordsSchema } from "harness/words.ts";
 import type { Browser } from "playwright";
 import { hostBench } from "../src/adapter/host.ts";
 import { kindOf, subkinds, type WorldEvent } from "../src/engine/events.ts";
 import { verbs } from "../src/engine/rules.ts";
 import {
+  chat,
+  endpoints,
+  exitsAfterClose,
   goal,
   JEV_COST,
   type JevRequest,
   jev,
   keyOf,
+  lines,
+  MAIN,
   MODEL_COST,
   model,
   NO_DONE,
   PASSED_OVER,
+  play,
   preferring,
+  proxied,
+  type Ran,
+  ROOT,
+  RUN_FILES,
   standIn,
   stops,
+  temps,
 } from "./stand-ins.ts";
 
-const ROOT = join(import.meta.dir, "..");
 // Every run below is a child process, or loads playwright only after this; each finds the
 // account's browsers.
 useAccountBrowsers();
-const MAIN = join(ROOT, "src", "adapter", "main.ts");
 
-const temps: string[] = [];
 afterAll(() => {
   for (const stop of stops) stop();
   for (const dir of temps) rmSync(dir, { recursive: true, force: true });
 });
-
-type Ran = { exitCode: number; stdout: string; stderr: string; runDir: string; record: RunRecord };
-
-/** Run the player CLI as the operator does, against the stand-ins, into a fresh corpus. */
-async function play(instruction: string, flags: string[]): Promise<Ran> {
-  const dir = mkdtempSync(join(tmpdir(), "strata-harness-test-"));
-  temps.push(dir);
-  const corpus = join(dir, "runs");
-  const proc = Bun.spawn(
-    [
-      process.execPath,
-      "run",
-      MAIN,
-      instruction,
-      "--tick-minutes",
-      "10",
-      "--corpus",
-      corpus,
-      ...flags,
-    ],
-    { cwd: ROOT, env: process.env, stdout: "pipe", stderr: "pipe" },
-  );
-  const [stdout, stderr, exitCode] = await Promise.all([
-    new Response(proc.stdout).text(),
-    new Response(proc.stderr).text(),
-    proc.exited,
-  ]);
-  const runs = existsSync(corpus) ? readdirSync(corpus) : [];
-  if (runs.length !== 1) throw new Error(`expected one run in ${corpus}: ${stderr}`);
-  const runDir = join(corpus, runs[0] ?? "");
-  const record = JSON.parse(readFileSync(join(runDir, "run.json"), "utf8")) as RunRecord;
-  return { exitCode, stdout, stderr, runDir, record };
-}
-
-function lines<T>(file: string): T[] {
-  return readFileSync(file, "utf8")
-    .split("\n")
-    .filter((line) => line !== "")
-    .map((line) => JSON.parse(line) as T);
-}
-
-function endpoints(m: { url: string }, j: { url: string }): string[] {
-  return ["--model-endpoint", m.url, "--jev-endpoint", j.url];
-}
-
-const RUN_FILES = ["events.jsonl", "loops.jsonl", "received.jsonl", "run.json"];
 
 /** The candidates a loop's controls offer, worked out here from the controls the loop read. */
 function offeredBy(entry: LoopRecord, words: string | null): string[] {
@@ -105,44 +69,6 @@ function offeredBy(entry: LoopRecord, words: string | null): string[] {
       ? [`type the words into ${control.label}`]
       : [];
   });
-}
-
-/**
- * Serve a bench on an ephemeral port behind a proxy: `rewrite` may change a static file the page
- * loads, and `fails` may answer one of the player's own route reads (those that carry no Chrome
- * user agent) in place of the bench.
- */
-function proxied(
-  rewrite: (path: string, text: string) => string = (_path, text) => text,
-  fails: (path: string) => Response | null = () => null,
-): string {
-  const bench = hostBench({ worldDir: join(ROOT, "world"), tickMinutes: 10 });
-  if (!bench.ok) throw new Error(bench.message);
-  stops.push(bench.stop);
-  const benchBase = new URL(bench.base).origin;
-  const proxy = Bun.serve({
-    hostname: "127.0.0.1",
-    port: 0,
-    fetch: async (request) => {
-      const url = new URL(request.url);
-      const fromBrowser = (request.headers.get("user-agent") ?? "").includes("Chrome");
-      const failed = fromBrowser ? null : fails(url.pathname);
-      if (failed !== null) return failed;
-      const type = request.headers.get("content-type");
-      const response = await fetch(`${benchBase}${url.pathname}${url.search}`, {
-        method: request.method,
-        headers: type === null ? {} : { "content-type": type },
-        body: request.method === "POST" ? await request.text() : undefined,
-      });
-      if (!url.pathname.startsWith("/bench/")) return response;
-      return new Response(rewrite(url.pathname, await response.text()), {
-        status: response.status,
-        headers: { "content-type": response.headers.get("content-type") ?? "text/plain" },
-      });
-    },
-  });
-  stops.push(() => void proxy.stop(true));
-  return `http://127.0.0.1:${proxy.port}/`;
 }
 
 const MUX_SAYS = { said: { person: "mux", subkind: "speech.say" } };
@@ -269,6 +195,9 @@ describe("C6: the player ends without inventing an end state", () => {
     );
     expect(ran.record.loops).toBe(0);
     expect(j.bodies).toHaveLength(0);
+    // A target checked() turns into no-such-action is no refusal: it is never asked again.
+    expect(m.bodies).toHaveLength(1);
+    expect(ran.record.calls).toEqual([{ client: "model", purpose: "target", costUsd: MODEL_COST }]);
   }, 60_000);
 
   test("a said end state naming a speech kind the bench does not serve ends no-such-action naming it", async () => {
@@ -651,7 +580,48 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     const ran = await play("send Glitch east", endpoints(m, j));
     expectStopped(ran, "parse", "target");
     expect(j.bodies).toHaveLength(0);
+    // Asked once more by the identical request, then final: both attempts are calls, no answer.
+    expect(m.bodies).toHaveLength(2);
+    expect(m.bodies[1]).toEqual(m.bodies[0]);
+    const refused = { message: "the chat completions body has no message content", answer: null };
+    expect(ran.record.calls).toEqual([
+      { client: "model", purpose: "target", costUsd: null, refused },
+      { client: "model", purpose: "target", costUsd: null, retry: true, refused },
+    ]);
+  }, 60_000);
+
+  test("status: the chat completions endpoint answers 500, asked once, no model call recorded", async () => {
+    const m = chat({ status: 500 }, { content: JSON.stringify(TARGET) });
+    const ran = await play("send Glitch east", endpoints(m, preferring([])));
+    expect(m.bodies).toHaveLength(1);
+    expectStopped(ran, "status", "target");
     expect(ran.record.calls).toEqual([]);
+  }, 60_000);
+
+  test("parse: a target not the shape, then a valid one, is the run's target; the retry is identical", async () => {
+    const plan = JSON.stringify({ kind: "plan", steps: [] });
+    const m = chat({ content: plan }, { content: JSON.stringify(TARGET) });
+    const ran = await play("send Glitch east", endpoints(m, preferring([])));
+    expect(ran.record.target).toEqual({ ...TARGET, steps: [] });
+    expect(m.bodies).toHaveLength(2);
+    expect(m.bodies[1]).toEqual(m.bodies[0]);
+    const refused = { message: expect.stringContaining("not the asked shape"), answer: plan };
+    expect(ran.record.calls.slice(0, 2)).toEqual([
+      { client: "model", purpose: "target", costUsd: MODEL_COST, refused },
+      { client: "model", purpose: "target", costUsd: MODEL_COST, retry: true },
+    ]);
+  }, 60_000);
+
+  test("parse: text that is not JSON twice stops at the target after exactly two requests", async () => {
+    const prose = ["Glitch heads east, I think.", "Glitch should walk east, surely."];
+    const m = chat(...prose.map((content) => ({ content })), { content: JSON.stringify(TARGET) });
+    const ran = await play("send Glitch east", endpoints(m, preferring([])));
+    expect(m.bodies).toHaveLength(2);
+    expectStopped(ran, "parse", "target");
+    expect(ran.record.calls.map((c) => [c.retry ?? false, c.refused?.answer])).toEqual([
+      [false, prose[0]],
+      [true, prose[1]],
+    ]);
   }, 60_000);
 
   test("network: no server answers at the decisions endpoint", async () => {
@@ -679,6 +649,37 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     expect(ran.record.stopped?.message).toContain("strata-test-no-such-key");
     expect(m.bodies).toHaveLength(0);
     expect(j.bodies).toHaveLength(0);
+  }, 60_000);
+});
+
+describe("S1: a words answer refused at parse is asked once more, every attempt a call", () => {
+  test("GLM's garbled words, then a valid line: reached, the refused answer kept whole", async () => {
+    const glm = join(ROOT, "corpus", "runs", "2026-11-01T21-15-09-855Z", "run.json");
+    const recorded = JSON.parse(readFileSync(glm, "utf8")) as RunRecord;
+    const excerpt = recorded.stopped?.message.replace("the model's answer is not JSON: ", "") ?? "";
+    const garbled = `${excerpt}${"<unused2133> ন্".repeat(6)}`;
+    const said = goal({ said: { person: "rogue", subkind: "speech.whisper" } }, true);
+    const target = { ...said, steps: [step("rogue", "whisper", { target: "glitch" })] };
+    const warning = "Glitch, the fixer sold us out; keep your head down.";
+    const answers = [JSON.stringify(target), garbled, JSON.stringify({ words: warning })];
+    const m = chat(...answers.map((content) => ({ content })));
+    const ran = await play("have Rogue whisper a warning to Glitch", endpoints(m, preferring([])));
+    expect(ran.record.outcome?.kind).toBe("reached");
+    expect(garbled.length).toBeGreaterThan(80);
+    const refused = {
+      message: `the model's answer is not JSON: ${garbled.slice(0, 80)}`,
+      answer: garbled,
+    };
+    expect(ran.record.calls.filter((c) => c.client === "model")).toEqual([
+      { client: "model", purpose: "target", costUsd: MODEL_COST },
+      { client: "model", purpose: "words", costUsd: MODEL_COST, refused },
+      { client: "model", purpose: "words", costUsd: MODEL_COST, retry: true },
+    ]);
+    const sum = ran.record.calls.reduce((total, c) => total + (c.costUsd ?? 0), 0);
+    expect(ran.record.costUsd).toBeCloseTo(sum, 12);
+    expect(ran.record.words).toBe(warning);
+    expect(m.bodies).toHaveLength(3);
+    expect(m.bodies[2]).toEqual(m.bodies[1]);
   }, 60_000);
 });
 
@@ -779,18 +780,17 @@ describe("the key goes only where it is named, never in the clear, and never int
 
 describe("every call's cost is on record, and a cost the provider did not report is told apart", () => {
   test("a call answered without usage.cost is recorded as unreported, never as zero", async () => {
-    const m = standIn(() =>
-      Response.json({
-        choices: [
-          { message: { content: JSON.stringify({ kind: "no-such-action", reason: "x" }) } },
-        ],
-      }),
-    );
+    // S4: the refused attempt reports a cost; its retry, which answers, reports none.
+    const answer = JSON.stringify({ kind: "no-such-action", reason: "x" });
+    const m = chat({ content: "no JSON here" }, { content: answer, cost: null });
     const ran = await play("have Rogue attack Glitch", endpoints(m, preferring([])));
     expect(ran.record.outcome?.kind).toBe("no-such-action");
-    expect(ran.record.calls).toEqual([{ client: "model", purpose: "target", costUsd: null }]);
+    expect(ran.record.calls.map((c) => [c.costUsd, c.retry ?? false, c.refused?.answer])).toEqual([
+      [MODEL_COST, false, "no JSON here"],
+      [null, true, undefined],
+    ]);
     expect(ran.record.unreportedCosts).toBe(1);
-    expect(ran.record.costUsd).toBe(0);
+    expect(ran.record.costUsd).toBe(MODEL_COST);
   }, 60_000);
 });
 
@@ -1157,41 +1157,6 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
   }, 60_000);
 });
 
-/**
- * Spawn `cmd` with stdin open and never ended, as a terminal's is, `lines` written to it up front.
- * Resolves once the close hold has been printed `closes` times and the process has then exited, or
- * the bound has passed with the process still alive (it is killed, and `exited` is false).
- */
-async function exitsAfterClose(cmd: string[], lines: number, closes: number, bound: number) {
-  const proc = Bun.spawn(cmd, {
-    cwd: ROOT,
-    env: process.env,
-    stdin: "pipe",
-    stdout: "pipe",
-    stderr: "pipe",
-  });
-  proc.stdin.write("\n".repeat(lines));
-  await proc.stdin.flush();
-  let stdout = "";
-  const decoder = new TextDecoder();
-  const closeLine = "hold: press Enter to close the browser";
-  const reading = (async () => {
-    for await (const chunk of proc.stdout) stdout += decoder.decode(chunk, { stream: true });
-  })();
-  const deadline = Date.now() + 60_000;
-  while (stdout.split(closeLine).length - 1 < closes && Date.now() < deadline) await Bun.sleep(50);
-  const closed = stdout.split(closeLine).length - 1 >= closes;
-  const exited = await Promise.race([
-    proc.exited.then(() => true),
-    Bun.sleep(bound).then(() => false),
-  ]);
-  if (!exited) proc.kill();
-  await proc.exited;
-  await reading;
-  const stderr = await new Response(proc.stderr).text();
-  return { closed, exited, exitCode: proc.exitCode, stdout, stderr };
-}
-
 describe("H4: a headed command line exits once its run is done, its stdin still open", () => {
   test("bun run harness --headed exits after the close hold answers, though stdin never ends", async () => {
     const m = model(goal(MUX_SAYS, true), { words: LINE });
@@ -1245,6 +1210,37 @@ describe("M1: the player's model is the --model setting, anthropic/claude-haiku-
       ]);
       expect((m.bodies as { model: string }[]).map((body) => body.model)).toEqual([posted, posted]);
       expect(ran.record.parameters.wordsModel).toBe(posted);
+      // S2: the request is pinned with its name: a change to it that keeps REQUEST turns this red.
+      expect([REQUEST, ran.record.parameters.request]).toEqual(["json-schema-retry", REQUEST]);
+      const bodies = m.bodies as Record<string, unknown>[];
+      const strict = (name: string, schema: unknown) => ({
+        type: "json_schema",
+        json_schema: { name, strict: true, schema },
+      });
+      const words = [
+        "You write the one line a character says in a small text world.",
+        "The instruction: have Mux say something funny",
+        `The end state: ${described(MUX_SAYS)}.`,
+        'Answer with one JSON object {"words": "<the line, as the character says it, one sentence>"} and nothing else.',
+      ].join("\n");
+      const head = /^You turn an instruction into a plan.*\nUse only the names listed above\.$/s;
+      expect(bodies).toEqual([
+        {
+          model: posted,
+          messages: [{ role: "user", content: expect.stringMatching(head) }],
+          response_format: strict("target", wireSchema(targetSchema)),
+          provider: { require_parameters: true },
+          usage: { include: true },
+        },
+        {
+          model: posted,
+          messages: [{ role: "user", content: words }],
+          response_format: strict("words", wireSchema(wordsSchema)),
+          provider: { require_parameters: true },
+          usage: { include: true },
+        },
+      ]);
+      expect(JSON.stringify(bodies)).not.toContain('"oneOf"');
       // Jev's model is a constant, whatever the player's model is.
       expect(j.bodies.length).toBeGreaterThan(0);
       expect((j.bodies as JevRequest[]).map((body) => body.model)).toEqual(
@@ -1298,7 +1294,10 @@ describe("H6: a fresh run's files carry the committed run's keys", () => {
     const committed = JSON.parse(readFileSync(join(COMMITTED, "run.json"), "utf8")) as RunRecord;
     const keys = (value: object) => Object.keys(value).sort();
     expect(keys(ran.record)).toEqual(keys(committed));
-    expect(keys(ran.record.parameters)).toEqual(keys(committed.parameters));
+    // A run records the request it made: the committed run, made before, has no request.
+    expect(keys(ran.record.parameters)).toEqual(
+      keys({ ...committed.parameters, request: REQUEST }),
+    );
     const committedLoops = lines<LoopRecord>(join(COMMITTED, "loops.jsonl"));
     const loopKeys = [...new Set(committedLoops.map((entry) => keys(entry).join(",")))];
     expect(loopKeys).toHaveLength(1);

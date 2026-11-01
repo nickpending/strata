@@ -220,6 +220,6 @@ export async function askTarget(
 ): Promise<Completed<Target>> {
   const offered = vocabulary(read, served.subkinds);
   const asked = prompt(instruction, offered, served.verbs, read.text);
-  const answered = await complete(asked, targetSchema, options);
+  const answered = await complete(asked, targetSchema, "target", options);
   return answered.ok ? { ...answered, value: checked(answered.value, offered) } : answered;
 }

@@ -15,6 +15,7 @@ import { useAccountBrowsers } from "harness/page.ts";
 import { RULE_AUTHOR, T_ACT, T_DONE } from "harness/rule.ts";
 import type { LoopRecord, RunRecord } from "harness/run.ts";
 import { GRID, type ScoreFile, scorePath } from "harness/score.ts";
+import { REQUEST } from "harness/words.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
 const ROOT = join(import.meta.dir, "..");
@@ -645,10 +646,10 @@ describe("M2: score refuses a --model that is not <provider>/<model> before any 
   }, 60_000);
 });
 
-describe("M3: a score under a named model lands in <set>.<slug>.score.json, never in <set>.score.json", () => {
+describe("M3: a score under a named model lands in <set>.<slug>.<request>.score.json, never in <set>.score.json", () => {
   const TWO = GOALS.filter((g) => g.id === "moon" || g.id === "mux-says");
 
-  test("two named models write their own files beside an untouched <set>.score.json; none named writes <set>.score.json", async () => {
+  test("two named models write their own files, named for the request, beside an untouched <set>.score.json; none named writes <set>.score.json", async () => {
     const dir = tempDir();
     const goalsFile = writeSet(dir, "named", TWO);
     const recorded = join(dir, "named.score.json");
@@ -670,7 +671,7 @@ describe("M3: a score under a named model lands in <set>.<slug>.score.json, neve
       expect(ran.exitCode).toBe(0);
       // The registered score is neither replaced nor rewritten by a score under a named model.
       expect(hash(recorded)).toBe(before);
-      const path = join(dir, `named.${named.replace("/", "_")}.score.json`);
+      const path = join(dir, `named.${named.replace("/", "_")}.${REQUEST}.score.json`);
       expect(scorePath(goalsFile, "named", named)).toBe(path);
       expect(ran.stdout).toContain(`score written to ${path}\n`);
       const written = readJson<ScoreFile>(path);
@@ -679,7 +680,7 @@ describe("M3: a score under a named model lands in <set>.<slug>.score.json, neve
       expect(m.bodies.map((body) => body.model)).toEqual([named, named, named]);
       for (const goal of written.perGoal) {
         const run = readJson<RunRecord>(join(dir, goal.run, "run.json"));
-        expect(run.parameters.wordsModel).toBe(named);
+        expect([run.parameters.wordsModel, run.parameters.request]).toEqual([named, REQUEST]);
       }
     }
     expect(hash(recorded)).toBe(before);
@@ -690,8 +691,8 @@ describe("M3: a score under a named model lands in <set>.<slug>.score.json, neve
     ).toEqual(
       [
         "named.score.json",
-        "named.z-ai_glm-5.3-flash.score.json",
-        "named.anthropic_claude-haiku-5.5.score.json",
+        `named.z-ai_glm-5.3-flash.${REQUEST}.score.json`,
+        `named.anthropic_claude-haiku-5.5.${REQUEST}.score.json`,
       ].sort(),
     );
 
@@ -813,5 +814,67 @@ describe("M4: each goal records its target's validity and its words, and the sco
     expect(written.targets).toEqual({ valid: 3, asked: 4 });
     expect(written.words).toEqual({ written: 1, refused: 1 });
     expect(written.model).toBe("anthropic/claude-haiku-5.5");
+  }, 120_000);
+});
+
+describe("S5: each goal and the score file count the retries asked and rescued", () => {
+  const GLM = "z-ai/glm-5.3-flash";
+  const NO_SUCH = JSON.stringify({ kind: "no-such-action", reason: "no verb for it" });
+  const PROSE = "I would rather not say.";
+  const MUX_SAY = { actor: "mux", verb: "say", fields: {} };
+  /** Each goal's target answers, and its words answers, in the order the stand-in gives them. */
+  const FOUR = [
+    { id: "at-once", instruction: "have Rogue fly to the moon", target: [NO_SUCH] },
+    { id: "rescued", instruction: "have Rogue swim the bay", target: [PROSE, NO_SUCH] },
+    { id: "refused-twice", instruction: "have Glitch dance", target: [PROSE, PROSE] },
+    {
+      id: "words-rescued",
+      instruction: "have Mux say something",
+      target: [JSON.stringify({ kind: "goal", expect: MUX_SAYS, steps: [MUX_SAY] })],
+      words: [PROSE, JSON.stringify({ words: LINE })],
+    },
+  ].map((g) => ({ words: [] as string[], ...g, expect: { outcome: "no-such-action" }, steps: [] }));
+
+  test("asked 0, 1, 1 and 1, rescued 0, 1, 0 and 1, in a file named for the request", async () => {
+    const dir = tempDir();
+    const goalsFile = writeSet(dir, "four", FOUR);
+    const before = join(dir, "four.z-ai_glm-5.3-flash.score.json");
+    writeFileSync(before, "the json_object score, as the old report names it\n");
+    const known = hash(before);
+    const asked = new Map<string, number>();
+    const m = serve((body) => {
+      const prompt = String((body.messages as { content: string }[])[0]?.content);
+      const words = prompt.includes('{"words"');
+      const lead = words ? "The instruction" : "Instruction";
+      const goal = FOUR.find((g) => prompt.includes(`${lead}: ${g.instruction}\n`));
+      const key = `${goal?.id} ${words}`;
+      const n = asked.get(key) ?? 0;
+      asked.set(key, n + 1);
+      const content = (words ? goal?.words : goal?.target)?.[n];
+      if (content === undefined) return new Response("no such answer", { status: 400 });
+      return Response.json({ choices: [{ message: { content } }], usage: { cost: MODEL_COST } });
+    });
+    const j = jevStandIn(FOUR);
+    const flags = ["--model-endpoint", m.url, "--jev-endpoint", j.url, "--model", GLM];
+    const ran = await score(goalsFile, join(dir, "runs"), flags);
+    expect(ran.exitCode).toBe(0);
+    // The score made before this request is left as it was.
+    expect(hash(before)).toBe(known);
+    const path = join(dir, `four.z-ai_glm-5.3-flash.${REQUEST}.score.json`);
+    expect(scorePath(goalsFile, "four", GLM)).toBe(path);
+    expect(ran.stdout).toContain(`score written to ${path}\n`);
+    const written = readJson<ScoreFile>(path);
+    expect(written.request).toBe("json-schema-retry");
+    expect(written.perGoal.map((g) => [g.id, g.retries])).toEqual([
+      ["at-once", { asked: 0, rescued: 0 }],
+      ["rescued", { asked: 1, rescued: 1 }],
+      ["refused-twice", { asked: 1, rescued: 0 }],
+      ["words-rescued", { asked: 1, rescued: 1 }],
+    ]);
+    expect(written.retries).toEqual({ asked: 3, rescued: 2 });
+    // The final answers: a rescued target or line counts as given, a twice-refused one as invalid.
+    expect(written.perGoal.map((g) => g.target)).toEqual(["valid", "valid", "invalid", "valid"]);
+    expect(written.targets).toEqual({ valid: 3, asked: 4 });
+    expect(written.words).toEqual({ written: 1, refused: 0 });
   }, 120_000);
 });
