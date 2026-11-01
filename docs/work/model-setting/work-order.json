@@ -1,0 +1,104 @@
+{
+  "workOrder": "model-setting",
+  "what": "The player's language model becomes a named setting (`--model`) on every run and score, recorded in run.json and the score file. A named model's score lands in <set>.<slug>.score.json beside the committed scores. Each goal records its target's validity and its words. A compare command writes a loss report of two models' scores. GLM-5.3-flash and Haiku 5.5 are scored on the built code over the four goal sets and the report is committed, with the default left at Haiku.",
+  "why": "docs/work/model-setting/design.md",
+  "issues": [3],
+  "criteria": [
+    {
+      "id": "M1",
+      "given": "the code before this change, which posts anthropic/claude-haiku-5.5 whatever is asked, and a chat completions stand-in that records each request body and answers a said(mux, speech.say) target and then a words line, with a Jev stand-in, on a hosted bench",
+      "when": "tests/player.test.ts runs the run command as the operator does, once with `--model z-ai/glm-5.3-flash` and once with no --model",
+      "then": "with --model, the target request and the words request each carry model z-ai/glm-5.3-flash and run.json's parameters.wordsModel is z-ai/glm-5.3-flash; with no --model, both requests carry anthropic/claude-haiku-5.5 and wordsModel is anthropic/claude-haiku-5.5, exactly as before; Jev's request still carries typesafe/jev-1.13",
+      "mutations": [
+        { "id": "M1-M1", "change": "make complete() in harness/src/words.ts post DEFAULT_MODEL regardless of options.model: M1's test goes red on the --model run" },
+        { "id": "M1-M2", "change": "record parameters.wordsModel as DEFAULT_MODEL in drive() whatever model was named: M1's test goes red on wordsModel" }
+      ]
+    },
+    {
+      "id": "M2",
+      "given": "model ids that are not <provider>/<model>: `haiku`, `../escape`, `.hidden/x`, `a/b/c` and the empty string",
+      "when": "tests/player.test.ts runs the run command and tests/score.test.ts runs the score command with each as --model",
+      "then": "each command exits 2 with stderr naming --model and the value, no corpus directory and no score file is created, no bench boots and neither stand-in is called",
+      "mutations": [
+        { "id": "M2-M1", "change": "remove the --model pattern check from optionsFromFlags() in harness/src/run.ts: M2's tests go red" }
+      ]
+    },
+    {
+      "id": "M3",
+      "given": "a scripted goal set in a temp directory beside a pre-existing <set>.score.json holding known bytes, with model and Jev stand-ins",
+      "when": "tests/score.test.ts runs the score command with `--model z-ai/glm-5.3-flash`, then with `--model anthropic/claude-haiku-5.5`, then with no --model in a fresh directory",
+      "then": "the first writes <set>.z-ai_glm-5.3-flash.score.json with model z-ai/glm-5.3-flash, and the second writes <set>.anthropic_claude-haiku-5.5.score.json with model anthropic/claude-haiku-5.5; after both, the pre-existing <set>.score.json is byte-identical; the third writes <set>.score.json with model anthropic/claude-haiku-5.5; scorePath in harness/src/score.ts gives each of these paths and is the only place a score path is derived",
+      "mutations": [
+        { "id": "M3-M1", "change": "make scorePath() ignore the model and always return <set>.score.json: M3's test goes red, the pre-existing file overwritten" }
+      ]
+    },
+    {
+      "id": "M4",
+      "given": "a scripted goal set of five goals whose model stand-in answers, per goal: a valid target and a words line; text that is not JSON for the target; a schema-valid target naming an item the page does not show (checked() makes it no-such-action); a valid said target and then words that are not JSON; and HTTP 500 for the target",
+      "when": "tests/score.test.ts runs the score command over it",
+      "then": "the goals' target fields are valid, invalid, valid, valid and unanswered; their words fields are written with the line, none, none, refused and none; the score file's targets is {valid: 3, asked: 4} and words is {written: 1, refused: 1}",
+      "mutations": [
+        { "id": "M4-M1", "change": "read a goal's target validity from its outcome, counting a no-such-action outcome as invalid: M4's test goes red on the third goal" },
+        { "id": "M4-M2", "change": "count an unanswered target as invalid: M4's test goes red on targets.asked" }
+      ]
+    },
+    {
+      "id": "M5",
+      "given": "two sets of score files written by this code for a baseline and a candidate model in a temp directory, with each goal's run.json under the run paths they name. Set one has a goal the baseline held and the candidate did not, its candidate run stuck with a recorded target and steps. Set two has a goal the candidate held and the baseline did not, and a goal whose candidate target was refused with stopped kind parse. Every goal has words of each kind across the two models.",
+      "when": "tests/compare.test.ts (new) runs `bun run compare --baseline <b> --candidate <c> --goals <set one> --goals <set two>`",
+      "then": "it exits 0 and writes <c-slug>.vs.<b-slug>.compare.json and .compare.md beside the first goal file. Per set, they show each model's reached held of of, targets valid of asked, words written and refused, and costUsd with unreportedCosts, equal to the score files' values. Losses list exactly the goals the baseline held and the candidate did not, each with both models' outcome and the target or stopped read from its own run.json. Gains list exactly the reverse. The words section lists every goal with both models' words. No key or line in either file states held, holds, did-not-hold or a verdict for a set or the whole. The markdown carries the same numbers and goal ids as the JSON.",
+      "mutations": [
+        { "id": "M5-M1", "change": "make compare's losses skip goals of every set after the first: M5's test goes red, set two's lost goal missing from the losses section" },
+        { "id": "M5-M2", "change": "read a lost goal's candidate target from the baseline's run.json: M5's test goes red on the loss's candidate target" },
+        { "id": "M5-M3", "change": "list a goal under gains when the candidate held it whether or not the baseline did: M5's test goes red, a goal both held appearing as a gain" }
+      ]
+    },
+    {
+      "id": "M6",
+      "given": "the M5 fixture altered one way at a time: a candidate score file whose model is another id; a score file whose rule.thresholds differ from REGISTERED; a candidate score whose perGoal ids are reordered; a missing candidate score file; and a lost goal whose run.json is deleted",
+      "when": "tests/compare.test.ts runs compare on each",
+      "then": "each exits 1 with stderr naming the file and the field or path at fault, and no compare file is written",
+      "mutations": [
+        { "id": "M6-M1", "change": "drop compare's check of each score file's model against the model named: M6's test goes red on the mislabelled file" }
+      ]
+    },
+    {
+      "id": "M7",
+      "given": "the job's worktree with M1 to M6 passing the gate, the real decisions and chat completions endpoints, the registered thresholds, and the committed corpus/goals/*.score.json files as on main",
+      "when": "these run in order: `bun run score --goals corpus/goals/calibration.json --sweep --tick-minutes 10 --model anthropic/claude-haiku-5.5`; then `bun run score --goals corpus/goals/<set>.json --tick-minutes 10 --model anthropic/claude-haiku-5.5` for blind-1, blind-2-spent and blind-2; then the same four with `--model z-ai/glm-5.3-flash`; then `bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/goals/calibration.json --goals corpus/goals/blind-1.json --goals corpus/goals/blind-2-spent.json --goals corpus/goals/blind-2.json`. The eight score files, their runs and the two compare files are committed in one commit.",
+      "then": "If any goal's target is unanswered, the builder halts the job to the orchestrator before compare, naming the run and its refusal, with nothing counted or re-run. Otherwise there are eight score files, 94 goals in all, each with the model it names, and every run.json those files name records that wordsModel. The compare files name z-ai/glm-5.3-flash and anthropic/claude-haiku-5.5 and list per set, losses, gains and words as M5 states. `git diff --exit-code <base> -- corpus/goals/*.score.json` over the committed files, which are calibration, calibration.baseline, calibration.moved, blind-1, blind-2-spent and blind-2, shows no change. DEFAULT_MODEL in harness/src/words.ts is anthropic/claude-haiku-5.5, and the job's result quotes the per-set table, the losses and the gains from the compare.md."
+    },
+    {
+      "id": "M8",
+      "given": "the job's worktree after M7's commit",
+      "when": "the strata gate runs (ember verify)",
+      "then": "it passes, including C9 in tests/rule.test.ts against the untouched calibration.score.json, tests/harness-boundary.test.ts with harness/ importing nothing from src/engine or src/server, and every run and score test that names no --model, unchanged"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "M7",
+      "when": "after merge, on main, with no endpoint called: bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/goals/calibration.json --goals corpus/goals/blind-1.json --goals corpus/goals/blind-2-spent.json --goals corpus/goals/blind-2.json",
+      "then": "it exits 0 and rewrites corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.json and .compare.md with git diff showing no change to either",
+      "by": "driver"
+    }
+  ],
+  "outOfScope": [
+    {"kind":"cost","summary":"Each model is scored once per set, so a goal listed as lost or gained can be run-to-run noise rather than the model (calibration went from 8 of 9 to 9 of 9 between two committed Haiku scores); the report shows the recorded target and outcome of each so rudy can read which, and a re-run is his call.","frequency":{"kind":"measured","command":"docs/work/model-setting/shape/rescore-noise.sh","records":"goals of corpus/goals/calibration.baseline.score.json and calibration.moved.score.json, two Haiku scores of calibration on the same rule (harness-package)","count":0,"total":9}},
+    {"kind":"cost","summary":"Naming the default model on the command line writes a separate <set>.<slug>.score.json rather than the registered <set>.score.json, so the same model can have two score files for one set.","frequency":{"kind":"not-a-case","reason":"No reader confuses the two: C9 and the committed record read <set>.score.json by name, and compare reads only the named-model files and checks each one's model field."}},
+    {"kind":"cost","summary":"Score files written before this carry no model, targets or words field, and the committed runs are not rewritten; compare reads only files written by this code.","frequency":{"kind":"measured","command":"docs/work/model-setting/shape/class-sweep.sh","records":"corpus/goals/*.score.json","count":6,"total":6}},
+    {"kind":"cost","summary":"complete() sends the same request to both models, json_object with no max_tokens and no structured-output schema, so GLM is measured on today's request rather than one tuned for it.","frequency":{"kind":"not-a-case","reason":"This is the like-for-like comparison issue #3 asks for, not a usage path. GLM answered that exact request shape with parseable JSON (docs/work/model-setting/shape/glm-probe.txt)."}}
+  ],
+  "stakes": [
+    "The player's model is one setting, `--model`, on every run and score; with none named the target and words are asked of anthropic/claude-haiku-5.5, as today.",
+    "A model id that is not <provider>/<model> is refused at the command line with exit 2, before any bench boots or any call is made.",
+    "Every run.json's parameters.wordsModel and every new score file's model name the model the runs were made with.",
+    "A score made under a named model writes only <set>.<slug>.score.json and never writes, reads or replaces <set>.score.json, so C9's calibration record and every committed score stay byte-identical.",
+    "Each goal's score entry says whether its target answer was schema-valid, schema-invalid or never answered, and whether its words were written (with the line) or refused; each score file sums them.",
+    "compare writes a loss report and no verdict. Per set, it puts both models' reached count, schema-valid targets of asked, words written and refused, and cost side by side. Then, in order, it lists every goal the baseline held and the candidate did not (with both models' outcome and recorded target or refusal), every goal the reverse, and every goal's words from both models, all rendered by code from the score and run files.",
+    "compare refuses two score files that name another model, were made at other thresholds than the registered ones, or score other goals, so the report only ever sets like-for-like runs side by side.",
+    "GLM-5.3-flash and Haiku 5.5 are each scored once per set on the same built code over calibration, blind-1, blind-2-spent and blind-2, and the scores, their runs and the comparison are committed together.",
+    "A comparison run that a provider failed (target unanswered) halts the job for a ruling; it is never counted for or against a model, and never silently re-run.",
+    "The default model is not changed; Jev's model stays a constant; the harness still reads the world only over the bench's routes."
+  ]
+}
