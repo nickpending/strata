@@ -1,0 +1,122 @@
+{
+  "workOrder": "already-held",
+  "what": "A run whose typed end state already holds on the bench before it acts ends with outcome already-held naming that end state, never reached, and a score never counts such a run held.",
+  "why": "docs/work/already-held/design.md",
+  "issues": [
+    4
+  ],
+  "stakes": [
+    "A run whose typed end state holds on the bench before it performs any action ends with outcome already-held naming that end state, never reached, with no words call, no Jev call and no loop.",
+    "The model is never re-asked: an already-held target is refused, as checked() refuses a target naming what the page does not show.",
+    "A run whose end state does not hold at its start decides every loop exactly as before; reached stays the code check of the end state.",
+    "A goal whose run ended already-held is never counted held in a score file's reached count, and its score entry's outcome is already-held.",
+    "The read before acting is holds() over the bench's routes; the harness imports nothing from the engine or the server.",
+    "No field of run.json, loops.jsonl, events.jsonl, received.jsonl or a score file is added or renamed; only the outcome union gains a kind."
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "An instruction that genuinely asks for a state already true (\"make sure Glitch keeps his stimpak\") also ends already-held and counts as not held; the run cannot tell a correct reading of such an instruction from a mistyped one, and treats both as nothing to do.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/already-held/shape/class-sweep.sh",
+        "records": "goal expectations in corpus/goals/blind-1.json, blind-2.json, blind-2-spent.json and calibration.json against the world's start holders and locations",
+        "count": 0,
+        "total": 47
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The committed runs and score that recorded the stimpak-for-mux miss as reached keep that record; they are history and are not rewritten.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/already-held/shape/class-sweep.sh",
+        "records": "corpus/runs/*/loops.jsonl with at least one loop, loop 1 held true",
+        "count": 2,
+        "total": 71
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Each run that passes the check pays one more snapshot read (or, for a said end state, one events read) before it acts.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/already-held/shape/class-sweep.sh",
+        "records": "corpus/runs/*/loops.jsonl with at least one loop whose loop 1 did not read held, each of which would have paid the read",
+        "count": 69,
+        "total": 71
+      }
+    }
+  ],
+  "criteria": [
+    {
+      "id": "A1",
+      "reproduces": true,
+      "given": "a fresh bench the run command hosts over the committed world (Glitch holds the stimpak from boot), a model stand-in that types {\"kind\":\"goal\",\"expect\":{\"holder\":{\"item\":\"stimpak\",\"person\":\"glitch\"}},\"steps\":[]}, and a Jev stand-in that records each call",
+      "when": "tests/player.test.ts runs the run command as the operator does, in a real browser, with the instruction \"Mux is looking rough back there. Get Glitch's stimpak into his hands.\"",
+      "then": "on the code before this change the run records outcome reached on loop 1 having performed nothing; after it, run.json's outcome is {\"kind\":\"already-held\",\"expect\":{\"holder\":{\"item\":\"stimpak\",\"person\":\"glitch\"}}}, loops is 0, loops.jsonl is empty, the calls' purposes are [\"target\"] only, the Jev stand-in is never called, events.jsonl and received.jsonl are written, and the command exits 1 with stderr naming already-held",
+      "mutations": [
+        {
+          "id": "A1-M1",
+          "change": "remove the read of holds(target.expect, base) before the words call in harness/src/run.ts play(): A1's test goes red, the run ending reached on loop 1"
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "given": "a run whose model stand-in types an end state of another kind that holds before the run acts: location(rogue, chrome-cassette) on a fresh hosted bench, and said(mux, speech.say) on a bench given by --url whose history already records a say by Mux before the run starts",
+      "when": "tests/player.test.ts runs the run command on each",
+      "then": "neither ends reached: each records outcome already-held naming its end state, loops 0 and calls [\"target\"] only, so the said run, whose end state is speech, makes no words call",
+      "mutations": [
+        {
+          "id": "A2-M1",
+          "change": "make the pre-act read in harness/src/run.ts apply only to holder end states: A2's test goes red on both runs"
+        }
+      ]
+    },
+    {
+      "id": "A3",
+      "given": "runs whose typed end state does not hold at the start: the existing tests/player.test.ts runs that give an item by plan, walk a person to a room and have a person speak, and tests/score.test.ts's give-shard, glitch-east, mux-says and stimpak-by-plan goals",
+      "when": "the strata tests run",
+      "then": "a run that starts with its end state not held and brings it about ends reached exactly as before, with the same loops, decisions and outcome its test asserts today; the pre-act read changes nothing for it but one more bench read"
+    },
+    {
+      "id": "A4",
+      "given": "a bench given by --url whose /api/snapshot answers 500 to the harness's own reads (the page's reads, which carry the browser's agent, answered as usual) once the target is asked for",
+      "when": "tests/player.test.ts runs the run command with a model stand-in typing a holder end state",
+      "then": "the run stops with outcome stopped, kind bench, call target, the message naming /api/snapshot and 500, and no loop and no Jev call; it is never recorded as reached or already-held"
+    },
+    {
+      "id": "A5",
+      "given": "a goal file in tests/score.test.ts with two goals whose model stand-in types holder(data-shard, rogue), true from boot: one whose file expects holder(data-shard, glitch), one whose file expects holder(data-shard, rogue), the state that already held",
+      "when": "score runs the set, plainly and with --sweep",
+      "then": "both goals' score entries carry outcome already-held and held false, the set's reached.held counts neither, and the sweep holds neither at any T_ACT on the grid",
+      "mutations": [
+        {
+          "id": "A5-M1",
+          "change": "drop the already-held condition from the goal's held in harness/src/score.ts score(): A5's test goes red on the goal whose file expects the state that already held"
+        }
+      ]
+    },
+    {
+      "id": "A6",
+      "given": "the tests that used an end state true from boot as a one-loop reached run: tests/player.test.ts's key test (an endpoint override is sent no key unless --key-name names one) and its history-read-failure test (a history route answering 500 keeps the run reached), both through ROGUE_HOLDS_SHARD, and tests/adapter.test.ts's hosted-bench test (the adapter's run hosts a fresh bench, drives it, and removes its directory at the end)",
+      "when": "each runs on a model target whose end state is false on the fresh world and that its run reaches by acting",
+      "then": "each passes with its assertions on keys, the history read failure and the hosted directories unchanged: the key test still sees both stand-ins called with no key, the history test still ends reached with the history read named as the one bench failure, the adapter test's Jev stand-in still sees the hosted directory during its calls and none after; no test relies on an end state true from boot to reach"
+    },
+    {
+      "id": "A7",
+      "given": "the harness package after this change",
+      "when": "tests/harness-boundary.test.ts copies harness/ alone and runs its typecheck, its tests and tsc --listFilesOnly, and the gate runs typecheck(harness), lint(harness) and tests(harness)",
+      "then": "all exit 0 with every listed file under the copy or its linked node_modules: the pre-act read is the harness's own holds() over the bench's routes and no harness file imports the engine or the server"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "A1",
+      "when": "after merge, on main with the real endpoints: bun run harness \"Make sure Rogue is holding the data shard.\" --tick-minutes 10",
+      "then": "when the run.json the run writes under corpus/runs/ records the target holder(data-shard, rogue), its outcome is {\"kind\":\"already-held\",\"expect\":{\"holder\":{\"item\":\"data-shard\",\"person\":\"rogue\"}}}, loops is 0, the only call is the target's, and the command exits 1 naming already-held; a run whose model typed any other target proves nothing and is reported as such",
+      "by": "driver"
+    }
+  ]
+}
