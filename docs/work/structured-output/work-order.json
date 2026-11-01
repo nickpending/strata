@@ -1,0 +1,216 @@
+{
+  "workOrder": "structured-output",
+  "what": "The player's model is asked for the target and words by strict OpenRouter json_schema built from the zod schemas that check them (oneOf renamed anyOf), with require_parameters, and zod kept as the backstop. A parse refusal is asked once more by a byte-identical request. Every attempt is a recorded call with its cost and, when refused, the model's whole answer. Score and compare count retries and show what they rescued, on paths that name the request. GLM-5.3-flash and Haiku 5.5 are re-scored on all four sets and a new loss report is committed beside the old one.",
+  "why": "docs/work/structured-output/design.md",
+  "issues": [
+    7
+  ],
+  "stakes": [
+    "The target call and the words call each send OpenRouter json_schema, strict, built from the very zod schema the answer is then checked against, with require_parameters true, so only endpoints that enforce a requested shape serve them; the zod check stays after it.",
+    "An answer refused at parse (no content, not JSON, or not the zod shape) is asked exactly once more by a request byte-identical to the first, a fresh sample at the provider's default since no temperature or seed is set; no other refusal, and no target checked() refuses, is ever asked again.",
+    "Every model attempt that came back with a body is a call in run.json with its own reported cost, marked when it was the retry, and carrying the model's whole answer and the refusal's message when it was refused.",
+    "Each score entry and score file count the retries asked and rescued, and the compare report shows them per set for both models and lists every goal where a retry was asked, with each refused answer.",
+    "Scores and reports made under this request are written to paths that name it, never over the files made before it, and compare refuses a score file made under another request.",
+    "GLM-5.3-flash and Haiku 5.5 are each re-scored once per set on calibration, blind-1, blind-2-spent and blind-2 under the new request, and the scores, runs and report are committed together; a provider-failed target halts for a ruling.",
+    "DEFAULT_MODEL stays anthropic/claude-haiku-5.5; the prompts are unchanged; the harness still imports nothing from the engine or the server."
+  ],
+  "criteria": [
+    {
+      "id": "S1",
+      "reproduces": true,
+      "given": "the code before this change, a hosted bench in a real browser, a Jev stand-in, and a chat completions stand-in that answers the target call with a valid said(rogue, speech.whisper) target whose step is rogue whisper to glitch, then the words call first with GLM's recorded garbled answer (the content stored in corpus/runs/2026-11-01T21-15-09-855Z/run.json's stopped message, extended past 80 characters) and then with a valid words line",
+      "when": "tests/player.test.ts runs the run command as the operator does with the instruction \"have Rogue whisper a warning to Glitch\"",
+      "then": "on the code before this change the run stops with kind parse at call words and its calls hold only the target. After it, the run ends reached; its calls are, in order, target, words carrying refused with the garbled answer whole (every character the stand-in sent, longer than 80) and the refusal's message, then words with retry true and no refused, each with the stand-in's cost; costUsd is their sum; run.json's words is the valid line; the stand-in received exactly three chat requests and the third body deep-equals the second",
+      "mutations": [
+        {
+          "id": "S1-M1",
+          "change": "make complete() in harness/src/words.ts return the first parse refusal without a retry: S1's test goes red on the outcome"
+        },
+        {
+          "id": "S1-M2",
+          "change": "record the refused attempt's answer as content.slice(0, 80): S1's test goes red on the whole answer"
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "given": "a chat completions stand-in that keeps every request body, answering a valid target with a step that takes words and a valid words line, with a Jev stand-in, on a hosted bench",
+      "when": "tests/player.test.ts runs the run command with no --model, and once with --model z-ai/glm-5.3-flash",
+      "then": "the target request's response_format is {type: json_schema, json_schema: {name: target, strict: true, schema}} and the words request's is the same with name words, schema deep-equal to wireSchema(targetSchema) and wireSchema(wordsSchema) from harness/src/words.ts; neither schema contains a oneOf key at any depth; each body's provider is {require_parameters: true}; each body has exactly the fields model, messages, response_format, provider and usage, with model the named model or anthropic/claude-haiku-5.5; the prompts' message content is unchanged from before this change; a test pins that body form together with REQUEST's value \"json-schema-retry\", and run.json's parameters.request is REQUEST",
+      "mutations": [
+        {
+          "id": "S2-M1",
+          "change": "post response_format {type: json_object} in complete(): S2's test goes red"
+        },
+        {
+          "id": "S2-M2",
+          "change": "drop provider.require_parameters from the request body: S2's test goes red"
+        },
+        {
+          "id": "S2-M3",
+          "change": "send z.toJSONSchema's output without renaming oneOf to anyOf: S2's test goes red"
+        },
+        {
+          "id": "S2-M4",
+          "change": "add temperature: 0 to the request body without renaming REQUEST: the REQUEST pin test goes red"
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "given": "chat completions stand-ins scripted per run: a target that fails targetSchema (kind \"plan\") then a valid target; text that is not JSON twice; HTTP 500 once; a body with no choices twice; and a schema-valid target naming an item the page does not show",
+      "when": "tests/player.test.ts runs the run command once over each",
+      "then": "the first run's target is the valid one, with calls target (refused, answer the plan JSON whole) then target (retry), and the retry's request body deep-equals the first; the second stops kind parse at call target after exactly two chat requests, both recorded as calls with refused and their answers; the third stops kind status at call target after exactly one chat request and records no model call; the fourth stops kind parse at call target after exactly two chat requests with two refused calls whose answer is null; the fifth ends no-such-action after exactly one chat request with one call and no retry",
+      "mutations": [
+        {
+          "id": "S3-M1",
+          "change": "retry a status refusal as well as a parse refusal: S3's test goes red on the third run's request count"
+        },
+        {
+          "id": "S3-M2",
+          "change": "append the first answer or its refusal message to the retry's messages: S3's test goes red on the request bodies' equality"
+        },
+        {
+          "id": "S3-M3",
+          "change": "allow a second retry after a refused retry: S3's test goes red on the second run's request count"
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "given": "a chat completions stand-in whose refused answer reports a cost and whose retry reports none (no usage.cost)",
+      "when": "tests/player.test.ts runs the run command over it",
+      "then": "run.json's calls hold the refused attempt with its reported cost and the retry with costUsd null; costUsd equals the refused attempt's cost plus every other reported call's; unreportedCosts counts the retry",
+      "mutations": [
+        {
+          "id": "S4-M1",
+          "change": "record only the attempt that answered ok, as hooks.call() did before this change: S4's test goes red"
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "given": "a scripted goal set in a temp directory beside a pre-existing <set>.z-ai_glm-5.3-flash.score.json holding known bytes, with model stand-ins answering per goal: valid at once; refused then rescued by the retry; refused twice; and a valid target with words refused then rescued",
+      "when": "tests/score.test.ts runs the score command with --model z-ai/glm-5.3-flash",
+      "then": "it writes <set>.z-ai_glm-5.3-flash.json-schema-retry.score.json, the path scorePath gives, and the pre-existing file is byte-identical after; the file's request is \"json-schema-retry\"; the goals' retries are {asked: 0, rescued: 0}, {asked: 1, rescued: 1}, {asked: 1, rescued: 0} and {asked: 1, rescued: 1}; the file's retries is {asked: 3, rescued: 2}; targets and words count the final answers",
+      "mutations": [
+        {
+          "id": "S5-M1",
+          "change": "count a retry whose answer was refused as rescued: S5's test goes red on the third goal"
+        },
+        {
+          "id": "S5-M2",
+          "change": "drop REQUEST from scorePath's named-model path: S5's test goes red, the pre-existing file overwritten"
+        }
+      ]
+    },
+    {
+      "id": "S6",
+      "given": "two sets of score files written by this code for a baseline and a candidate model in a temp directory, with each goal's run.json; one goal the baseline held and the candidate lost on a target refused twice; one goal the candidate held after a rescued words retry; a pre-existing <candidate>.vs.<baseline>.compare.json and .md holding known bytes; and, in a second directory, a candidate score file whose request is not REQUEST",
+      "when": "tests/compare.test.ts runs the compare command over each directory",
+      "then": "over the first it writes <candidate>.vs.<baseline>.json-schema-retry.compare.json and .md and leaves the pre-existing compare files byte-identical; the report's request is REQUEST; the per-set table carries retries asked and retries rescued for both models from their score files; the lost goal's candidate line shows both refused answers whole; a Retries section after Gains and before Words lists exactly the two retried goals in goal-file order, each with both models' held, retries asked and rescued, and each refused answer with its message in call order. Over the second it exits 1 naming the score file and its request, writing nothing",
+      "mutations": [
+        {
+          "id": "S6-M1",
+          "change": "drop the Retries section from rendered() in harness/src/compare.ts: S6's test goes red"
+        },
+        {
+          "id": "S6-M2",
+          "change": "list only goals the candidate retried in the Retries section: S6's test goes red"
+        },
+        {
+          "id": "S6-M3",
+          "change": "remove the request check from readScore(): S6's test goes red on the second directory"
+        }
+      ]
+    },
+    {
+      "id": "S7",
+      "given": "the job's worktree with S1 to S6 passing the gate, the real decisions and chat completions endpoints, the registered thresholds, and the committed corpus/goals score and compare files as on main",
+      "when": "these run in order: `bun run score --goals corpus/goals/calibration.json --sweep --tick-minutes 10 --model anthropic/claude-haiku-5.5`; then `bun run score --goals corpus/goals/<set>.json --tick-minutes 10 --model anthropic/claude-haiku-5.5` for blind-1, blind-2-spent and blind-2; then the same four with `--model z-ai/glm-5.3-flash`; then `bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/goals/calibration.json --goals corpus/goals/blind-1.json --goals corpus/goals/blind-2-spent.json --goals corpus/goals/blind-2.json`. The eight new score files, their runs and the two new compare files are committed in one commit.",
+      "then": "If any goal's target is unanswered, the builder halts the job to the orchestrator before compare, naming the run and its refusal, with nothing counted or re-run. Otherwise there are eight <set>.<slug>.json-schema-retry.score.json files, 94 goals in all, each with the model it names and request json-schema-retry, every run.json they name records that wordsModel and request, and the compare files z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json and .md list per set (with retries), losses, gains, retries and words as S6 states. `git diff --exit-code <base> -- corpus/goals/` shows no change to any file that existed at the base. DEFAULT_MODEL in harness/src/words.ts is anthropic/claude-haiku-5.5, and the job's result quotes the per-set table, the losses, the gains and the retries from the new compare.md."
+    },
+    {
+      "id": "S8",
+      "given": "the job's worktree after S7's commit",
+      "when": "the strata gate runs (ember verify)",
+      "then": "it passes, including C9 in tests/rule.test.ts against the untouched calibration.score.json, tests/harness-boundary.test.ts with harness/ importing nothing from src/engine or src/server, and every existing run, score and compare test, updated only where a retry or a recorded refused call changes what it asserts"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "S7",
+      "when": "after merge, on main, with no endpoint called: bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/goals/calibration.json --goals corpus/goals/blind-1.json --goals corpus/goals/blind-2-spent.json --goals corpus/goals/blind-2.json",
+      "then": "it exits 0 and rewrites corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json and .md with git diff showing no change to either, and the old compare files are untouched",
+      "by": "driver"
+    }
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "Providers do not enforce minLength or trim, so a provider-shaped answer can still be refused by zod; the zod check and the one retry cover it rather than the schema.",
+      "frequency": {
+        "kind": "measured",
+        "command": "grep -c '\"probe\":\"words-empty\".*zod-invalid' docs/work/structured-output/shape/probe.txt",
+        "records": "the empty-line probes of docs/work/structured-output/shape/probe.txt, both models, both schema variants",
+        "count": 4,
+        "total": 4
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "require_parameters keeps the request off every endpoint that lacks structured_outputs, so fewer providers can serve either model, and a model with none would be refused with a status the comparison halts on.",
+      "frequency": {
+        "kind": "measured",
+        "command": "jq -s '[.[]|select(.structured|not)]|length' docs/work/structured-output/shape/endpoints.txt",
+        "records": "the OpenRouter endpoints of z-ai/glm-5.3-flash and anthropic/claude-haiku-5.5 (docs/work/structured-output/shape/endpoints.txt)",
+        "count": 10,
+        "total": 50
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The committed GLM-vs-Haiku scores and report cannot be read or regenerated by the new compare, which reads only files of this request; they stay committed as the json_object record.",
+      "frequency": {
+        "kind": "measured",
+        "command": "ls corpus/goals/*.z-ai_glm-5.3-flash.score.json corpus/goals/*.anthropic_claude-haiku-5.5.score.json corpus/goals/*.compare.* | wc -l",
+        "records": "the committed named-model score files and compare files in corpus/goals",
+        "count": 10,
+        "total": 10
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A goal the retry rescued counts as held for its model, so the reached count measures the model with one hint-free resample; the retries columns and section show each one so rudy can discount it.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/structured-output/shape/class-sweep.sh",
+        "records": "corpus/runs/*/run.json, runs stopped on a parse refusal at target or words, the runs a retry would have reached",
+        "count": 3,
+        "total": 177
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Neither call sets temperature or seed, so the byte-identical retry is a fresh sample at the provider's default, not a guaranteed repeat of the first answer: a rescue measures a second draw.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/structured-output/shape/class-sweep.sh",
+        "records": "corpus/runs/*/run.json, runs stopped on a parse refusal at target or words, each of which a retry would resample",
+        "count": 3,
+        "total": 177
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A refused answer is kept whole in run.json, however long the model's garbled output runs.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/structured-output/shape/class-sweep.sh",
+        "records": "corpus/runs/*/run.json, runs with a refused model answer",
+        "count": 3,
+        "total": 177
+      }
+    }
+  ]
+}
