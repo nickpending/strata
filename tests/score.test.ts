@@ -480,12 +480,13 @@ describe("H4: a headed score holds before every action of every goal", () => {
     const m = modelStandIn();
     const j = jevStandIn();
     const corpus = join(dir, "runs");
-    // One line per action the two goals perform: glitch-east's Act and Step, mux-says's four moves.
+    // One line per action the two goals perform (glitch-east's Act and Step, mux-says's four
+    // moves) and one more after each goal, to close its browser.
     const ran = await score(
       goalsFile,
       corpus,
       ["--model-endpoint", m.url, "--jev-endpoint", j.url, "--headed"],
-      "\n".repeat(6),
+      "\n".repeat(8),
     );
     expect(ran.stderr).toBe("");
     expect(ran.exitCode).toBe(0);
@@ -498,7 +499,9 @@ describe("H4: a headed score holds before every action of every goal", () => {
     expect(holds).toEqual([
       'hold: press Enter to perform "press Act"',
       'hold: press Enter to perform "press Step"',
+      "hold: press Enter to close the browser",
       ...MUX_SAY_STEPS.map((move) => `hold: press Enter to perform "${move}"`),
+      "hold: press Enter to close the browser",
     ]);
   }, 120_000);
 });

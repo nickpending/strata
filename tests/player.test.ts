@@ -1014,17 +1014,25 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
   /** One hold call: the action, what had been printed and appended, and the page's controls. */
   type HoldCall = { action: string; printed: string; loops: LoopRecord[]; controls: Control[] };
 
+  /**
+   * The hold before the browser closes: how many actions were held before it, what had been
+   * printed, the run files on disk, and whether the page was still open once it had waited.
+   */
+  type CloseCall = { after: number; printed: string; files: string[]; open: boolean };
+
   /** Drive toward Mux's say in this process, with a hold that records each call and answers. */
   async function heldRun(
     headed: boolean,
     answer: (call: number) => "go" | "end",
     j: { url: string },
-  ): Promise<{ result: DriveResult; calls: HoldCall[]; printed: string[] }> {
+    answers: unknown[] = [goal(MUX_SAYS, true), { words: LINE }],
+  ): Promise<{ result: DriveResult; calls: HoldCall[]; closes: CloseCall[]; printed: string[] }> {
     const { drive } = await import("harness/run.ts");
     const corpus = join(mkdtempSync(join(tmpdir(), "strata-harness-test-")), "runs");
     temps.push(dirname(corpus));
     const printed: string[] = [];
     const calls: HoldCall[] = [];
+    const closes: CloseCall[] = [];
     const result = await drive({
       instruction: "have Mux say something funny",
       worldDir: join(ROOT, "world"),
@@ -1033,16 +1041,26 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
       maxLoops: 24,
       corpusDir: corpus,
       jev: { endpoint: j.url },
-      model: { endpoint: model(goal(MUX_SAYS, true), { words: LINE }).url },
+      model: { endpoint: model(...answers).url },
       host: hostBench,
       browser,
       print: (text) => printed.push(text),
-      hold: async (action) => {
+      hold: async (held) => {
+        const runDir = join(corpus, readdirSync(corpus)[0] ?? "");
+        if (held.kind === "close") {
+          const close = { after: calls.length, printed: printed.join("\n") };
+          const files = RUN_FILES.filter((file) => existsSync(join(runDir, file)));
+          // The operator takes a while to press Enter: the page must still be open after it.
+          await Bun.sleep(300);
+          const page = browser.contexts()[0]?.pages()[0];
+          const open = page !== undefined && (await readPage(page)).controls.length > 0;
+          closes.push({ ...close, files, open });
+          return "go";
+        }
         const page = browser.contexts()[0]?.pages()[0];
         if (page === undefined) throw new Error("the run has no page open");
-        const runDir = join(corpus, readdirSync(corpus)[0] ?? "");
         calls.push({
-          action,
+          action: held.action,
           printed: printed.join("\n"),
           loops: lines<LoopRecord>(join(runDir, "loops.jsonl")),
           controls: (await readPage(page)).controls,
@@ -1050,11 +1068,21 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
         return answer(calls.length);
       },
     });
-    return { result, calls, printed };
+    return { result, calls, closes, printed };
+  }
+
+  /** The one close hold a headed run makes: after everything, the page open until it answers. */
+  function expectClosedAfterHold(closes: CloseCall[], actions: number, outcome: string): void {
+    expect(closes).toEqual([
+      { after: actions, printed: expect.any(String), files: RUN_FILES, open: true },
+    ]);
+    expect(closes[0]?.printed).toContain(`outcome: {"kind":"${outcome}"`);
+    // The run closed its context once the hold had answered.
+    expect(browser.contexts()).toEqual([]);
   }
 
   test("each hold comes after its loop is printed and appended, with the page as that loop read it", async () => {
-    const { result, calls } = await heldRun(true, () => "go", preferring(MUX_SAY_MOVES));
+    const { result, calls, closes } = await heldRun(true, () => "go", preferring(MUX_SAY_MOVES));
     const loops = lines<LoopRecord>(join(result.runDir, "loops.jsonl"));
     expect(result.record.outcome).toEqual({ kind: "reached", loop: 5, done: NO_DONE });
     // Once per performed action, and never on the reached loop.
@@ -1080,10 +1108,12 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
       // Nothing was performed yet: the page's controls are as that loop read them.
       expect(call.controls).toEqual(entry.controls);
     });
+    // After the reached loop, one more hold, and the browser closes only once it answers.
+    expectClosedAfterHold(closes, MUX_SAY_MOVES.length, "reached");
   }, 60_000);
 
   test("a hold answering end on its second call stops the run there, the action not performed", async () => {
-    const { result, calls } = await heldRun(
+    const { result, calls, closes } = await heldRun(
       true,
       (call) => (call === 2 ? "end" : "go"),
       preferring(["press Step"]),
@@ -1099,12 +1129,23 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
     const events = lines<WorldEvent>(join(result.runDir, "events.jsonl"));
     expect(events.map((e) => e.subkind)).toEqual(["time.tick"]);
     expect(RUN_FILES.filter((file) => !existsSync(join(result.runDir, file)))).toEqual([]);
+    // Ended at a hold, the run still holds once more before it closes the browser.
+    expectClosedAfterHold(closes, 2, "stopped");
+  }, 60_000);
+
+  test("a headed run that ends before any loop still holds before closing the browser", async () => {
+    const { result, calls, closes } = await heldRun(true, () => "go", preferring([]), [
+      { kind: "no-such-action", reason: "no verb jokes" },
+    ]);
+    expect(result.record.outcome).toEqual({ kind: "no-such-action", reason: "no verb jokes" });
+    expect(calls).toEqual([]);
+    expectClosedAfterHold(closes, 0, "no-such-action");
   }, 60_000);
 
   test("a headless run never calls the hold", async () => {
-    const { result, calls } = await heldRun(false, () => "end", preferring(MUX_SAY_MOVES));
+    const { result, calls, closes } = await heldRun(false, () => "end", preferring(MUX_SAY_MOVES));
     expect(result.record.outcome).toEqual({ kind: "reached", loop: 5, done: NO_DONE });
-    expect(calls).toEqual([]);
+    expect([calls, closes]).toEqual([[], []]);
   }, 60_000);
 });
 

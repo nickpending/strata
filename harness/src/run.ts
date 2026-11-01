@@ -4,8 +4,9 @@
  * the snapshot route's pending states and whether the end state holds, ask Jev, perform the rule's
  * choice in the browser, and loop until reached, stuck, the ceiling, or a refusal. Every loop is
  * printed as it happens and appended to loops.jsonl; a headed run then holds until the operator
- * steps it before performing anything. run.json is rewritten as the run goes; the history is read
- * back through the bench's own routes at the end.
+ * steps it before performing anything, and holds once more, however it ended, before it closes the
+ * browser. run.json is rewritten as the run goes; the history is read back through the bench's own
+ * routes at the end.
  */
 import { appendFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
@@ -53,8 +54,17 @@ export type Hosted = { ok: true; base: string; stop: () => void } | { ok: false;
 /** Hosts a fresh bench over `worldDir` at `tickMinutes` for a run with no `url`. */
 export type Host = (bench: { worldDir: string; tickMinutes: number }) => Hosted;
 
-/** Asked before each action of a headed run: go performs it, end stops the run there. */
-export type Hold = (action: string) => Promise<"go" | "end">;
+/**
+ * Where a headed run holds: before performing an action, or, once the run has ended, before it
+ * closes the browser.
+ */
+export type Held = { kind: "perform"; action: string } | { kind: "close" };
+
+/**
+ * Asked at each hold of a headed run: before an action, go performs it and end stops the run
+ * there; before the close, either answer closes the browser.
+ */
+export type Hold = (held: Held) => Promise<"go" | "end">;
 
 export type DriveOptions = {
   instruction: string;
@@ -62,7 +72,7 @@ export type DriveOptions = {
   url?: string | undefined;
   /** Hosts the bench a run with no `url` drives; with neither, the run has no bench and stops. */
   host?: Host | undefined;
-  /** Asked before each action of a headed run; holdOnEnter over stdin when absent. */
+  /** Asked at each hold of a headed run; holdOnEnter over stdin when absent. */
   hold?: Hold | undefined;
   worldDir: string;
   tickMinutes: number;
@@ -327,8 +337,9 @@ const STDIN = () => Bun.stdin.stream();
 const sources = new WeakMap<() => ReadableStream<Uint8Array>, LineSource>();
 
 /**
- * The hold a headed run uses when none is given: it prints the action it holds before, and answers
- * go on the next line `input` gives, end once `input` has ended. Every hold over the same `input`
+ * The hold a headed run uses when none is given: it prints what it holds before (the action, or the
+ * browser's close), and answers go on the next line `input` gives, end once `input` has ended.
+ * Every hold over the same `input`
  * shares one reader, so every run of a process (each goal of a headed score) holds on stdin in
  * turn, each line answering one call.
  */
@@ -336,8 +347,12 @@ export function holdOnEnter(
   input: () => ReadableStream<Uint8Array> = STDIN,
   print: (text: string) => void = (text) => console.log(text),
 ): Hold {
-  return async (action) => {
-    print(`hold: press Enter to perform "${action}"`);
+  return async (held) => {
+    print(
+      held.kind === "close"
+        ? "hold: press Enter to close the browser"
+        : `hold: press Enter to perform "${held.action}"`,
+    );
     let source = sources.get(input);
     if (source === undefined) {
       source = { reader: null, decoder: new TextDecoder(), buffered: "", ended: false };
@@ -407,6 +422,7 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
   };
   save();
   print(`run ${runId}: ${options.instruction}`);
+  const hold = options.headed ? (options.hold ?? holdOnEnter(undefined, print)) : null;
 
   let hosted: Extract<Hosted, { ok: true }> | null = null;
   let launched: Browser | null = null;
@@ -453,7 +469,7 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
       await page.goto(base);
     });
     benchBase = base;
-    await play(page, base, options, thresholds, record, { print, call, finish, runDir });
+    await play(page, base, options, thresholds, record, { print, call, finish, runDir, hold });
   } catch (error) {
     // Only a run play() has not finished stops on the browser; a finished outcome stands.
     if (record.outcome === null) {
@@ -469,6 +485,8 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
     }
     record.endedAt = new Date().toISOString();
     save();
+    // A headed run's operator watches the last step land: the browser closes on their word.
+    if (hold !== null && context !== null) await hold({ kind: "close" });
     await context?.close();
     await launched?.close();
     hosted?.stop();
@@ -481,6 +499,8 @@ type Hooks = {
   call: (client: Call["client"], purpose: string, costUsd: number | null) => void;
   finish: (outcome: Outcome) => void;
   runDir: string;
+  /** The headed run's hold; null in a headless run, which never holds. */
+  hold: Hold | null;
 };
 
 /** The page read, or null after stopping the run when it has a control with no label. */
@@ -545,7 +565,6 @@ async function play(
     hooks.print(`words: ${words}`);
   }
   const goal: Goal = { instruction: options.instruction, target, words, verbs: served.verbs };
-  const hold = options.headed ? (options.hold ?? holdOnEnter(undefined, hooks.print)) : null;
   let plan = PLAN_START;
   /** The log's last seq before a press Act the plan led to, until the next loop reads what it recorded. */
   let pressedAfter: number | null = null;
@@ -625,7 +644,8 @@ async function play(
         return;
       }
     }
-    if (hold !== null && (await hold(chosen.description)) === "end") {
+    const held: Held = { kind: "perform", action: chosen.description };
+    if (hooks.hold !== null && (await hooks.hold(held)) === "end") {
       hooks.finish({
         kind: "stopped",
         stopped: {
