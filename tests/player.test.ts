@@ -1149,6 +1149,76 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
   }, 60_000);
 });
 
+/**
+ * Spawn `cmd` with stdin open and never ended, as a terminal's is, `lines` written to it up front.
+ * Resolves once the close hold has been printed `closes` times and the process has then exited, or
+ * the bound has passed with the process still alive (it is killed, and `exited` is false).
+ */
+async function exitsAfterClose(cmd: string[], lines: number, closes: number, bound: number) {
+  const proc = Bun.spawn(cmd, {
+    cwd: ROOT,
+    env: process.env,
+    stdin: "pipe",
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  proc.stdin.write("\n".repeat(lines));
+  await proc.stdin.flush();
+  let stdout = "";
+  const decoder = new TextDecoder();
+  const closeLine = "hold: press Enter to close the browser";
+  const reading = (async () => {
+    for await (const chunk of proc.stdout) stdout += decoder.decode(chunk, { stream: true });
+  })();
+  const deadline = Date.now() + 60_000;
+  while (stdout.split(closeLine).length - 1 < closes && Date.now() < deadline) await Bun.sleep(50);
+  const closed = stdout.split(closeLine).length - 1 >= closes;
+  const exited = await Promise.race([
+    proc.exited.then(() => true),
+    Bun.sleep(bound).then(() => false),
+  ]);
+  if (!exited) proc.kill();
+  await proc.exited;
+  await reading;
+  const stderr = await new Response(proc.stderr).text();
+  return { closed, exited, exitCode: proc.exitCode, stdout, stderr };
+}
+
+describe("H4: a headed command line exits once its run is done, its stdin still open", () => {
+  test("bun run harness --headed exits after the close hold answers, though stdin never ends", async () => {
+    const m = model(goal(MUX_SAYS, true), { words: LINE });
+    const j = preferring(MUX_SAY_MOVES);
+    const corpus = join(mkdtempSync(join(tmpdir(), "strata-harness-test-")), "runs");
+    temps.push(dirname(corpus));
+    const ran = await exitsAfterClose(
+      [
+        process.execPath,
+        "run",
+        MAIN,
+        "have Mux say something funny",
+        "--tick-minutes",
+        "10",
+        "--corpus",
+        corpus,
+        "--headed",
+        ...endpoints(m, j),
+      ],
+      // A line for each of the four moves, and one for the close.
+      MUX_SAY_MOVES.length + 1,
+      1,
+      15_000,
+    );
+    expect(ran.closed).toBe(true);
+    expect({ exited: ran.exited, exitCode: ran.exitCode, stderr: ran.stderr }).toEqual({
+      exited: true,
+      exitCode: 0,
+      stderr: "",
+    });
+    expect(ran.stdout).toContain("run written to ");
+    expect(ran.stdout).toContain('outcome: {"kind":"reached","loop":5');
+  }, 90_000);
+});
+
 describe("H6: a fresh run's files carry the committed run's keys", () => {
   const COMMITTED = join(ROOT, "corpus", "runs", "2026-10-31T14-36-50-377Z");
 

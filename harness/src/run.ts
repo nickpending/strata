@@ -358,9 +358,9 @@ export function holdOnEnter(
       source = { reader: null, decoder: new TextDecoder(), buffered: "", ended: false };
       sources.set(input, source);
     }
-    source.reader ??= input().getReader();
     while (!source.buffered.includes("\n")) {
       if (source.ended) return "end";
+      source.reader ??= input().getReader();
       const { done, value } = await source.reader.read();
       if (done) source.ended = true;
       else source.buffered += source.decoder.decode(value, { stream: true });
@@ -368,6 +368,20 @@ export function holdOnEnter(
     source.buffered = source.buffered.slice(source.buffered.indexOf("\n") + 1);
     return "go";
   };
+}
+
+/**
+ * Let go of `input` once nothing will hold on it again: cancel its reader, if a hold opened one,
+ * so an open stdin no longer keeps the process alive. A command line calls it once, when its work
+ * ends; a hold after it answers end.
+ */
+export async function releaseHolds(input: () => ReadableStream<Uint8Array> = STDIN): Promise<void> {
+  const source = sources.get(input);
+  if (source === undefined) return;
+  source.ended = true;
+  const { reader } = source;
+  source.reader = null;
+  await reader?.cancel();
 }
 
 /** Drive the bench once toward `options.instruction`, recording everything under a new run dir. */

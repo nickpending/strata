@@ -1,5 +1,5 @@
 import { parseArgs } from "node:util";
-import { drive, type Host, optionsFromFlags, RUN_FLAGS, RUN_USAGE } from "./run.ts";
+import { drive, type Host, optionsFromFlags, RUN_FLAGS, RUN_USAGE, releaseHolds } from "./run.ts";
 
 const USAGE = `usage: bun run harness "<instruction>" ${RUN_USAGE} [--url <bench>]`;
 
@@ -34,12 +34,14 @@ export async function cli(args: string[], bench: { host?: Host } = {}): Promise<
   const options = optionsFromFlags(parsed.values);
   if ("error" in options) usage(options.error);
 
-  const { runDir, record } = await drive({
-    ...options,
-    instruction,
-    url: parsed.values.url,
-    host: bench.host,
-  });
+  let driven: Awaited<ReturnType<typeof drive>>;
+  try {
+    driven = await drive({ ...options, instruction, url: parsed.values.url, host: bench.host });
+  } finally {
+    // The run's holds are done: an open stdin must not keep the process alive past its run.
+    await releaseHolds();
+  }
+  const { runDir, record } = driven;
   console.log(`run written to ${runDir}`);
   const { outcome } = record;
   for (const failure of record.benchFailures) {

@@ -23,6 +23,7 @@ import {
   optionsFromFlags,
   RUN_FLAGS,
   RUN_USAGE,
+  releaseHolds,
 } from "./run.ts";
 
 const name = z.string().trim().min(1);
@@ -259,7 +260,14 @@ export async function scoreCli(args: string[], bench: { host?: Host } = {}): Pro
     );
     process.exit(1);
   }
-  const { path, scored } = await score(goalsPath, file, { ...options, host: bench.host }, sweeping);
+  let written: Awaited<ReturnType<typeof score>>;
+  try {
+    written = await score(goalsPath, file, { ...options, host: bench.host }, sweeping);
+  } finally {
+    // Every goal's holds are done: an open stdin must not keep the process alive past the last.
+    await releaseHolds();
+  }
+  const { path, scored } = written;
   console.log(JSON.stringify({ reached: scored.reached, perGoal: scored.perGoal }, null, 2));
   console.log(`score written to ${path}`);
   const best = scored.sweep?.best;

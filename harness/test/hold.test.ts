@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { holdOnEnter } from "../src/run.ts";
+import { holdOnEnter, releaseHolds } from "../src/run.ts";
 
 /** A stand-in stdin: the given chunks, then its end. */
 function stdin(...chunks: string[]): () => ReadableStream<Uint8Array> {
@@ -67,6 +67,28 @@ describe("holdOnEnter: a headed run's hold over stdin", () => {
       await second(before("d")),
     ]).toEqual(["go", "go", "go", "end"]);
     expect(opened).toBe(1);
+  });
+
+  test("releasing an input cancels its reader, and a hold after it answers end", async () => {
+    let cancelled = 0;
+    const open = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(new TextEncoder().encode("\n"));
+      },
+      cancel() {
+        cancelled++;
+      },
+    });
+    const input = () => open;
+    const hold = holdOnEnter(input, () => {});
+    expect(await hold(before("a"))).toBe("go");
+    await releaseHolds(input);
+    expect(cancelled).toBe(1);
+    expect(await hold({ kind: "close" })).toBe("end");
+    // Releasing again, or an input no hold opened, does nothing.
+    await releaseHolds(input);
+    await releaseHolds(stdin());
+    expect(cancelled).toBe(1);
   });
 
   test("stdin is not read before the first hold", () => {

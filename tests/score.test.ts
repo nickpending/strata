@@ -211,7 +211,18 @@ function jevStandIn() {
   });
 }
 
-async function score(goals: string, corpus: string, flags: string[], stdin?: string) {
+/**
+ * Run score as the operator does. `stdin`, when given, is written to a stdin left open, as a
+ * terminal's is: the process must exit on its own once its goals are done; one still running
+ * `bound` after it started is killed, and its exit code is null.
+ */
+async function score(
+  goals: string,
+  corpus: string,
+  flags: string[],
+  stdin?: string,
+  bound = 60_000,
+) {
   const proc = Bun.spawn(
     [
       process.execPath,
@@ -228,17 +239,23 @@ async function score(goals: string, corpus: string, flags: string[], stdin?: str
     {
       cwd: ROOT,
       env: process.env,
-      stdin: stdin === undefined ? "ignore" : new Response(stdin),
+      stdin: stdin === undefined ? "ignore" : "pipe",
       stdout: "pipe",
       stderr: "pipe",
     },
   );
-  const [stdout, stderr, exitCode] = await Promise.all([
-    new Response(proc.stdout).text(),
-    new Response(proc.stderr).text(),
-    proc.exited,
+  if (stdin !== undefined && proc.stdin !== undefined && typeof proc.stdin !== "number") {
+    proc.stdin.write(stdin);
+    await proc.stdin.flush();
+  }
+  const output = Promise.all([new Response(proc.stdout).text(), new Response(proc.stderr).text()]);
+  const exited = await Promise.race([
+    proc.exited.then(() => true),
+    Bun.sleep(bound).then(() => false),
   ]);
-  return { stdout, stderr, exitCode };
+  if (!exited) proc.kill();
+  const [stdout, stderr] = await output;
+  return { stdout, stderr, exitCode: exited ? proc.exitCode : null };
 }
 
 function hash(file: string): string {
