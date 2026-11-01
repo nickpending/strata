@@ -1,0 +1,18 @@
+S7 driver walk, 2026-11-01T23:14:52Z, on main at 2f48954, no endpoint called
+$ shasum before
+4e7d4e8d1e3cdb4e3408e3acddfe8b19e5bf9bf2  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json
+a6b14c9b9ee7ceec2b9dead5c987c08f52cb2fdd  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.md
+ba608ca9cf7010d5271278cf9bf2b64b16e42504  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.json
+e7443201022e3f1468dcf193d2396ccbac161990  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.md
+$ bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/goals/calibration.json --goals corpus/goals/blind-1.json --goals corpus/goals/blind-2-spent.json --goals corpus/goals/blind-2.json
+$ bun run src/adapter/compare.ts --baseline "anthropic/claude-haiku-5.5" --candidate "z-ai/glm-5.3-flash" --goals corpus/goals/calibration.json --goals "corpus/goals/blind-1.json" --goals "corpus/goals/blind-2-spent.json" --goals "corpus/goals/blind-2.json"
+compare written to ~/development/projects/strata/corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json and ~/development/projects/strata/corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.md
+exit: 0
+$ git status --short corpus/goals/
+$ git diff --exit-code -- corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.md corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.json corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.md
+git diff exit: 0
+$ shasum after
+4e7d4e8d1e3cdb4e3408e3acddfe8b19e5bf9bf2  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json
+a6b14c9b9ee7ceec2b9dead5c987c08f52cb2fdd  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.md
+ba608ca9cf7010d5271278cf9bf2b64b16e42504  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.json
+e7443201022e3f1468dcf193d2396ccbac161990  corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.md
