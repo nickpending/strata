@@ -1,0 +1,17 @@
+A1 driver walk, 2026-11-01T19:58:05Z, on main at 6835a94 with the real endpoints.
+Command: bun run harness "Make sure Rogue is holding the data shard." --tick-minutes 10
+
+Output:
+  $ bun run src/adapter/main.ts "Make sure Rogue is holding the data shard." --tick-minutes "10"
+  run 2026-11-01T19-57-58-504Z: Make sure Rogue is holding the data shard.
+  target: {"kind":"goal","expect":{"holder":{"item":"data-shard","person":"rogue"}},"steps":[]}
+  already held: rogue holds data-shard
+  outcome: {"kind":"already-held","expect":{"holder":{"item":"data-shard","person":"rogue"}}}
+  run written to corpus/runs/2026-11-01T19-57-58-504Z
+  harness: already-held: {"kind":"already-held","expect":{"holder":{"item":"data-shard","person":"rogue"}}}
+  error: script "harness" exited with code 1
+  exit: 1
+
+run.json (corpus/runs/2026-11-01T19-57-58-504Z):
+  {"target":{"kind":"goal","expect":{"holder":{"item":"data-shard","person":"rogue"}},"steps":[]},"outcome":{"kind":"already-held","expect":{"holder":{"item":"data-shard","person":"rogue"}}},"loops":0,"calls":[{"client":"model","purpose":"target","costUsd":0.0002438}]}
+loops.jsonl bytes: 0
