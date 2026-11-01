@@ -51,3 +51,24 @@ Outcome, failed, in his words: "I ran it -- it did something but was too fast fo
 The run reached in 5 loops (`corpus/runs/2026-10-31T14-36-50-377Z`, committed with this note). Nothing paces a
 headed run, so its loops cannot be watched. The pacing fix ships as its own work order, and the C5 re-walk will
 be recorded here when it is given.
+
+## C5 headed re-walk
+
+The re-walk ran after harness-package's pacing fix (closed at bd3bd65, issue #5). Headed runs now hold on Enter
+before each action and before the browser closes, and they exit cleanly. The player moved from src/player into
+the harness package, so the C5 command `bun run src/player/main.ts "have Mux say something funny" --tick-minutes 10 --headed`
+is now `bun run harness "have Mux say something funny" --tick-minutes 10 --headed`. The root `harness` script
+runs `src/adapter/main.ts`, which hosts the bench over `world/` and hands it to the harness CLI.
+
+The operator walked that command on main as harness-package's H4 walk. Outcome, passed, in his words: "passed".
+The run is `corpus/runs/2026-11-01T19-22-29-696Z`, committed at 5454c84.
+
+Each part of C5's then, checked against the run's files:
+
+- Window on the hosted bench: `run.json` has `headed: true` and `url: null`, so the run drove a bench it hosted
+  over `world/`. `benchFailures` is empty.
+- Each loop printed: `loops.jsonl` holds five loops, each with its state, questions, answers and action. The
+  actions are set actor to mux, set verb to say, type the words, and press Act. Loop 5 is `reached` at done 0.99.
+- Mux's say in the history: `events.jsonl` holds e1, a `speech.say` by mux in back-room with the run's words,
+  and `received.jsonl` holds mux's copy of it.
+- Four files written: `run.json`, `loops.jsonl`, `events.jsonl` and `received.jsonl`.
