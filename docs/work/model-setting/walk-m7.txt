@@ -1,0 +1,8 @@
+M7 driver walk, 2026-11-01T21:33:08Z, on main at a42525c, no endpoint called
+$ bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/goals/calibration.json --goals corpus/goals/blind-1.json --goals corpus/goals/blind-2-spent.json --goals corpus/goals/blind-2.json
+$ bun run src/adapter/compare.ts --baseline "anthropic/claude-haiku-5.5" --candidate "z-ai/glm-5.3-flash" --goals corpus/goals/calibration.json --goals "corpus/goals/blind-1.json" --goals "corpus/goals/blind-2-spent.json" --goals "corpus/goals/blind-2.json"
+compare written to corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.json and corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.md
+exit: 0
+$ git status --short corpus/goals/
+$ git diff --stat -- corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.json corpus/goals/z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.compare.md
+git diff exit: 0
