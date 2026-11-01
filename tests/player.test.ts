@@ -768,8 +768,12 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
   }, 60_000);
 });
 
-/** An end state the committed world holds from boot: a run toward it is reached on its first loop. */
-const ROGUE_HOLDS_SHARD = goal({ holder: { item: "data-shard", person: "rogue" } });
+/**
+ * An end state false on the fresh world that a run reaches by acting: Jev favours press Act, Glitch
+ * departs east, code presses Step until he arrives, and the third loop finds him in the Back Room.
+ */
+const GLITCH_IN_BACK = goal({ location: { person: "glitch", room: "back-room" } });
+const GLITCH_GOES_EAST = ["press Act"];
 
 describe("the key goes only where it is named, never in the clear, and never into a message", () => {
   const FAKE_SECRET = "sk-or-v1-FAKESECRET0000000000";
@@ -785,11 +789,12 @@ describe("the key goes only where it is named, never in the clear, and never int
   }
 
   test("an endpoint override is sent no key unless --key-name names one for it", async () => {
-    const m = model(ROGUE_HOLDS_SHARD);
-    const j = preferring([]);
-    const ran = await play("keep the data shard with Rogue", endpoints(m, j));
-    expect(ran.record.outcome?.kind).toBe("reached");
-    expect([m.authorized, j.authorized]).toEqual([[false], [false]]);
+    const m = model(GLITCH_IN_BACK);
+    const j = preferring(GLITCH_GOES_EAST);
+    const ran = await play("send Glitch to the Back Room", endpoints(m, j));
+    expect(ran.record.outcome).toEqual({ kind: "reached", loop: 3, done: NO_DONE });
+    expect(j.authorized.length).toBe(ran.record.loops);
+    expect([m.authorized, j.authorized]).toEqual([[false], j.authorized.map(() => false)]);
   }, 60_000);
 
   test("a named key is never sent over plain http to another machine", async () => {
@@ -881,13 +886,13 @@ describe("a bench read that fails after the run is its own failure, kept apart f
     const base = proxied(undefined, (path) =>
       path === "/api/events" ? new Response("history unavailable", { status: 500 }) : null,
     );
-    const ran = await play("keep the data shard with Rogue", [
-      ...endpoints(model(ROGUE_HOLDS_SHARD), preferring([])),
+    const ran = await play("send Glitch to the Back Room", [
+      ...endpoints(model(GLITCH_IN_BACK), preferring(GLITCH_GOES_EAST)),
       "--url",
       base,
     ]);
     expect(ran.exitCode).toBe(1);
-    expect(ran.record.outcome).toEqual({ kind: "reached", loop: 1, done: NO_DONE });
+    expect(ran.record.outcome).toEqual({ kind: "reached", loop: 3, done: NO_DONE });
     expect(ran.record.stopped).toBeUndefined();
     expect(ran.record.benchFailures).toHaveLength(1);
     expect(ran.record.benchFailures[0]).toMatchObject({ kind: "bench", call: "history" });
@@ -897,6 +902,95 @@ describe("a bench read that fails after the run is its own failure, kept apart f
     expect(existsSync(join(ran.runDir, "received.jsonl"))).toBe(false);
     expect(ran.stderr).toContain("bench");
     expect(ran.stderr).toContain("/api/events");
+  }, 60_000);
+});
+
+describe("A1: a run whose typed end state already holds before it acts ends already-held, never reached", () => {
+  /** The run's end, read whole: an already-held run asks the model once and performs nothing. */
+  function expectAlreadyHeld(ran: Ran, j: { bodies: unknown[] }, expected: EndState): void {
+    expect(ran.record.outcome).toEqual({ kind: "already-held", expect: expected });
+    expect(ran.record.loops).toBe(0);
+    expect(readFileSync(join(ran.runDir, "loops.jsonl"), "utf8")).toBe("");
+    expect(ran.record.calls.map((c) => c.purpose)).toEqual(["target"]);
+    expect(j.bodies).toHaveLength(0);
+    expect(RUN_FILES.filter((file) => !existsSync(join(ran.runDir, file)))).toEqual([]);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.stderr).toContain("already-held");
+    expect(ran.stdout).toContain(`already held: ${described(expected)}`);
+  }
+
+  test("Glitch's stimpak typed as Glitch's: the run refuses it before acting, with no words and no Jev call", async () => {
+    const stimpakWithGlitch = { holder: { item: "stimpak", person: "glitch" } };
+    const m = model({ kind: "goal", expect: stimpakWithGlitch, steps: [] });
+    const j = preferring([]);
+    const ran = await play(
+      "Mux is looking rough back there. Get Glitch's stimpak into his hands.",
+      endpoints(m, j),
+    );
+    expectAlreadyHeld(ran, j, stimpakWithGlitch);
+    expect(m.bodies).toHaveLength(1);
+    // Nothing was done: the history read back from the fresh bench is empty.
+    expect(readFileSync(join(ran.runDir, "events.jsonl"), "utf8")).toBe("");
+  }, 60_000);
+
+  test("A2: a location end state true from boot ends already-held", async () => {
+    const rogueInBar = { location: { person: "rogue", room: "chrome-cassette" } };
+    const j = preferring([]);
+    const ran = await play("bring Rogue to the bar", endpoints(model(goal(rogueInBar)), j));
+    expectAlreadyHeld(ran, j, rogueInBar);
+  }, 60_000);
+
+  test("A2: a said end state the bench's history already records ends already-held, with no words call", async () => {
+    const bench = hostBench({ worldDir: join(ROOT, "world"), tickMinutes: 10 });
+    if (!bench.ok) throw new Error(bench.message);
+    stops.push(bench.stop);
+    const said = await fetch(new URL("/api/actions", bench.base), {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ actor: "mux", verb: "say", words: LINE }),
+    });
+    expect(said.status).toBe(200);
+    const m = model(goal(MUX_SAYS, true), { words: LINE });
+    const j = preferring(MUX_SAY_MOVES);
+    const ran = await play("have Mux say something funny", [
+      ...endpoints(m, j),
+      "--url",
+      bench.base,
+    ]);
+    expectAlreadyHeld(ran, j, MUX_SAYS);
+    expect(m.bodies).toHaveLength(1);
+    expect(ran.record.words).toBeNull();
+    // The history holds the say made before the run, and nothing the run did.
+    const events = lines<WorldEvent>(join(ran.runDir, "events.jsonl"));
+    expect(events.map((e) => [e.subkind, e.actor])).toEqual([["speech.say", "mux"]]);
+  }, 60_000);
+
+  test("A4: a snapshot read failing at the pre-act read stops the run as bench at the target", async () => {
+    const m = model(goal({ holder: { item: "stimpak", person: "rogue" } }));
+    // The harness's own snapshot reads fail once the target has been asked for; the page's do not.
+    const base = proxied(undefined, (path) =>
+      path === "/api/snapshot" && m.bodies.length > 0
+        ? new Response("snapshot unavailable", { status: 500 })
+        : null,
+    );
+    const j = preferring([]);
+    const ran = await play("have Glitch give Rogue the stimpak", [
+      ...endpoints(m, j),
+      "--url",
+      base,
+    ]);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.record.outcome).toMatchObject({
+      kind: "stopped",
+      stopped: { kind: "bench", call: "target" },
+    });
+    expect(ran.record.stopped?.message).toContain("/api/snapshot");
+    expect(ran.record.stopped?.message).toContain("500");
+    expect(ran.record.loops).toBe(0);
+    expect(readFileSync(join(ran.runDir, "loops.jsonl"), "utf8")).toBe("");
+    expect(ran.record.calls.map((c) => c.purpose)).toEqual(["target"]);
+    expect(j.bodies).toHaveLength(0);
+    expect(ran.stderr).toContain("stopped: bench at target");
   }, 60_000);
 });
 

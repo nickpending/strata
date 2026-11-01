@@ -153,9 +153,11 @@ describe("H5: a run has a bench only when it is given one or a host for one", ()
           choices: [
             {
               message: {
+                // False on the fresh world: code's plan walks Glitch east, Jev favouring nothing.
                 content: JSON.stringify({
                   kind: "goal",
-                  expect: { holder: { item: "data-shard", person: "rogue" } },
+                  expect: { location: { person: "glitch", room: "back-room" } },
+                  steps: [{ actor: "glitch", verb: "depart", fields: { exit: "east" } }],
                 }),
               },
             },
@@ -182,7 +184,7 @@ describe("H5: a run has a bench only when it is given one or a host for one", ()
         process.execPath,
         "run",
         join(ROOT, "src", "adapter", "main.ts"),
-        "keep the data shard with Rogue",
+        "send Glitch to the Back Room",
         "--tick-minutes",
         "10",
         "--corpus",
@@ -198,11 +200,16 @@ describe("H5: a run has a bench only when it is given one or a host for one", ()
     expect(ran.exitCode).toBe(0);
     const { runDir, record } = onlyRun(corpus);
     expect(record.parameters.url).toBeNull();
-    expect(record.outcome).toEqual({ kind: "reached", loop: 1, done: 0 });
+    expect(record.outcome).toEqual({ kind: "reached", loop: 3, done: 0 });
     // The run drove a bench of its own, in one directory under TMPDIR while it ran, and none after.
-    expect(during).toEqual([[expect.stringMatching(/^strata-harness-/)]]);
+    expect(during).toHaveLength(record.loops);
+    expect(during).toEqual(during.map(() => [expect.stringMatching(/^strata-harness-/)]));
     expect(hostedDirs()).toEqual([]);
     // A fresh bench: its history holds nothing the run did not do.
-    expect(readFileSync(join(runDir, "events.jsonl"), "utf8")).toBe("");
+    const events = readFileSync(join(runDir, "events.jsonl"), "utf8")
+      .split("\n")
+      .filter((line) => line !== "")
+      .map((line) => (JSON.parse(line) as { subkind: string }).subkind);
+    expect(events).toEqual(["physical.depart", "time.tick", "physical.arrive"]);
   }, 60_000);
 });

@@ -165,8 +165,12 @@ export async function score(
         probe: (base) => holds(goal.expect, base),
       });
       const outcome = record.outcome?.kind ?? "unfinished";
+      // A run that found its end state already held did nothing: whatever the probe reads, the
+      // goal is not held, even when the file expects the very state that held.
       const held =
-        "outcome" in goal.expect ? outcome === goal.expect.outcome : record.held === true;
+        "outcome" in goal.expect
+          ? outcome === goal.expect.outcome
+          : outcome !== "already-held" && record.held === true;
       goals.push({
         score: {
           id: goal.id,

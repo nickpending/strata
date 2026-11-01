@@ -174,10 +174,10 @@ function serve(answer: (body: Record<string, unknown>) => Response): {
 }
 
 /** The chat stand-in: the scripted target for the goal named in the prompt, or the line of words. */
-function modelStandIn() {
+function modelStandIn(goals: Scripted[] = GOALS) {
   return serve((body) => {
     const prompt = String((body.messages as { content: string }[])[0]?.content);
-    const goal = GOALS.find((g) => prompt.includes(`Instruction: ${g.instruction}\n`));
+    const goal = goals.find((g) => prompt.includes(`Instruction: ${g.instruction}\n`));
     const content = prompt.includes('{"words"') ? { words: LINE } : goal?.target;
     return Response.json({
       choices: [{ message: { content: JSON.stringify(content ?? {}) } }],
@@ -190,12 +190,12 @@ function modelStandIn() {
  * The decisions stand-in: per goal, favour the next scripted step. Done is answered yes on every
  * call: it decides nothing.
  */
-function jevStandIn() {
+function jevStandIn(goals: (Scripted & { id: string })[] = GOALS) {
   const calls = new Map<string, number>();
   return serve((body) => {
     const state = String(body.state);
     const questions = body.questions as Record<string, { instructions: string }>;
-    const goal = GOALS.find((g) => state.startsWith(`Goal: ${g.instruction}\n`));
+    const goal = goals.find((g) => state.startsWith(`Goal: ${g.instruction}\n`));
     if (goal === undefined) return new Response("no such goal", { status: 400 });
     const n = calls.get(goal.id) ?? 0;
     calls.set(goal.id, n + 1);
@@ -478,6 +478,65 @@ describe("C8: scoring a goal set by expected end states", () => {
       expect({ ...pair, held: heldAt(pair.act) }).toEqual(pair);
     }
   }, 240_000);
+});
+
+describe("A5: a goal whose run ended already-held is never counted held", () => {
+  /** Rogue holds the shard from boot: the model types that end state for both goals. */
+  const SHARD_WITH_ROGUE = { holder: { item: "data-shard", person: "rogue" } };
+  const ALREADY: (Scripted & { id: string; expect: unknown })[] = [
+    {
+      id: "expects-another-state",
+      instruction: "have Rogue hand Glitch the data shard",
+      expect: SHARD_TO_GLITCH,
+      target: { kind: "goal", expect: SHARD_WITH_ROGUE, needsWords: false },
+      steps: [],
+    },
+    {
+      id: "expects-the-held-state",
+      instruction: "make sure Rogue keeps the data shard",
+      expect: SHARD_WITH_ROGUE,
+      target: { kind: "goal", expect: SHARD_WITH_ROGUE, needsWords: false },
+      steps: [],
+    },
+  ];
+
+  test("plainly and with --sweep: both goals score already-held, held false, at every T_ACT", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "strata-score-"));
+    temps.push(dir);
+    const goalsFile = join(dir, "already.json");
+    writeFileSync(
+      goalsFile,
+      JSON.stringify({
+        set: "already",
+        author: "a test, not the rule's author",
+        goals: ALREADY.map(({ id, instruction, expect }) => ({ id, instruction, expect })),
+      }),
+    );
+    const m = modelStandIn(ALREADY);
+    const j = jevStandIn(ALREADY);
+    const endpoints = ["--model-endpoint", m.url, "--jev-endpoint", j.url];
+    const scoreFile = join(dir, "already.score.json");
+
+    for (const flags of [endpoints, [...endpoints, "--sweep"]]) {
+      const ran = await score(goalsFile, join(dir, "runs"), flags);
+      expect(ran.stderr).toBe("");
+      expect(ran.exitCode).toBe(0);
+      const written = JSON.parse(readFileSync(scoreFile, "utf8")) as ScoreFile;
+      expect(written.perGoal.map((g) => [g.id, g.outcome, g.held, g.loops])).toEqual([
+        ["expects-another-state", "already-held", false, 0],
+        ["expects-the-held-state", "already-held", false, 0],
+      ]);
+      expect(written.reached).toEqual({ held: 0, of: 2 });
+      if (flags.includes("--sweep")) {
+        expect(written.sweep?.results.map((r) => r.held)).toEqual(GRID.act.map(() => 0));
+      } else {
+        expect(written.sweep).toBeUndefined();
+      }
+    }
+    // Only the targets were asked for: no words, and no loop asked Jev anything.
+    expect(m.calls).toBe(4);
+    expect(j.calls).toBe(0);
+  }, 120_000);
 });
 
 describe("H4: a headed score holds before every action of every goal", () => {

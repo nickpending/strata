@@ -1,6 +1,7 @@
 /**
  * The harness's loop: open the bench at `url` (or one `host` hosts) in chromium, read the verbs and
- * subkinds it serves, ask the model for the target end state and the words, then read the page,
+ * subkinds it serves, ask the model for the target end state (a run whose end state already holds
+ * ends there, already-held, having done nothing) and the words, then read the page,
  * the snapshot route's pending states and whether the end state holds, ask Jev, perform the rule's
  * choice in the browser, and loop until reached, stuck, the ceiling, or a refusal. Every loop is
  * printed as it happens and appended to loops.jsonl; a headed run then holds until the operator
@@ -20,7 +21,7 @@ import {
   type VerbsBody,
 } from "./bench.ts";
 import { type Candidate, candidates } from "./candidates.ts";
-import { holds } from "./goal.ts";
+import { described, type EndState, holds } from "./goal.ts";
 import { type ClientOptions, JEV_MODEL, type Refusal } from "./jev.ts";
 import {
   type Control,
@@ -114,6 +115,8 @@ export type Outcome =
       step?: Extract<Decision, { kind: "stuck" }>["step"];
     }
   | { kind: "no-such-action"; reason: string }
+  /** The target's end state held on the bench before the run acted: nothing was done. */
+  | { kind: "already-held"; expect: EndState }
   | { kind: "ceiling"; loops: number }
   | { kind: "stopped"; stopped: Stopped };
 
@@ -541,6 +544,11 @@ async function play(
   record: RunRecord,
   hooks: Hooks,
 ): Promise<void> {
+  /** Stop the run on a bench route it could not read at `call`. */
+  const benchStop = (error: unknown, call: string) => {
+    const message = error instanceof Error ? error.message : String(error);
+    hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call } });
+  };
   const first = await labelledRead(page, hooks, "target");
   if (first === null) return;
   let served: Served;
@@ -549,8 +557,7 @@ async function play(
     const { subkinds } = await getJson<SubkindsBody>(base, "/api/subkinds");
     served = { verbs, subkinds };
   } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call: "target" } });
+    benchStop(error, "target");
     return;
   }
   const asked = await askTarget(options.instruction, first, served, options.model);
@@ -564,6 +571,20 @@ async function play(
   hooks.print(`target: ${JSON.stringify(target)}`);
   if (target.kind === "no-such-action") {
     hooks.finish({ kind: "no-such-action", reason: target.reason });
+    return;
+  }
+  // An end state that holds before the run acts is refused, as checked() refuses one the page
+  // does not show: a loop would read it held and call the run reached having done nothing.
+  let already: boolean;
+  try {
+    already = await holds(target.expect, base);
+  } catch (error) {
+    benchStop(error, "target");
+    return;
+  }
+  if (already) {
+    hooks.print(`already held: ${described(target.expect)}`);
+    hooks.finish({ kind: "already-held", expect: target.expect });
     return;
   }
   let words: string | null = null;
@@ -582,10 +603,6 @@ async function play(
   let plan = PLAN_START;
   /** The log's last seq before a press Act the plan led to, until the next loop reads what it recorded. */
   let pressedAfter: number | null = null;
-  const benchStop = (error: unknown, loop: number) => {
-    const message = error instanceof Error ? error.message : String(error);
-    hooks.finish({ kind: "stopped", stopped: { kind: "bench", message, call: `loop ${loop}` } });
-  };
 
   for (let loop = 1; loop <= options.maxLoops; loop++) {
     const read = await labelledRead(page, hooks, `loop ${loop}`);
@@ -601,7 +618,7 @@ async function play(
       const { pending } = await getJson<SnapshotBody>(base, "/api/snapshot");
       seen = { held: await holds(target.expect, base), pending, controls: read.controls, plan };
     } catch (error) {
-      benchStop(error, loop);
+      benchStop(error, `loop ${loop}`);
       return;
     }
     const state = renderState(goal, read.text, plan);
@@ -654,7 +671,7 @@ async function play(
         const { events } = await getJson<EventsBody>(base, "/api/events?since=0");
         pressedAfter = events.at(-1)?.seq ?? 0;
       } catch (error) {
-        benchStop(error, loop);
+        benchStop(error, `loop ${loop}`);
         return;
       }
     }
