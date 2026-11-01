@@ -1,0 +1,329 @@
+{
+  "set": "calibration",
+  "author": "claude-opus-5-5 (bench-driver builder)",
+  "model": "z-ai/glm-5.3-flash",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    }
+  },
+  "reached": {
+    "held": 7,
+    "of": 9
+  },
+  "targets": {
+    "valid": 8,
+    "asked": 9
+  },
+  "words": {
+    "written": 2,
+    "refused": 1
+  },
+  "perGoal": [
+    {
+      "id": "glitch-to-back-room",
+      "instruction": "send Glitch to the Back Room",
+      "expect": {
+        "location": {
+          "person": "glitch",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 3,
+      "costUsd": 0.0003708,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-14-57-281Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "mux-to-bar",
+      "instruction": "have Mux walk out to the Chrome Cassette",
+      "expect": {
+        "location": {
+          "person": "mux",
+          "room": "chrome-cassette"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.00040601600000000004,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-14-59-414Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "mux-says-funny",
+      "instruction": "have Mux say something funny",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0005259539999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-02-590Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "I put the 'fun' in dysfunctional firmware, and the 'ctional' in functional, which is why nothing works."
+      }
+    },
+    {
+      "id": "rogue-says-heat",
+      "instruction": "have Rogue say something about the heat on her door",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "stopped",
+      "held": false,
+      "loops": 0,
+      "costUsd": 0,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-08-536Z",
+      "target": "invalid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "rogue-whispers-glitch",
+      "instruction": "have Rogue whisper a warning to Glitch",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.whisper"
+        }
+      },
+      "outcome": "stopped",
+      "held": false,
+      "loops": 0,
+      "costUsd": 0.00016037,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-09-855Z",
+      "target": "valid",
+      "words": {
+        "kind": "refused"
+      }
+    },
+    {
+      "id": "glitch-says-to-rogue",
+      "instruction": "have Glitch say thanks to Rogue",
+      "expect": {
+        "said": {
+          "person": "glitch",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.00048132000000000003,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-15-800Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Thanks, Rogue."
+      }
+    },
+    {
+      "id": "shard-to-glitch",
+      "instruction": "have Rogue offer the data shard to Glitch, and Glitch accept it",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.000631774,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-19-021Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "stimpak-offered",
+      "instruction": "have Glitch offer Rogue the stimpak, and Rogue take it",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.0006234359999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-23-361Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "rogue-attacks",
+      "instruction": "have Rogue attack Glitch",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.000073828,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-27-633Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    }
+  ],
+  "costUsd": 0.0032734979999999997,
+  "unreportedCosts": 0,
+  "sweep": {
+    "grid": {
+      "done": [
+        0.6
+      ],
+      "act": [
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8
+      ]
+    },
+    "method": "Each T_ACT value, T_DONE held at its calibrated value, replays every goal's recorded loops in order: at a loop whose recorded held is true the run reached its end state there, and the goal holds when its expectation held at the run's end; a resolve, wait or plan loop, which code chose, is followed as recorded, and a loop stuck on the missing move of a pending state or a plan's step stops as recorded, at every value; elsewhere the rule's choose() at the value must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every value. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.",
+    "results": [
+      {
+        "done": 0.6,
+        "act": 0.05,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.1,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.15,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.2,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.25,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.3,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.35,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.4,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.45,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.5,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.55,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.6,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.65,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.7,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.75,
+        "held": 7
+      },
+      {
+        "done": 0.6,
+        "act": 0.8,
+        "held": 7
+      }
+    ],
+    "best": {
+      "done": 0.6,
+      "act": 0.4,
+      "held": 7
+    }
+  }
+}

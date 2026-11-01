@@ -8,7 +8,11 @@ import { described, type EndState } from "./goal.ts";
 import { type ClientOptions, costOf, isRecord, postJson, type Refusal } from "./jev.ts";
 
 export const COMPLETIONS_URL = "https://openrouter.ai/api/v1/chat/completions";
-export const WORDS_MODEL = "anthropic/claude-haiku-5.5";
+/** The player's model when none is named: it writes the target and the words. */
+export const DEFAULT_MODEL = "anthropic/claude-haiku-5.5";
+
+/** A chat completions client, and the model it asks: DEFAULT_MODEL when none is named. */
+export type ModelOptions = ClientOptions & { model?: string | undefined };
 
 export type Completed<T> =
   | { ok: true; value: T; costUsd: number | null }
@@ -30,13 +34,13 @@ function contentOf(body: unknown): string | undefined {
 export async function complete<T>(
   prompt: string,
   schema: z.ZodType<T>,
-  options: ClientOptions = {},
+  options: ModelOptions = {},
 ): Promise<Completed<T>> {
   const posted = await postJson(
     COMPLETIONS_URL,
     "chat completions",
     {
-      model: WORDS_MODEL,
+      model: options.model ?? DEFAULT_MODEL,
       messages: [{ role: "user", content: prompt }],
       response_format: { type: "json_object" },
       usage: { include: true },
@@ -71,7 +75,7 @@ const wordsSchema = z.object({ words: z.string().trim().min(1) });
 export async function words(
   instruction: string,
   goal: EndState,
-  options: ClientOptions = {},
+  options: ModelOptions = {},
 ): Promise<Completed<string>> {
   const prompt = [
     "You write the one line a character says in a small text world.",

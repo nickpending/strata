@@ -47,7 +47,7 @@ import {
   type Thresholds,
 } from "./rule.ts";
 import { askTarget, type RecordedTarget, type Served, writesWords } from "./target.ts";
-import { words as askWords, WORDS_MODEL } from "./words.ts";
+import { words as askWords, DEFAULT_MODEL, type ModelOptions } from "./words.ts";
 
 /** A bench hosted for one run: where it answers and how to stop it, or why it would not boot. */
 export type Hosted = { ok: true; base: string; stop: () => void } | { ok: false; message: string };
@@ -82,7 +82,8 @@ export type DriveOptions = {
   /** Where run directories are made: corpus/runs by default. */
   corpusDir: string;
   jev: ClientOptions;
-  model: ClientOptions;
+  /** The player's model client; its model is DEFAULT_MODEL when none is named. */
+  model: ModelOptions;
   thresholds?: Thresholds;
   /** Whether a goal file's expectation holds on the bench at `base`; asked once the run ends. */
   probe?: (base: string) => Promise<boolean>;
@@ -187,10 +188,22 @@ export const RUN_FLAGS = {
   "model-endpoint": { type: "string" },
   /** The apiconf key to send; an endpoint override is sent a key only when this names one. */
   "key-name": { type: "string" },
+  /** The player's model, which writes the target and the words; DEFAULT_MODEL when absent. */
+  model: { type: "string" },
 } as const;
 
 export const RUN_USAGE =
-  "--tick-minutes <n> [--world world] [--corpus corpus/runs] [--max-loops 24] [--headed] [--jev-endpoint <url>] [--model-endpoint <url>] [--key-name sable-openrouter]";
+  "--tick-minutes <n> [--world world] [--corpus corpus/runs] [--max-loops 24] [--headed] [--jev-endpoint <url>] [--model-endpoint <url>] [--key-name sable-openrouter] [--model <provider/model>]";
+
+/** An OpenRouter model id, <provider>/<model>: one slash, and neither part leading with a dot. */
+const MODEL_ID = /^[A-Za-z0-9][A-Za-z0-9._-]*\/[A-Za-z0-9][A-Za-z0-9._:-]*$/;
+
+/** The message refusing `value` given as `flag`, or null when it is a model id. */
+export function modelIdRefusal(flag: string, value: string): string | null {
+  return MODEL_ID.test(value)
+    ? null
+    : `${flag} must be an OpenRouter model id, <provider>/<model>, got "${value}"`;
+}
 
 type FlagValues = { [K in keyof typeof RUN_FLAGS]?: string | boolean | undefined };
 
@@ -215,6 +228,9 @@ export function optionsFromFlags(
       error: `--max-loops must be a whole number of at least 1, got "${text("max-loops")}"`,
     };
   }
+  const model = text("model");
+  const refused = model === undefined ? null : modelIdRefusal("--model", model);
+  if (refused !== null) return { error: refused };
   const client = (endpoint: string | undefined): ClientOptions => ({
     endpoint,
     keyName: text("key-name"),
@@ -226,7 +242,7 @@ export function optionsFromFlags(
     maxLoops,
     corpusDir: resolve(text("corpus") ?? "corpus/runs"),
     jev: client(text("jev-endpoint")),
-    model: client(text("model-endpoint")),
+    model: { ...client(text("model-endpoint")), model },
   };
 }
 
@@ -412,7 +428,7 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
       headed: options.headed,
       thresholds,
       jevModel: JEV_MODEL,
-      wordsModel: WORDS_MODEL,
+      wordsModel: options.model.model ?? DEFAULT_MODEL,
     },
     target: null,
     words: null,

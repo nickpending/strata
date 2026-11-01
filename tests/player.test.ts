@@ -12,12 +12,26 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { described, type EndState } from "harness/goal.ts";
 import { type Control, readPage, useAccountBrowsers } from "harness/page.ts";
-import { T_ACT, T_DONE } from "harness/rule.ts";
+import { T_ACT } from "harness/rule.ts";
 import type { DriveResult, LoopRecord, RunRecord } from "harness/run.ts";
 import type { Browser } from "playwright";
 import { hostBench } from "../src/adapter/host.ts";
 import { kindOf, subkinds, type WorldEvent } from "../src/engine/events.ts";
 import { verbs } from "../src/engine/rules.ts";
+import {
+  goal,
+  JEV_COST,
+  type JevRequest,
+  jev,
+  keyOf,
+  MODEL_COST,
+  model,
+  NO_DONE,
+  PASSED_OVER,
+  preferring,
+  standIn,
+  stops,
+} from "./stand-ins.ts";
 
 const ROOT = join(import.meta.dir, "..");
 // Every run below is a child process, or loads playwright only after this; each finds the
@@ -25,111 +39,11 @@ const ROOT = join(import.meta.dir, "..");
 useAccountBrowsers();
 const MAIN = join(ROOT, "src", "adapter", "main.ts");
 
-const MODEL_COST = 0.0002;
-const JEV_COST = 0.00002;
-/** Scripted noul values, derived from the rule's thresholds so they hold whatever calibration sets. */
-const NO_DONE = T_DONE * 0.3;
-const FAVOURED = Math.min(1, T_ACT + 0.05);
-const PASSED_OVER = T_ACT * 0.3;
-
 const temps: string[] = [];
-const stops: (() => void)[] = [];
 afterAll(() => {
   for (const stop of stops) stop();
   for (const dir of temps) rmSync(dir, { recursive: true, force: true });
 });
-
-type JevRequest = {
-  model: string;
-  state: string;
-  questions: Record<string, { type: string; instructions: string }>;
-};
-
-/**
- * A local server standing in for an endpoint; each request's JSON body is kept, in order, and
- * whether it carried an Authorization header.
- */
-function standIn(answer: (body: unknown, n: number) => Response): {
-  url: string;
-  bodies: unknown[];
-  authorized: boolean[];
-} {
-  const bodies: unknown[] = [];
-  const authorized: boolean[] = [];
-  const server = Bun.serve({
-    hostname: "127.0.0.1",
-    port: 0,
-    fetch: async (request) => {
-      const body: unknown = await request.json();
-      bodies.push(body);
-      authorized.push(request.headers.has("authorization"));
-      return answer(body, bodies.length);
-    },
-  });
-  stops.push(() => void server.stop(true));
-  return { url: `http://127.0.0.1:${server.port}/`, bodies, authorized };
-}
-
-/** The chat completions stand-in: answers each call with the next scripted JSON object. */
-function model(...answers: unknown[]) {
-  return standIn((_body, n) =>
-    Response.json({
-      choices: [{ message: { role: "assistant", content: JSON.stringify(answers[n - 1] ?? {}) } }],
-      usage: { cost: MODEL_COST },
-    }),
-  );
-}
-
-/** The model's target for an end state. */
-function goal(expect: EndState, needsWords = false) {
-  return { kind: "goal" as const, expect, needsWords };
-}
-
-/**
- * The decisions stand-in: `score` gives every question's noul from the whole request; `instead`
- * may answer the nth call with another response.
- */
-function jev(
-  score: (request: JevRequest) => Record<string, number>,
-  instead: (n: number) => Response | null = () => null,
-) {
-  return standIn((body, n) => {
-    const other = instead(n);
-    if (other !== null) return other;
-    const answers = Object.fromEntries(
-      Object.entries(score(body as JevRequest)).map(([key, noul]) => [key, { noul }]),
-    );
-    return Response.json({ answers, usage: { cost: JEV_COST } });
-  });
-}
-
-/** The key of the question asking about `description`, if this request asks about it. */
-function keyOf(request: JevRequest, description: string): string | undefined {
-  return Object.entries(request.questions).find(
-    ([key, q]) => key !== "done" && q.instructions.includes(`"${description}"`),
-  )?.[0];
-}
-
-/**
- * A Jev stand-in that favours the first of `preferred` the page offers (or that `preferred` gives
- * for the request), passes over every other candidate, and answers done with `done`.
- */
-function preferring(
-  preferred: string[] | ((request: JevRequest) => string[]),
-  done = NO_DONE,
-  instead?: (n: number) => Response | null,
-) {
-  return jev((request) => {
-    const wanted = typeof preferred === "function" ? preferred(request) : preferred;
-    const favoured = wanted.map((d) => keyOf(request, d)).find((key) => key !== undefined);
-    return Object.fromEntries(
-      Object.keys(request.questions).map((key) => {
-        if (key === "done") return [key, done];
-        return [key, key === favoured ? FAVOURED : PASSED_OVER];
-      }),
-    );
-  }, instead);
-}
 
 type Ran = { exitCode: number; stdout: string; stderr: string; runDir: string; record: RunRecord };
 
@@ -1311,6 +1225,68 @@ describe("H4: a headed command line exits once its run is done, its stdin still 
     expect(ran.stdout).toContain("run written to ");
     expect(ran.stdout).toContain('outcome: {"kind":"reached","loop":5');
   }, 90_000);
+});
+
+describe("M1: the player's model is the --model setting, anthropic/claude-haiku-5.5 when none is named", () => {
+  const RUNS: [flags: string[], posted: string][] = [
+    [["--model", "z-ai/glm-5.3-flash"], "z-ai/glm-5.3-flash"],
+    [[], "anthropic/claude-haiku-5.5"],
+  ];
+
+  for (const [flags, posted] of RUNS) {
+    test(`${flags.join(" ") || "no --model"}: the target and the words are asked of ${posted}, and run.json records it`, async () => {
+      const m = model(goal(MUX_SAYS, true), { words: LINE });
+      const j = preferring(MUX_SAY_MOVES);
+      const ran = await play("have Mux say something funny", [...endpoints(m, j), ...flags]);
+      expect(ran.record.outcome?.kind).toBe("reached");
+      expect(ran.record.calls.filter((c) => c.client === "model").map((c) => c.purpose)).toEqual([
+        "target",
+        "words",
+      ]);
+      expect((m.bodies as { model: string }[]).map((body) => body.model)).toEqual([posted, posted]);
+      expect(ran.record.parameters.wordsModel).toBe(posted);
+      // Jev's model is a constant, whatever the player's model is.
+      expect(j.bodies.length).toBeGreaterThan(0);
+      expect((j.bodies as JevRequest[]).map((body) => body.model)).toEqual(
+        j.bodies.map(() => "typesafe/jev-1.13"),
+      );
+      expect(ran.exitCode).toBe(0);
+    }, 60_000);
+  }
+});
+
+describe("M2: a --model that is not <provider>/<model> is refused before the run starts", () => {
+  test("each refused id exits 2 naming --model and the value, with no corpus and no call made", async () => {
+    for (const bad of ["haiku", "../escape", ".hidden/x", "a/b/c", ""]) {
+      const m = model(goal(MUX_SAYS, true), { words: LINE });
+      const j = preferring(MUX_SAY_MOVES);
+      const corpus = join(mkdtempSync(join(tmpdir(), "strata-harness-test-")), "runs");
+      temps.push(dirname(corpus));
+      const proc = Bun.spawn(
+        [
+          process.execPath,
+          "run",
+          MAIN,
+          "have Mux say something funny",
+          "--tick-minutes",
+          "10",
+          "--corpus",
+          corpus,
+          "--model",
+          bad,
+          ...endpoints(m, j),
+        ],
+        { cwd: ROOT, env: process.env, stdout: "pipe", stderr: "pipe" },
+      );
+      const [stderr, exitCode] = await Promise.all([new Response(proc.stderr).text(), proc.exited]);
+      expect({ bad, exitCode }).toEqual({ bad, exitCode: 2 });
+      expect(stderr).toContain(
+        `--model must be an OpenRouter model id, <provider>/<model>, got "${bad}"`,
+      );
+      expect(existsSync(corpus)).toBe(false);
+      expect([m.bodies.length, j.bodies.length]).toEqual([0, 0]);
+    }
+  }, 60_000);
 });
 
 describe("H6: a fresh run's files carry the committed run's keys", () => {

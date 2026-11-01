@@ -13,8 +13,8 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { useAccountBrowsers } from "harness/page.ts";
 import { RULE_AUTHOR, T_ACT, T_DONE } from "harness/rule.ts";
-import type { LoopRecord } from "harness/run.ts";
-import { GRID, type ScoreFile } from "harness/score.ts";
+import type { LoopRecord, RunRecord } from "harness/run.ts";
+import { GRID, type ScoreFile, scorePath } from "harness/score.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
 const ROOT = join(import.meta.dir, "..");
@@ -158,14 +158,18 @@ const GOALS: (Scripted & { id: string; expect: unknown })[] = [
 function serve(answer: (body: Record<string, unknown>) => Response): {
   url: string;
   calls: number;
+  /** Each request's JSON body, in order. */
+  bodies: Record<string, unknown>[];
 } {
-  const counter = { url: "", calls: 0 };
+  const counter = { url: "", calls: 0, bodies: [] as Record<string, unknown>[] };
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
     fetch: async (request) => {
       counter.calls++;
-      return answer((await request.json()) as Record<string, unknown>);
+      const body = (await request.json()) as Record<string, unknown>;
+      counter.bodies.push(body);
+      return answer(body);
     },
   });
   stops.push(() => void server.stop(true));
@@ -579,5 +583,235 @@ describe("H4: a headed score holds before every action of every goal", () => {
       ...MUX_SAY_STEPS.map((move) => `hold: press Enter to perform "${move}"`),
       "hold: press Enter to close the browser",
     ]);
+  }, 120_000);
+});
+
+/** A goal file for `set` at <dir>/<set>.json, by another author than the rule's. */
+function writeSet(
+  dir: string,
+  set: string,
+  goals: { id: string; instruction: string; expect: unknown }[],
+): string {
+  const file = join(dir, `${set}.json`);
+  writeFileSync(
+    file,
+    JSON.stringify({
+      set,
+      author: "a test, not the rule's author",
+      goals: goals.map(({ id, instruction, expect }) => ({ id, instruction, expect })),
+    }),
+  );
+  return file;
+}
+
+function readJson<T>(file: string): T {
+  return JSON.parse(readFileSync(file, "utf8")) as T;
+}
+
+function tempDir(): string {
+  const dir = mkdtempSync(join(tmpdir(), "strata-score-"));
+  temps.push(dir);
+  return dir;
+}
+
+describe("M2: score refuses a --model that is not <provider>/<model> before any goal runs", () => {
+  test("each refused id exits 2 naming --model and the value, writing no runs and no score", async () => {
+    for (const bad of ["haiku", "../escape", ".hidden/x", "a/b/c", ""]) {
+      const dir = tempDir();
+      const goalsFile = writeSet(
+        dir,
+        "refused",
+        GOALS.filter((g) => g.id === "moon"),
+      );
+      const m = modelStandIn();
+      const j = jevStandIn();
+      const corpus = join(dir, "runs");
+      const ran = await score(goalsFile, corpus, [
+        "--model",
+        bad,
+        "--model-endpoint",
+        m.url,
+        "--jev-endpoint",
+        j.url,
+      ]);
+      expect({ bad, exitCode: ran.exitCode }).toEqual({ bad, exitCode: 2 });
+      expect(ran.stderr).toContain(
+        `--model must be an OpenRouter model id, <provider>/<model>, got "${bad}"`,
+      );
+      expect(existsSync(corpus)).toBe(false);
+      expect(readdirSync(dir)).toEqual(["refused.json"]);
+      expect([m.calls, j.calls]).toEqual([0, 0]);
+    }
+  }, 60_000);
+});
+
+describe("M3: a score under a named model lands in <set>.<slug>.score.json, never in <set>.score.json", () => {
+  const TWO = GOALS.filter((g) => g.id === "moon" || g.id === "mux-says");
+
+  test("two named models write their own files beside an untouched <set>.score.json; none named writes <set>.score.json", async () => {
+    const dir = tempDir();
+    const goalsFile = writeSet(dir, "named", TWO);
+    const recorded = join(dir, "named.score.json");
+    writeFileSync(recorded, "the committed score, as C9 reads it\n");
+    const before = hash(recorded);
+
+    for (const named of ["z-ai/glm-5.3-flash", "anthropic/claude-haiku-5.5"]) {
+      const m = modelStandIn(TWO);
+      const j = jevStandIn(TWO);
+      const ran = await score(goalsFile, join(dir, "runs"), [
+        "--model-endpoint",
+        m.url,
+        "--jev-endpoint",
+        j.url,
+        "--model",
+        named,
+      ]);
+      expect(ran.stderr).toBe("");
+      expect(ran.exitCode).toBe(0);
+      // The registered score is neither replaced nor rewritten by a score under a named model.
+      expect(hash(recorded)).toBe(before);
+      const path = join(dir, `named.${named.replace("/", "_")}.score.json`);
+      expect(scorePath(goalsFile, "named", named)).toBe(path);
+      expect(ran.stdout).toContain(`score written to ${path}\n`);
+      const written = readJson<ScoreFile>(path);
+      expect(written.model).toBe(named);
+      // Both targets and the say's words were asked of the named model, and each run records it.
+      expect(m.bodies.map((body) => body.model)).toEqual([named, named, named]);
+      for (const goal of written.perGoal) {
+        const run = readJson<RunRecord>(join(dir, goal.run, "run.json"));
+        expect(run.parameters.wordsModel).toBe(named);
+      }
+    }
+    expect(hash(recorded)).toBe(before);
+    expect(
+      readdirSync(dir)
+        .filter((file) => file.endsWith(".score.json"))
+        .sort(),
+    ).toEqual(
+      [
+        "named.score.json",
+        "named.z-ai_glm-5.3-flash.score.json",
+        "named.anthropic_claude-haiku-5.5.score.json",
+      ].sort(),
+    );
+
+    const fresh = tempDir();
+    const freshGoals = writeSet(fresh, "named", TWO);
+    const m = modelStandIn(TWO);
+    const j = jevStandIn(TWO);
+    const ran = await score(freshGoals, join(fresh, "runs"), [
+      "--model-endpoint",
+      m.url,
+      "--jev-endpoint",
+      j.url,
+    ]);
+    expect(ran.stderr).toBe("");
+    expect(ran.exitCode).toBe(0);
+    const path = join(fresh, "named.score.json");
+    expect(scorePath(freshGoals, "named", undefined)).toBe(path);
+    expect(readJson<ScoreFile>(path).model).toBe("anthropic/claude-haiku-5.5");
+    expect(m.bodies.map((body) => body.model)).toEqual([
+      "anthropic/claude-haiku-5.5",
+      "anthropic/claude-haiku-5.5",
+      "anthropic/claude-haiku-5.5",
+    ]);
+    expect(readdirSync(fresh).filter((file) => file.endsWith(".score.json"))).toEqual([
+      "named.score.json",
+    ]);
+  }, 180_000);
+});
+
+/** A scripted answer of the chat stand-in: a message's content, or an HTTP status with no answer. */
+type Answer = { content: string } | { status: number };
+
+describe("M4: each goal records its target's validity and its words, and the score file sums them", () => {
+  const json = (value: unknown): Answer => ({ content: JSON.stringify(value) });
+  const ROGUE_SAYS = { said: { person: "rogue", subkind: "speech.say" } };
+  const FIVE: (Scripted & {
+    id: string;
+    expect: unknown;
+    target: Answer;
+    words?: Answer;
+  })[] = [
+    {
+      id: "written",
+      instruction: "have Mux say something",
+      expect: MUX_SAYS,
+      target: json({ kind: "goal", expect: MUX_SAYS, needsWords: true }),
+      words: json({ words: LINE }),
+      steps: MUX_SAY_STEPS,
+    },
+    {
+      id: "not-json",
+      instruction: "have Glitch dance",
+      expect: { outcome: "no-such-action" },
+      target: { content: "Glitch dances, I suppose." },
+      steps: [],
+    },
+    {
+      // checked() turns it into no-such-action: the page shows no plasma rifle.
+      id: "no-such-item",
+      instruction: "have Glitch take the plasma rifle",
+      expect: { outcome: "no-such-action" },
+      target: json({
+        kind: "goal",
+        expect: { holder: { item: "plasma-rifle", person: "glitch" } },
+      }),
+      steps: [],
+    },
+    {
+      id: "words-refused",
+      instruction: "have Rogue say something",
+      expect: ROGUE_SAYS,
+      target: json({ kind: "goal", expect: ROGUE_SAYS }),
+      words: { content: "Rogue says hi." },
+      steps: [],
+    },
+    {
+      id: "unanswered",
+      instruction: "have Mux leave the bar",
+      expect: { outcome: "no-such-action" },
+      target: { status: 500 },
+      steps: [],
+    },
+  ];
+
+  test("valid, invalid, valid, valid and unanswered targets; words written, none, none, refused and none", async () => {
+    const dir = tempDir();
+    const goalsFile = writeSet(dir, "five", FIVE);
+    const m = serve((body) => {
+      const prompt = String((body.messages as { content: string }[])[0]?.content);
+      const goal = FIVE.find(
+        (g) =>
+          prompt.includes(`Instruction: ${g.instruction}\n`) ||
+          prompt.includes(`The instruction: ${g.instruction}\n`),
+      );
+      const answer = prompt.includes('{"words"') ? goal?.words : goal?.target;
+      if (answer === undefined) return new Response("no such goal", { status: 400 });
+      if ("status" in answer) return new Response("upstream exploded", { status: answer.status });
+      return Response.json({
+        choices: [{ message: { content: answer.content } }],
+        usage: { cost: MODEL_COST },
+      });
+    });
+    const j = jevStandIn(FIVE);
+    const ran = await score(goalsFile, join(dir, "runs"), [
+      "--model-endpoint",
+      m.url,
+      "--jev-endpoint",
+      j.url,
+    ]);
+    expect(ran.exitCode).toBe(0);
+    const written = readJson<ScoreFile>(join(dir, "five.score.json"));
+    expect(written.perGoal.map((g) => [g.id, g.outcome, g.target, g.words])).toEqual([
+      ["written", "reached", "valid", { kind: "written", text: LINE }],
+      ["not-json", "stopped", "invalid", { kind: "none" }],
+      ["no-such-item", "no-such-action", "valid", { kind: "none" }],
+      ["words-refused", "stopped", "valid", { kind: "refused" }],
+      ["unanswered", "stopped", "unanswered", { kind: "none" }],
+    ]);
+    expect(written.targets).toEqual({ valid: 3, asked: 4 });
+    expect(written.words).toEqual({ written: 1, refused: 1 });
+    expect(written.model).toBe("anthropic/claude-haiku-5.5");
   }, 120_000);
 });

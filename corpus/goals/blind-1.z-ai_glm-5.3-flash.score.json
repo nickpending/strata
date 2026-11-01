@@ -1,0 +1,278 @@
+{
+  "set": "blind-1",
+  "author": "claude-opus-5-5 (bench-driver blind goal writer)",
+  "model": "z-ai/glm-5.3-flash",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    }
+  },
+  "reached": {
+    "held": 12,
+    "of": 12
+  },
+  "targets": {
+    "valid": 12,
+    "asked": 12
+  },
+  "words": {
+    "written": 4,
+    "refused": 0
+  },
+  "perGoal": [
+    {
+      "id": "glitch-to-back-room",
+      "instruction": "walk Glitch over to the back room",
+      "expect": {
+        "location": {
+          "person": "glitch",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 3,
+      "costUsd": 0.00036926600000000004,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-32-618Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "mux-to-bar",
+      "instruction": "have Mux come out front to the Chrome Cassette",
+      "expect": {
+        "location": {
+          "person": "mux",
+          "room": "chrome-cassette"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.00040848,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-34-827Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "rogue-to-back-room",
+      "instruction": "get Rogue into the back room",
+      "expect": {
+        "location": {
+          "person": "rogue",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 4,
+      "costUsd": 0.00036738200000000003,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-37-471Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "stimpak-to-rogue",
+      "instruction": "have Glitch hand his stimpak over to Rogue",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.000621496,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-41-785Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "shard-to-glitch",
+      "instruction": "Rogue should pass the data shard to Glitch",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.000663524,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-47-052Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "cell-to-glitch",
+      "instruction": "get Mux's charge cell into Glitch's hands",
+      "expect": {
+        "holder": {
+          "item": "charge-cell",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 10,
+      "costUsd": 0.000911374,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-53-415Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "rogue-announces",
+      "instruction": "have Rogue tell the whole bar out loud that last call is coming",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0004309,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-15-58-416Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "\"Last call, everybody, finish up your drinks and settle your tabs, we're shutting it down soon!\""
+      }
+    },
+    {
+      "id": "mux-speaks-up",
+      "instruction": "make Mux say something out loud to the room",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000393204,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-16-03-284Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Alright, listen up everyone—Mux has arrived, so the real business can finally start."
+      }
+    },
+    {
+      "id": "glitch-whispers-rogue",
+      "instruction": "Glitch should quietly whisper to Rogue that he needs somewhere to hide",
+      "expect": {
+        "said": {
+          "person": "glitch",
+          "subkind": "speech.whisper"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0005231880000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-16-07-032Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "I need somewhere to hide, Rogue."
+      }
+    },
+    {
+      "id": "rogue-addresses-glitch",
+      "instruction": "have Rogue speak directly to Glitch and tell him his welcome is wearing thin",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000751796,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-16-14-849Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Glitch, your welcome is wearing thin."
+      }
+    },
+    {
+      "id": "hack-jukebox",
+      "instruction": "have Glitch hack the bar's jukebox",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0003628,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-16-24-019Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    },
+    {
+      "id": "rogue-drinks",
+      "instruction": "make Rogue drink a shot at the bar",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.000432,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../runs/2026-11-01T21-16-25-836Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      }
+    }
+  ],
+  "costUsd": 0.00623541,
+  "unreportedCosts": 0
+}

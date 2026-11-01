@@ -1,0 +1,40 @@
+{
+  "runId": "2026-11-01T21-14-50-813Z",
+  "instruction": "Get Mux to repair the jammed door between the back room and the bar.",
+  "startedAt": "2026-11-01T21:14:50.813Z",
+  "endedAt": "2026-11-01T21:14:53.061Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/.claude/worktrees/agent-a20dfafba586cc3fc/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no verb or end state for repairing anything. The available end states only cover who holds an item, who is in a room, and who has said something of a given kind. Saying something to Mux would not make him repair the jammed door, so no end state carries out the instruction."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no verb or end state for repairing anything. The available end states only cover who holds an item, who is in a room, and who has said something of a given kind. Saying something to Mux would not make him repair the jammed door, so no end state carries out the instruction."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0002949
+    }
+  ],
+  "costUsd": 0.0002949,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

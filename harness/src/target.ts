@@ -7,9 +7,8 @@
 import { z } from "zod";
 import type { SubkindsBody, VerbsBody } from "./bench.ts";
 import { type EndState, endStateSchema } from "./goal.ts";
-import type { ClientOptions } from "./jev.ts";
 import type { PageRead } from "./page.ts";
-import { type Completed, complete } from "./words.ts";
+import { type Completed, complete, type ModelOptions } from "./words.ts";
 
 const name = z.string().trim().min(1);
 const field = name.nullish();
@@ -217,7 +216,7 @@ export async function askTarget(
   instruction: string,
   read: PageRead,
   served: Served,
-  options: ClientOptions = {},
+  options: ModelOptions = {},
 ): Promise<Completed<Target>> {
   const offered = vocabulary(read, served.subkinds);
   const asked = prompt(instruction, offered, served.verbs, read.text);

@@ -5,7 +5,8 @@
  * recorded loops and the value holding the most goals is printed. A goal set whose author is the
  * rule's author is refused on a plain score: it is no blind test of the rule. A set not named as
  * its file is refused: its score would land on another file's. Each goal needs a bench hosted for
- * it, so a score with no host refuses before any goal runs.
+ * it, so a score with no host refuses before any goal runs. A score under a named --model asks that
+ * model for every target and words, records it, and lands in a file of its own (scorePath).
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative, resolve } from "node:path";
@@ -23,13 +24,15 @@ import {
   optionsFromFlags,
   RUN_FLAGS,
   RUN_USAGE,
+  type RunRecord,
   releaseHolds,
 } from "./run.ts";
+import { DEFAULT_MODEL } from "./words.ts";
 
 const name = z.string().trim().min(1);
 
 export const goalFileSchema = z.strictObject({
-  /** The set's name, and its score file's: <set>.score.json beside the goals, so a plain name. */
+  /** The set's name, and its score file's (scorePath), beside the goals: so a plain name. */
   set: z
     .string()
     .regex(/^[A-Za-z0-9][A-Za-z0-9_-]*$/, "set must be letters, digits, - and _ (a file name)"),
@@ -66,16 +69,32 @@ export type GoalScore = {
   benchFailures: BenchFailure[];
   /** The run directory, relative to the score file's directory. */
   run: string;
+  /**
+   * The model's target answer: valid when it parsed and passed the target schema (a target
+   * checked() turned into no-such-action included), invalid when it did not, unanswered when the
+   * run stopped before or at the target call with no answer from the model.
+   */
+  target: "valid" | "invalid" | "unanswered";
+  /** The run's words: the line the model wrote, refused when its answer did not parse, or none. */
+  words: GoalWords;
 };
+
+export type GoalWords = { kind: "written"; text: string } | { kind: "refused" } | { kind: "none" };
 
 export type SweepResult = { done: number; act: number; held: number };
 
 export type ScoreFile = {
   set: string;
   author: string;
+  /** The model the runs were made with, as each run.json's wordsModel records it. */
+  model: string;
   /** The rule the runs were made with. */
   rule: { author: string; thresholds: Thresholds };
   reached: { held: number; of: number };
+  /** The goals whose target was valid, of those whose target the model answered. */
+  targets: { valid: number; asked: number };
+  /** The goals whose words were written, and those whose words were refused. */
+  words: { written: number; refused: number };
   perGoal: GoalScore[];
   /** The sum of every goal's reported cost. */
   costUsd: number;
@@ -145,6 +164,37 @@ function readLoops(runDir: string): LoopRecord[] {
     .map((line) => JSON.parse(line) as LoopRecord);
 }
 
+/** Whether the run's target was answered, and parsed, read from its record, never its outcome. */
+function targetOf(record: RunRecord): GoalScore["target"] {
+  if (record.target !== null) return "valid";
+  const { stopped } = record;
+  return stopped?.call === "target" && stopped.kind === "parse" ? "invalid" : "unanswered";
+}
+
+/** The run's words as its record holds them: written, refused when their answer did not parse. */
+function wordsOf(record: RunRecord): GoalWords {
+  if (record.words !== null) return { kind: "written", text: record.words };
+  const { stopped } = record;
+  return stopped?.call === "words" && stopped.kind === "parse"
+    ? { kind: "refused" }
+    : { kind: "none" };
+}
+
+/** A model id as a file name: every character outside [A-Za-z0-9._-] becomes _. */
+export function modelSlug(model: string): string {
+  return model.replace(/[^A-Za-z0-9._-]/g, "_");
+}
+
+/**
+ * Where `set`'s score is written beside `goalsPath`: <set>.score.json when no model was named, and
+ * <set>.<slug>.score.json when one was, even the default's id, so a named model's score never
+ * writes, reads or replaces the registered one. The one place a score path is derived.
+ */
+export function scorePath(goalsPath: string, set: string, model: string | undefined): string {
+  const name = model === undefined ? set : `${set}.${modelSlug(model)}`;
+  return join(dirname(goalsPath), `${name}.score.json`);
+}
+
 /** Run every goal of `file` on its own fresh bench and score it; the score file is written beside the goals. */
 export async function score(
   goalsPath: string,
@@ -152,7 +202,7 @@ export async function score(
   run: Omit<DriveOptions, "instruction">,
   withSweep: boolean,
 ): Promise<{ path: string; scored: ScoreFile }> {
-  const path = join(dirname(goalsPath), `${file.set}.score.json`);
+  const path = scorePath(goalsPath, file.set, run.model.model);
   const browser: Browser = await chromium.launch({ headless: !run.headed });
   const goals: { score: GoalScore; loops: LoopRecord[] }[] = [];
   try {
@@ -183,6 +233,8 @@ export async function score(
           unreportedCosts: record.unreportedCosts,
           benchFailures: record.benchFailures,
           run: relative(dirname(path), runDir),
+          target: targetOf(record),
+          words: wordsOf(record),
         },
         loops: readLoops(runDir),
       });
@@ -194,8 +246,17 @@ export async function score(
   const scored: ScoreFile = {
     set: file.set,
     author: file.author,
+    model: run.model.model ?? DEFAULT_MODEL,
     rule: { author: RULE_AUTHOR, thresholds: run.thresholds ?? REGISTERED },
     reached: { held: perGoal.filter((g) => g.held).length, of: perGoal.length },
+    targets: {
+      valid: perGoal.filter((g) => g.target === "valid").length,
+      asked: perGoal.filter((g) => g.target !== "unanswered").length,
+    },
+    words: {
+      written: perGoal.filter((g) => g.words.kind === "written").length,
+      refused: perGoal.filter((g) => g.words.kind === "refused").length,
+    },
     perGoal,
     costUsd: perGoal.reduce((sum, g) => sum + g.costUsd, 0),
     unreportedCosts: perGoal.reduce((sum, g) => sum + g.unreportedCosts, 0),
@@ -245,7 +306,7 @@ export async function scoreCli(args: string[], bench: { host?: Host } = {}): Pro
   const fileName = basename(goalsPath, ".json");
   if (file.set !== fileName) {
     console.error(
-      `score: refused: the goal file's set "${file.set}" is not its file's name "${fileName}"; the score is written to <set>.score.json, and a set named for another file would overwrite that file's score`,
+      `score: refused: the goal file's set "${file.set}" is not its file's name "${fileName}"; the score is written to ${scorePath(goalsPath, file.set, values.model)}, and a set named for another file would overwrite that file's score`,
     );
     process.exit(1);
   }

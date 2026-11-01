@@ -21,6 +21,7 @@
     "driver": "bun run src/driver/main.ts",
     "harness": "bun run src/adapter/main.ts",
     "score": "bun run src/adapter/score.ts",
+    "compare": "bun run src/adapter/compare.ts",
     "check": "bun node_modules/.bin/biome check .",
     "check:fix": "bun node_modules/.bin/biome check --fix .",
     "typecheck": "bun node_modules/typescript/bin/tsc --noEmit -p tsconfig.json",
