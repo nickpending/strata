@@ -1,0 +1,244 @@
+{
+  "workOrder": "glm-default",
+  "what": "The player's default model becomes z-ai/glm-5.3-flash, asked by json_object pinned to Z.AI under its own request name while every other model keeps json-schema-retry byte-identical, with OpenRouter's reported provider recorded on every model call through score and compare, an atomic run-directory claim, run.json's world recorded relative to the repository root, and GLM and Haiku re-scored and compared on copies of the four goal sets under corpus/experiments/glm-default/.",
+  "why": "rudy decided on 2026-11-01 to switch the default to GLM-5.3-flash pinned to Z.AI, which reached 137 of 141 at Haiku's cost per run, and the harness could neither send that request nor show who served a call; design: docs/work/glm-default/design.md.",
+  "issues": [
+    8
+  ],
+  "stakes": [
+    "With no model named, the target and the words are asked of z-ai/glm-5.3-flash by json_object with provider order [z-ai] and allow_fallbacks false, under the request name json-object-z-ai-retry, recorded in run.json and the score.",
+    "Every model not listed in the request table, anthropic/claude-haiku-5.5 included, is sent a body whose JSON text equals today's json-schema-retry body, under the name json-schema-retry.",
+    "Every model call in a new run.json records the provider OpenRouter reported for it, or null when it reported none; each score entry and file counts model calls per provider, and the compare shows providers per set and per moved goal.",
+    "compare reads each side under its own model's request, refuses a score whose request is not its model's, and writes to a name carrying both requests, never a committed compare file's name.",
+    "A run directory is claimed by the mkdir that creates it, retried on EEXIST, so concurrent score processes each get their own and none fails.",
+    "run.json records world relative to the repository root, and no new run.json carries an absolute path; committed runs are left as they are, and #8 closes with this work order.",
+    "A score with no model named lands on the default's named path; no score or compare writes any file under corpus/goals, and C9 still reads the committed calibration.score.json.",
+    "GLM (no --model) and Haiku are each scored once per set on byte-identical copies of the four goal files under corpus/experiments/glm-default/ and compared there, a test pins each copy's sha256 to its original, an unanswered target halts for a ruling, and spend past $0.50 stops for the orchestrator.",
+    "The prompts, the parse and the one identical retry are unchanged; the harness still imports nothing from the engine or the server."
+  ],
+  "criteria": [
+    {
+      "id": "G1",
+      "given": "a hosted bench in a real browser, a Jev stand-in and a chat completions stand-in that keeps every request body",
+      "when": "tests/player.test.ts runs the run command as the operator does, once with no --model, once with --model anthropic/claude-haiku-5.5 and once with --model openai/gpt-test (a model the request table does not list)",
+      "then": "the run with no --model fails if any target or words body differs from arm F's: it posts model z-ai/glm-5.3-flash with exactly {model, messages, response_format: {type: json_object}, provider: {order: [\"z-ai\"], allow_fallbacks: false}, usage: {include: true}} and no other key, and records wordsModel z-ai/glm-5.3-flash and request json-object-z-ai-retry. The Haiku run's bodies, as JSON text, equal today's json-schema-retry bodies (response_format json_schema strict with name target or words and wireSchema of the schema, provider {require_parameters: true}, usage include, keys in today's order), and it records request json-schema-retry. The unlisted model gets the json-schema-retry body and name. Each request name is asserted beside its body",
+      "mutations": [
+        {
+          "id": "G1-M1",
+          "change": "add require_parameters: true to the GLM body in harness/src/words.ts"
+        },
+        {
+          "id": "G1-M2",
+          "change": "swap the order of provider and usage in the json-schema-retry body"
+        },
+        {
+          "id": "G1-M3",
+          "change": "set DEFAULT_MODEL back to anthropic/claude-haiku-5.5"
+        },
+        {
+          "id": "G1-M4",
+          "change": "make requestFor() return JSON_OBJECT_Z_AI for every model"
+        }
+      ]
+    },
+    {
+      "id": "G2",
+      "given": "a chat completions stand-in whose target answer body carries provider \"Z.AI\" and whose words answer body carries no provider, and a Jev stand-in",
+      "when": "tests/player.test.ts runs the run command and reads run.json",
+      "then": "run.json is wrong if a model call lacks a provider key or a Jev call has one: the target call records provider \"Z.AI\", the words call records provider null, and no Jev call has a provider key; a refused attempt and its retry each record their own body's provider",
+      "mutations": [
+        {
+          "id": "G2-M1",
+          "change": "leave provider out of the Call recordAttempts() records in harness/src/run.ts"
+        },
+        {
+          "id": "G2-M2",
+          "change": "read provider from body.model instead of body.provider in attempt()"
+        }
+      ]
+    },
+    {
+      "id": "G3",
+      "given": "a temp goal set named named of two goals, a pre-written named.score.json holding known bytes, model stand-ins reporting providers, and a Jev stand-in",
+      "when": "tests/score.test.ts runs the score command with no --model, then with --model anthropic/claude-haiku-5.5",
+      "then": "the scores are wrong if named.score.json changes by a byte: the no-model score writes named.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json with model z-ai/glm-5.3-flash and request json-object-z-ai-retry, scorePath(goals, \"named\", undefined) returns that path, and the Haiku score writes named.anthropic_claude-haiku-5.5.json-schema-retry.score.json; each goal entry's providers counts its run's model calls per provider in first-seen order and the file's providers sums them",
+      "mutations": [
+        {
+          "id": "G3-M1",
+          "change": "make scorePath() return <set>.score.json when model is undefined"
+        },
+        {
+          "id": "G3-M2",
+          "change": "count Jev calls into a goal's providers in harness/src/score.ts"
+        }
+      ]
+    },
+    {
+      "id": "G4",
+      "given": "in a temp directory, score files written by this code for z-ai/glm-5.3-flash under json-object-z-ai-retry and anthropic/claude-haiku-5.5 under json-schema-retry with their run.json files, one goal Haiku held and GLM lost whose GLM score entry's providers differ from what its run.json's calls would count, a pre-existing <candidate>.vs.<baseline>.json-schema-retry.compare.json and .md holding known bytes, a Haiku score file made before providers existed; and in a second directory a GLM score file at its path whose request is json-schema-retry",
+      "when": "tests/compare.test.ts runs the compare command over each directory",
+      "then": "over the first it writes z-ai_glm-5.3-flash.json-object-z-ai-retry.vs.anthropic_claude-haiku-5.5.json-schema-retry.compare.json and .md, leaves the pre-existing compare files byte-identical, records requests {baseline: json-schema-retry, candidate: json-object-z-ai-retry}, renders a providers column per set (not recorded for the pre-provider score), and shows the lost goal's providers as its score entries record them. Over the second it exits 1 naming the score file, the request found and the one expected, writing nothing",
+      "mutations": [
+        {
+          "id": "G4-M1",
+          "change": "check both sides in readScore() against the candidate's request"
+        },
+        {
+          "id": "G4-M2",
+          "change": "count a moved goal's providers from its run.json in compare.ts instead of taking its score entry's"
+        },
+        {
+          "id": "G4-M3",
+          "change": "write the report to <candidate>.vs.<baseline>.<candidate request>.compare"
+        }
+      ]
+    },
+    {
+      "id": "G5",
+      "given": "one empty corpus directory and a fixed startedAt",
+      "when": "a test starts several child bun processes at once, each calling claimRunDir() from harness/src/run.ts many times for that corpus and startedAt",
+      "then": "the claim is broken if any process throws or two claims return one directory: every process exits 0, every returned runDir exists, and the number of distinct directories equals the number of claims",
+      "mutations": [
+        {
+          "id": "G5-M1",
+          "change": "restore the existsSync check before a separate mkdirSync in claimRunDir()"
+        },
+        {
+          "id": "G5-M2",
+          "change": "take any mkdir error as already claimed instead of only code EEXIST: a test that claimRunDir rethrows an error other than EEXIST goes red"
+        }
+      ]
+    },
+    {
+      "id": "G6",
+      "given": "a run of the run command over the default world with the stand-ins, from the checkout",
+      "when": "tests/player.test.ts reads its run.json",
+      "then": "run.json leaks a path if any string value anywhere in it is one path.isAbsolute accepts: parameters.world is \"world\" and no string value in the record is absolute",
+      "mutations": [
+        {
+          "id": "G6-M1",
+          "change": "record world as options.worldDir in parametersOf() in harness/src/run.ts"
+        }
+      ]
+    },
+    {
+      "id": "G7",
+      "given": "the committed copies corpus/experiments/glm-default/{calibration,blind-1,blind-2-spent,blind-2}.json",
+      "when": "the gate's tests run",
+      "then": "a copy has drifted if its sha256 differs from its corpus/goals original: a test asserts each of the four copies' sha256 equals the original's",
+      "mutations": [
+        {
+          "id": "G7-M1",
+          "change": "change one byte of corpus/experiments/glm-default/blind-1.json"
+        }
+      ]
+    },
+    {
+      "id": "G8",
+      "given": "the job's branch after the live comparison is committed",
+      "when": "git diff main -- corpus/goals and the gate's tests run",
+      "then": "a committed record was written over if the diff is not empty: git diff main -- corpus/goals prints nothing, C9 (tests/rule.test.ts) passes reading corpus/goals/calibration.score.json unchanged, and the harness boundary test passes, the harness importing nothing from the engine or the server"
+    },
+    {
+      "id": "G9",
+      "given": "the built code in the job's worktree, the real OpenRouter and Jev endpoints, the registered thresholds, and the four copies in corpus/experiments/glm-default",
+      "when": "the builder runs bun run score --goals corpus/experiments/glm-default/calibration.json --sweep --tick-minutes 10 with no --model, the same for blind-1, blind-2-spent and blind-2 without --sweep, then the four with --model anthropic/claude-haiku-5.5, then bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals with the four copies",
+      "then": "the comparison failed if any target is unanswered (that halts to the orchestrator and is never counted or re-run without its ruling) or the summed costUsd of the eight scores passes 0.50 USD (that stops for the orchestrator): eight score files and the two compare files are written in corpus/experiments/glm-default, 94 runs land in corpus/runs, every GLM run records wordsModel z-ai/glm-5.3-flash and request json-object-z-ai-retry with every model call's provider Z.AI, every Haiku run records request json-schema-retry with a provider on every model call, every run's parameters.world is world, and the lane result reports each model's reached, retries, providers and cost per set, and the losses and gains"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "G9",
+      "when": "after merge, on main, with no endpoint called: bun run compare --baseline anthropic/claude-haiku-5.5 --candidate z-ai/glm-5.3-flash --goals corpus/experiments/glm-default/calibration.json --goals corpus/experiments/glm-default/blind-1.json --goals corpus/experiments/glm-default/blind-2-spent.json --goals corpus/experiments/glm-default/blind-2.json",
+      "then": "it exits 0 and rewrites the two compare files in corpus/experiments/glm-default with git diff showing no change to either, and corpus/goals is untouched",
+      "by": "driver"
+    }
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "allow_fallbacks false means a Z.AI outage or refusal stops every default run with a status refusal instead of routing GLM to another provider.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "corpus/experiments/glm-request/F/calls.jsonl, arm F's model calls pinned to Z.AI with no fallback, those not answered 200",
+        "count": 0,
+        "total": 191
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Z.AI has no structured_outputs, so GLM's request asks for any JSON object and relies on the prompt for the shape, with zod and the one retry as the only check of it.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "corpus/experiments/glm-request/analysis.json, arm F's runs lost to a schema failure",
+        "count": 0,
+        "total": 141
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The plain <set>.score.json files are never written again, so the calibration record C9 reads can no longer be refreshed by a model-less score; a new calibration (#6) must name its own writer.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "git ls-files corpus/goals/*.score.json, the committed plain score files",
+        "count": 6,
+        "total": 22
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The new compare cannot regenerate the committed json-schema-retry or pre-request compare reports, whose names carry one request or none; they stay committed as they are.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "git ls-files corpus/goals/*.compare.*, the committed compare files",
+        "count": 4,
+        "total": 4
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Score files made before providers were recorded show `not recorded` in the compare's providers column.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "git ls-files corpus/goals/*.score.json, committed score files without providers",
+        "count": 22,
+        "total": 22
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A world outside the repository is recorded as a relative path climbing out of it, which names directories above the checkout.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "corpus/runs/*/run.json, committed runs whose world is not the world folder at a checkout's root",
+        "count": 0,
+        "total": 976
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The experiment folder holds copies of the four goal files, kept equal to corpus/goals only by the sha256 test.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "The four copies are pinned to their corpus/goals originals by a sha256 test the gate runs, so a drifted copy cannot pass the gate and never reaches a score."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The request table is keyed by exact model id, so another GLM id, a later version included, is asked by json-schema-retry until it is listed.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/glm-default/shape/sacrifice-freq.sh > docs/work/glm-default/shape/sacrifice-freq.txt",
+        "records": "corpus/runs/*/run.json, committed runs asked of a z-ai model other than z-ai/glm-5.3-flash",
+        "count": 0,
+        "total": 976
+      }
+    }
+  ]
+}
