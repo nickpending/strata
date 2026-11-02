@@ -1,0 +1,43 @@
+$ git rev-parse HEAD
+6920d6a5e4d269baa33ac6501da0986243b43a6c
+$ bun run driver --seed 7 --actions 400 --tick-minutes 10
+$ bun run src/driver/main.ts --seed "7" --actions "400" --tick-minutes "10"
+{
+  "ok": true,
+  "seed": 7,
+  "actions": 400,
+  "steps": 80,
+  "tally": {
+    "recorded": {
+      "speech.say-to": 21,
+      "time.tick": 80,
+      "physical.depart": 29,
+      "speech.whisper": 16,
+      "speech.say": 40,
+      "physical.arrive": 29,
+      "exchange.offer": 19,
+      "exchange.lapse": 14,
+      "exchange.refuse": 3,
+      "exchange.accept": 2
+    },
+    "refused": {
+      "not-offered-to-you": 106,
+      "in-transit": 36,
+      "self-target": 16,
+      "no-such-exit": 7,
+      "not-holding": 23,
+      "not-in-room": 18,
+      "already-offered": 2,
+      "giver-absent": 5
+    },
+    "invalid": 57
+  },
+  "checks": {
+    "replay": 480,
+    "knowledge": 480,
+    "truth": 480,
+    "present": 480,
+    "invariants": 480
+  }
+}
+exit: 0
