@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { dueEntries, fired } from "../src/engine/clock.ts";
 import { boot, type Engine } from "../src/engine/engine.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
@@ -62,6 +63,39 @@ describe("C8: entries due at the same tick fire in the order they were scheduled
     if (firstTick === undefined) throw new Error("first step recorded nothing");
     expect(seqs).toEqual([firstTick.seq + 1, firstTick.seq + 2, firstTick.seq + 3]);
     expect(engine.snapshot().schedule).toEqual([]);
+  });
+
+  test("fired makes each due entry its draft: an arrive's present from the snapshot it is given, a lapse as scheduled", () => {
+    const engine = fresh();
+    const depart = recorded(engine, { actor: "mux", verb: "depart", exit: "west" });
+    const offer = recorded(engine, {
+      actor: "rogue",
+      verb: "offer",
+      target: "glitch",
+      item: "data-shard",
+    });
+    const snapshot = engine.snapshot();
+    const [arrive, lapse] = dueEntries(snapshot.schedule, 2);
+    if (arrive === undefined || lapse === undefined) throw new Error("nothing due at tick 2");
+    expect(fired(arrive, 2, snapshot)).toEqual({
+      subkind: "physical.arrive",
+      tick: 2,
+      cause: depart.id,
+      actor: "mux",
+      targets: [],
+      place: "chrome-cassette",
+      payload: { from: "back-room", to: "chrome-cassette", present: ["glitch", "rogue"] },
+    });
+    expect(fired(lapse, 2, snapshot)).toEqual({
+      subkind: "exchange.lapse",
+      tick: 2,
+      cause: offer.id,
+      actor: "rogue",
+      targets: ["glitch"],
+      place: "chrome-cassette",
+      payload: { item: "data-shard", from: "rogue", to: "glitch" },
+    });
+    expect(dueEntries(snapshot.schedule, 1)).toEqual([]);
   });
 
   test("game time is the tick times the tick length", () => {

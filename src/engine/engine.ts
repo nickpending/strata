@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { dueDrafts, tickDraft } from "./clock.ts";
+import { dueEntries, fired, tickDraft } from "./clock.ts";
 import { type DefinitionRefusal, loadWorld, type WorldDefs } from "./definitions.ts";
 import {
   type Copy,
@@ -10,6 +10,13 @@ import {
   registry,
   type WorldEvent,
 } from "./events.ts";
+import {
+  initialKnown,
+  type KnowledgeView,
+  type KnownRow,
+  knowledgeView,
+  learned,
+} from "./knowledge.ts";
 import { type Pending, pendingOf } from "./pending.ts";
 import { actionSchema, type Refusal, rule } from "./rules.ts";
 import { buildSnapshot, type Snapshot } from "./snapshot.ts";
@@ -112,6 +119,28 @@ export class Engine {
     return this.store.received(thing);
   }
 
+  /** Every known row `person` holds, in the order they were appended. */
+  known(person: string): KnownRow[] {
+    return this.store.known(person).map(({ seq: _seq, subkind: _subkind, ...row }) => row);
+  }
+
+  /**
+   * What `person` knows: its own location and holdings from their parts, the people it knows, its
+   * latest fact per subject with the world's current value beside it, and its every row.
+   */
+  knowledge(person: string): KnowledgeView {
+    const def = this.defs.people.find((p) => p.id === person);
+    if (def === undefined) throw new Error(`"${person}" names no person`);
+    return knowledgeView({
+      person,
+      name: def.name,
+      snapshot: this.snapshot(),
+      rows: this.store.known(person),
+      latest: this.store.latestKnown(person),
+      copies: this.store.received(person),
+    });
+  }
+
   isPerson(id: string): boolean {
     return this.defs.people.some((person) => person.id === id);
   }
@@ -139,8 +168,9 @@ export class Engine {
     return this.store.transaction(() => {
       const tick = this.snapshot().tick + 1;
       const recorded = [this.record(tickDraft(tick))];
-      for (const draft of dueDrafts(this.snapshot().schedule, tick)) {
-        recorded.push(this.record(draft));
+      // Each entry fires from the world as it stands once the entries before it are recorded.
+      for (const entry of dueEntries(this.snapshot().schedule, tick)) {
+        recorded.push(this.record(fired(entry, tick, this.snapshot())));
       }
       return recorded;
     });
@@ -162,7 +192,11 @@ export class Engine {
       if (next !== row.state) this.store.writeState({ ...row, state: next });
     }
     for (const witness of witnessesOf(event, this.snapshot())) {
-      this.store.witness(event.id, witness, redact(event, witness));
+      const copy = redact(event, witness);
+      this.store.witness(event.id, witness, copy);
+      for (const fact of learned(copy, witness)) {
+        this.store.know({ ...fact, witness, tick: event.tick, event: event.id });
+      }
     }
     return event;
   }
@@ -186,6 +220,6 @@ export function boot(worldDir: string, options: BootOptions): BootResult {
   }
   const loaded = loadWorld(worldDir);
   if (!loaded.ok) return { ok: false, refusal: loaded.refusal };
-  const store = Store.create(options.dbPath, initialRows(loaded.defs));
+  const store = Store.create(options.dbPath, initialRows(loaded.defs), initialKnown(loaded.defs));
   return { ok: true, engine: new Engine(store, loaded.defs, tickMinutes, options.dbPath) };
 }

@@ -5,7 +5,7 @@
  * every person through the rules and the reducers on copies of the rows, keeping each action after
  * which the entry is gone. Nothing here names a verb, a subkind or a part.
  */
-import { dueDrafts, type Scheduled } from "./clock.ts";
+import { fired, type Scheduled } from "./clock.ts";
 import type { WorldDefs } from "./definitions.ts";
 import { eventOf } from "./engine.ts";
 import type { EventDraft, Subkind, WorldEvent } from "./events.ts";
@@ -103,13 +103,13 @@ export function pendingOf(
       throw new Error(`the schedule entry's cause ${entry.cause} names no event`);
     }
     const { id, subkind, actor, targets, payload } = opening;
-    const fired = applied(rows, dueDrafts([entry], entry.at), lastSeq);
+    const atDue = applied(rows, [fired(entry, entry.at, snapshot)], lastSeq);
     return {
       opened: { id, subkind, actor, targets, payload } as Opened,
       due: {
         at: entry.at,
         fires: entry.subkind,
-        after: afterOf(buildSnapshot(fired, defs, tickMinutes)),
+        after: afterOf(buildSnapshot(atDue, defs, tickMinutes)),
       },
       resolutions: tried
         .filter(({ reached }) => !stands(entry, reached.schedule))

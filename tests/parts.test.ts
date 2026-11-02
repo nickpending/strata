@@ -67,7 +67,7 @@ function sample(subkind: Subkind, seq: number): WorldEvent {
       subkind: "physical.arrive",
       targets: [],
       cause: "e1",
-      payload: { from: "chrome-cassette", to: "back-room" },
+      payload: { from: "chrome-cassette", to: "back-room", present: ["mux"] },
     },
     "speech.say": { ...envelope, subkind: "speech.say", targets: [], payload: { words: "hey" } },
     "speech.say-to": { ...envelope, subkind: "speech.say-to", payload: { words: "hey" } },

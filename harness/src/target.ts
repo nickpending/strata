@@ -136,6 +136,15 @@ function namesOf(endState: EndState, offered: Vocabulary): Named[] {
       ["room", endState.location.room, offered.rooms],
     ];
   }
+  if ("knows" in endState) {
+    const subject = endState.knows;
+    return [
+      ["person", subject.person, offered.people],
+      "location" in subject
+        ? ["person", subject.location, offered.people]
+        : ["item", subject.holder, offered.items],
+    ];
+  }
   return [
     ["person", endState.said.person, offered.people],
     ["speech kind", endState.said.subkind, offered.speech],
@@ -203,9 +212,12 @@ function prompt(
     "where the end state is one of",
     '{"holder": {"item": "<item>", "person": "<person>"}} (the person holds the item),',
     '{"location": {"person": "<person>", "room": "<room>"}} (the person is in the room),',
-    '{"said": {"person": "<person>", "subkind": "<speech kind>"}} (the person has said something of that kind);',
+    '{"said": {"person": "<person>", "subkind": "<speech kind>"}} (the person has said something of that kind),',
+    '{"knows": {"person": "<person>", "location": "<person>"}} (the first person knows where the second is now),',
+    '{"knows": {"person": "<person>", "holder": "<item>"}} (the person knows who holds the item now);',
     'and each action is {"actor": "<person>", "verb": "<verb>", "fields": {"target": "<person>", "item": "<item>", "exit": "<exit>"}}, with only the fields its verb takes (words are written for you; leave them out).',
     "List every action the end state needs, in order, by whoever must take it: an item changes hands when its holder offers it to someone in the same room and that person accepts it; a person must be in the same room as anyone they offer to or speak to, and walks there first by departing through an exit of the room they are in. Leave out stepping the clock: it is stepped for you while someone walks.",
+    "A person learns where someone is only while in the same room when that someone arrives, leaves, speaks, is spoken to, offers or accepts there, and who holds an item when it is offered, accepted or refused in their room; arriving somewhere teaches the arriver where everyone already there is, and what someone learned goes stale when it changes out of their sight.",
     'Or answer {"kind": "no-such-action", "reason": "<why no end state above is what the instruction wants>"} when none of them carries the instruction out.',
     "Use only the names listed above.",
   ].join("\n");

@@ -18,6 +18,7 @@ const api = {
   snapshot: () => request("GET", "/api/snapshot"),
   events: (since) => request("GET", `/api/events?since=${since}`),
   received: (thing) => request("GET", `/api/received/${encodeURIComponent(thing)}`),
+  knowledge: (thing) => request("GET", `/api/knowledge/${encodeURIComponent(thing)}`),
   verbs: () => request("GET", "/api/verbs"),
   act: (action) => request("POST", "/api/actions", action),
   step: () => request("POST", "/api/step"),

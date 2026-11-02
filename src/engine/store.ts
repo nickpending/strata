@@ -1,6 +1,7 @@
 import { Database } from "bun:sqlite";
 import { renameSync, rmSync } from "node:fs";
 import type { Copy, WorldEvent } from "./events.ts";
+import type { KnownRow, StoredKnown } from "./knowledge.ts";
 import type { PartName, StateRow } from "./things.ts";
 
 const SCHEMA = `
@@ -23,7 +24,39 @@ CREATE TABLE witnessed (
   json TEXT NOT NULL,
   PRIMARY KEY (event, witness)
 );
+CREATE TABLE known (
+  seq INTEGER PRIMARY KEY,
+  witness TEXT NOT NULL,
+  kind TEXT NOT NULL,
+  thing TEXT NOT NULL,
+  json TEXT NOT NULL,
+  tick INTEGER NOT NULL,
+  event TEXT,
+  FOREIGN KEY (event, witness) REFERENCES witnessed (event, witness)
+);
+CREATE VIEW known_latest AS
+  SELECT * FROM known k
+  WHERE k.seq = (
+    SELECT max(seq) FROM known
+    WHERE witness = k.witness AND kind = k.kind AND thing = k.thing
+  );
 `;
+
+type KnownSql = {
+  seq: number;
+  witness: string;
+  kind: string;
+  thing: string;
+  json: string;
+  tick: number;
+  event: string | null;
+  subkind: string | null;
+};
+
+function knownOf(row: KnownSql): StoredKnown {
+  const { json, ...rest } = row;
+  return { ...rest, value: JSON.parse(json) } as StoredKnown;
+}
 
 /** Delete the database file at `path` and its journal files, if any. */
 function removeDatabase(path: string): void {
@@ -31,16 +64,20 @@ function removeDatabase(path: string): void {
     rmSync(`${path}${suffix}`, { force: true });
 }
 
-/** The database file of one world: the event log, the live state rows and the witnessed copies. */
+/**
+ * The database file of one world: the event log, the live state rows, the witnessed copies and the
+ * known rows beside them. Known rows are only ever inserted.
+ */
 export class Store {
   private constructor(private readonly db: Database) {}
 
   /**
    * Create the database at `path` afresh: a world is never resumed, every boot replaces the
    * previous run. The new database is built beside `path` and renamed over it only once it is
-   * complete, so a create that fails leaves whatever was at `path` untouched.
+   * complete, so a create that fails leaves whatever was at `path` untouched. `known` is the
+   * authored rows, written in the same transaction as the state rows.
    */
-  static create(path: string, rows: StateRow[]): Store {
+  static create(path: string, rows: StateRow[], known: KnownRow[]): Store {
     const next = `${path}.next`;
     removeDatabase(next);
     try {
@@ -49,6 +86,7 @@ export class Store {
         building.db.exec(SCHEMA);
         building.transaction(() => {
           for (const row of rows) building.writeState(row);
+          for (const row of known) building.know(row);
         });
       } finally {
         building.close();
@@ -125,6 +163,35 @@ export class Store {
       )
       .all(witness)
       .map((row) => JSON.parse(row.json) as Copy);
+  }
+
+  /** Append one known row. A taught row must stand beside its witness's copy of its event. */
+  know(row: KnownRow): void {
+    this.db
+      .query(
+        "INSERT INTO known (witness, kind, thing, json, tick, event) VALUES (?, ?, ?, ?, ?, ?)",
+      )
+      .run(row.witness, row.kind, row.thing, JSON.stringify(row.value), row.tick, row.event);
+  }
+
+  /** Every known row `witness` holds, in seq order, with its teaching event's subkind. */
+  known(witness: string): StoredKnown[] {
+    return this.knownFrom("known", witness);
+  }
+
+  /** The latest known row per (kind, thing) that `witness` holds, in seq order. */
+  latestKnown(witness: string): StoredKnown[] {
+    return this.knownFrom("known_latest", witness);
+  }
+
+  private knownFrom(table: "known" | "known_latest", witness: string): StoredKnown[] {
+    return this.db
+      .query<KnownSql, [string]>(
+        `SELECT k.seq, k.witness, k.kind, k.thing, k.json, k.tick, k.event, e.subkind FROM ${table} k ` +
+          "LEFT JOIN events e ON e.id = k.event WHERE k.witness = ? ORDER BY k.seq",
+      )
+      .all(witness)
+      .map(knownOf);
   }
 
   close(): void {

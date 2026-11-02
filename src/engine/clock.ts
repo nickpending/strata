@@ -1,11 +1,18 @@
 import { CLOCK, type EventDraft, OPERATOR, type PayloadOf } from "./events.ts";
+import type { Snapshot } from "./snapshot.ts";
 import type { Part } from "./things.ts";
 
 type ScheduledBase = { at: number; cause: string; actor: string; targets: string[]; place: string };
 
-/** An event the clock will fire at tick `at`, caused by the event whose id is `cause`. */
+/**
+ * An event the clock will fire at tick `at`, caused by the event whose id is `cause`. An arrive's
+ * entry carries no `present`: who is in the room is read when the clock fires it (fired).
+ */
 export type Scheduled =
-  | (ScheduledBase & { subkind: "physical.arrive"; payload: PayloadOf<"physical.arrive"> })
+  | (ScheduledBase & {
+      subkind: "physical.arrive";
+      payload: Omit<PayloadOf<"physical.arrive">, "present">;
+    })
   | (ScheduledBase & { subkind: "exchange.lapse"; payload: PayloadOf<"exchange.lapse"> });
 
 /** The clock's pending entries, in insertion order. */
@@ -90,9 +97,21 @@ export function tickDraft(tick: number): EventDraft {
   };
 }
 
-/** The events due at `tick`, in the order they were scheduled, each caused by its scheduling event. */
-export function dueDrafts(schedule: Schedule, tick: number): EventDraft[] {
-  return schedule
-    .filter((entry) => entry.at <= tick)
-    .map(({ at: _at, ...entry }) => ({ ...entry, tick }) as EventDraft);
+/** The entries due at `tick`, in the order they were scheduled. */
+export function dueEntries(schedule: Schedule, tick: number): Scheduled[] {
+  return schedule.filter((entry) => entry.at <= tick);
+}
+
+/**
+ * The one place a due entry becomes the event the clock records at `tick`, caused by its scheduling
+ * event. `snapshot` is the world just before it is recorded: an arrive's `present` is everyone then
+ * in the room it lands in, sorted, the mover not among them.
+ */
+export function fired(entry: Scheduled, tick: number, snapshot: Snapshot): EventDraft {
+  const { at: _at, ...draft } = entry;
+  if (draft.subkind === "exchange.lapse") return { ...draft, tick };
+  const present = (snapshot.views.presence[draft.place] ?? [])
+    .filter((person) => person !== draft.actor)
+    .sort();
+  return { ...draft, tick, payload: { ...draft.payload, present } };
 }

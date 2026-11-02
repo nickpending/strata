@@ -6,10 +6,12 @@
  */
 import { existsSync, mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import type { EndState } from "harness/goal.ts";
+import { type Control, readPage } from "harness/page.ts";
 import { T_ACT, T_DONE } from "harness/rule.ts";
-import type { LoopRecord, RunRecord } from "harness/run.ts";
+import type { DriveResult, LoopRecord, RunRecord } from "harness/run.ts";
+import type { Browser } from "playwright";
 import { hostBench } from "../src/adapter/host.ts";
 
 export const ROOT = join(import.meta.dir, "..");
@@ -303,6 +305,79 @@ export function stringsOf(value: unknown): string[] {
 /** The model's target for an end state. */
 export function goal(expect: EndState, needsWords = false) {
   return { kind: "goal" as const, expect, needsWords };
+}
+
+/** The end state of Mux saying something, and the words the stand-ins write for it. */
+export const MUX_SAYS = { said: { person: "mux", subkind: "speech.say" } };
+export const LINE = "My refurb deck runs on hope and duct tape.";
+
+/** One hold call: the action, what had been printed and appended, and the page's controls. */
+export type HoldCall = {
+  action: string;
+  printed: string;
+  loops: LoopRecord[];
+  controls: Control[];
+};
+
+/**
+ * The hold before the browser closes: how many actions were held before it, what had been
+ * printed, the run files on disk, and whether the page was still open once it had waited.
+ */
+export type CloseCall = { after: number; printed: string; files: string[]; open: boolean };
+
+/**
+ * Drive toward Mux's say in this process on `browser`, with a hold that records each call and
+ * answers it with `answer`.
+ */
+export async function heldRun(
+  browser: Browser,
+  headed: boolean,
+  answer: (call: number) => "go" | "end",
+  j: { url: string },
+  answers: unknown[] = [goal(MUX_SAYS, true), { words: LINE }],
+): Promise<{ result: DriveResult; calls: HoldCall[]; closes: CloseCall[]; printed: string[] }> {
+  const { drive } = await import("harness/run.ts");
+  const corpus = join(mkdtempSync(join(tmpdir(), "strata-harness-test-")), "runs");
+  temps.push(dirname(corpus));
+  const printed: string[] = [];
+  const calls: HoldCall[] = [];
+  const closes: CloseCall[] = [];
+  const result = await drive({
+    instruction: "have Mux say something funny",
+    worldDir: join(ROOT, "world"),
+    tickMinutes: 10,
+    headed,
+    maxLoops: 24,
+    corpusDir: corpus,
+    jev: { endpoint: j.url },
+    model: { endpoint: model(...answers).url },
+    host: hostBench,
+    browser,
+    print: (text) => printed.push(text),
+    hold: async (held) => {
+      const runDir = join(corpus, readdirSync(corpus)[0] ?? "");
+      if (held.kind === "close") {
+        const close = { after: calls.length, printed: printed.join("\n") };
+        const files = RUN_FILES.filter((file) => existsSync(join(runDir, file)));
+        // The operator takes a while to press Enter: the page must still be open after it.
+        await Bun.sleep(300);
+        const page = browser.contexts()[0]?.pages()[0];
+        const open = page !== undefined && (await readPage(page)).controls.length > 0;
+        closes.push({ ...close, files, open });
+        return "go";
+      }
+      const page = browser.contexts()[0]?.pages()[0];
+      if (page === undefined) throw new Error("the run has no page open");
+      calls.push({
+        action: held.action,
+        printed: printed.join("\n"),
+        loops: lines<LoopRecord>(join(runDir, "loops.jsonl")),
+        controls: (await readPage(page)).controls,
+      });
+      return answer(calls.length);
+    },
+  });
+  return { result, calls, closes, printed };
 }
 
 /**

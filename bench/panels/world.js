@@ -1,9 +1,10 @@
 /**
  * The world panel: rooms with who is present, what they hold and their ties; who is in transit;
- * the items with any pending offer; the clock and its schedule; each pending state with who closes
- * it and what the clock fires; the act form built from the served verbs; step and reset; the
- * history; and one person's received copies.
+ * the items with any pending offer; what each person knows; the clock and its schedule; each
+ * pending state with who closes it and what the clock fires; the act form built from the served
+ * verbs; step and reset; the history; and one person's received copies.
  */
+import { knowledgeSection } from "./knowledge.js";
 
 function h(tag, attrs, ...children) {
   const el = document.createElement(tag);
@@ -41,6 +42,8 @@ export async function mount(root, api) {
     verbs: (await api.verbs()).body.verbs,
     viewer: null,
     received: [],
+    /** Every person's knowledge body, in the snapshot's person order. */
+    knowledge: [],
     form: { actor: null, verb: null, fields: {} },
     /** A rule's refusal of the last action (422): `{ code, message }`, code from the closed set. */
     refusal: null,
@@ -61,6 +64,9 @@ export async function mount(root, api) {
     state.form.actor ??= people[0] ?? null;
     state.form.verb ??= state.verbs[0]?.verb ?? null;
     state.received = state.viewer === null ? [] : (await api.received(state.viewer)).body.copies;
+    state.knowledge = await Promise.all(
+      people.map(async (person) => (await api.knowledge(person)).body),
+    );
     render();
   }
 
@@ -374,6 +380,7 @@ export async function mount(root, api) {
       roomsSection(),
       transitSection(),
       itemsSection(),
+      knowledgeSection(h, state.knowledge),
       receivedSection(),
       historySection(),
     );

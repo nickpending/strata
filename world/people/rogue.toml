@@ -1,6 +1,7 @@
 id = "rogue"
 name = "Rogue"
 location = "chrome-cassette"
+places = ["back-room", "chrome-cassette"]
 
 [[ties]]
 target = "glitch"

@@ -2,6 +2,7 @@ import { existsSync, statSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import { type BootRefusal, boot, type Engine } from "../engine/engine.ts";
 import { type Copy, kindOf, type Subkind, subkinds, type WorldEvent } from "../engine/events.ts";
+import type { KnowledgeView } from "../engine/knowledge.ts";
 import type { Pending } from "../engine/pending.ts";
 import { verbs } from "../engine/rules.ts";
 import type { Snapshot } from "../engine/snapshot.ts";
@@ -35,6 +36,9 @@ export type EventsBody = { events: WorldEvent[] };
 
 /** The body of GET /api/received/<person>: the copies that person has received. */
 export type ReceivedBody = { thing: string; copies: Copy[] };
+
+/** The body of GET /api/knowledge/<person>: what that person knows, as Engine.knowledge() reads it. */
+export type KnowledgeBody = KnowledgeView;
 
 export type Started =
   | { ok: true; server: Bun.Server<undefined>; stop: () => void }
@@ -87,6 +91,9 @@ function decoded(segment: string): string | null {
 
 const MALFORMED_PATH = { error: "the path is not valid percent-encoding" };
 
+/** The routes that take a person's id as their last path segment. */
+const PERSON_ROUTES = ["/api/received/", "/api/knowledge/"] as const;
+
 function staticFile(path: string): Response {
   const file = resolve(BENCH_DIR, path);
   if (!file.startsWith(BENCH_DIR + sep) || !existsSync(file) || !statSync(file).isFile()) {
@@ -130,12 +137,8 @@ class Bench {
         } satisfies SubkindsBody);
       }
       if (path === "/api/events") return this.events(url.searchParams.get("since"));
-      if (path.startsWith("/api/received/")) {
-        const thing = decoded(path.slice(14));
-        if (thing === null) return json(MALFORMED_PATH, 400);
-        if (!this.engine.isPerson(thing)) return json({ error: `no person "${thing}"` }, 404);
-        return json({ thing, copies: this.engine.received(thing) } satisfies ReceivedBody);
-      }
+      const ofPerson = this.ofPerson(path);
+      if (ofPerson !== null) return ofPerson;
     }
     if (request.method === "POST") {
       if (path === "/api/actions") return this.act(request);
@@ -143,6 +146,22 @@ class Bench {
       if (path === "/api/reset") return this.reset();
     }
     return json({ error: "not found" }, 404);
+  }
+
+  /**
+   * GET /api/received/<person> and /api/knowledge/<person>: 400 on malformed percent-encoding, 404
+   * naming a name that is no person; null for any other path.
+   */
+  private ofPerson(path: string): Response | null {
+    const route = PERSON_ROUTES.find((prefix) => path.startsWith(prefix));
+    if (route === undefined) return null;
+    const person = decoded(path.slice(route.length));
+    if (person === null) return json(MALFORMED_PATH, 400);
+    if (!this.engine.isPerson(person)) return json({ error: `no person "${person}"` }, 404);
+    if (route === "/api/received/") {
+      return json({ thing: person, copies: this.engine.received(person) } satisfies ReceivedBody);
+    }
+    return json(this.engine.knowledge(person) satisfies KnowledgeBody);
   }
 
   private events(since: string | null): Response {

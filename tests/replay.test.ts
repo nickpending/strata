@@ -81,7 +81,7 @@ const log: WorldEvent[] = [
     targets: [],
     place: "back-room",
     cause: "e1",
-    payload: { from: "chrome-cassette", to: "back-room" },
+    payload: { from: "chrome-cassette", to: "back-room", present: ["mux"] },
   }),
   event(4, "exchange.offer", {
     tick: 1,

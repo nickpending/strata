@@ -4,7 +4,9 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:f
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
+import { boot } from "../src/engine/engine.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
+import type { KnowledgeView } from "../src/engine/knowledge.ts";
 import { actionSchemas, type Verb } from "../src/engine/rules.ts";
 import type { Snapshot } from "../src/engine/snapshot.ts";
 import { startServer } from "../src/server/routes.ts";
@@ -96,6 +98,11 @@ describe("C10: the bench and its API over HTTP", () => {
       { path: "/", file: "bench/index.html", type: "text/html" },
       { path: "/bench/app.js", file: "bench/app.js", type: "text/javascript" },
       { path: "/bench/panels/world.js", file: "bench/panels/world.js", type: "text/javascript" },
+      {
+        path: "/bench/panels/knowledge.js",
+        file: "bench/panels/knowledge.js",
+        type: "text/javascript",
+      },
     ];
     for (const { path, file, type } of files) {
       const response = await fetch(`${main.base}${path}`);
@@ -224,6 +231,53 @@ describe("C10: the bench and its API over HTTP", () => {
       }
     }
     await reset();
+  });
+});
+
+describe("K8: GET /api/knowledge/<person> serves Engine.knowledge()", () => {
+  test("mux's body fresh and after an act; nobody is a 404 naming it; a malformed path is a 400", async () => {
+    const served = serve(false);
+    const api = client(served);
+    const dir = mkdtempSync(join(tmpdir(), "strata-server-"));
+    temps.push(dir);
+    const booted = boot(WORLD, { tickMinutes: 10, dbPath: join(dir, "world.sqlite") });
+    if (!booted.ok) throw new Error(booted.refusal.message);
+    const engine = booted.engine;
+    stops.push(() => engine.close());
+
+    const fresh = await api.get<KnowledgeView>("/api/knowledge/mux");
+    expect(fresh).toEqual(JSON.parse(JSON.stringify(engine.knowledge("mux"))));
+    expect(Object.keys(fresh).sort()).toEqual(
+      ["facts", "history", "name", "own", "people", "person"].sort(),
+    );
+    expect(fresh.person).toBe("mux");
+
+    // Mux walks into the bar: the arrive teaches him where Glitch and Rogue are.
+    const walk = { actor: "mux", verb: "depart", exit: "west" };
+    await api.act(walk);
+    await api.step();
+    await api.step();
+    engine.act(walk);
+    engine.step();
+    engine.step();
+    const walked = await api.get<KnowledgeView>("/api/knowledge/mux");
+    expect(walked).toEqual(JSON.parse(JSON.stringify(engine.knowledge("mux"))));
+    expect(walked.facts.filter((fact) => fact.kind === "location").map((f) => f.thing)).toEqual([
+      "glitch",
+      "rogue",
+    ]);
+    for (const fact of walked.facts) {
+      expect(Object.keys(fact).sort()).toEqual(
+        ["kind", "now", "source", "stale", "subkind", "thing", "tick", "value"].sort(),
+      );
+    }
+
+    const nobody = await fetch(`${served.base}/api/knowledge/nobody`);
+    expect(nobody.status).toBe(404);
+    expect(await nobody.json()).toEqual({ error: 'no person "nobody"' });
+    const malformed = await fetch(`${served.base}/api/knowledge/%E0%A4%A`);
+    expect(malformed.status).toBe(400);
+    expect(await malformed.json()).toEqual({ error: "the path is not valid percent-encoding" });
   });
 });
 
@@ -403,6 +457,7 @@ describe("the bench page keeps refusals, invalid actions and refused resets apar
       snapshot: () => call("GET", "/api/snapshot"),
       events: (since: number) => call("GET", `/api/events?since=${since}`),
       received: (thing: string) => call("GET", `/api/received/${thing}`),
+      knowledge: (thing: string) => call("GET", `/api/knowledge/${thing}`),
       verbs: () => call("GET", "/api/verbs"),
       act: (action: unknown) => call("POST", "/api/actions", action),
       step: () => call("POST", "/api/step"),

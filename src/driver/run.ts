@@ -3,10 +3,19 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { type BootRefusal, boot, type Engine } from "../engine/engine.ts";
 import type { WorldEvent } from "../engine/events.ts";
+import type { KnownRow } from "../engine/knowledge.ts";
 import { verbs } from "../engine/rules.ts";
 import { randomAction } from "./actions.ts";
 import { check, type Violation } from "./invariants.ts";
-import { compare, type Difference, project } from "./replay.ts";
+import {
+  compare,
+  type Difference,
+  type FalseFact,
+  type KnownProjection,
+  project,
+  projectKnown,
+  type WrongPresent,
+} from "./replay.ts";
 import { seeded } from "./rng.ts";
 
 export type DriverOptions = {
@@ -26,10 +35,22 @@ export type Tally = {
   invalid: number;
 };
 
+/** The first known row, per witness in seq order, where the live store and the projection differ. */
+export type KnownDifference = {
+  witness: string;
+  /** The teaching event of the row on either side, null for an authored row or none. */
+  event: string | null;
+  live: Omit<KnownRow, "witness"> | null;
+  replayed: Omit<KnownRow, "witness"> | null;
+};
+
 /** What one failed check found, with the message naming it. */
 type Found = { message: string } & (
   | { check: "refusal"; before: number; after: number }
   | { check: "replay"; difference: Difference }
+  | { check: "knowledge"; difference: KnownDifference }
+  | { check: "truth"; falseFact: FalseFact }
+  | { check: "present"; wrong: WrongPresent }
   | { check: "invariants"; violations: Violation[] }
 );
 
@@ -45,8 +66,8 @@ export type DriverReport = {
   actions: number;
   steps: number;
   tally: Tally;
-  /** How many replay and invariant checks passed. */
-  checks: { replay: number; invariants: number };
+  /** How many state replay, knowledge replay, truth, present and invariant checks passed. */
+  checks: { replay: number; knowledge: number; truth: number; present: number; invariants: number };
   failure?: Failure;
 };
 
@@ -87,6 +108,63 @@ function replayed(engine: Engine, events: WorldEvent[]): Found | null {
     check: "replay",
     difference,
     message: `replay differs at ${thing} ${part} after ${event}: live ${JSON.stringify(live)}, replayed ${JSON.stringify(value)}`,
+  };
+}
+
+/** `row` without its witness, as a difference shows it. */
+function shown(row: KnownRow | undefined): Omit<KnownRow, "witness"> | null {
+  if (row === undefined) return null;
+  const { witness: _witness, ...rest } = row;
+  return rest;
+}
+
+/** The first row where every person's live known rows and the projection's differ, or null. */
+function knownDifference(engine: Engine, projected: KnownRow[]): KnownDifference | null {
+  for (const { id: witness } of engine.defs.people) {
+    const live = engine.known(witness);
+    const replayed = projected.filter((row) => row.witness === witness);
+    for (let i = 0; i < Math.max(live.length, replayed.length); i++) {
+      if (Bun.deepEquals(live[i], replayed[i], true)) continue;
+      const event = live[i]?.event ?? replayed[i]?.event ?? null;
+      return { witness, event, live: shown(live[i]), replayed: shown(replayed[i]) };
+    }
+  }
+  return null;
+}
+
+/** The knowledge replay: every person's live known rows against the log's projection. */
+function knownReplayed(engine: Engine, projected: KnownProjection): Found | null {
+  const difference = knownDifference(engine, projected.rows);
+  if (difference === null) return null;
+  const { witness, event, live, replayed: value } = difference;
+  return {
+    check: "knowledge",
+    difference,
+    message: `knowledge replay differs for ${witness} at ${event ?? "an authored row"}: live ${JSON.stringify(live)}, replayed ${JSON.stringify(value)}`,
+  };
+}
+
+/** The truth check: every fact held of the world right after the event that taught it. */
+function truthful(projected: KnownProjection, events: WorldEvent[]): Found | null {
+  const [falseFact] = projected.falseFacts;
+  if (falseFact === undefined) return null;
+  const { witness, event, fact, value, now } = falseFact;
+  const subkind = events.find((e) => e.id === event)?.subkind ?? "an unlogged event";
+  return {
+    check: "truth",
+    falseFact,
+    message: `${witness} learned from ${event} (${subkind}) the ${fact.kind} of ${fact.thing} as ${JSON.stringify(value)}, but the world then held ${JSON.stringify(now)}`,
+  };
+}
+
+/** The present check: every arrive's `present` is who was in its room just before it. */
+function presentRight(projected: KnownProjection): Found | null {
+  const [wrong] = projected.wrongPresent;
+  if (wrong === undefined) return null;
+  return {
+    check: "present",
+    wrong,
+    message: `the arrive ${wrong.event} carries present ${JSON.stringify(wrong.present)}, but its room held ${JSON.stringify(wrong.expected)}`,
   };
 }
 
@@ -138,7 +216,7 @@ function drive(engine: Engine, options: DriverOptions): DriverReport {
   const rng = seeded(options.seed);
   const verbList = verbs();
   const tally: Tally = { recorded: {}, refused: {}, invalid: 0 };
-  const checks = { replay: 0, invariants: 0 };
+  const checks = { replay: 0, knowledge: 0, truth: 0, present: 0, invariants: 0 };
   let steps = 0;
   const report = (failure?: Failure): DriverReport => ({
     ok: failure === undefined,
@@ -158,6 +236,16 @@ function drive(engine: Engine, options: DriverOptions): DriverReport {
     const replay = replayed(engine, events);
     if (replay !== null) return replay;
     checks.replay++;
+    const projected = projectKnown(engine.defs, engine.tickMinutes, events);
+    const known = knownReplayed(engine, projected);
+    if (known !== null) return known;
+    checks.knowledge++;
+    const untrue = truthful(projected, events);
+    if (untrue !== null) return untrue;
+    checks.truth++;
+    const misplaced = presentRight(projected);
+    if (misplaced !== null) return misplaced;
+    checks.present++;
     const broken = invariants(engine, events);
     if (broken !== null) return broken;
     checks.invariants++;

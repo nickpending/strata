@@ -1,5 +1,8 @@
 import type { WorldDefs } from "../engine/definitions.ts";
-import type { WorldEvent } from "../engine/events.ts";
+import { witnessesOf } from "../engine/engine.ts";
+import { redact, type WorldEvent } from "../engine/events.ts";
+import { type Fact, initialKnown, type KnownRow, learned, nowOf } from "../engine/knowledge.ts";
+import { buildSnapshot, type Snapshot } from "../engine/snapshot.ts";
 import { applyPart, initialRows, type StateRow } from "../engine/things.ts";
 
 /** Where live state and the replayed log part ways: the row, the last event applied, both values. */
@@ -21,6 +24,77 @@ export function project(defs: WorldDefs, events: WorldEvent[]): StateRow[] {
     rows = rows.map((row) => ({ ...row, state: applyPart(row.part, row.thing, row.state, event) }));
   }
   return rows;
+}
+
+/** A fact that did not hold of the world right after the event that taught it. */
+export type FalseFact = {
+  witness: string;
+  event: string;
+  fact: Fact;
+  value: unknown;
+  now: unknown;
+};
+
+/** An arrive whose `present` is not the people who were in its room just before it. */
+export type WrongPresent = { event: string; present: unknown; expected: string[] };
+
+/** What replaying the log reaches of every person's knowledge, and what it found wrong. */
+export type KnownProjection = {
+  /** Every known row, in the order record() appends them, without seq. */
+  rows: KnownRow[];
+  falseFacts: FalseFact[];
+  wrongPresent: WrongPresent[];
+};
+
+/**
+ * The known rows the log reaches from the booted definitions, replayed as record() writes them:
+ * from initialKnown, each event applied through every part, its witnesses read from the state
+ * after it, each witness's copy redacted and learned. Beside them, every fact whose value differs
+ * from the world's right after its teaching event, and every arrive whose `present` is not the
+ * people in its room just before it, sorted, the mover not among them. Pure, like project.
+ */
+export function projectKnown(
+  defs: WorldDefs,
+  tickMinutes: number,
+  events: WorldEvent[],
+): KnownProjection {
+  let rows = initialRows(defs);
+  const projection: KnownProjection = {
+    rows: initialKnown(defs),
+    falseFacts: [],
+    wrongPresent: [],
+  };
+  for (const event of [...events].sort((a, b) => a.seq - b.seq)) {
+    const wrong = wrongPresent(event, buildSnapshot(rows, defs, tickMinutes));
+    if (wrong !== null) projection.wrongPresent.push(wrong);
+    rows = rows.map((row) => ({ ...row, state: applyPart(row.part, row.thing, row.state, event) }));
+    taught(event, buildSnapshot(rows, defs, tickMinutes), projection);
+  }
+  return projection;
+}
+
+/** `event`, when an arrive whose `present` is not who `before` holds in its room; else null. */
+function wrongPresent(event: WorldEvent, before: Snapshot): WrongPresent | null {
+  if (event.subkind !== "physical.arrive") return null;
+  const { to, present } = event.payload;
+  const expected = (before.views.presence[to] ?? []).filter((p) => p !== event.actor).sort();
+  return Bun.deepEquals(present, expected, true) ? null : { event: event.id, present, expected };
+}
+
+/**
+ * Append to `projection` each row `event` teaches each witness, found from `after`, the state
+ * right after it, and each of those facts that `after` does not bear out.
+ */
+function taught(event: WorldEvent, after: Snapshot, projection: KnownProjection): void {
+  for (const witness of witnessesOf(event, after)) {
+    for (const fact of learned(redact(event, witness), witness)) {
+      projection.rows.push({ ...fact, witness, tick: event.tick, event: event.id });
+      const now = nowOf(fact, after);
+      if (!Bun.deepEquals(fact.value, now, true)) {
+        projection.falseFacts.push({ witness, event: event.id, fact, value: fact.value, now });
+      }
+    }
+  }
 }
 
 /** Rows keyed by `thing/part`, so neither side's order matters. */

@@ -1,5 +1,11 @@
 /** Fixtures the harness's own tests share: a page as read, and bodies a bench could serve. */
-import type { Pending, SnapshotBody, SubkindsBody, VerbsBody } from "../src/bench.ts";
+import type {
+  KnowledgeBody,
+  Pending,
+  SnapshotBody,
+  SubkindsBody,
+  VerbsBody,
+} from "../src/bench.ts";
 import type { Control, PageRead } from "../src/page.ts";
 
 function select(id: number, label: string, value: string, options: string[]): Control {
@@ -71,6 +77,46 @@ export const SNAPSHOT: SnapshotBody = {
     bo: { location: { transit: { from: "yard", to: "hall", arrivesAt: 2 } } },
   },
   pending: [],
+};
+
+/**
+ * What ada knows: where bo is, still true, and who holds the key, since changed out of her sight.
+ * She knows nothing of the lamp's holder.
+ */
+export const ADA_KNOWS: KnowledgeBody = {
+  person: "ada",
+  facts: [
+    { kind: "place", thing: "yard", stale: false },
+    { kind: "location", thing: "bo", stale: false },
+    { kind: "holder", thing: "key", stale: true },
+  ],
+};
+
+/** What bo knows: where ada is, since changed out of his sight, and who holds the lamp, still true. */
+export const BO_KNOWS: KnowledgeBody = {
+  person: "bo",
+  facts: [
+    { kind: "location", thing: "ada", stale: true },
+    { kind: "holder", thing: "lamp", stale: false },
+  ],
+};
+
+/** A goal file whose goals expect knows end states, as a set's author writes one. */
+export const KNOWS_GOALS = {
+  set: "knows",
+  author: "a fixture",
+  goals: [
+    {
+      id: "ada-finds-bo",
+      instruction: "Ada wants to know where Bo is.",
+      expect: { knows: { person: "ada", location: "bo" } },
+    },
+    {
+      id: "bo-finds-lamp",
+      instruction: "Bo should find out who has the lamp.",
+      expect: { knows: { person: "bo", holder: "lamp" } },
+    },
+  ],
 };
 
 /** Ada's offer of the lamp to bo, which bo's take closes, leaving bo the lamp. */

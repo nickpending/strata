@@ -1,0 +1,42 @@
+{
+  "runId": "2026-11-02T23-04-43-461Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-11-02T23:04:43.461Z",
+  "endedAt": "2026-11-02T23:04:53.962Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-object-z-ai-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "Jabbing the stimpak into his own arm is a use/self-injection action, but the page offers no verb for using an item, and none of the reachable end states (holding, location, speaking, knowing) captures it. The closest state, glitch holding the stimpak, is already true at the start, so no ordered actions on this page bring about what the instruction wants."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "Jabbing the stimpak into his own arm is a use/self-injection action, but the page offers no verb for using an item, and none of the reachable end states (holding, location, speaking, knowing) captures it. The closest state, glitch holding the stimpak, is already true at the start, so no ordered actions on this page bring about what the instruction wants."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0005682,
+      "provider": "Z.AI"
+    }
+  ],
+  "costUsd": 0.0005682,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

@@ -56,6 +56,15 @@ export type EventsBody = { events: Event[] };
 /** GET /api/received/<person>: the copies of events that person has received. */
 export type ReceivedBody = { thing: string; copies: unknown[] };
 
+/**
+ * GET /api/knowledge/<person>: that person's latest fact per (kind, thing), each with whether the
+ * world has since changed it out of the person's sight.
+ */
+export type KnowledgeBody = {
+  person: string;
+  facts: { kind: string; thing: string; stale: boolean }[];
+};
+
 /** GET a bench route's JSON; a non-2xx answer throws naming the route and the status. */
 export async function getJson<T>(base: string, path: string): Promise<T> {
   const response = await fetch(new URL(path, base));

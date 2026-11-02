@@ -1,6 +1,7 @@
 id = "mux"
 name = "Mux"
 location = "back-room"
+places = ["back-room", "chrome-cassette"]
 
 [[ties]]
 target = "glitch"

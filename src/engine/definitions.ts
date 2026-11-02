@@ -24,6 +24,8 @@ export const personSchema = z.strictObject({
   name: z.string().min(1),
   location: id,
   ties: z.array(tieSchema),
+  /** The rooms the person knows of from boot. */
+  places: z.array(id),
 });
 
 export const itemSchema = z.strictObject({
@@ -133,6 +135,11 @@ function checkReferences(
           "tie-target-names-person",
           `tie target "${tie.target}" names no person`,
         );
+      }
+    });
+    def.places.forEach((place, i) => {
+      if (!roomIds.has(place)) {
+        refuse(file, `places.${i}`, "place-names-room", `place "${place}" names no room`);
       }
     });
   }

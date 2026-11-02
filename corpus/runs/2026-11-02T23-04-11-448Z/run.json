@@ -1,0 +1,42 @@
+{
+  "runId": "2026-11-02T23-04-11-448Z",
+  "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+  "startedAt": "2026-11-02T23:04:11.448Z",
+  "endedAt": "2026-11-02T23:04:43.459Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-object-z-ai-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "Nothing on the page lets a person use or read an item: the only item verbs (offer, accept, refuse) merely move possession, so Glitch can never jack into the data shard, and no available end state (holding, location, saying, or knowing a location/holder) represents the shard's contacts being read out."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "Nothing on the page lets a person use or read an item: the only item verbs (offer, accept, refuse) merely move possession, so Glitch can never jack into the data shard, and no available end state (holding, location, saying, or knowing a location/holder) represents the shard's contacts being read out."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0011992,
+      "provider": "Z.AI"
+    }
+  ],
+  "costUsd": 0.0011992,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

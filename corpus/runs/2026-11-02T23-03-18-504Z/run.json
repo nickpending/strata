@@ -1,0 +1,86 @@
+{
+  "runId": "2026-11-02T23-03-18-504Z",
+  "instruction": "Have Rogue shout out to the whole bar that it's last orders.",
+  "startedAt": "2026-11-02T23:03:18.504Z",
+  "endedAt": "2026-11-02T23:03:29.696Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-object-z-ai-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "say",
+        "fields": {}
+      }
+    ]
+  },
+  "words": "Last orders, everyone—get your drinks in now!",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00038775,
+      "provider": "Z.AI"
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.00010725,
+      "provider": "Z.AI"
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000069426
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000069426
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.00006993
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000069468
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.00008064
+    }
+  ],
+  "costUsd": 0.00085389,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

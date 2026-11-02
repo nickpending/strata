@@ -74,7 +74,12 @@ describe("C5: Glitch departs east, then the clock steps once", () => {
       actor: "glitch",
       place: "back-room",
       cause: depart.id,
-      payload: { from: "chrome-cassette", to: "back-room" },
+    });
+    // Mux was already in the Back Room as Glitch arrived.
+    expect(arrive.payload).toEqual({ from: "chrome-cassette", to: "back-room", present: ["mux"] });
+    expect(engine.received("mux").find((copy) => copy.id === arrive.id)?.payload).toEqual({
+      from: "chrome-cassette",
+      to: "back-room",
     });
     expect(engine.snapshot().people.glitch?.location).toEqual({ room: "back-room" });
     expect(witnesses(engine, arrive)).toEqual(["glitch", "mux"]);

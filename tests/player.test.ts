@@ -1,19 +1,11 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, isAbsolute, join } from "node:path";
 import { described, type EndState } from "harness/goal.ts";
-import { type Control, readPage, useAccountBrowsers } from "harness/page.ts";
+import { useAccountBrowsers } from "harness/page.ts";
 import { T_ACT } from "harness/rule.ts";
-import type { DriveResult, LoopRecord, RunRecord } from "harness/run.ts";
+import type { LoopRecord, RunRecord } from "harness/run.ts";
 import { targetSchema } from "harness/target.ts";
 import { wireSchema, wordsSchema } from "harness/words.ts";
 import type { Browser } from "playwright";
@@ -21,18 +13,22 @@ import { hostBench } from "../src/adapter/host.ts";
 import { kindOf, subkinds, type WorldEvent } from "../src/engine/events.ts";
 import { verbs } from "../src/engine/rules.ts";
 import {
+  type CloseCall,
   chat,
   endpoints,
   exitsAfterClose,
   goal,
+  heldRun,
   JEV_COST,
   type JevRequest,
   jev,
   keyOf,
   kinds,
+  LINE,
   lines,
   MAIN,
   MODEL_COST,
+  MUX_SAYS,
   model,
   NO_DONE,
   offeredBy,
@@ -66,8 +62,6 @@ afterAll(() => {
   for (const dir of temps) rmSync(dir, { recursive: true, force: true });
 });
 
-const MUX_SAYS = { said: { person: "mux", subkind: "speech.say" } };
-const LINE = "My refurb deck runs on hope and duct tape.";
 const MUX_SAY_MOVES = [
   "set actor to mux",
   "set verb to say",
@@ -481,6 +475,39 @@ describe("the plan: code performs the target's typed steps, resolving and waitin
     ]);
     expect(loops[4]?.state).toContain("refused: not-holding");
     expect(ran.record.outcome).toEqual({ kind: "ceiling", loops: 6 });
+  }, 60_000);
+});
+
+describe("K11: a knows end state is reached by the bench's knowledge route, never by a claim", () => {
+  test("mux knows where glitch is: the depart, Step to the arrive, then held from /api/knowledge/mux", async () => {
+    const target = {
+      ...goal({ knows: { person: "mux", location: "glitch" } }),
+      steps: [step("glitch", "depart", { exit: "east" })],
+    };
+    const ran = await play(
+      "let Mux find out where Glitch is",
+      endpoints(model(target), preferring([])),
+    );
+    const loops = lines<LoopRecord>(join(ran.runDir, "loops.jsonl"));
+    expect(loops.map((l) => [l.decision.kind, l.action, l.held])).toEqual([
+      ["plan", "press Act", false],
+      ["wait", "press Step", false],
+      ["reached", null, true],
+    ]);
+    expect(ran.record.outcome).toEqual({ kind: "reached", loop: 3, done: NO_DONE });
+    expect(ran.record.target).toEqual(target);
+    expect(RUN_FILES.filter((file) => !existsSync(join(ran.runDir, file)))).toEqual([]);
+    const events = lines<WorldEvent>(join(ran.runDir, "events.jsonl"));
+    expect(events.map((e) => [e.id, e.subkind])).toEqual([
+      ["e1", "physical.depart"],
+      ["e2", "time.tick"],
+      ["e3", "physical.arrive"],
+    ]);
+    const received = lines<{ thing: string; copy: WorldEvent }>(join(ran.runDir, "received.jsonl"));
+    expect(received.map((r) => `${r.thing} ${r.copy.id}`).sort()).toEqual(
+      ["glitch e1", "glitch e3", "mux e3", "rogue e1"].sort(),
+    );
+    expect(ran.exitCode).toBe(0);
   }, 60_000);
 });
 
@@ -968,66 +995,6 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
     await browser?.close();
   }, 30_000);
 
-  /** One hold call: the action, what had been printed and appended, and the page's controls. */
-  type HoldCall = { action: string; printed: string; loops: LoopRecord[]; controls: Control[] };
-
-  /**
-   * The hold before the browser closes: how many actions were held before it, what had been
-   * printed, the run files on disk, and whether the page was still open once it had waited.
-   */
-  type CloseCall = { after: number; printed: string; files: string[]; open: boolean };
-
-  /** Drive toward Mux's say in this process, with a hold that records each call and answers. */
-  async function heldRun(
-    headed: boolean,
-    answer: (call: number) => "go" | "end",
-    j: { url: string },
-    answers: unknown[] = [goal(MUX_SAYS, true), { words: LINE }],
-  ): Promise<{ result: DriveResult; calls: HoldCall[]; closes: CloseCall[]; printed: string[] }> {
-    const { drive } = await import("harness/run.ts");
-    const corpus = join(mkdtempSync(join(tmpdir(), "strata-harness-test-")), "runs");
-    temps.push(dirname(corpus));
-    const printed: string[] = [];
-    const calls: HoldCall[] = [];
-    const closes: CloseCall[] = [];
-    const result = await drive({
-      instruction: "have Mux say something funny",
-      worldDir: join(ROOT, "world"),
-      tickMinutes: 10,
-      headed,
-      maxLoops: 24,
-      corpusDir: corpus,
-      jev: { endpoint: j.url },
-      model: { endpoint: model(...answers).url },
-      host: hostBench,
-      browser,
-      print: (text) => printed.push(text),
-      hold: async (held) => {
-        const runDir = join(corpus, readdirSync(corpus)[0] ?? "");
-        if (held.kind === "close") {
-          const close = { after: calls.length, printed: printed.join("\n") };
-          const files = RUN_FILES.filter((file) => existsSync(join(runDir, file)));
-          // The operator takes a while to press Enter: the page must still be open after it.
-          await Bun.sleep(300);
-          const page = browser.contexts()[0]?.pages()[0];
-          const open = page !== undefined && (await readPage(page)).controls.length > 0;
-          closes.push({ ...close, files, open });
-          return "go";
-        }
-        const page = browser.contexts()[0]?.pages()[0];
-        if (page === undefined) throw new Error("the run has no page open");
-        calls.push({
-          action: held.action,
-          printed: printed.join("\n"),
-          loops: lines<LoopRecord>(join(runDir, "loops.jsonl")),
-          controls: (await readPage(page)).controls,
-        });
-        return answer(calls.length);
-      },
-    });
-    return { result, calls, closes, printed };
-  }
-
   /** The one close hold a headed run makes: after everything, the page open until it answers. */
   function expectClosedAfterHold(closes: CloseCall[], actions: number, outcome: string): void {
     expect(closes).toEqual([
@@ -1039,7 +1006,12 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
   }
 
   test("each hold comes after its loop is printed and appended, with the page as that loop read it", async () => {
-    const { result, calls, closes } = await heldRun(true, () => "go", preferring(MUX_SAY_MOVES));
+    const { result, calls, closes } = await heldRun(
+      browser,
+      true,
+      () => "go",
+      preferring(MUX_SAY_MOVES),
+    );
     const loops = lines<LoopRecord>(join(result.runDir, "loops.jsonl"));
     expect(result.record.outcome).toEqual({ kind: "reached", loop: 5, done: NO_DONE });
     // Once per performed action, and never on the reached loop.
@@ -1071,6 +1043,7 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
 
   test("a hold answering end on its second call stops the run there, the action not performed", async () => {
     const { result, calls, closes } = await heldRun(
+      browser,
       true,
       (call) => (call === 2 ? "end" : "go"),
       preferring(["press Step"]),
@@ -1091,7 +1064,7 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
   }, 60_000);
 
   test("a headed run that ends before any loop still holds before closing the browser", async () => {
-    const { result, calls, closes } = await heldRun(true, () => "go", preferring([]), [
+    const { result, calls, closes } = await heldRun(browser, true, () => "go", preferring([]), [
       { kind: "no-such-action", reason: "no verb jokes" },
     ]);
     expect(result.record.outcome).toEqual({ kind: "no-such-action", reason: "no verb jokes" });
@@ -1100,7 +1073,12 @@ describe("H4: a headed run performs nothing until the operator steps it", () => 
   }, 60_000);
 
   test("a headless run never calls the hold", async () => {
-    const { result, calls, closes } = await heldRun(false, () => "end", preferring(MUX_SAY_MOVES));
+    const { result, calls, closes } = await heldRun(
+      browser,
+      false,
+      () => "end",
+      preferring(MUX_SAY_MOVES),
+    );
     expect(result.record.outcome).toEqual({ kind: "reached", loop: 5, done: NO_DONE });
     expect([calls, closes]).toEqual([[], []]);
   }, 60_000);

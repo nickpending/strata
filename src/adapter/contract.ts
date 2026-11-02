@@ -16,4 +16,5 @@ export type Contract = [
   Serves<Served.SnapshotBody, Harness.SnapshotBody>,
   Serves<Served.EventsBody, Harness.EventsBody>,
   Serves<Served.ReceivedBody, Harness.ReceivedBody>,
+  Serves<Served.KnowledgeBody, Harness.KnowledgeBody>,
 ];

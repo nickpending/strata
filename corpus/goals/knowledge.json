@@ -1,0 +1,36 @@
+{
+  "set": "knowledge",
+  "author": "claude-opus-5-5 (npc-knowledge shaper)",
+  "goals": [
+    {
+      "id": "mux-finds-rogue",
+      "instruction": "Mux has never laid eyes on Rogue. Get him to find out where she is.",
+      "expect": { "knows": { "person": "mux", "location": "rogue" } }
+    },
+    {
+      "id": "rogue-finds-mux",
+      "instruction": "Rogue wants to know where Mux is. Make sure she finds out.",
+      "expect": { "knows": { "person": "rogue", "location": "mux" } }
+    },
+    {
+      "id": "glitch-finds-cell",
+      "instruction": "Glitch needs a charge cell. Let him learn who has one.",
+      "expect": { "knows": { "person": "glitch", "holder": "charge-cell" } }
+    },
+    {
+      "id": "mux-sees-glitch",
+      "instruction": "Mux should know where Glitch is right now.",
+      "expect": { "knows": { "person": "mux", "location": "glitch" } }
+    },
+    {
+      "id": "mux-finds-shard",
+      "instruction": "Mux has heard of a data shard. Let him find out who holds it.",
+      "expect": { "knows": { "person": "mux", "holder": "data-shard" } }
+    },
+    {
+      "id": "rogue-reads-glitch",
+      "instruction": "Make Rogue know what Glitch is really thinking.",
+      "expect": { "outcome": "no-such-action" }
+    }
+  ]
+}

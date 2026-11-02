@@ -1,7 +1,8 @@
 import { afterAll, describe, expect, test } from "bun:test";
 import { afterOf, type Event } from "../src/bench.ts";
-import { holds, satisfies } from "../src/goal.ts";
-import { OFFER, SNAPSHOT } from "./fixtures.ts";
+import { described, type EndState, expectSchema, holds, satisfies } from "../src/goal.ts";
+import { checked, type Target, vocabulary } from "../src/target.ts";
+import { ADA_KNOWS, BO_KNOWS, KNOWS_GOALS, OFFER, PAGE, SNAPSHOT, SUBKINDS } from "./fixtures.ts";
 
 const stops: (() => void)[] = [];
 afterAll(() => {
@@ -18,8 +19,10 @@ const SUNG: Event = {
   payload: { words: "la" },
 };
 
-/** A stand-in bench answering fixture bodies on /api/snapshot and /api/events. */
+/** A stand-in bench answering fixture bodies on /api/snapshot, /api/events and /api/knowledge. */
 function bench(events: Event[]): string {
+  const knowledge: Record<string, unknown> = { "/api/knowledge/ada": ADA_KNOWS };
+  knowledge["/api/knowledge/bo"] = BO_KNOWS;
   const server = Bun.serve({
     hostname: "127.0.0.1",
     port: 0,
@@ -27,6 +30,7 @@ function bench(events: Event[]): string {
       const { pathname } = new URL(request.url);
       if (pathname === "/api/snapshot") return Response.json(SNAPSHOT);
       if (pathname === "/api/events") return Response.json({ events });
+      if (Object.hasOwn(knowledge, pathname)) return Response.json(knowledge[pathname]);
       return new Response("not found", { status: 404 });
     },
   });
@@ -80,5 +84,65 @@ describe("end states are checked by code against what the bench serves", () => {
     await expect(holds({ holder: { item: "key", person: "bo" } }, base)).rejects.toThrow(
       "GET /api/snapshot answered 503",
     );
+  });
+});
+
+describe("K10: a knows end state holds only on the knower's latest fact, and only while not stale", () => {
+  test("holds reads /api/knowledge/<person>: a fresh fact holds; a stale or absent one never does", async () => {
+    const base = bench([]);
+    expect(await holds({ knows: { person: "ada", location: "bo" } }, base)).toBe(true);
+    expect(await holds({ knows: { person: "bo", location: "ada" } }, base)).toBe(false);
+    expect(await holds({ knows: { person: "ada", location: "zed" } }, base)).toBe(false);
+    expect(await holds({ knows: { person: "bo", holder: "lamp" } }, base)).toBe(true);
+    expect(await holds({ knows: { person: "ada", holder: "key" } }, base)).toBe(false);
+    expect(await holds({ knows: { person: "ada", holder: "lamp" } }, base)).toBe(false);
+    // A fact of the other kind on the same thing is not the one asked for.
+    expect(await holds({ knows: { person: "ada", holder: "bo" } }, base)).toBe(false);
+  });
+
+  test("satisfies is false for knows, since a pending state's after carries no knowledge", () => {
+    const now = afterOf(SNAPSHOT);
+    expect(satisfies({ knows: { person: "ada", location: "bo" } }, now)).toBe(false);
+    expect(satisfies({ knows: { person: "bo", holder: "lamp" } }, now)).toBe(false);
+  });
+
+  test("described reads who knows where someone is, or who holds an item, now", () => {
+    expect(described({ knows: { person: "mux", location: "rogue" } })).toBe(
+      "mux knows where rogue is now",
+    );
+    expect(described({ knows: { person: "glitch", holder: "charge-cell" } })).toBe(
+      "glitch knows who holds charge-cell now",
+    );
+  });
+
+  test("checked turns a knows naming a person or an item the page does not show into no-such-action", () => {
+    const offered = vocabulary(PAGE, SUBKINDS);
+    const knows = (expect: EndState): Target => ({ kind: "goal", expect, steps: [] });
+    const refused = (reason: string): Target => ({ kind: "no-such-action", reason });
+    const fine = knows({ knows: { person: "ada", location: "bo" } });
+    expect(checked(fine, offered)).toEqual(fine);
+    const held = knows({ knows: { person: "bo", holder: "lamp" } });
+    expect(checked(held, offered)).toEqual(held);
+    expect(checked(knows({ knows: { person: "cy", location: "bo" } }), offered)).toEqual(
+      refused('the page shows no person "cy" (it has: ada, bo)'),
+    );
+    expect(checked(knows({ knows: { person: "ada", location: "lamp" } }), offered)).toEqual(
+      refused('the page shows no person "lamp" (it has: ada, bo)'),
+    );
+    expect(checked(knows({ knows: { person: "ada", holder: "bo" } }), offered)).toEqual(
+      refused('the page shows no item "bo" (it has: lamp, key)'),
+    );
+    expect(checked(knows({ knows: { person: "ada", holder: "torch" } }), offered)).toEqual(
+      refused('the page shows no item "torch" (it has: lamp, key)'),
+    );
+  });
+
+  test("a goal file whose expects are knows end states parses with expectSchema", () => {
+    expect(KNOWS_GOALS.goals.map((goal) => expectSchema.parse(goal.expect))).toEqual(
+      KNOWS_GOALS.goals.map((goal) => goal.expect),
+    );
+    expect(
+      expectSchema.safeParse({ knows: { person: "ada", location: "bo", holder: "lamp" } }).success,
+    ).toBe(false);
   });
 });

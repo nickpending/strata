@@ -1,8 +1,10 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { join } from "node:path";
 import { nameOf, type PageRead, readPage, unlabeled, useAccountBrowsers } from "harness/page.ts";
+import { vocabulary } from "harness/target.ts";
 import type { Browser } from "playwright";
 import { hostBench } from "../src/adapter/host.ts";
+import { loadWorld } from "../src/engine/definitions.ts";
 
 const WORLD = join(import.meta.dir, "..", "world");
 
@@ -59,6 +61,22 @@ function pendingLines(text: string): string[] {
 }
 
 const controlsOf = (got: PageRead) => got.controls.map((c) => `${c.kind} ${c.label}`);
+
+/** The Knowledge section's lines, keyed by each person's heading, as the page's text gives them. */
+function knowledgeOf(text: string): Record<string, string[]> {
+  const section = text.slice(
+    text.indexOf('heading "Knowledge"'),
+    text.indexOf('heading "Received"'),
+  );
+  // Split on each heading, kept: [before, heading, its lines, heading, its lines, ...].
+  const parts = section.split(/- heading "(What [^"]+)" \[level=3\]/);
+  const blocks: Record<string, string[]> = {};
+  for (let i = 1; i < parts.length; i += 2) {
+    const lines = [...(parts[i + 1] ?? "").matchAll(/listitem: "?([^"\n]*)"?\n/g)];
+    blocks[parts[i] ?? ""] = lines.map((m) => m[1] ?? "");
+  }
+  return blocks;
+}
 
 // Runs first, so the labelled-control test below reads the page with these pending states on it.
 describe("C14: the page shows each pending state with its resolvers and what the clock fires", () => {
@@ -135,4 +153,105 @@ describe("C10: every control on a strata page carries a label", () => {
     expect(unlabeled(controls).map(nameOf)).toEqual(['button #2 <button id="mystery"></button>']);
     await page.close();
   }, 30_000);
+});
+
+// Runs last: it resets the bench the tests above share.
+describe("K9: what each person knows, shown in a Knowledge section on the bench page", () => {
+  test("the section adds no control, feeds no name to the vocabulary, and marks stale facts", async () => {
+    const loaded = loadWorld(WORLD);
+    if (!loaded.ok) throw new Error(loaded.refusal.message);
+    const { defs } = loaded;
+    const world = {
+      people: defs.people.map((p) => p.id),
+      items: defs.items.map((i) => i.id),
+      rooms: defs.rooms.map((r) => r.id),
+      exits: [...new Set(defs.rooms.flatMap((r) => Object.keys(r.exits)))],
+    };
+    const { subkinds } = await (await fetch(new URL("/api/subkinds", base))).json();
+    // The controls of the bench before the Knowledge section, on a fresh world.
+    const MAIN_CONTROLS = [
+      ["select", "actor", ["glitch", "mux", "rogue"]],
+      ["select", "verb", ["depart", "say", "say-to", "whisper", "offer", "accept", "refuse"]],
+      ["select", "exit", ["east"]],
+      ["button", "Act", []],
+      ["button", "Step", []],
+      ["button", "Reset", []],
+      ["select", "person", ["glitch", "mux", "rogue"]],
+    ];
+    const seen = async () => {
+      const got = await read();
+      expect(got.controls.map((c) => [c.kind, c.label, c.options])).toEqual(MAIN_CONTROLS);
+      expect(unlabeled(got.controls).map(nameOf)).toEqual([]);
+      const { verbs: _verbs, speech: _speech, ...names } = vocabulary(got, subkinds);
+      expect(names).toEqual(world);
+      return knowledgeOf(got.text);
+    };
+    const events = async (path: string, body?: unknown) => {
+      const response = await fetch(new URL(path, base), {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body ?? {}),
+      });
+      return ((await response.json()) as { events: { id: string }[] }).events;
+    };
+    await events("/api/reset");
+
+    const fresh = await seen();
+    expect(Object.keys(fresh)).toEqual(["What Glitch knows", "What Mux knows", "What Rogue knows"]);
+    for (const lines of Object.values(fresh)) {
+      for (const label of [
+        "own location (location part): ",
+        "own holdings (holder part): ",
+        "knows person ",
+        "knows place ",
+      ]) {
+        expect(lines.some((line) => line.startsWith(label))).toBe(true);
+      }
+    }
+    expect(fresh["What Mux knows"]).toContain("own location (location part): room back-room");
+    expect(fresh["What Mux knows"]).toContain("own holdings (holder part): charge-cell");
+
+    await events("/api/actions", { actor: "mux", verb: "depart", exit: "west" });
+    await events("/api/step");
+    const arrive = (await events("/api/step"))[1]?.id;
+    const arrived = await seen();
+    const aboutRogue = (lines: string[] | undefined) =>
+      (lines ?? []).filter((line) => line.startsWith("location of rogue: "));
+    expect(aboutRogue(arrived["What Mux knows"])).toEqual([
+      `location of rogue: room chrome-cassette, learned tick 2 from ${arrive} physical.arrive`,
+    ]);
+
+    // Mux offers Glitch the charge cell: Glitch learns who holds it, in a line no item pattern reads.
+    const offer = (
+      await events("/api/actions", {
+        actor: "mux",
+        verb: "offer",
+        target: "glitch",
+        item: "charge-cell",
+      })
+    )[0]?.id;
+    const offered = await seen();
+    expect(
+      (offered["What Glitch knows"] ?? []).filter((line) => line.startsWith("holder of ")),
+    ).toEqual([`holder of charge-cell: mux, learned tick 2 from ${offer} exchange.offer`]);
+    expect(offered["What Glitch knows"]?.some((line) => line.includes(": held by "))).toBe(false);
+
+    const depart = (
+      await events("/api/actions", { actor: "rogue", verb: "depart", exit: "east" })
+    )[0]?.id;
+    const transit = `location of rogue: in transit chrome-cassette -> back-room, arrives tick 3, learned tick 2 from ${depart} physical.depart`;
+    expect(aboutRogue((await seen())["What Mux knows"])).toEqual([transit]);
+
+    await events("/api/step");
+    const landed = await seen();
+    expect(aboutRogue(landed["What Mux knows"])).toEqual([
+      `${transit} STALE (operator view): now room back-room`,
+    ]);
+    // Rogue last saw Mux in the bar at his offer; he is still there, so her fact is not stale.
+    expect(
+      (landed["What Rogue knows"] ?? []).filter((line) => line.startsWith("location of mux: ")),
+    ).toEqual([
+      `location of mux: room chrome-cassette, learned tick 2 from ${offer} exchange.offer`,
+    ]);
+  }, 60_000);
 });
