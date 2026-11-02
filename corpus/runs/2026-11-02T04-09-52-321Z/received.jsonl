@@ -1,0 +1,1 @@
+{"thing":"mux","copy":{"id":"e1","tick":0,"seq":1,"kind":"speech","subkind":"speech.say","actor":"mux","targets":[],"place":"back-room","visibility":{"audience":"place"},"cause":"operator","payload":{"words":"Listen up, all of you — the hum of this room just changed pitch, and I don't believe it did that on its own."}}}

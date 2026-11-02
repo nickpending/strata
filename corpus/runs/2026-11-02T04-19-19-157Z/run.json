@@ -1,0 +1,42 @@
+{
+  "runId": "2026-11-02T04-19-19-157Z",
+  "instruction": "make Rogue drink a shot at the bar",
+  "startedAt": "2026-11-02T04:19:19.157Z",
+  "endedAt": "2026-11-02T04:19:21.318Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page has no drink verb and no shot item, so none of the end states (holder, location, or said) can express Rogue drinking a shot at the bar."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page has no drink verb and no shot item, so none of the end states (holder, location, or said) can express Rogue drinking a shot at the bar."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003673,
+      "provider": "Azure"
+    }
+  ],
+  "costUsd": 0.0003673,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

@@ -15,7 +15,6 @@ import type { Comparison, RefusedCall } from "harness/compare.ts";
 import { useAccountBrowsers } from "harness/page.ts";
 import type { RunRecord } from "harness/run.ts";
 import type { ScoreFile } from "harness/score.ts";
-import { REQUEST } from "harness/words.ts";
 
 const ROOT = join(import.meta.dir, "..");
 // The fixture's scores are child processes; each inherits where the account's browsers are.
@@ -24,6 +23,10 @@ const SCORE = join(ROOT, "src", "adapter", "score.ts");
 
 const BASELINE = "test/baseline";
 const CANDIDATE = "test/candidate";
+const GLM = "z-ai/glm-5.3-flash";
+const HAIKU = "anthropic/claude-haiku-5.5";
+/** The provider the chat stand-in reports for each model; the test models' answers report none. */
+const PROVIDERS: Record<string, string> = { [GLM]: "Z.AI", [HAIKU]: "Anthropic" };
 const MODEL_COST = 0.0002;
 const JEV_COST = 0.00002;
 const LINE = "Nothing in this bar runs on time, least of all me.";
@@ -186,7 +189,12 @@ function modelStandIn(sets: { goals: Scripted[] }[]): string {
     const answer = scripted?.[kind];
     const content = Array.isArray(answer) ? answer[n] : answer;
     if (content === undefined) return new Response("no such answer", { status: 400 });
-    return Response.json({ choices: [{ message: { content } }], usage: { cost: MODEL_COST } });
+    const provider = PROVIDERS[String(body.model)];
+    return Response.json({
+      ...(provider === undefined ? {} : { provider }),
+      choices: [{ message: { content } }],
+      usage: { cost: MODEL_COST },
+    });
   });
 }
 
@@ -209,8 +217,11 @@ async function spawned(cmd: string[]) {
   return { stdout, stderr, exitCode };
 }
 
-/** A fixture: <dir>/goals/<set>.json and both models' scores of each, their runs in <dir>/runs. */
-async function fixtureOf(sets: { set: string; goals: Scripted[] }[]): Promise<string> {
+/** A fixture: <dir>/goals/<set>.json and each of `models`' scores of each, their runs in <dir>/runs. */
+async function fixtureOf(
+  sets: { set: string; goals: Scripted[] }[],
+  models = [BASELINE, CANDIDATE],
+): Promise<string> {
   const fixture = tempDir();
   mkdirSync(join(fixture, "goals"));
   const model = modelStandIn(sets);
@@ -225,7 +236,7 @@ async function fixtureOf(sets: { set: string; goals: Scripted[] }[]): Promise<st
         goals: goals.map(({ id, instruction, expect }) => ({ id, instruction, expect })),
       }),
     );
-    for (const named of [BASELINE, CANDIDATE]) {
+    for (const named of models) {
       const ran = await spawned([
         process.execPath,
         "run",
@@ -257,23 +268,32 @@ beforeAll(async () => {
 }, 300_000);
 
 const goalsOf = (dir: string, set: string) => join(dir, "goals", `${set}.json`);
-const scoreOf = (dir: string, set: string, model: string) =>
-  join(dir, "goals", `${set}.${model.replace("/", "_")}.${REQUEST}.score.json`);
-const COMPARE_JSON = `test_candidate.vs.test_baseline.${REQUEST}.compare.json`;
-const COMPARE_MD = `test_candidate.vs.test_baseline.${REQUEST}.compare.md`;
+/** The request every model the request table does not list is asked by. */
+const SCHEMA_RETRY = "json-schema-retry";
+/** The score file of `set` under `model`, asked by `request` (the unlisted models' by default). */
+const scoreOf = (dir: string, set: string, model: string, request = SCHEMA_RETRY) =>
+  join(dir, "goals", `${set}.${model.replace("/", "_")}.${request}.score.json`);
+const COMPARE_JSON = `test_candidate.${SCHEMA_RETRY}.vs.test_baseline.${SCHEMA_RETRY}.compare.json`;
+const COMPARE_MD = `test_candidate.${SCHEMA_RETRY}.vs.test_baseline.${SCHEMA_RETRY}.compare.md`;
 
 /** `bun run compare` over the sets of `dir` (SETS' two by default), as the operator runs it. */
-function compare(dir: string, sets = ["one", "two"]) {
+function compare(dir: string, sets = ["one", "two"], baseline = BASELINE, candidate = CANDIDATE) {
   return spawned([
     process.execPath,
     "run",
     "compare",
     "--baseline",
-    BASELINE,
+    baseline,
     "--candidate",
-    CANDIDATE,
+    candidate,
     ...sets.flatMap((set) => ["--goals", goalsOf(dir, set)]),
   ]);
+}
+
+/** A side's providers as the per-set table and a run line render them. */
+function providersText(providers: ScoreFile["providers"] | null): string {
+  if (providers === null) return "not recorded";
+  return providers.map((p) => `${p.provider ?? "unreported"} ${p.calls}`).join(", ");
 }
 
 /** Every refused call of `record`, in call order, as compare must show it. */
@@ -332,16 +352,17 @@ describe("M5: compare sets two models' scores side by side as a loss report, dec
         const file = scored(row.set, model);
         const shown = row[side];
         expect(shown).toEqual({
-          scoreFile: `${row.set}.${model.replace("/", "_")}.${REQUEST}.score.json`,
+          scoreFile: `${row.set}.${model.replace("/", "_")}.${SCHEMA_RETRY}.score.json`,
           reached: { count: file.reached.held, of: file.reached.of },
           targets: file.targets,
           words: file.words,
           costUsd: file.costUsd,
           unreportedCosts: file.unreportedCosts,
           retries: file.retries,
+          providers: file.providers,
         });
         expect(markdown).toContain(
-          `| ${row.set} | ${side} | ${model} | ${file.reached.held} of ${file.reached.of} | ${file.targets.valid} of ${file.targets.asked} | ${file.words.written} | ${file.words.refused} | ${file.retries.asked} | ${file.retries.rescued} | ${file.costUsd} | ${file.unreportedCosts} |\n`,
+          `| ${row.set} | ${side} | ${model} | ${file.reached.held} of ${file.reached.of} | ${file.targets.valid} of ${file.targets.asked} | ${file.words.written} | ${file.words.refused} | ${file.retries.asked} | ${file.retries.rescued} | ${file.costUsd} | ${file.unreportedCosts} | ${providersText(file.providers)} |\n`,
         );
       }
     }
@@ -372,6 +393,7 @@ describe("M5: compare sets two models' scores side by side as a loss report, dec
         target: record.target,
         stopped: record.stopped ?? null,
         refused: refusedOf(record),
+        providers: entry.providers,
       };
     };
     const moved = (set: string, id: string) => {
@@ -568,7 +590,7 @@ describe("S6: compare counts and lists the retries, on a path naming the request
     }
     const report = readJson<Comparison>(join(dir, "goals", COMPARE_JSON));
     const markdown = readFileSync(join(dir, "goals", COMPARE_MD), "utf8");
-    expect(report.request).toBe(REQUEST);
+    expect(report.requests).toEqual({ baseline: SCHEMA_RETRY, candidate: SCHEMA_RETRY });
 
     const [baseline, candidate] = [BASELINE, CANDIDATE].map((model) =>
       readJson<ScoreFile>(scoreOf(dir, "retried", model)),
@@ -660,6 +682,159 @@ describe("S6: compare counts and lists the retries, on a path naming the request
     expect(ran.exitCode).toBe(1);
     expect(ran.stderr).toContain(file);
     expect(ran.stderr).toContain('request is "json-object"');
+    expect(readdirSync(join(dir, "goals")).filter((f) => f.includes(".compare."))).toEqual([]);
+  }, 30_000);
+});
+
+describe("G4: compare reads each side under its own model's request and shows the providers", () => {
+  const OBJECT_Z_AI = "json-object-z-ai-retry";
+  const NO_SUCH = json({ kind: "no-such-action", reason: "no verb flies" });
+  /**
+   * Set kept: a goal Haiku holds and GLM loses, GLM's run stuck on a plan of its own, and a goal
+   * both hold. Set older: one goal both hold, whose Haiku score is made pre-providers below.
+   */
+  const PAIR: { set: string; goals: Scripted[] }[] = [
+    {
+      set: "kept",
+      goals: [
+        {
+          id: "lost",
+          instruction: "send Glitch to the Back Room",
+          expect: GLITCH_IN_BACK,
+          answers: {
+            [HAIKU]: {
+              target: json({
+                kind: "goal",
+                expect: GLITCH_IN_BACK,
+                steps: [{ actor: "glitch", verb: "depart", fields: { exit: "east" } }],
+              }),
+            },
+            [GLM]: {
+              target: json({ kind: "goal", expect: GLITCH_IN_BACK, steps: [MUX_SAY] }),
+              words: json({ words: LINE }),
+            },
+          },
+        },
+        {
+          id: "both",
+          instruction: "have Mux say something",
+          expect: MUX_SAYS,
+          answers: {
+            [HAIKU]: {
+              target: json({ kind: "goal", expect: MUX_SAYS, steps: [MUX_SAY] }),
+              words: json({ words: LINE }),
+            },
+            [GLM]: {
+              target: json({ kind: "goal", expect: MUX_SAYS, steps: [MUX_SAY] }),
+              words: json({ words: LINE }),
+            },
+          },
+        },
+      ],
+    },
+    {
+      set: "older",
+      goals: [
+        {
+          id: "moon",
+          instruction: "have Rogue fly to the moon",
+          expect: { outcome: "no-such-action" },
+          answers: { [HAIKU]: { target: NO_SUCH }, [GLM]: { target: NO_SUCH } },
+        },
+      ],
+    },
+  ];
+  /** The lost goal's providers as GLM's score entry records them: not what its run.json counts. */
+  const EDITED = [{ provider: "edited-in-score", calls: 7 }];
+  const OLD_COMPARE = ["json", "md"].map(
+    (ext) => `z-ai_glm-5.3-flash.vs.anthropic_claude-haiku-5.5.${SCHEMA_RETRY}.compare.${ext}`,
+  );
+  const NEW_COMPARE = ["json", "md"].map(
+    (ext) =>
+      `z-ai_glm-5.3-flash.${OBJECT_Z_AI}.vs.anthropic_claude-haiku-5.5.${SCHEMA_RETRY}.compare.${ext}`,
+  );
+
+  let pair = "";
+  beforeAll(async () => {
+    pair = await fixtureOf(PAIR, [HAIKU, GLM]);
+  }, 300_000);
+
+  function rewrite(file: string, edit: (score: ScoreFile) => unknown): void {
+    writeFileSync(file, `${JSON.stringify(edit(readJson<ScoreFile>(file)), null, 2)}\n`);
+  }
+
+  test("GLM under json-object-z-ai-retry beside Haiku under json-schema-retry: a two-request name, providers per set and per moved goal", async () => {
+    const dir = tempDir();
+    cpSync(pair, dir, { recursive: true });
+    rewrite(scoreOf(dir, "kept", GLM, OBJECT_Z_AI), (score) => ({
+      ...score,
+      perGoal: score.perGoal.map((g) => (g.id === "lost" ? { ...g, providers: EDITED } : g)),
+    }));
+    // Haiku's score of older made before providers were recorded: no providers anywhere in it.
+    rewrite(scoreOf(dir, "older", HAIKU), ({ providers: _file, ...score }) => ({
+      ...score,
+      perGoal: score.perGoal.map(({ providers: _goal, ...g }) => g),
+    }));
+    const old = OLD_COMPARE.map((name) => join(dir, "goals", name));
+    for (const file of old) writeFileSync(file, `the json-schema-retry report at ${file}\n`);
+
+    const ran = await compare(dir, ["kept", "older"], HAIKU, GLM);
+    expect(ran.stderr).not.toContain("compare: ");
+    expect(ran.exitCode).toBe(0);
+    for (const file of old) {
+      expect(readFileSync(file, "utf8")).toBe(`the json-schema-retry report at ${file}\n`);
+    }
+    const [jsonFile, mdFile] = NEW_COMPARE.map((name) => join(dir, "goals", name));
+    expect(ran.stdout).toContain(`compare written to ${jsonFile} and ${mdFile}`);
+    const report = readJson<Comparison>(jsonFile ?? "");
+    const markdown = readFileSync(mdFile ?? "", "utf8");
+    expect(report.requests).toEqual({ baseline: SCHEMA_RETRY, candidate: OBJECT_Z_AI });
+    expect(markdown).toContain(`${HAIKU} under ${SCHEMA_RETRY}`);
+    expect(markdown).toContain(`${GLM} under ${OBJECT_Z_AI}`);
+
+    // Per set: each side's providers as its score file records them, not recorded when it has none.
+    const kept = readJson<ScoreFile>(scoreOf(dir, "kept", HAIKU)).providers;
+    const glmKept = readJson<ScoreFile>(scoreOf(dir, "kept", GLM, OBJECT_Z_AI)).providers;
+    const glmOlder = readJson<ScoreFile>(scoreOf(dir, "older", GLM, OBJECT_Z_AI)).providers;
+    expect([kept, glmKept, glmOlder]).toEqual([
+      [{ provider: "Anthropic", calls: 3 }],
+      [{ provider: "Z.AI", calls: 4 }],
+      [{ provider: "Z.AI", calls: 1 }],
+    ]);
+    expect(
+      report.sets.map((row) => [row.set, row.baseline.providers, row.candidate.providers]),
+    ).toEqual([
+      ["kept", kept, glmKept],
+      ["older", null, glmOlder],
+    ]);
+    expect(markdown).toContain("| costUsd | unreported costs | providers |\n");
+    expect(markdown).toContain("| Anthropic 3 |\n");
+    expect(markdown).toContain("| Z.AI 4 |\n");
+    expect(markdown).toMatch(
+      /\| older \| baseline \| anthropic\/claude-haiku-5\.5 \|.*\| not recorded \|\n/,
+    );
+
+    // The lost goal shows each side's providers as its score entry records them, never recounted.
+    expect(
+      report.losses.map((g) => [g.set, g.id, g.baseline.providers, g.candidate.providers]),
+    ).toEqual([["kept", "lost", [{ provider: "Anthropic", calls: 1 }], EDITED]]);
+    const losses = markdown.slice(markdown.indexOf("## Losses"), markdown.indexOf("## Gains"));
+    expect(losses).toContain(`- baseline (${HAIKU}): `);
+    expect(losses).toContain("; providers Anthropic 1; ");
+    expect(losses).toContain("; providers edited-in-score 7; ");
+    expect(report.gains).toEqual([]);
+  }, 60_000);
+
+  test("a GLM score at its path whose request is json-schema-retry is refused, naming the file, the request found and the one expected", async () => {
+    const dir = tempDir();
+    cpSync(pair, dir, { recursive: true });
+    const file = scoreOf(dir, "kept", GLM, OBJECT_Z_AI);
+    rewrite(file, (score) => ({ ...score, request: SCHEMA_RETRY }));
+    const ran = await compare(dir, ["kept", "older"], HAIKU, GLM);
+    expect(ran.exitCode).toBe(1);
+    expect(ran.stderr).toContain(file);
+    expect(ran.stderr).toContain(`request is "${SCHEMA_RETRY}"`);
+    expect(ran.stderr).toContain(`"${OBJECT_Z_AI}"`);
     expect(readdirSync(join(dir, "goals")).filter((f) => f.includes(".compare."))).toEqual([]);
   }, 30_000);
 });

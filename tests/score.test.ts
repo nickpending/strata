@@ -15,7 +15,6 @@ import { useAccountBrowsers } from "harness/page.ts";
 import { RULE_AUTHOR, T_ACT, T_DONE } from "harness/rule.ts";
 import type { LoopRecord, RunRecord } from "harness/run.ts";
 import { GRID, type ScoreFile, scorePath } from "harness/score.ts";
-import { REQUEST } from "harness/words.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
 const ROOT = join(import.meta.dir, "..");
@@ -178,13 +177,21 @@ function serve(answer: (body: Record<string, unknown>) => Response): {
   return counter;
 }
 
-/** The chat stand-in: the scripted target for the goal named in the prompt, or the line of words. */
-function modelStandIn(goals: Scripted[] = GOALS) {
+/**
+ * The chat stand-in: the scripted target for the goal named in the prompt, or the line of words,
+ * each answered with the provider `providerOf` gives for its request (no provider key when none).
+ */
+function modelStandIn(
+  goals: Scripted[] = GOALS,
+  providerOf: (body: Record<string, unknown>) => string | undefined = () => undefined,
+) {
   return serve((body) => {
     const prompt = String((body.messages as { content: string }[])[0]?.content);
     const goal = goals.find((g) => prompt.includes(`Instruction: ${g.instruction}\n`));
     const content = prompt.includes('{"words"') ? { words: LINE } : goal?.target;
+    const provider = providerOf(body);
     return Response.json({
+      ...(provider === undefined ? {} : { provider }),
       choices: [{ message: { content: JSON.stringify(content ?? {}) } }],
       usage: { cost: MODEL_COST },
     });
@@ -347,7 +354,9 @@ describe("C8: scoring a goal set by expected end states", () => {
     expect(ran.stderr).toBe("");
     expect(ran.exitCode).toBe(0);
 
-    const written = JSON.parse(readFileSync(join(dir, "scripted.score.json"), "utf8")) as ScoreFile;
+    const written = JSON.parse(
+      readFileSync(scorePath(goalsFile, "scripted", undefined), "utf8"),
+    ) as ScoreFile;
     // Five goals hold; two reached the model's end state, but the file's does not hold.
     expect(written.reached).toEqual({ held: 5, of: 7 });
     // Loops and cost per goal, derived by hand from the scripted answers: one Jev call per loop
@@ -520,7 +529,7 @@ describe("A5: a goal whose run ended already-held is never counted held", () => 
     const m = modelStandIn(ALREADY);
     const j = jevStandIn(ALREADY);
     const endpoints = ["--model-endpoint", m.url, "--jev-endpoint", j.url];
-    const scoreFile = join(dir, "already.score.json");
+    const scoreFile = scorePath(goalsFile, "already", undefined);
 
     for (const flags of [endpoints, [...endpoints, "--sweep"]]) {
       const ran = await score(goalsFile, join(dir, "runs"), flags);
@@ -571,7 +580,9 @@ describe("H4: a headed score holds before every action of every goal", () => {
     );
     expect(ran.stderr).toBe("");
     expect(ran.exitCode).toBe(0);
-    const written = JSON.parse(readFileSync(join(dir, "headed.score.json"), "utf8")) as ScoreFile;
+    const written = JSON.parse(
+      readFileSync(scorePath(goalsFile, "headed", undefined), "utf8"),
+    ) as ScoreFile;
     expect(written.perGoal.map((g) => [g.id, g.outcome, g.held])).toEqual([
       ["glitch-east", "reached", true],
       ["mux-says", "reached", true],
@@ -646,41 +657,83 @@ describe("M2: score refuses a --model that is not <provider>/<model> before any 
   }, 60_000);
 });
 
-describe("M3: a score under a named model lands in <set>.<slug>.<request>.score.json, never in <set>.score.json", () => {
+describe("G3: every score lands in <set>.<slug>.<request>.score.json, the default's when no model is named, and counts providers", () => {
   const TWO = GOALS.filter((g) => g.id === "moon" || g.id === "mux-says");
+  /** Mux's target is served by Z.AI and every words call by Fireworks; the moon's target reports none. */
+  const providerOf = (body: Record<string, unknown>): string | undefined => {
+    const prompt = String((body.messages as { content: string }[])[0]?.content);
+    if (prompt.includes('{"words"')) return "Fireworks";
+    return prompt.includes("Instruction: have Mux say something\n") ? "Z.AI" : undefined;
+  };
+  const RUNS = [
+    {
+      flags: [] as string[],
+      model: "z-ai/glm-5.3-flash",
+      file: "named.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json",
+      request: "json-object-z-ai-retry",
+    },
+    {
+      flags: ["--model", "anthropic/claude-haiku-5.5"],
+      model: "anthropic/claude-haiku-5.5",
+      file: "named.anthropic_claude-haiku-5.5.json-schema-retry.score.json",
+      request: "json-schema-retry",
+    },
+  ];
 
-  test("two named models write their own files, named for the request, beside an untouched <set>.score.json; none named writes <set>.score.json", async () => {
+  test("no --model writes the default's named file, --model Haiku its own, both beside an untouched <set>.score.json, providers counted per goal and per file", async () => {
     const dir = tempDir();
     const goalsFile = writeSet(dir, "named", TWO);
     const recorded = join(dir, "named.score.json");
     writeFileSync(recorded, "the committed score, as C9 reads it\n");
     const before = hash(recorded);
+    expect(scorePath(goalsFile, "named", undefined)).toBe(join(dir, RUNS[0]?.file ?? ""));
 
-    for (const named of ["z-ai/glm-5.3-flash", "anthropic/claude-haiku-5.5"]) {
-      const m = modelStandIn(TWO);
+    for (const run of RUNS) {
+      const m = modelStandIn(TWO, providerOf);
       const j = jevStandIn(TWO);
       const ran = await score(goalsFile, join(dir, "runs"), [
         "--model-endpoint",
         m.url,
         "--jev-endpoint",
         j.url,
-        "--model",
-        named,
+        ...run.flags,
       ]);
       expect(ran.stderr).toBe("");
       expect(ran.exitCode).toBe(0);
-      // The registered score is neither replaced nor rewritten by a score under a named model.
+      // The registered score is neither replaced nor rewritten by any score.
       expect(hash(recorded)).toBe(before);
-      const path = join(dir, `named.${named.replace("/", "_")}.${REQUEST}.score.json`);
-      expect(scorePath(goalsFile, "named", named)).toBe(path);
+      const path = join(dir, run.file);
+      expect(scorePath(goalsFile, "named", run.flags[1])).toBe(path);
       expect(ran.stdout).toContain(`score written to ${path}\n`);
       const written = readJson<ScoreFile>(path);
-      expect(written.model).toBe(named);
-      // Both targets and the say's words were asked of the named model, and each run records it.
-      expect(m.bodies.map((body) => body.model)).toEqual([named, named, named]);
+      expect([written.model, written.request]).toEqual([run.model, run.request]);
+      // Both targets and the say's words were asked of the model, and each run records it.
+      expect(m.bodies.map((body) => body.model)).toEqual([run.model, run.model, run.model]);
+      // Each goal counts its run's model calls per reported provider, in first-seen order, and
+      // never a Jev call; the file sums them in first-seen order over the goals.
+      expect(written.perGoal.map((g) => [g.id, g.providers])).toEqual([
+        [
+          "mux-says",
+          [
+            { provider: "Z.AI", calls: 1 },
+            { provider: "Fireworks", calls: 1 },
+          ],
+        ],
+        ["moon", [{ provider: null, calls: 1 }]],
+      ]);
+      expect(written.providers).toEqual([
+        { provider: "Z.AI", calls: 1 },
+        { provider: "Fireworks", calls: 1 },
+        { provider: null, calls: 1 },
+      ]);
       for (const goal of written.perGoal) {
-        const run = readJson<RunRecord>(join(dir, goal.run, "run.json"));
-        expect([run.parameters.wordsModel, run.parameters.request]).toEqual([named, REQUEST]);
+        const record = readJson<RunRecord>(join(dir, goal.run, "run.json"));
+        expect([record.parameters.wordsModel, record.parameters.request]).toEqual([
+          run.model,
+          run.request,
+        ]);
+        const models = record.calls.filter((c) => c.client === "model");
+        expect(goal.providers.reduce((sum, p) => sum + p.calls, 0)).toBe(models.length);
       }
     }
     expect(hash(recorded)).toBe(before);
@@ -688,37 +741,7 @@ describe("M3: a score under a named model lands in <set>.<slug>.<request>.score.
       readdirSync(dir)
         .filter((file) => file.endsWith(".score.json"))
         .sort(),
-    ).toEqual(
-      [
-        "named.score.json",
-        `named.z-ai_glm-5.3-flash.${REQUEST}.score.json`,
-        `named.anthropic_claude-haiku-5.5.${REQUEST}.score.json`,
-      ].sort(),
-    );
-
-    const fresh = tempDir();
-    const freshGoals = writeSet(fresh, "named", TWO);
-    const m = modelStandIn(TWO);
-    const j = jevStandIn(TWO);
-    const ran = await score(freshGoals, join(fresh, "runs"), [
-      "--model-endpoint",
-      m.url,
-      "--jev-endpoint",
-      j.url,
-    ]);
-    expect(ran.stderr).toBe("");
-    expect(ran.exitCode).toBe(0);
-    const path = join(fresh, "named.score.json");
-    expect(scorePath(freshGoals, "named", undefined)).toBe(path);
-    expect(readJson<ScoreFile>(path).model).toBe("anthropic/claude-haiku-5.5");
-    expect(m.bodies.map((body) => body.model)).toEqual([
-      "anthropic/claude-haiku-5.5",
-      "anthropic/claude-haiku-5.5",
-      "anthropic/claude-haiku-5.5",
-    ]);
-    expect(readdirSync(fresh).filter((file) => file.endsWith(".score.json"))).toEqual([
-      "named.score.json",
-    ]);
+    ).toEqual(["named.score.json", ...RUNS.map((run) => run.file)].sort());
   }, 180_000);
 });
 
@@ -803,7 +826,7 @@ describe("M4: each goal records its target's validity and its words, and the sco
       j.url,
     ]);
     expect(ran.exitCode).toBe(0);
-    const written = readJson<ScoreFile>(join(dir, "five.score.json"));
+    const written = readJson<ScoreFile>(scorePath(goalsFile, "five", undefined));
     expect(written.perGoal.map((g) => [g.id, g.outcome, g.target, g.words])).toEqual([
       ["written", "reached", "valid", { kind: "written", text: LINE }],
       ["not-json", "stopped", "invalid", { kind: "none" }],
@@ -813,7 +836,7 @@ describe("M4: each goal records its target's validity and its words, and the sco
     ]);
     expect(written.targets).toEqual({ valid: 3, asked: 4 });
     expect(written.words).toEqual({ written: 1, refused: 1 });
-    expect(written.model).toBe("anthropic/claude-haiku-5.5");
+    expect(written.model).toBe("z-ai/glm-5.3-flash");
   }, 120_000);
 });
 
@@ -860,11 +883,11 @@ describe("S5: each goal and the score file count the retries asked and rescued",
     expect(ran.exitCode).toBe(0);
     // The score made before this request is left as it was.
     expect(hash(before)).toBe(known);
-    const path = join(dir, `four.z-ai_glm-5.3-flash.${REQUEST}.score.json`);
+    const path = join(dir, "four.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json");
     expect(scorePath(goalsFile, "four", GLM)).toBe(path);
     expect(ran.stdout).toContain(`score written to ${path}\n`);
     const written = readJson<ScoreFile>(path);
-    expect(written.request).toBe("json-schema-retry");
+    expect(written.request).toBe("json-object-z-ai-retry");
     expect(written.perGoal.map((g) => [g.id, g.retries])).toEqual([
       ["at-once", { asked: 0, rescued: 0 }],
       ["rescued", { asked: 1, rescued: 1 }],

@@ -1,0 +1,113 @@
+{
+  "runId": "2026-11-02T04-21-51-190Z",
+  "instruction": "Rogue wants everyone in the bar to hear that she's closing early tonight.",
+  "startedAt": "2026-11-02T04:21:51.190Z",
+  "endedAt": "2026-11-02T04:22:00.592Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say"
+      }
+    },
+    "steps": [
+      {
+        "actor": "mux",
+        "verb": "depart",
+        "fields": {
+          "exit": "west"
+        }
+      },
+      {
+        "actor": "rogue",
+        "verb": "say",
+        "fields": {}
+      }
+    ]
+  },
+  "words": "Listen up, everyone: I'm closing early tonight, so finish your drinks and settle your tabs soon!",
+  "outcome": {
+    "kind": "reached",
+    "loop": 9,
+    "done": 0.99
+  },
+  "loops": 9,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0005695,
+      "provider": "Azure"
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000552,
+      "provider": "Azure"
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000057246
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000057246
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000066318
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000070434
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000081144
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000081144
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000081648
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000081648
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 9",
+      "costUsd": 0.000092694
+    }
+  ],
+  "costUsd": 0.0012942219999999998,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

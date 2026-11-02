@@ -1,0 +1,440 @@
+{
+  "set": "blind-2",
+  "author": "claude-opus-5-5 (blind-2 rewalk writer, pending-states)",
+  "model": "anthropic/claude-haiku-5.5",
+  "request": "json-schema-retry",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    }
+  },
+  "reached": {
+    "held": 13,
+    "of": 13
+  },
+  "targets": {
+    "valid": 13,
+    "asked": 13
+  },
+  "words": {
+    "written": 4,
+    "refused": 0
+  },
+  "retries": {
+    "asked": 0,
+    "rescued": 0
+  },
+  "providers": [
+    {
+      "provider": "Azure",
+      "calls": 17
+    }
+  ],
+  "perGoal": [
+    {
+      "id": "shard-to-glitch",
+      "instruction": "Rogue has decided to let Glitch have the data shard. Make it his.",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.0009975000000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-20-58-586Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "stimpak-to-rogue",
+      "instruction": "Glitch owes Rogue for letting him lie low. Have him pay her with his stimpak.",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.001037092,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-05-032Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "stimpak-for-mux",
+      "instruction": "Mux is looking rough back there. Get Glitch's stimpak into his hands.",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "mux"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 10,
+      "costUsd": 0.0013878160000000003,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-11-238Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "cell-for-rogue",
+      "instruction": "Rogue wants the charge cell Mux is sitting on. Make sure she ends up holding it.",
+      "expect": {
+        "holder": {
+          "item": "charge-cell",
+          "person": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 11,
+      "costUsd": 0.001423988,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-18-494Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "shard-to-mux",
+      "instruction": "Rogue should drop the data shard off with Mux so he can keep it in the back.",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "mux"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 11,
+      "costUsd": 0.00146362,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-26-803Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "rogue-checks-back",
+      "instruction": "Send Rogue to see what's going on in the back room.",
+      "expect": {
+        "location": {
+          "person": "rogue",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 4,
+      "costUsd": 0.0007116399999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-35-176Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "mux-comes-out-front",
+      "instruction": "Mux has been hiding among the crates all night. Get him out to the bar.",
+      "expect": {
+        "location": {
+          "person": "mux",
+          "room": "chrome-cassette"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0007584180000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-39-865Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "glitch-quiet-word",
+      "instruction": "Glitch has something for Rogue's ears only. Let him tell her without anyone else catching the words.",
+      "expect": {
+        "said": {
+          "person": "glitch",
+          "subkind": "speech.whisper"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0008226360000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-44-699Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Rogue, don't turn around, but the vault door's code is the same as the one on the janitor's keycard, and I think someone in this room is listening."
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 2
+        }
+      ]
+    },
+    {
+      "id": "rogue-announces",
+      "instruction": "Rogue wants everyone in the bar to hear that she's closing early tonight.",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 9,
+      "costUsd": 0.0012942219999999998,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-21-51-190Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Listen up, everyone: I'm closing early tonight, so finish your drinks and settle your tabs soon!"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 2
+        }
+      ]
+    },
+    {
+      "id": "mux-mutters",
+      "instruction": "Have Mux grumble out loud about the dead screens. He doesn't need anyone in particular to hear it.",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0007687440000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-22-00-595Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Great, another row of dead screens, and nobody's around to fix them, so I'm just going to stand here and grumble at the dark glass."
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 2
+        }
+      ]
+    },
+    {
+      "id": "rogue-faces-mux",
+      "instruction": "Rogue has a warning for Mux. She should go and give it to him directly, out loud.",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.001199092,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-22-07-238Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Mux, listen to me carefully: the bridge past the old mill is rigged to collapse, so do not cross it tonight."
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 2
+        }
+      ]
+    },
+    {
+      "id": "decrypt-the-shard",
+      "instruction": "Have Glitch plug the data shard into his deck and crack whatever is on it.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0004165,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-22-15-814Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "fix-the-door",
+      "instruction": "Get Mux to repair the jammed door between the back room and the bar.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0003871,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-02T04-22-18-786Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Azure",
+          "calls": 1
+        }
+      ]
+    }
+  ],
+  "costUsd": 0.012668368,
+  "unreportedCosts": 0
+}

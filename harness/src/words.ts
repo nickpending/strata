@@ -1,8 +1,8 @@
 /**
  * The language-model client: an OpenAI-shaped chat completion on OpenRouter, keyed as the Jev
- * client is, asking by strict json_schema for one JSON object that the same zod schema validates
- * on return. The model writes only the run's typed end state and its one line of words; both are
- * checked by code before use.
+ * client is, asking each model by its own request (requestFor) for one JSON object that a zod
+ * schema validates on return. The model writes only the run's typed end state and its one line of
+ * words; both are checked by code before use.
  */
 import { z } from "zod";
 import { described, type EndState } from "./goal.ts";
@@ -10,13 +10,7 @@ import { type ClientOptions, costOf, isRecord, postJson, type Refusal } from "./
 
 export const COMPLETIONS_URL = "https://openrouter.ai/api/v1/chat/completions";
 /** The player's model when none is named: it writes the target and the words. */
-export const DEFAULT_MODEL = "anthropic/claude-haiku-5.5";
-/**
- * The name of the request complete() sends: strict json_schema, require_parameters, one identical
- * retry on a parse refusal. Scores and reports made under it land on paths that name it, so a
- * change to the request renames it.
- */
-export const REQUEST = "json-schema-retry";
+export const DEFAULT_MODEL = "z-ai/glm-5.3-flash";
 
 /** `schema` with every oneOf key renamed anyOf, at any depth. */
 function anyOf(schema: unknown): unknown {
@@ -36,16 +30,75 @@ export function wireSchema(schema: z.ZodType): unknown {
   return anyOf(z.toJSONSchema(schema, { io: "output" }));
 }
 
+/**
+ * How complete() asks a model: the request's name, and the chat completions body it posts for a
+ * prompt and the schema `name` its answer must match. Every request is answered through the same
+ * parse and the same one identical retry on a parse refusal. Scores and reports made under a
+ * request land on paths that name it, so a change to a body renames its request.
+ */
+export type Request = {
+  name: string;
+  body: (model: string, prompt: string, schema: z.ZodType, name: string) => Record<string, unknown>;
+};
+
+/** Strict json_schema on an endpoint that enforces it (require_parameters). */
+export const JSON_SCHEMA_RETRY: Request = {
+  name: "json-schema-retry",
+  body: (model, prompt, schema, name) => ({
+    model,
+    messages: [{ role: "user", content: prompt }],
+    response_format: {
+      type: "json_schema",
+      json_schema: { name, strict: true, schema: wireSchema(schema) },
+    },
+    provider: { require_parameters: true },
+    usage: { include: true },
+  }),
+};
+
+/**
+ * Any JSON object, served by Z.AI alone with no fallback. Z.AI takes response_format but not
+ * structured_outputs, so the body carries no schema and no require_parameters: the prompt asks for
+ * the shape, and zod checks it on return.
+ */
+export const JSON_OBJECT_Z_AI: Request = {
+  name: "json-object-z-ai-retry",
+  body: (model, prompt) => ({
+    model,
+    messages: [{ role: "user", content: prompt }],
+    response_format: { type: "json_object" },
+    provider: { order: ["z-ai"], allow_fallbacks: false },
+    usage: { include: true },
+  }),
+};
+
+/** The models asked by a request of their own, by exact id; every other is asked by JSON_SCHEMA_RETRY. */
+export const REQUESTS: Readonly<Record<string, Request>> = {
+  "z-ai/glm-5.3-flash": JSON_OBJECT_Z_AI,
+};
+
+/** The request `model` is asked by. */
+export function requestFor(model: string): Request {
+  return REQUESTS[model] ?? JSON_SCHEMA_RETRY;
+}
+
 /** A chat completions client, and the model it asks: DEFAULT_MODEL when none is named. */
 export type ModelOptions = ClientOptions & { model?: string | undefined };
 
+/** The model `options` asks: the one place the default is applied. */
+export function modelOf(options: ModelOptions): string {
+  return options.model ?? DEFAULT_MODEL;
+}
+
 /**
- * One post to the model that came back with a body: the cost it reported (null when none), whether
- * it was the retry, and, when its answer was refused, the refusal's message and the message content
- * exactly as sent, whole (null when the body had none).
+ * One post to the model that came back with a body: the cost it reported (null when none), the
+ * provider OpenRouter reported serving it (null when none), whether it was the retry, and, when its
+ * answer was refused, the refusal's message and the message content exactly as sent, whole (null
+ * when the body had none).
  */
 export type Attempt = {
   costUsd: number | null;
+  provider: string | null;
   retry: boolean;
   refused: { message: string; answer: string | null } | null;
 };
@@ -94,6 +147,11 @@ function answerOf<T>(
   return { ok: true, value: parsed.data };
 }
 
+/** The provider the chat completions body reports serving it, or null when it names none. */
+function providerOf(body: unknown): string | null {
+  return isRecord(body) && typeof body.provider === "string" ? body.provider : null;
+}
+
 /** Post `request` once and read its answer against `schema`. */
 async function attempt<T>(
   request: unknown,
@@ -106,16 +164,17 @@ async function attempt<T>(
   const content = contentOf(posted.body);
   const read = answerOf(content, schema);
   const costUsd = costOf(posted.body);
-  if (read.ok) return { ...read, attempt: { costUsd, retry, refused: null } };
+  const provider = providerOf(posted.body);
+  if (read.ok) return { ...read, attempt: { costUsd, provider, retry, refused: null } };
   const refused = { message: read.refusal.message, answer: content ?? null };
-  return { ...read, attempt: { costUsd, retry, refused } };
+  return { ...read, attempt: { costUsd, provider, retry, refused } };
 }
 
 /**
- * Ask the model, by strict json_schema `name` built from `schema` on an endpoint that enforces it,
- * for one JSON object matching `schema`; anything else is a `parse` refusal. An answer refused at
- * parse is asked once more by the identical request, which carries no hint; a refusal with no body
- * (config, network, status) and a second parse refusal are final.
+ * Ask the model, by the request its model is asked by (requestFor), for one JSON object matching
+ * `schema`, named `name`; anything else is a `parse` refusal. An answer refused at parse is asked
+ * once more by the identical request, which carries no hint; a refusal with no body (config,
+ * network, status) and a second parse refusal are final.
  */
 export async function complete<T>(
   prompt: string,
@@ -123,16 +182,8 @@ export async function complete<T>(
   name: string,
   options: ModelOptions = {},
 ): Promise<Completed<T>> {
-  const request = {
-    model: options.model ?? DEFAULT_MODEL,
-    messages: [{ role: "user", content: prompt }],
-    response_format: {
-      type: "json_schema",
-      json_schema: { name, strict: true, schema: wireSchema(schema) },
-    },
-    provider: { require_parameters: true },
-    usage: { include: true },
-  };
+  const model = modelOf(options);
+  const request = requestFor(model).body(model, prompt, schema, name);
   const first = await attempt(request, schema, options, false);
   const asked =
     first.ok || first.attempt === null

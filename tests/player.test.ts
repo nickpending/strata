@@ -9,13 +9,13 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, isAbsolute, join } from "node:path";
 import { described, type EndState } from "harness/goal.ts";
 import { type Control, readPage, useAccountBrowsers } from "harness/page.ts";
 import { T_ACT } from "harness/rule.ts";
 import type { DriveResult, LoopRecord, RunRecord } from "harness/run.ts";
 import { targetSchema } from "harness/target.ts";
-import { REQUEST, wireSchema, wordsSchema } from "harness/words.ts";
+import { wireSchema, wordsSchema } from "harness/words.ts";
 import type { Browser } from "playwright";
 import { hostBench } from "../src/adapter/host.ts";
 import { kindOf, subkinds, type WorldEvent } from "../src/engine/events.ts";
@@ -29,21 +29,32 @@ import {
   type JevRequest,
   jev,
   keyOf,
+  kinds,
   lines,
   MAIN,
   MODEL_COST,
   model,
   NO_DONE,
+  offeredBy,
+  offerThenStep,
   PASSED_OVER,
   play,
   preferring,
+  promptOf,
   proxied,
   type Ran,
   ROOT,
   RUN_FILES,
+  schemaRetryText,
   standIn,
+  step,
+  steppedWhileOffered,
   stops,
+  stringsOf,
+  targetPrompt,
   temps,
+  verbLine,
+  verbLines,
 } from "./stand-ins.ts";
 
 // Every run below is a child process, or loads playwright only after this; each finds the
@@ -54,22 +65,6 @@ afterAll(() => {
   for (const stop of stops) stop();
   for (const dir of temps) rmSync(dir, { recursive: true, force: true });
 });
-
-/** The candidates a loop's controls offer, worked out here from the controls the loop read. */
-function offeredBy(entry: LoopRecord, words: string | null): string[] {
-  return entry.controls.flatMap((control) => {
-    if (control.label === "" || !control.enabled) return [];
-    if (control.kind === "select") {
-      return control.options
-        .filter((option) => option !== control.value)
-        .map((option) => `set ${control.label} to ${option}`);
-    }
-    if (control.kind === "button") return [`press ${control.label}`];
-    return words !== null && control.value !== words
-      ? [`type the words into ${control.label}`]
-      : [];
-  });
-}
 
 const MUX_SAYS = { said: { person: "mux", subkind: "speech.say" } };
 const LINE = "My refurb deck runs on hope and duct tape.";
@@ -197,7 +192,9 @@ describe("C6: the player ends without inventing an end state", () => {
     expect(j.bodies).toHaveLength(0);
     // A target checked() turns into no-such-action is no refusal: it is never asked again.
     expect(m.bodies).toHaveLength(1);
-    expect(ran.record.calls).toEqual([{ client: "model", purpose: "target", costUsd: MODEL_COST }]);
+    expect(ran.record.calls).toEqual([
+      { client: "model", purpose: "target", costUsd: MODEL_COST, provider: null },
+    ]);
   }, 60_000);
 
   test("a said end state naming a speech kind the bench does not serve ends no-such-action naming it", async () => {
@@ -251,25 +248,6 @@ describe("C6: the player ends without inventing an end state", () => {
     expect(events.map((e) => e.subkind)).toEqual(["time.tick", "time.tick"]);
   }, 60_000);
 });
-
-/**
- * A Jev stand-in that favours the giver's offer moves, in order, until the offer is recorded, and
- * from then on scores press Step above every other candidate on every loop.
- */
-function offerThenStep(offerMoves: string[]) {
-  return preferring((request) =>
-    request.state.includes("exchange.offer") ? ["press Step"] : offerMoves,
-  );
-}
-
-/** The loops that pressed Step while the page showed the offer `e1` pending. */
-function steppedWhileOffered(loops: LoopRecord[]): number[] {
-  return loops
-    .filter(
-      (entry) => entry.state.includes("exchange.offer e1 by") && entry.action === "press Step",
-    )
-    .map((entry) => entry.loop);
-}
 
 describe("C15: code resolves a pending offer before the clock lapses it", () => {
   const GIVES = [
@@ -357,16 +335,6 @@ describe("C15: code resolves a pending offer before the clock lapses it", () => 
     expect(ran.stderr).toContain("exchange.offer");
   }, 60_000);
 });
-
-/** A plan's step as the model writes it. */
-function step(actor: string, verb: string, fields: Record<string, string> = {}) {
-  return { actor, verb, fields };
-}
-
-/** The decision kinds of a run's loops, in order. */
-function kinds(loops: LoopRecord[]): string[] {
-  return loops.map((entry) => entry.decision.kind);
-}
 
 describe("the plan: code performs the target's typed steps, resolving and waiting out what stands between them", () => {
   test("each give reaches its end state through plan and resolve loops alone, every noul below T_ACT", async () => {
@@ -585,8 +553,8 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     expect(m.bodies[1]).toEqual(m.bodies[0]);
     const refused = { message: "the chat completions body has no message content", answer: null };
     expect(ran.record.calls).toEqual([
-      { client: "model", purpose: "target", costUsd: null, refused },
-      { client: "model", purpose: "target", costUsd: null, retry: true, refused },
+      { client: "model", purpose: "target", costUsd: null, provider: null, refused },
+      { client: "model", purpose: "target", costUsd: null, provider: null, retry: true, refused },
     ]);
   }, 60_000);
 
@@ -607,8 +575,8 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
     expect(m.bodies[1]).toEqual(m.bodies[0]);
     const refused = { message: expect.stringContaining("not the asked shape"), answer: plan };
     expect(ran.record.calls.slice(0, 2)).toEqual([
-      { client: "model", purpose: "target", costUsd: MODEL_COST, refused },
-      { client: "model", purpose: "target", costUsd: MODEL_COST, retry: true },
+      { client: "model", purpose: "target", costUsd: MODEL_COST, provider: null, refused },
+      { client: "model", purpose: "target", costUsd: MODEL_COST, provider: null, retry: true },
     ]);
   }, 60_000);
 
@@ -671,9 +639,9 @@ describe("S1: a words answer refused at parse is asked once more, every attempt 
       answer: garbled,
     };
     expect(ran.record.calls.filter((c) => c.client === "model")).toEqual([
-      { client: "model", purpose: "target", costUsd: MODEL_COST },
-      { client: "model", purpose: "words", costUsd: MODEL_COST, refused },
-      { client: "model", purpose: "words", costUsd: MODEL_COST, retry: true },
+      { client: "model", purpose: "target", costUsd: MODEL_COST, provider: null },
+      { client: "model", purpose: "words", costUsd: MODEL_COST, provider: null, refused },
+      { client: "model", purpose: "words", costUsd: MODEL_COST, provider: null, retry: true },
     ]);
     const sum = ran.record.calls.reduce((total, c) => total + (c.costUsd ?? 0), 0);
     expect(ran.record.costUsd).toBeCloseTo(sum, 12);
@@ -907,25 +875,6 @@ describe("A1: a run whose typed end state already holds before it acts ends alre
     expect(ran.stderr).toContain("stopped: bench at target");
   }, 60_000);
 });
-
-/** The prompt the chat completions stand-in received on its first call: the target's. */
-function targetPrompt(m: { bodies: unknown[] }): string {
-  const first = m.bodies[0] as { messages: { content: string }[] } | undefined;
-  return first?.messages[0]?.content ?? "";
-}
-
-/** The verb lines of a target prompt, between their heading and the people line. */
-function verbLines(prompt: string): string[] {
-  const all = prompt.split("\n");
-  const from = all.indexOf("Verbs the page offers, each with the fields it takes besides actor:");
-  const to = all.findIndex((line) => line.startsWith("People (actors and targets): "));
-  return all.slice(from + 1, to);
-}
-
-/** A verb line as the prompt writes it from a verb and its fields. */
-function verbLine({ verb, fields }: { verb: string; fields: string[] }): string {
-  return `  ${verb}${fields.length > 0 ? ` (fields: ${fields.join(", ")})` : ""}`;
-}
 
 describe("H2: every engine fact the target uses is read from the bench's routes during the run", () => {
   const RUNS = [
@@ -1192,63 +1141,112 @@ describe("H4: a headed command line exits once its run is done, its stdin still 
   }, 90_000);
 });
 
-describe("M1: the player's model is the --model setting, anthropic/claude-haiku-5.5 when none is named", () => {
-  const RUNS: [flags: string[], posted: string][] = [
-    [["--model", "z-ai/glm-5.3-flash"], "z-ai/glm-5.3-flash"],
-    [[], "anthropic/claude-haiku-5.5"],
-  ];
+describe("G1: each model is asked by its own request: GLM by json_object pinned to Z.AI, every other by json-schema-retry", () => {
+  const WORDS_PROMPT = [
+    "You write the one line a character says in a small text world.",
+    "The instruction: have Mux say something funny",
+    `The end state: ${described(MUX_SAYS)}.`,
+    'Answer with one JSON object {"words": "<the line, as the character says it, one sentence>"} and nothing else.',
+  ].join("\n");
+  const TARGET_HEAD = /^You turn an instruction into a plan.*\nUse only the names listed above\.$/s;
 
-  for (const [flags, posted] of RUNS) {
-    test(`${flags.join(" ") || "no --model"}: the target and the words are asked of ${posted}, and run.json records it`, async () => {
-      const m = model(goal(MUX_SAYS, true), { words: LINE });
-      const j = preferring(MUX_SAY_MOVES);
-      const ran = await play("have Mux say something funny", [...endpoints(m, j), ...flags]);
-      expect(ran.record.outcome?.kind).toBe("reached");
-      expect(ran.record.calls.filter((c) => c.client === "model").map((c) => c.purpose)).toEqual([
-        "target",
-        "words",
-      ]);
-      expect((m.bodies as { model: string }[]).map((body) => body.model)).toEqual([posted, posted]);
-      expect(ran.record.parameters.wordsModel).toBe(posted);
-      // S2: the request is pinned with its name: a change to it that keeps REQUEST turns this red.
-      expect([REQUEST, ran.record.parameters.request]).toEqual(["json-schema-retry", REQUEST]);
-      const bodies = m.bodies as Record<string, unknown>[];
-      const strict = (name: string, schema: unknown) => ({
-        type: "json_schema",
-        json_schema: { name, strict: true, schema },
+  /** Run Mux's say with `flags`: the target and the words are both asked, then checked here. */
+  async function mux(flags: string[]): Promise<{ ran: Ran; bodies: Record<string, unknown>[] }> {
+    const m = model(goal(MUX_SAYS, true), { words: LINE });
+    const j = preferring(MUX_SAY_MOVES);
+    const ran = await play("have Mux say something funny", [...endpoints(m, j), ...flags]);
+    expect([ran.record.outcome?.kind, ran.exitCode]).toEqual(["reached", 0]);
+    // Jev's model is a constant, whatever the player's model is.
+    expect((j.bodies as JevRequest[]).map((body) => body.model)).toEqual(
+      j.bodies.map(() => "typesafe/jev-1.13"),
+    );
+    const bodies = m.bodies as Record<string, unknown>[];
+    expect([bodies.length, promptOf(bodies[0])]).toEqual([2, expect.stringMatching(TARGET_HEAD)]);
+    return { ran, bodies };
+  }
+
+  test("no --model: target and words asked of z-ai/glm-5.3-flash by arm F's body exactly, recorded as json-object-z-ai-retry", async () => {
+    const { ran, bodies } = await mux([]);
+    const armF = (prompt: string) => ({
+      model: "z-ai/glm-5.3-flash",
+      messages: [{ role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+      provider: { order: ["z-ai"], allow_fallbacks: false },
+      usage: { include: true },
+    });
+    // The request's name is pinned beside its body, and toEqual refuses any key arm F's lacks.
+    expect({
+      request: ran.record.parameters.request,
+      wordsModel: ran.record.parameters.wordsModel,
+      bodies,
+    }).toEqual({
+      request: "json-object-z-ai-retry",
+      wordsModel: "z-ai/glm-5.3-flash",
+      bodies: [armF(promptOf(bodies[0])), armF(WORDS_PROMPT)],
+    });
+  }, 60_000);
+
+  for (const named of ["anthropic/claude-haiku-5.5", "openai/gpt-test"]) {
+    test(`--model ${named}: each body's JSON text is today's json-schema-retry body, recorded as json-schema-retry`, async () => {
+      const { ran, bodies } = await mux(["--model", named]);
+      expect({
+        request: ran.record.parameters.request,
+        wordsModel: ran.record.parameters.wordsModel,
+        texts: bodies.map((body) => JSON.stringify(body)),
+      }).toEqual({
+        request: "json-schema-retry",
+        wordsModel: named,
+        texts: [
+          schemaRetryText(named, promptOf(bodies[0]), "target", wireSchema(targetSchema)),
+          schemaRetryText(named, WORDS_PROMPT, "words", wireSchema(wordsSchema)),
+        ],
       });
-      const words = [
-        "You write the one line a character says in a small text world.",
-        "The instruction: have Mux say something funny",
-        `The end state: ${described(MUX_SAYS)}.`,
-        'Answer with one JSON object {"words": "<the line, as the character says it, one sentence>"} and nothing else.',
-      ].join("\n");
-      const head = /^You turn an instruction into a plan.*\nUse only the names listed above\.$/s;
-      expect(bodies).toEqual([
-        {
-          model: posted,
-          messages: [{ role: "user", content: expect.stringMatching(head) }],
-          response_format: strict("target", wireSchema(targetSchema)),
-          provider: { require_parameters: true },
-          usage: { include: true },
-        },
-        {
-          model: posted,
-          messages: [{ role: "user", content: words }],
-          response_format: strict("words", wireSchema(wordsSchema)),
-          provider: { require_parameters: true },
-          usage: { include: true },
-        },
-      ]);
       expect(JSON.stringify(bodies)).not.toContain('"oneOf"');
-      // Jev's model is a constant, whatever the player's model is.
-      expect(j.bodies.length).toBeGreaterThan(0);
-      expect((j.bodies as JevRequest[]).map((body) => body.model)).toEqual(
-        j.bodies.map(() => "typesafe/jev-1.13"),
-      );
-      expect(ran.exitCode).toBe(0);
     }, 60_000);
   }
+});
+
+describe("G2: every model call records the provider OpenRouter reported, and no Jev call has one", () => {
+  test("a target served by Z.AI records it, words answered with no provider record null, Jev calls carry no provider key", async () => {
+    const m = chat(
+      { content: JSON.stringify(goal(MUX_SAYS, true)), provider: "Z.AI" },
+      { content: JSON.stringify({ words: LINE }) },
+    );
+    const ran = await play("have Mux say something funny", endpoints(m, preferring(MUX_SAY_MOVES)));
+    expect(ran.record.outcome?.kind).toBe("reached");
+    const models = ran.record.calls.filter((c) => c.client === "model");
+    expect(models.map((c) => [c.purpose, "provider" in c, c.provider])).toEqual([
+      ["target", true, "Z.AI"],
+      ["words", true, null],
+    ]);
+    const jevs = ran.record.calls.filter((c) => c.client === "jev");
+    expect([jevs.length > 0, jevs.filter((c) => "provider" in c)]).toEqual([true, []]);
+  }, 60_000);
+
+  test("a refused attempt and its retry each record their own body's provider", async () => {
+    const answer = JSON.stringify({ kind: "no-such-action", reason: "no verb attacks" });
+    const m = chat(
+      { content: "no JSON here", provider: "Chutes" },
+      { content: answer, provider: "Z.AI" },
+    );
+    const ran = await play("have Rogue attack Glitch", endpoints(m, preferring([])));
+    expect(ran.record.outcome?.kind).toBe("no-such-action");
+    expect(ran.record.calls.map((c) => [c.retry ?? false, c.refused?.answer, c.provider])).toEqual([
+      [false, "no JSON here", "Chutes"],
+      [true, undefined, "Z.AI"],
+    ]);
+  }, 60_000);
+});
+
+describe("G6: run.json records the world relative to the repository root and carries no absolute path", () => {
+  test("a run over the default world records world as world, and no string in run.json is absolute", async () => {
+    const m = model(goal(MUX_SAYS, true), { words: LINE });
+    const ran = await play("have Mux say something funny", endpoints(m, preferring(MUX_SAY_MOVES)));
+    expect(ran.record.outcome?.kind).toBe("reached");
+    // ran.record is run.json as written, read back whole.
+    expect(ran.record.parameters.world).toBe("world");
+    expect(stringsOf(ran.record).filter((text) => isAbsolute(text))).toEqual([]);
+  }, 60_000);
 });
 
 describe("M2: a --model that is not <provider>/<model> is refused before the run starts", () => {
@@ -1296,7 +1294,7 @@ describe("H6: a fresh run's files carry the committed run's keys", () => {
     expect(keys(ran.record)).toEqual(keys(committed));
     // A run records the request it made: the committed run, made before, has no request.
     expect(keys(ran.record.parameters)).toEqual(
-      keys({ ...committed.parameters, request: REQUEST }),
+      keys({ ...committed.parameters, request: "json-object-z-ai-retry" }),
     );
     const committedLoops = lines<LoopRecord>(join(COMMITTED, "loops.jsonl"));
     const loopKeys = [...new Set(committedLoops.map((entry) => keys(entry).join(",")))];

@@ -9,8 +9,8 @@
  * browser. run.json is rewritten as the run goes; the history is read back through the bench's own
  * routes at the end.
  */
-import { appendFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { appendFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { join, relative, resolve } from "node:path";
 import { type Browser, type BrowserContext, chromium, type Page } from "playwright";
 import {
   type EventsBody,
@@ -50,10 +50,13 @@ import { askTarget, type RecordedTarget, type Served, writesWords } from "./targ
 import {
   type Attempt,
   words as askWords,
-  DEFAULT_MODEL,
   type ModelOptions,
-  REQUEST,
+  modelOf,
+  requestFor,
 } from "./words.ts";
+
+/** The checkout holding harness/: run.json records the world relative to it. */
+const REPO_ROOT = resolve(import.meta.dir, "..", "..");
 
 /** A bench hosted for one run: where it answers and how to stop it, or why it would not boot. */
 export type Hosted = { ok: true; base: string; stop: () => void } | { ok: false; message: string };
@@ -88,7 +91,7 @@ export type DriveOptions = {
   /** Where run directories are made: corpus/runs by default. */
   corpusDir: string;
   jev: ClientOptions;
-  /** The player's model client; its model is DEFAULT_MODEL when none is named. */
+  /** The player's model client; its model is DEFAULT_MODEL when none is named (modelOf). */
   model: ModelOptions;
   thresholds?: Thresholds;
   /** Whether a goal file's expectation holds on the bench at `base`; asked once the run ends. */
@@ -129,19 +132,22 @@ export type Outcome =
 
 /**
  * One model or Jev call and what it cost: null when the provider reported no cost. A model call
- * that was the retry is marked so; one whose answer was refused carries the refusal's message and
- * the model's whole answer. Both are left out otherwise, so a run.json written before reads as one.
+ * carries the provider OpenRouter reported serving it (null when it reported none); a Jev call
+ * leaves it out. A model call that was the retry is marked so; one whose answer was refused carries
+ * the refusal's message and the model's whole answer. Each is left out otherwise, so a run.json
+ * written before reads as one.
  */
 export type Call = {
   client: "model" | "jev";
   purpose: string;
   costUsd: number | null;
+  provider?: string | null;
   retry?: true;
   refused?: { message: string; answer: string | null };
 };
 
 /** What marks a call beyond its client, purpose and cost. */
-type Marks = Pick<Call, "retry" | "refused">;
+type Marks = Pick<Call, "provider" | "retry" | "refused">;
 
 /** One loop as recorded in loops.jsonl. */
 export type LoopRecord = {
@@ -173,7 +179,7 @@ export type RunRecord = {
     thresholds: Thresholds;
     jevModel: string;
     wordsModel: string;
-    /** The request the player's model was asked by (REQUEST); absent in a run made before it was named. */
+    /** The request the player's model was asked by (requestFor); absent in a run made before it was named. */
     request?: string;
   };
   target: RecordedTarget | null;
@@ -267,12 +273,24 @@ export function optionsFromFlags(
   };
 }
 
-/** The UTC start time, safe as a directory name, made unique within `corpusDir`. */
-function runIdFor(corpusDir: string, startedAt: Date): string {
+/**
+ * A new run directory in `corpusDir`, named for the UTC start time, safe as a directory name, and
+ * claimed by the mkdir that creates it: the base, then <base>-2, <base>-3, …, the first one the
+ * mkdir made. A directory already there (EEXIST) is taken and the next is tried; every other error
+ * is thrown. No check precedes the mkdir, so two processes are never handed one directory.
+ */
+export function claimRunDir(corpusDir: string, startedAt: Date): { runId: string; runDir: string } {
   const base = startedAt.toISOString().replace(/[:.]/g, "-");
-  let id = base;
-  for (let n = 2; existsSync(join(corpusDir, id)); n++) id = `${base}-${n}`;
-  return id;
+  for (let n = 1; ; n++) {
+    const runId = n === 1 ? base : `${base}-${n}`;
+    const runDir = join(corpusDir, runId);
+    try {
+      mkdirSync(runDir);
+      return { runId, runDir };
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code !== "EEXIST") throw error;
+    }
+  }
 }
 
 /**
@@ -424,18 +442,22 @@ export async function releaseHolds(input: () => ReadableStream<Uint8Array> = STD
   await reader?.cancel();
 }
 
-/** What a run records it was made with: the bench, the rule, the models and the request. */
+/**
+ * What a run records it was made with: the bench, the rule, the models and the request. The world
+ * is recorded relative to the checkout, so no run.json carries a path of the machine it ran on.
+ */
 function parametersOf(options: DriveOptions, thresholds: Thresholds): RunRecord["parameters"] {
+  const model = modelOf(options.model);
   return {
     url: options.url ?? null,
-    world: options.worldDir,
+    world: relative(REPO_ROOT, options.worldDir),
     tickMinutes: options.tickMinutes,
     maxLoops: options.maxLoops,
     headed: options.headed,
     thresholds,
     jevModel: JEV_MODEL,
-    wordsModel: options.model.model ?? DEFAULT_MODEL,
-    request: REQUEST,
+    wordsModel: model,
+    request: requestFor(model).name,
   };
 }
 
@@ -445,9 +467,7 @@ export async function drive(options: DriveOptions): Promise<DriveResult> {
   const thresholds = options.thresholds ?? REGISTERED;
   const started = new Date();
   mkdirSync(options.corpusDir, { recursive: true });
-  const runId = runIdFor(options.corpusDir, started);
-  const runDir = join(options.corpusDir, runId);
-  mkdirSync(runDir);
+  const { runId, runDir } = claimRunDir(options.corpusDir, started);
   // loops.jsonl grows as the run goes; events.jsonl and received.jsonl are written once the
   // history has been read back whole, so their absence means it was never read.
   writeFileSync(join(runDir, "loops.jsonl"), "");
@@ -570,8 +590,9 @@ type Hooks = {
 
 /** Record each attempt of the model call for `purpose` as a call of its own, in order. */
 function recordAttempts(hooks: Hooks, purpose: string, attempts: Attempt[]): void {
-  for (const { costUsd, retry, refused } of attempts) {
+  for (const { costUsd, provider, retry, refused } of attempts) {
     hooks.call("model", purpose, costUsd, {
+      provider,
       ...(retry ? { retry: true } : {}),
       ...(refused === null ? {} : { refused }),
     });

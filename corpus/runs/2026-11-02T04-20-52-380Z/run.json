@@ -1,0 +1,42 @@
+{
+  "runId": "2026-11-02T04-20-52-380Z",
+  "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+  "startedAt": "2026-11-02T04:20:52.380Z",
+  "endedAt": "2026-11-02T04:20:55.240Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for jacking into the data shard or reading the contacts stored on it. The available verbs (depart, say, say-to, whisper, offer, accept, refuse) cannot carry out either part of the instruction, and none of the allowed end states describes Glitch reading that data."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for jacking into the data shard or reading the contacts stored on it. The available verbs (depart, say, say-to, whisper, offer, accept, refuse) cannot carry out either part of the instruction, and none of the allowed end states describes Glitch reading that data."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0004344,
+      "provider": "Azure"
+    }
+  ],
+  "costUsd": 0.0004344,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

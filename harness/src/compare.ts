@@ -1,12 +1,14 @@
 /**
- * Two models' scores of the same goal sets side by side, as a loss report: per set, each model's
- * reached count, valid targets, words, retries and cost; then every goal the baseline held and the
- * candidate did not, every goal the reverse, every goal either model's run asked a retry on, and
- * every goal's words from both. Each lost or gained goal shows both models' outcome and target, or
- * the target's refusal, and each refused answer whole, as the run.json its score entry names
- * records them. Every number and line is rendered by code from those files, and the report states
- * no verdict. Score files that name another model or request, were made at other thresholds than
- * the registered ones, or score other goals are refused before anything is written.
+ * Two models' scores of the same goal sets side by side, each under its own model's request, as a
+ * loss report: per set, each model's reached count, valid targets, words, retries, cost and
+ * providers; then every goal the baseline held and the candidate did not, every goal the reverse,
+ * every goal either model's run asked a retry on, and every goal's words from both. Each lost or
+ * gained goal shows both models' outcome and target, or the target's refusal, and each refused
+ * answer whole, as the run.json its score entry names records them, and its providers as the score
+ * entry records them. Every number and line is rendered by code from those files, and the report
+ * states no verdict. Score files that name another model or a request not their model's, were made
+ * at other thresholds than the registered ones, or score other goals are refused before anything
+ * is written.
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
@@ -20,12 +22,13 @@ import {
   type GoalWords,
   goalFileSchema,
   modelSlug,
+  type Providers,
   type Retries,
   type ScoreFile,
   scorePath,
 } from "./score.ts";
 import type { RecordedTarget } from "./target.ts";
-import { REQUEST } from "./words.ts";
+import { requestFor } from "./words.ts";
 
 /** One model's numbers for one set, as its score file records them. */
 export type Side = {
@@ -37,6 +40,8 @@ export type Side = {
   costUsd: number;
   unreportedCosts: number;
   retries: Retries;
+  /** The set's model calls per provider; null for a score file made before providers were recorded. */
+  providers: Providers | null;
 };
 
 export type SetRow = { set: string; goals: string; baseline: Side; candidate: Side };
@@ -59,6 +64,11 @@ export type GoalRun = {
   stopped: Stopped | null;
   /** Every refused model call of the run, in call order. */
   refused: RefusedCall[];
+  /**
+   * The run's model calls per provider, as its score entry records them, never recounted from
+   * run.json; null for an entry made before providers were recorded.
+   */
+  providers: Providers | null;
 };
 
 /** One model's side of a retried goal: its score entry's held and retries, and its refused calls. */
@@ -88,8 +98,8 @@ export type WordsRow = { set: string; id: string; baseline: GoalWords; candidate
 export type Comparison = {
   baseline: string;
   candidate: string;
-  /** The request both models' scores were made under (REQUEST). */
-  request: string;
+  /** The request each model's scores were made under: its own (requestFor). */
+  requests: { baseline: string; candidate: string };
   sets: SetRow[];
   losses: Moved[];
   gains: Moved[];
@@ -120,8 +130,8 @@ function readGoals(goalsPath: string): GoalFile {
 }
 
 /**
- * `model`'s score of `file`, refused unless it is that model's, under REQUEST, at REGISTERED, of
- * its goals.
+ * `model`'s score of `file`, refused unless it is that model's, under that model's request, at
+ * REGISTERED, of its goals.
  */
 function readScore(
   goalsPath: string,
@@ -136,10 +146,11 @@ function readScore(
       `model is ${JSON.stringify(score.model)}, not the model named, "${model}"`,
     );
   }
-  if (score.request !== REQUEST) {
+  const request = requestFor(model).name;
+  if (score.request !== request) {
     throw new Refused(
       path,
-      `request is ${JSON.stringify(score.request)}, not this request, "${REQUEST}"`,
+      `request is ${JSON.stringify(score.request)}, not ${model}'s request, "${request}"`,
     );
   }
   const thresholds = score.rule?.thresholds;
@@ -177,10 +188,14 @@ function sideOf(out: string, { path, score }: Read["baseline"]): Side {
     costUsd: score.costUsd,
     unreportedCosts: score.unreportedCosts,
     retries: score.retries,
+    providers: score.providers ?? null,
   };
 }
 
-/** The run `entry` names, read from its own run.json, relative to the score file at `path`. */
+/**
+ * The run `entry` names, read from its own run.json, relative to the score file at `path`, with
+ * the providers `entry` records.
+ */
 function runOf(out: string, path: string, entry: GoalScore): GoalRun {
   const runDir = join(dirname(path), entry.run);
   const record = readJson<RunRecord>(join(runDir, "run.json"), `run.json of ${entry.id}`);
@@ -192,6 +207,7 @@ function runOf(out: string, path: string, entry: GoalScore): GoalRun {
     refused: record.calls.flatMap(({ purpose, retry, refused }) =>
       refused === undefined ? [] : [{ purpose, retry: retry === true, ...refused }],
     ),
+    providers: entry.providers ?? null,
   };
 }
 
@@ -264,10 +280,14 @@ export function compare(
       candidate: readScore(goalsPath, file, candidate),
     };
   });
+  const requests = {
+    baseline: requestFor(baseline).name,
+    candidate: requestFor(candidate).name,
+  };
   const report: Comparison = {
     baseline,
     candidate,
-    request: REQUEST,
+    requests,
     sets: sets.map((read) => ({
       set: read.file.set,
       goals: relative(out, read.goalsPath),
@@ -286,7 +306,11 @@ export function compare(
       })),
     ),
   };
-  const base = join(out, `${modelSlug(candidate)}.vs.${modelSlug(baseline)}.${REQUEST}.compare`);
+  const sides = [
+    `${modelSlug(candidate)}.${requests.candidate}`,
+    `${modelSlug(baseline)}.${requests.baseline}`,
+  ];
+  const base = join(out, `${sides.join(".vs.")}.compare`);
   const paths = [`${base}.json`, `${base}.md`];
   writeFileSync(`${base}.json`, `${JSON.stringify(report, null, 2)}\n`);
   writeFileSync(`${base}.md`, rendered(report));
@@ -313,6 +337,15 @@ function wordsText(words: GoalWords): string {
   return words.kind === "written" ? `written: "${cell(words.text)}"` : words.kind;
 }
 
+/**
+ * Each provider's model calls as `<provider> <calls>`, an unreported provider as `unreported`, or
+ * `not recorded` for a score made before providers were recorded.
+ */
+function providersText(providers: Providers | null): string {
+  if (providers === null) return "not recorded";
+  return providers.map((p) => `${p.provider ?? "unreported"} ${p.calls}`).join(", ");
+}
+
 function runLine(side: "baseline" | "candidate", model: string, run: GoalRun): string {
   const target =
     run.target !== null
@@ -320,7 +353,8 @@ function runLine(side: "baseline" | "candidate", model: string, run: GoalRun): s
       : run.stopped !== null
         ? `target refused: ${run.stopped.kind} at ${run.stopped.call}: ${oneLine(run.stopped.message)}`
         : "no target recorded";
-  return `- ${side} (${model}): outcome ${code(run.outcome)}; ${target}; run ${code(run.run)}`;
+  const providers = `providers ${oneLine(providersText(run.providers))}`;
+  return `- ${side} (${model}): outcome ${code(run.outcome)}; ${target}; ${providers}; run ${code(run.run)}`;
 }
 
 /**
@@ -381,20 +415,21 @@ function retriesSection(report: Comparison): string[] {
 
 function sideRow(set: string, side: "baseline" | "candidate", model: string, shown: Side): string {
   const { reached, targets, words, retries } = shown;
-  return `| ${set} | ${side} | ${model} | ${reached.count} of ${reached.of} | ${targets.valid} of ${targets.asked} | ${words.written} | ${words.refused} | ${retries.asked} | ${retries.rescued} | ${shown.costUsd} | ${shown.unreportedCosts} |`;
+  return `| ${set} | ${side} | ${model} | ${reached.count} of ${reached.of} | ${targets.valid} of ${targets.asked} | ${words.written} | ${words.refused} | ${retries.asked} | ${retries.rescued} | ${shown.costUsd} | ${shown.unreportedCosts} | ${cell(providersText(shown.providers))} |`;
 }
 
 /** The report as markdown: the same numbers and goals as the JSON, in the same order. */
 export function rendered(report: Comparison): string {
+  const { requests } = report;
   return [
     `# ${report.candidate} against ${report.baseline}`,
     "",
-    `Baseline: ${report.baseline}. Candidate: ${report.candidate}. Request: ${report.request}. Every number and line below is rendered from the score files and the run.json files they name.`,
+    `Baseline: ${report.baseline} under ${requests.baseline}. Candidate: ${report.candidate} under ${requests.candidate}. Each model's scores were made under its own request. Every number and line below is rendered from the score files and the run.json files they name.`,
     "",
     "## Per set",
     "",
-    "| set | side | model | reached | targets valid of asked | words written | words refused | retries asked | retries rescued | costUsd | unreported costs |",
-    "|---|---|---|---|---|---|---|---|---|---|---|",
+    "| set | side | model | reached | targets valid of asked | words written | words refused | retries asked | retries rescued | costUsd | unreported costs | providers |",
+    "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ...report.sets.flatMap((row) => [
       sideRow(row.set, "baseline", report.baseline, row.baseline),
       sideRow(row.set, "candidate", report.candidate, row.candidate),
@@ -435,8 +470,9 @@ function usage(message: string): never {
 
 /**
  * compare's command line over `args`: both models' scores of every goal file, set side by side in
- * <candidate>.vs.<baseline>.<REQUEST>.compare.json and .compare.md beside the first goal file; refused,
- * writing nothing, when any file is missing or not like for like.
+ * <candidate>.<candidate request>.vs.<baseline>.<baseline request>.compare.json and .compare.md
+ * beside the first goal file; refused, writing nothing, when any file is missing or not like for
+ * like.
  */
 export async function compareCli(args: string[]): Promise<void> {
   let values: ReturnType<typeof parse>["values"];

@@ -9,7 +9,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import type { EndState } from "harness/goal.ts";
 import { T_ACT, T_DONE } from "harness/rule.ts";
-import type { RunRecord } from "harness/run.ts";
+import type { LoopRecord, RunRecord } from "harness/run.ts";
 import { hostBench } from "../src/adapter/host.ts";
 
 export const ROOT = join(import.meta.dir, "..");
@@ -185,17 +185,21 @@ export function standIn(answer: (body: unknown, n: number) => Response): {
 
 /**
  * One scripted chat completions answer: a message's content as sent (a body with no choices when
- * absent) and the cost reported (MODEL_COST when absent, no usage.cost when null), or a status.
+ * absent), the cost reported (MODEL_COST when absent, no usage.cost when null) and the provider
+ * reported (no provider key when absent), or a status.
  */
-export type ChatAnswer = { content?: string; cost?: number | null } | { status: number };
+export type ChatAnswer =
+  | { content?: string; cost?: number | null; provider?: string }
+  | { status: number };
 
 /** The chat completions stand-in scripted call by call: the nth call gets the nth answer. */
 export function chat(...answers: ChatAnswer[]) {
   return standIn((_body, n) => {
     const answer = answers[n - 1] ?? { content: "{}" };
     if ("status" in answer) return new Response("upstream exploded", { status: answer.status });
-    const { content, cost = MODEL_COST } = answer;
+    const { content, cost = MODEL_COST, provider } = answer;
     return Response.json({
+      ...(provider === undefined ? {} : { provider }),
       choices: content === undefined ? [] : [{ message: { role: "assistant", content } }],
       ...(cost === null ? {} : { usage: { cost } }),
     });
@@ -205,6 +209,95 @@ export function chat(...answers: ChatAnswer[]) {
 /** The chat completions stand-in: answers each call with the next scripted JSON object. */
 export function model(...answers: unknown[]) {
   return chat(...answers.map((answer) => ({ content: JSON.stringify(answer) })));
+}
+
+/** The prompt a chat completions request `body` was sent with, as a stand-in kept it. */
+export function promptOf(body: unknown): string {
+  const sent = body as { messages?: { content: string }[] } | undefined;
+  return sent?.messages?.[0]?.content ?? "";
+}
+
+/** The prompt the chat completions stand-in received on its first call: the target's. */
+export function targetPrompt(m: { bodies: unknown[] }): string {
+  return promptOf(m.bodies[0]);
+}
+
+/** The verb lines of a target prompt, between their heading and the people line. */
+export function verbLines(prompt: string): string[] {
+  const all = prompt.split("\n");
+  const from = all.indexOf("Verbs the page offers, each with the fields it takes besides actor:");
+  const to = all.findIndex((line) => line.startsWith("People (actors and targets): "));
+  return all.slice(from + 1, to);
+}
+
+/** A verb line as the prompt writes it from a verb and its fields. */
+export function verbLine({ verb, fields }: { verb: string; fields: string[] }): string {
+  return `  ${verb}${fields.length > 0 ? ` (fields: ${fields.join(", ")})` : ""}`;
+}
+
+/**
+ * Today's json-schema-retry body for `model`, its keys in today's order, as JSON text: the body
+ * every model the request table does not list is sent.
+ */
+export function schemaRetryText(
+  model: string,
+  prompt: string,
+  name: string,
+  schema: unknown,
+): string {
+  return JSON.stringify({
+    model,
+    messages: [{ role: "user", content: prompt }],
+    response_format: {
+      type: "json_schema",
+      json_schema: { name, strict: true, schema },
+    },
+    provider: { require_parameters: true },
+    usage: { include: true },
+  });
+}
+
+/** The candidates a loop's controls offer, worked out here from the controls the loop read. */
+export function offeredBy(entry: LoopRecord, words: string | null): string[] {
+  return entry.controls.flatMap((control) => {
+    if (control.label === "" || !control.enabled) return [];
+    if (control.kind === "select") {
+      return control.options
+        .filter((option) => option !== control.value)
+        .map((option) => `set ${control.label} to ${option}`);
+    }
+    if (control.kind === "button") return [`press ${control.label}`];
+    return words !== null && control.value !== words
+      ? [`type the words into ${control.label}`]
+      : [];
+  });
+}
+
+/** A plan's step as the model writes it. */
+export function step(actor: string, verb: string, fields: Record<string, string> = {}) {
+  return { actor, verb, fields };
+}
+
+/** The decision kinds of a run's loops, in order. */
+export function kinds(loops: LoopRecord[]): string[] {
+  return loops.map((entry) => entry.decision.kind);
+}
+
+/** The loops that pressed Step while the page showed the offer `e1` pending. */
+export function steppedWhileOffered(loops: LoopRecord[]): number[] {
+  return loops
+    .filter(
+      (entry) => entry.state.includes("exchange.offer e1 by") && entry.action === "press Step",
+    )
+    .map((entry) => entry.loop);
+}
+
+/** Every string anywhere in `value`, at any depth, keys left out. */
+export function stringsOf(value: unknown): string[] {
+  if (typeof value === "string") return [value];
+  if (Array.isArray(value)) return value.flatMap(stringsOf);
+  if (value === null || typeof value !== "object") return [];
+  return Object.values(value).flatMap(stringsOf);
 }
 
 /** The model's target for an end state. */
@@ -256,4 +349,14 @@ export function preferring(
       }),
     );
   }, instead);
+}
+
+/**
+ * A Jev stand-in that favours the giver's offer moves, in order, until the offer is recorded, and
+ * from then on scores press Step above every other candidate on every loop.
+ */
+export function offerThenStep(offerMoves: string[]) {
+  return preferring((request) =>
+    request.state.includes("exchange.offer") ? ["press Step"] : offerMoves,
+  );
 }
