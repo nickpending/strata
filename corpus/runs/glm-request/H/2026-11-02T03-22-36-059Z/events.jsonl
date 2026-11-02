@@ -1,0 +1,1 @@
+{"id":"e1","tick":0,"seq":1,"kind":"speech","subkind":"speech.whisper","actor":"glitch","targets":["rogue"],"place":"chrome-cassette","visibility":{"audience":"place","narrow":{"words":"participants"}},"cause":"operator","payload":{"words":"Rogue, the vault door's code is 4-1-7-9, but the guard changes shifts at midnight, so we have to move before then."}}

@@ -1,0 +1,76 @@
+{
+  "runId": "2026-11-02T02-29-56-672Z",
+  "instruction": "get Rogue into the back room",
+  "startedAt": "2026-11-02T02:29:56.672Z",
+  "endedAt": "2026-11-02T02:30:01.050Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "location": {
+        "person": "rogue",
+        "room": "back-room"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 4,
+    "done": 0.95
+  },
+  "loops": 4,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00010735
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000055062
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000055062
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.00007014
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000075768
+    }
+  ],
+  "costUsd": 0.000363382,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

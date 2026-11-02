@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-04-08-895Z",
+  "instruction": "Glitch has something for Rogue's ears only. Let him tell her without anyone else catching the words.",
+  "startedAt": "2026-11-02T03:04:08.895Z",
+  "endedAt": "2026-11-02T03:04:11.596Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "Whisper targets are same-room only, so a private aside only works inside a room; the end-state schema only accepts a bare said whisper with no privacy condition, and the page offers no action that can guarantee no one else hears it (speech rooms here always leave the whisper unguarded by any verifiable constraint), so no listed end state carries out 'without anyone else catching the words'."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "Whisper targets are same-room only, so a private aside only works inside a room; the end-state schema only accepts a bare said whisper with no privacy condition, and the page offers no action that can guarantee no one else hears it (speech rooms here always leave the whisper unguarded by any verifiable constraint), so no listed end state carries out 'without anyone else catching the words'."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00051508
+    }
+  ],
+  "costUsd": 0.00051508,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

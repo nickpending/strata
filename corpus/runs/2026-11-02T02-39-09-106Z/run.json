@@ -1,0 +1,187 @@
+{
+  "runId": "2026-11-02T02-39-09-106Z",
+  "instruction": "Glitch should lean in close and tell Rogue, for her ears only, that he'll be gone before sunrise.",
+  "startedAt": "2026-11-02T02:39:09.106Z",
+  "endedAt": "2026-11-02T02:39:25.614Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "glitch",
+        "subkind": "speech.whisper"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      },
+      {
+        "actor": "glitch",
+        "verb": "whisper",
+        "fields": {
+          "target": "rogue"
+        }
+      }
+    ]
+  },
+  "words": "Just between us, Rogue — I'll be gone before the sun comes up, so don't you wait for me.",
+  "outcome": {
+    "kind": "ceiling",
+    "loops": 24
+  },
+  "loops": 24,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00016746
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.00028711
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000058044
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000073248
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000084042
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000087864
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000087864
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000087948
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 9",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 10",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 11",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 12",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 13",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 14",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 15",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 16",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 17",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 18",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 19",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 20",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 21",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 22",
+      "costUsd": 0.000089208
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 23",
+      "costUsd": 0.00008925
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 24",
+      "costUsd": 0.000089208
+    }
+  ],
+  "costUsd": 0.0025397019999999987,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

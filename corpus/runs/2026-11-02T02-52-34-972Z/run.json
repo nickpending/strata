@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-52-34-972Z",
+  "instruction": "Get Mux to repair the jammed door between the back room and the bar.",
+  "startedAt": "2026-11-02T02:52:34.972Z",
+  "endedAt": "2026-11-02T02:53:02.557Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no repair verb, and none of the available end states represents the jammed door being repaired."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no repair verb, and none of the available end states represents the jammed door being repaired."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00116086
+    }
+  ],
+  "costUsd": 0.00116086,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

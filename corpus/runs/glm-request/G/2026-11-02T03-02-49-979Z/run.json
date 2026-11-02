@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-02-49-979Z",
+  "instruction": "make Rogue drink a shot at the bar",
+  "startedAt": "2026-11-02T03:02:49.979Z",
+  "endedAt": "2026-11-02T03:02:52.644Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no drink verb, and no item is a shot (the only items are charge-cell, data-shard, stimpak). None of the reachable end states matches: Rogue already stands in the chrome-cassette bar, so a location goal is already true, and holding an item or saying something would not be drinking a shot."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no drink verb, and no item is a shot (the only items are charge-cell, data-shard, stimpak). None of the reachable end states matches: Rogue already stands in the chrome-cassette bar, so a location goal is already true, and holding an item or saying something would not be drinking a shot."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0004678
+    }
+  ],
+  "costUsd": 0.0004678,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

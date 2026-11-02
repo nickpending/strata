@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-05-47-838Z",
+  "instruction": "get Mux's charge cell into Glitch's hands",
+  "startedAt": "2026-11-02T03:05:47.838Z",
+  "endedAt": "2026-11-02T03:05:50.035Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "Mux holds the charge-cell in the back room while Glitch is in the chrome-cassette; a hand-off requires Mux to walk west to Glitch, offer the charge-cell, and Glitch to accept it."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "Mux holds the charge-cell in the back room while Glitch is in the chrome-cassette; a hand-off requires Mux to walk west to Glitch, offer the charge-cell, and Glitch to accept it."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00041077
+    }
+  ],
+  "costUsd": 0.00041077,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

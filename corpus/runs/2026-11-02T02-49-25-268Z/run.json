@@ -1,0 +1,84 @@
+{
+  "runId": "2026-11-02T02-49-25-268Z",
+  "instruction": "have Mux say something funny",
+  "startedAt": "2026-11-02T02:49:25.268Z",
+  "endedAt": "2026-11-02T02:49:31.143Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "mux",
+        "subkind": "speech.say"
+      }
+    },
+    "steps": [
+      {
+        "actor": "mux",
+        "verb": "say",
+        "fields": {}
+      }
+    ]
+  },
+  "words": "I came here to multiplex signals and disappoint my manufacturers, and I'm fresh out of signals.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000087452
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0001422
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000056364
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000056364
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000056868
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000056826
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000061824
+    }
+  ],
+  "costUsd": 0.000517898,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

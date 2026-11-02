@@ -1,0 +1,356 @@
+{
+  "set": "blind-2-spent",
+  "author": "claude-opus-5-5 (blind-2 writer, pending-states)",
+  "model": "anthropic/claude-haiku-5.5",
+  "request": "json-schema-retry",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    }
+  },
+  "reached": {
+    "held": 13,
+    "of": 13
+  },
+  "targets": {
+    "valid": 13,
+    "asked": 13
+  },
+  "words": {
+    "written": 4,
+    "refused": 0
+  },
+  "retries": {
+    "asked": 0,
+    "rescued": 0
+  },
+  "perGoal": [
+    {
+      "id": "shard-into-glitchs-hands",
+      "instruction": "Glitch has been after Rogue's data shard all night. Get it into his hands.",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.000903172,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-20-58-204Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "fresh-cell-for-glitch",
+      "instruction": "Glitch's rig is running on fumes. Make sure he walks away with Mux's charge cell.",
+      "expect": {
+        "holder": {
+          "item": "charge-cell",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 9,
+      "costUsd": 0.0012502300000000002,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-04-020Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-ends-up-with-the-stim",
+      "instruction": "Rogue's hands are shaking. I want her holding that stimpak by the end of this.",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.0008702560000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-10-518Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "shard-back-to-mux",
+      "instruction": "The data shard belongs in the back room with Mux. See that he gets it.",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "mux"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 11,
+      "costUsd": 0.0013556579999999998,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-15-528Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "glitch-slips-out-back",
+      "instruction": "Glitch needs to get out of sight for a while. Put him in the back room.",
+      "expect": {
+        "location": {
+          "person": "glitch",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 3,
+      "costUsd": 0.000496126,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-23-663Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "mux-comes-out-front",
+      "instruction": "Mux has been hiding among his crates long enough. Bring him out to the bar.",
+      "expect": {
+        "location": {
+          "person": "mux",
+          "room": "chrome-cassette"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000611418,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-26-850Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-goes-to-check-stock",
+      "instruction": "Rogue wants to see what Mux has stacked up in the back. Get her back there.",
+      "expect": {
+        "location": {
+          "person": "rogue",
+          "room": "back-room"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 4,
+      "costUsd": 0.0005609479999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-30-776Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-calls-last-orders",
+      "instruction": "Have Rogue shout out to the whole bar that it's last orders.",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000637202,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-33-908Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Last orders, everyone, this is your final call before we close up!"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-warns-glitch-openly",
+      "instruction": "Rogue should tell Glitch straight to his face, loud enough that nobody could miss it, that his welcome is wearing thin.",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.0006947000000000001,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-38-759Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Glitch, I'm going to say this plainly so everyone in this room hears it: your welcome here is wearing thin, and you'd better start acting like you know it."
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "glitch-confides-in-rogue",
+      "instruction": "Glitch should lean in close and tell Rogue, for her ears only, that he'll be gone before sunrise.",
+      "expect": {
+        "said": {
+          "person": "glitch",
+          "subkind": "speech.whisper"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000673874,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-43-902Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "*leans in close* \"Don't look now, Rogue, but you'll be gone before sunrise.\""
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "mux-asks-glitch-about-the-cell",
+      "instruction": "I'd like Mux to ask Glitch, out loud and to him directly, whether the last cell held up.",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.001011976,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-48-528Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Glitch, did the last cell hold up?"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "read-the-shard",
+      "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0004267,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-54-989Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "glitch-takes-the-jolt",
+      "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0003057,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/H/2026-11-02T03-21-58-308Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    }
+  ],
+  "costUsd": 0.009797960000000001,
+  "unreportedCosts": 0
+}

@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-21-54-989Z",
+  "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+  "startedAt": "2026-11-02T03:21:54.989Z",
+  "endedAt": "2026-11-02T03:21:58.306Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for jacking into a data shard or reading its contents. The offered verbs are depart, say, say-to, whisper, offer, accept and refuse, and none of them accesses stored data. Glitch could be given the shard, but the instruction's core step cannot be carried out, and no end state (holder, location, or said) captures reading contacts from it."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for jacking into a data shard or reading its contents. The offered verbs are depart, say, say-to, whisper, offer, accept and refuse, and none of them accesses stored data. Glitch could be given the shard, but the instruction's core step cannot be carried out, and no end state (holder, location, or said) captures reading contacts from it."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0004267
+    }
+  ],
+  "costUsd": 0.0004267,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-07-00-431Z",
+  "instruction": "Glitch should lean in close and tell Rogue, for her ears only, that he'll be gone before sunrise.",
+  "startedAt": "2026-11-02T03:07:00.431Z",
+  "endedAt": "2026-11-02T03:07:03.850Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Glitch to lean in close and tell Rogue something for her ears only — a private whisper. But the only whisper verb requires a target person, and with only one possible target in the page, the end state would be just 'glitch whispered to rogue', which is not one of the offered end states."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Glitch to lean in close and tell Rogue something for her ears only — a private whisper. But the only whisper verb requires a target person, and with only one possible target in the page, the end state would be just 'glitch whispered to rogue', which is not one of the offered end states."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00046266
+    }
+  ],
+  "costUsd": 0.00046266,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

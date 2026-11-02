@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-22-57-988Z",
+  "instruction": "Have Glitch plug the data shard into his deck and crack whatever is on it.",
+  "startedAt": "2026-11-02T03:22:57.988Z",
+  "endedAt": "2026-11-02T03:23:00.847Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for plugging an item into a deck or cracking its contents. The offered verbs are depart, say, say-to, whisper, offer, accept and refuse, and none of the end-state forms (holder, location, said) can express a plug-in or crack. Handing Glitch the data shard would move the item but would not carry out the instruction."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page has no verb for plugging an item into a deck or cracking its contents. The offered verbs are depart, say, say-to, whisper, offer, accept and refuse, and none of the end-state forms (holder, location, said) can express a plug-in or crack. Handing Glitch the data shard would move the item but would not carry out the instruction."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003638
+    }
+  ],
+  "costUsd": 0.0003638,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

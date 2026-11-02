@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-02-24-656Z",
+  "instruction": "have Glitch hand his stimpak over to Rogue",
+  "startedAt": "2026-11-02T03:02:24.656Z",
+  "endedAt": "2026-11-02T03:02:25.806Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "x"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "x"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00037237
+    }
+  ],
+  "costUsd": 0.00037237,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

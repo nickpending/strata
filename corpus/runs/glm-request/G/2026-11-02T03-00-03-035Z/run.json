@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-00-03-035Z",
+  "instruction": "Have Rogue shout out to the whole bar that it's last orders.",
+  "startedAt": "2026-11-02T03:00:03.035Z",
+  "endedAt": "2026-11-02T03:00:06.012Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page's only whole-room speech verb is say, which carries the instruction (Rogue is already in the bar), but the end-state schema for 'said' records only the person and speech kind; the instruction's content (last orders to the whole bar) is exactly a speech.say by rogue, which is reachable: rogue says to the room. However, since the offered end states must carry the instruction and a plain say by rogue does, the goal is representable."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page's only whole-room speech verb is say, which carries the instruction (Rogue is already in the bar), but the end-state schema for 'said' records only the person and speech kind; the instruction's content (last orders to the whole bar) is exactly a speech.say by rogue, which is reachable: rogue says to the room. However, since the offered end states must carry the instruction and a plain say by rogue does, the goal is representable."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00043335
+    }
+  ],
+  "costUsd": 0.00043335,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

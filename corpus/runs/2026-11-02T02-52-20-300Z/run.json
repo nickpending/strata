@@ -1,0 +1,108 @@
+{
+  "runId": "2026-11-02T02-52-20-300Z",
+  "instruction": "Rogue has a warning for Mux. She should go and give it to him directly, out loud.",
+  "startedAt": "2026-11-02T02:52:20.300Z",
+  "endedAt": "2026-11-02T02:52:28.076Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say-to"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      },
+      {
+        "actor": "rogue",
+        "verb": "say-to",
+        "fields": {
+          "target": "mux"
+        }
+      }
+    ]
+  },
+  "words": "Mux, don't drink from the well—the water's been poisoned.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 8,
+    "done": 0.98
+  },
+  "loops": 8,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00029342
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.00012245
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000057498
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000057498
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000072576
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000078204
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000081984
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000081984
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.00008169
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000087318
+    }
+  ],
+  "costUsd": 0.0010146220000000002,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

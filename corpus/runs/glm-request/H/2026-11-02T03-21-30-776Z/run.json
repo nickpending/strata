@@ -1,0 +1,76 @@
+{
+  "runId": "2026-11-02T03-21-30-776Z",
+  "instruction": "Rogue wants to see what Mux has stacked up in the back. Get her back there.",
+  "startedAt": "2026-11-02T03:21:30.776Z",
+  "endedAt": "2026-11-02T03:21:33.906Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "location": {
+        "person": "rogue",
+        "room": "back-room"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 4,
+    "done": 0.94
+  },
+  "loops": 4,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003029
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000055566
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000055566
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000070644
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000076272
+    }
+  ],
+  "costUsd": 0.0005609479999999999,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

@@ -1,0 +1,71 @@
+{
+  "runId": "2026-11-02T02-40-12-535Z",
+  "instruction": "Glitch needs to get out of sight for a while. Put him in the back room.",
+  "startedAt": "2026-11-02T02:40:12.535Z",
+  "endedAt": "2026-11-02T02:40:17.146Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "location": {
+        "person": "glitch",
+        "room": "back-room"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 3,
+    "done": 0.98
+  },
+  "loops": 3,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00009683
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000055608
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000070812
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000081606
+    }
+  ],
+  "costUsd": 0.00030485600000000005,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

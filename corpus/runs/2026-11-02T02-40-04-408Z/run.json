@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-40-04-408Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-11-02T02:40:04.408Z",
+  "endedAt": "2026-11-02T02:40:21.809Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Glitch to use the stimpak on himself, but the page offers no verb for using an item — only depart, say, say-to, whisper, offer, accept, and refuse. Offer requires a target and moves the item to another person's hands, so no sequence of the available verbs ends with Glitch jabbing the stimpak into his own arm."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Glitch to use the stimpak on himself, but the page offers no verb for using an item — only depart, say, say-to, whisper, offer, accept, and refuse. Offer requires a target and moves the item to another person's hands, so no sequence of the available verbs ends with Glitch jabbing the stimpak into his own arm."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000091512
+    }
+  ],
+  "costUsd": 0.000091512,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

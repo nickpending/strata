@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-36-53-859Z",
+  "instruction": "have Rogue say something about the heat on her door",
+  "startedAt": "2026-11-02T02:36:53.859Z",
+  "endedAt": "2026-11-02T02:36:56.822Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00011227
+    }
+  ],
+  "costUsd": 0.00011227,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

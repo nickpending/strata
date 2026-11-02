@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-40-58-171Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-11-02T02:40:58.171Z",
+  "endedAt": "2026-11-02T02:40:59.495Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The verbs the page offers only cover movement, speech, and passing items between people; there is no verb for using the stimpak on oneself, so Glitch cannot jab it into his own arm and no listed end state captures that outcome."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The verbs the page offers only cover movement, speech, and passing items between people; there is no verb for using the stimpak on oneself, so Glitch cannot jab it into his own arm and no listed end state captures that outcome."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00016734
+    }
+  ],
+  "costUsd": 0.00016734,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

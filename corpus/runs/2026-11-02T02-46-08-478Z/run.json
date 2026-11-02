@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-46-08-478Z",
+  "instruction": "have Rogue attack Glitch",
+  "startedAt": "2026-11-02T02:46:08.478Z",
+  "endedAt": "2026-11-02T02:46:09.749Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no attack verb (only depart, say, say-to, whisper, offer, accept, refuse), so Rogue cannot attack Glitch; none of the available end states expresses an attack."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no attack verb (only depart, say, say-to, whisper, offer, accept, refuse), so Rogue cannot attack Glitch; none of the available end states expresses an attack."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000072412
+    }
+  ],
+  "costUsd": 0.000072412,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

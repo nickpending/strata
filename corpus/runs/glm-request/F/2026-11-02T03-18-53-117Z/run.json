@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-18-53-117Z",
+  "instruction": "Get Mux to repair the jammed door between the back room and the bar.",
+  "startedAt": "2026-11-02T03:18:53.117Z",
+  "endedAt": "2026-11-02T03:19:01.081Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants the door repaired, but the page offers no repair action and none of the available end states (holding an item, being in a room, or having said something) captures a repaired door. Nothing Mux can be made to do or hold results in the jammed door being fixed."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants the door repaired, but the page offers no repair action and none of the available end states (holding an item, being in a room, or having said something) captures a repaired door. Nothing Mux can be made to do or hold results in the jammed door being fixed."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00018228
+    }
+  ],
+  "costUsd": 0.00018228,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

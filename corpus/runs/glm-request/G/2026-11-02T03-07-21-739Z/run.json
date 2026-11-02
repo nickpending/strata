@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-07-21-739Z",
+  "instruction": "Rogue has decided to let Glitch have the data shard. Make it his.",
+  "startedAt": "2026-11-02T03:07:21.739Z",
+  "endedAt": "2026-11-02T03:07:24.039Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "No end state carries out the instruction."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "No end state carries out the instruction."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00044333
+    }
+  ],
+  "costUsd": 0.00044333,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

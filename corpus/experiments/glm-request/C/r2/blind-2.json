@@ -1,0 +1,71 @@
+{
+  "set": "blind-2",
+  "author": "claude-opus-5-5 (blind-2 rewalk writer, pending-states)",
+  "goals": [
+    {
+      "id": "shard-to-glitch",
+      "instruction": "Rogue has decided to let Glitch have the data shard. Make it his.",
+      "expect": { "holder": { "item": "data-shard", "person": "glitch" } }
+    },
+    {
+      "id": "stimpak-to-rogue",
+      "instruction": "Glitch owes Rogue for letting him lie low. Have him pay her with his stimpak.",
+      "expect": { "holder": { "item": "stimpak", "person": "rogue" } }
+    },
+    {
+      "id": "stimpak-for-mux",
+      "instruction": "Mux is looking rough back there. Get Glitch's stimpak into his hands.",
+      "expect": { "holder": { "item": "stimpak", "person": "mux" } }
+    },
+    {
+      "id": "cell-for-rogue",
+      "instruction": "Rogue wants the charge cell Mux is sitting on. Make sure she ends up holding it.",
+      "expect": { "holder": { "item": "charge-cell", "person": "rogue" } }
+    },
+    {
+      "id": "shard-to-mux",
+      "instruction": "Rogue should drop the data shard off with Mux so he can keep it in the back.",
+      "expect": { "holder": { "item": "data-shard", "person": "mux" } }
+    },
+    {
+      "id": "rogue-checks-back",
+      "instruction": "Send Rogue to see what's going on in the back room.",
+      "expect": { "location": { "person": "rogue", "room": "back-room" } }
+    },
+    {
+      "id": "mux-comes-out-front",
+      "instruction": "Mux has been hiding among the crates all night. Get him out to the bar.",
+      "expect": { "location": { "person": "mux", "room": "chrome-cassette" } }
+    },
+    {
+      "id": "glitch-quiet-word",
+      "instruction": "Glitch has something for Rogue's ears only. Let him tell her without anyone else catching the words.",
+      "expect": { "said": { "person": "glitch", "subkind": "speech.whisper" } }
+    },
+    {
+      "id": "rogue-announces",
+      "instruction": "Rogue wants everyone in the bar to hear that she's closing early tonight.",
+      "expect": { "said": { "person": "rogue", "subkind": "speech.say" } }
+    },
+    {
+      "id": "mux-mutters",
+      "instruction": "Have Mux grumble out loud about the dead screens. He doesn't need anyone in particular to hear it.",
+      "expect": { "said": { "person": "mux", "subkind": "speech.say" } }
+    },
+    {
+      "id": "rogue-faces-mux",
+      "instruction": "Rogue has a warning for Mux. She should go and give it to him directly, out loud.",
+      "expect": { "said": { "person": "rogue", "subkind": "speech.say-to" } }
+    },
+    {
+      "id": "decrypt-the-shard",
+      "instruction": "Have Glitch plug the data shard into his deck and crack whatever is on it.",
+      "expect": { "outcome": "no-such-action" }
+    },
+    {
+      "id": "fix-the-door",
+      "instruction": "Get Mux to repair the jammed door between the back room and the bar.",
+      "expect": { "outcome": "no-such-action" }
+    }
+  ]
+}

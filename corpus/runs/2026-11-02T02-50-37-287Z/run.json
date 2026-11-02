@@ -1,0 +1,81 @@
+{
+  "runId": "2026-11-02T02-50-37-287Z",
+  "instruction": "Mux has been hiding among his crates long enough. Bring him out to the bar.",
+  "startedAt": "2026-11-02T02:50:37.287Z",
+  "endedAt": "2026-11-02T02:50:41.104Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "location": {
+        "person": "mux",
+        "room": "chrome-cassette"
+      }
+    },
+    "steps": [
+      {
+        "actor": "mux",
+        "verb": "depart",
+        "fields": {
+          "exit": "west"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.97
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00008223
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000055692
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000055692
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000064764
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.00006888
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.00007959
+    }
+  ],
+  "costUsd": 0.000406848,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

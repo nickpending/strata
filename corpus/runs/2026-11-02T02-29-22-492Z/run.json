@@ -1,0 +1,104 @@
+{
+  "runId": "2026-11-02T02-29-22-492Z",
+  "instruction": "have Glitch hand his stimpak over to Rogue",
+  "startedAt": "2026-11-02T02:29:22.492Z",
+  "endedAt": "2026-11-02T02:29:26.470Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "holder": {
+        "item": "stimpak",
+        "person": "rogue"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "offer",
+        "fields": {
+          "target": "rogue",
+          "item": "stimpak"
+        }
+      },
+      {
+        "actor": "rogue",
+        "verb": "accept",
+        "fields": {
+          "item": "stimpak"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 8,
+    "done": 0.96
+  },
+  "loops": 8,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000089922
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000055986
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00006195
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.00006195
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000061908
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000075432
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000075432
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000072114
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000079632
+    }
+  ],
+  "costUsd": 0.0006343259999999999,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

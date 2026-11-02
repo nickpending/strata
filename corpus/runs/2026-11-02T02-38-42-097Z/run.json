@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-38-42-097Z",
+  "instruction": "have Rogue attack Glitch",
+  "startedAt": "2026-11-02T02:38:42.097Z",
+  "endedAt": "2026-11-02T02:38:43.719Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no attack verb, and none of the available end states (an item changing hands, a person arriving in a room, or a person saying something) amounts to Rogue attacking Glitch. The closest thing the page could express—Rogue traveling to where Glitch is, offering, or speaking—does not carry out an attack, so no plan reaches the state the instruction wants."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no attack verb, and none of the available end states (an item changing hands, a person arriving in a room, or a person saying something) amounts to Rogue attacking Glitch. The closest thing the page could express—Rogue traveling to where Glitch is, offering, or speaking—does not carry out an attack, so no plan reaches the state the instruction wants."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000080012
+    }
+  ],
+  "costUsd": 0.000080012,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

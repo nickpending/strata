@@ -1,0 +1,129 @@
+{
+  "runId": "2026-11-02T02-32-30-358Z",
+  "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+  "startedAt": "2026-11-02T02:32:30.358Z",
+  "endedAt": "2026-11-02T02:32:37.996Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "glitch",
+        "subkind": "speech.say"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "offer",
+        "fields": {
+          "target": "glitch",
+          "item": "data-shard"
+        }
+      },
+      {
+        "actor": "glitch",
+        "verb": "accept",
+        "fields": {
+          "item": "data-shard"
+        }
+      },
+      {
+        "actor": "glitch",
+        "verb": "say",
+        "fields": {}
+      }
+    ]
+  },
+  "words": "Jackin' in... okay, got the shard wired up—pulling the contact list now: we've got fourteen entries, mostly fixers and a couple of netrunners, one flagged as a Militech corp agent.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 11,
+    "done": 0.99
+  },
+  "loops": 11,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000138776
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.00002544
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000059346
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000059346
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.00006531
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000065268
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000078792
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000078792
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000075474
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000082866
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 9",
+      "costUsd": 0.000080766
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 10",
+      "costUsd": 0.0000819
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 11",
+      "costUsd": 0.00009408
+    }
+  ],
+  "costUsd": 0.0009861560000000002,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

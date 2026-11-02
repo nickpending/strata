@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-03-45-027Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-11-02T03:03:45.027Z",
+  "endedAt": "2026-11-02T03:03:46.652Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The available verbs cannot make Glitch use the stimpak on himself: the stimpak is already held by glitch, and 'offer' and 'accept' only move items between two people, never into use on oneself."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The available verbs cannot make Glitch use the stimpak on himself: the stimpak is already held by glitch, and 'offer' and 'accept' only move items between two people, never into use on oneself."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000070464
+    }
+  ],
+  "costUsd": 0.000070464,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

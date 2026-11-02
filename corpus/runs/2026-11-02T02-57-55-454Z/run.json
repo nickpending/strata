@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-57-55-454Z",
+  "instruction": "Have Glitch plug the data shard into his deck and crack whatever is on it.",
+  "startedAt": "2026-11-02T02:57:55.454Z",
+  "endedAt": "2026-11-02T02:57:59.613Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction requires Glitch to plug the data shard into his deck and crack it, which is an action not represented by any of the allowed end state types (holder, location, said)."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction requires Glitch to plug the data shard into his deck and crack it, which is an action not represented by any of the allowed end state types (holder, location, said)."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00014989
+    }
+  ],
+  "costUsd": 0.00014989,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

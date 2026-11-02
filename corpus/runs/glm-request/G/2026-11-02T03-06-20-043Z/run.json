@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-06-20-043Z",
+  "instruction": "Glitch's rig is running on fumes. Make sure he walks away with Mux's charge cell.",
+  "startedAt": "2026-11-02T03:06:20.043Z",
+  "endedAt": "2026-11-02T03:06:25.978Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "unused"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "unused"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00065507
+    }
+  ],
+  "costUsd": 0.00065507,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

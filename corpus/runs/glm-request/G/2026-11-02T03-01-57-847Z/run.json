@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-01-57-847Z",
+  "instruction": "have Rogue whisper a warning to Glitch",
+  "startedAt": "2026-11-02T03:01:57.847Z",
+  "endedAt": "2026-11-02T03:02:00.179Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "placeholder"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "placeholder"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003538
+    }
+  ],
+  "costUsd": 0.0003538,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

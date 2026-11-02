@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-40-13-154Z",
+  "instruction": "make Rogue drink a shot at the bar",
+  "startedAt": "2026-11-02T02:40:13.154Z",
+  "endedAt": "2026-11-02T02:40:15.658Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Rogue to drink a shot, but the page offers no drink verb and no drink item (only charge-cell, data-shard, stimpak), and none of the available end states — holding an item, being in a room, or having said something — expresses drinking. Rogue is already in the bar (chrome-cassette), but mere presence there does not carry out drinking a shot."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Rogue to drink a shot, but the page offers no drink verb and no drink item (only charge-cell, data-shard, stimpak), and none of the available end states — holding an item, being in a room, or having said something — expresses drinking. Rogue is already in the bar (chrome-cassette), but mere presence there does not carry out drinking a shot."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000377
+    }
+  ],
+  "costUsd": 0.000377,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

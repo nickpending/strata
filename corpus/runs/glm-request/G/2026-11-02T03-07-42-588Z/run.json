@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-07-42-588Z",
+  "instruction": "Send Rogue to see what's going on in the back room.",
+  "startedAt": "2026-11-02T03:07:42.588Z",
+  "endedAt": "2026-11-02T03:07:44.723Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "the instruction is to move Rogue to the back room, but the Act combobox only offers a single actor/verb/exit triple and no step enqueues an action for a chosen actor; with the page's verbs there is no action whose end state is Rogue being in back-room, so none of the listed end states carries the instruction out"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "the instruction is to move Rogue to the back room, but the Act combobox only offers a single actor/verb/exit triple and no step enqueues an action for a chosen actor; with the page's verbs there is no action whose end state is Rogue being in back-room, so none of the listed end states carries the instruction out"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00038336
+    }
+  ],
+  "costUsd": 0.00038336,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

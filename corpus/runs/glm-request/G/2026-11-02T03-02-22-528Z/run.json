@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-02-22-528Z",
+  "instruction": "get Rogue into the back room",
+  "startedAt": "2026-11-02T03:02:22.528Z",
+  "endedAt": "2026-11-02T03:02:24.654Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "the provided error message does not contain the details needed to answer; it only shows the usage/help text and no diagnostic message, so there is no flag combination to suggest"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "the provided error message does not contain the details needed to answer; it only shows the usage/help text and no diagnostic message, so there is no flag combination to suggest"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00032282
+    }
+  ],
+  "costUsd": 0.00032282,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

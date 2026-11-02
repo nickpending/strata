@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T03-07-55-821Z",
+  "instruction": "Rogue wants everyone in the bar to hear that she's closing early tonight.",
+  "startedAt": "2026-11-02T03:07:55.821Z",
+  "endedAt": "2026-11-02T03:08:07.207Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction asks for everyone in the bar to hear Rogue, which is an audience-wide effect, but the page's end states can only record that a person said something, holds an item, or is in a room. Rogue already stands in the bar (chrome-cassette), so a plain say there would be an announcement, yet no listed end state captures 'everyone heard her'; the closest (said: rogue, speech.say) does not by itself carry the instruction's meaning on this page."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction asks for everyone in the bar to hear Rogue, which is an audience-wide effect, but the page's end states can only record that a person said something, holds an item, or is in a room. Rogue already stands in the bar (chrome-cassette), so a plain say there would be an announcement, yet no listed end state captures 'everyone heard her'; the closest (said: rogue, speech.say) does not by itself carry the instruction's meaning on this page."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00114634
+    }
+  ],
+  "costUsd": 0.00114634,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

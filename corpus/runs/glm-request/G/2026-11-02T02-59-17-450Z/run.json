@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-59-17-450Z",
+  "instruction": "Glitch should quietly whisper to Rogue that he needs somewhere to hide",
+  "startedAt": "2026-11-02T02:59:17.450Z",
+  "endedAt": "2026-11-02T02:59:19.887Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The end state the page can record for speech only says that a person has said something of a kind; it cannot capture the instruction's content that the whisper tells Rogue he needs somewhere to hide, so no listed end state carries the instruction out."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The end state the page can record for speech only says that a person has said something of a kind; it cannot capture the instruction's content that the whisper tells Rogue he needs somewhere to hide, so no listed end state carries the instruction out."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00040275
+    }
+  ],
+  "costUsd": 0.00040275,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

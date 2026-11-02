@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-58-31-719Z",
+  "instruction": "have Rogue whisper a warning to Glitch",
+  "startedAt": "2026-11-02T02:58:31.719Z",
+  "endedAt": "2026-11-02T02:58:35.100Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Rogue to whisper to Glitch specifically, and both are already in chrome-cassette, so the end state Rogue has whispered (speech.whisper) is reachable directly: {"
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Rogue to whisper to Glitch specifically, and both are already in chrome-cassette, so the end state Rogue has whispered (speech.whisper) is reachable directly: {"
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000403
+    }
+  ],
+  "costUsd": 0.000403,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

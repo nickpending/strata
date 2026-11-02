@@ -1,0 +1,84 @@
+{
+  "runId": "2026-11-02T03-20-33-756Z",
+  "instruction": "have Rogue tell the whole bar out loud that last call is coming",
+  "startedAt": "2026-11-02T03:20:33.756Z",
+  "endedAt": "2026-11-02T03:20:38.690Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "say",
+        "fields": {}
+      }
+    ]
+  },
+  "words": "Listen up, everyone, last call is coming, so finish your drinks and settle your tabs!",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003238
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000305
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000056574
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000056574
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000057078
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000056952
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000067368
+    }
+  ],
+  "costUsd": 0.000648846,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

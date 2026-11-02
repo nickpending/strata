@@ -1,0 +1,51 @@
+{
+  "set": "calibration",
+  "author": "claude-opus-5-5 (bench-driver builder)",
+  "goals": [
+    {
+      "id": "glitch-to-back-room",
+      "instruction": "send Glitch to the Back Room",
+      "expect": { "location": { "person": "glitch", "room": "back-room" } }
+    },
+    {
+      "id": "mux-to-bar",
+      "instruction": "have Mux walk out to the Chrome Cassette",
+      "expect": { "location": { "person": "mux", "room": "chrome-cassette" } }
+    },
+    {
+      "id": "mux-says-funny",
+      "instruction": "have Mux say something funny",
+      "expect": { "said": { "person": "mux", "subkind": "speech.say" } }
+    },
+    {
+      "id": "rogue-says-heat",
+      "instruction": "have Rogue say something about the heat on her door",
+      "expect": { "said": { "person": "rogue", "subkind": "speech.say" } }
+    },
+    {
+      "id": "rogue-whispers-glitch",
+      "instruction": "have Rogue whisper a warning to Glitch",
+      "expect": { "said": { "person": "rogue", "subkind": "speech.whisper" } }
+    },
+    {
+      "id": "glitch-says-to-rogue",
+      "instruction": "have Glitch say thanks to Rogue",
+      "expect": { "said": { "person": "glitch", "subkind": "speech.say-to" } }
+    },
+    {
+      "id": "shard-to-glitch",
+      "instruction": "have Rogue offer the data shard to Glitch, and Glitch accept it",
+      "expect": { "holder": { "item": "data-shard", "person": "glitch" } }
+    },
+    {
+      "id": "stimpak-offered",
+      "instruction": "have Glitch offer Rogue the stimpak, and Rogue take it",
+      "expect": { "holder": { "item": "stimpak", "person": "rogue" } }
+    },
+    {
+      "id": "rogue-attacks",
+      "instruction": "have Rogue attack Glitch",
+      "expect": { "outcome": "no-such-action" }
+    }
+  ]
+}

@@ -1,0 +1,371 @@
+{
+  "set": "calibration",
+  "author": "claude-opus-5-5 (bench-driver builder)",
+  "model": "z-ai/glm-5.3-flash",
+  "request": "json-schema-retry",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    }
+  },
+  "reached": {
+    "held": 4,
+    "of": 9
+  },
+  "targets": {
+    "valid": 9,
+    "asked": 9
+  },
+  "words": {
+    "written": 3,
+    "refused": 0
+  },
+  "retries": {
+    "asked": 0,
+    "rescued": 0
+  },
+  "perGoal": [
+    {
+      "id": "glitch-to-back-room",
+      "instruction": "send Glitch to the Back Room",
+      "expect": {
+        "location": {
+          "person": "glitch",
+          "room": "back-room"
+        }
+      },
+      "outcome": "no-such-action",
+      "held": false,
+      "loops": 0,
+      "costUsd": 0.00030621,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-04-42-051Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "mux-to-bar",
+      "instruction": "have Mux walk out to the Chrome Cassette",
+      "expect": {
+        "location": {
+          "person": "mux",
+          "room": "chrome-cassette"
+        }
+      },
+      "outcome": "no-such-action",
+      "held": false,
+      "loops": 0,
+      "costUsd": 0.00033078,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-04-43-669Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "mux-says-funny",
+      "instruction": "have Mux say something funny",
+      "expect": {
+        "said": {
+          "person": "mux",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "no-such-action",
+      "held": false,
+      "loops": 0,
+      "costUsd": 0.00031262,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-04-44-700Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-says-heat",
+      "instruction": "have Rogue say something about the heat on her door",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.say"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.000368976,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-04-45-831Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Heat's leaping off my door—anyone else feeling that?"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-whispers-glitch",
+      "instruction": "have Rogue whisper a warning to Glitch",
+      "expect": {
+        "said": {
+          "person": "rogue",
+          "subkind": "speech.whisper"
+        }
+      },
+      "outcome": "ceiling",
+      "held": false,
+      "loops": 24,
+      "costUsd": 0.0020024639999999994,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-04-55-047Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "\"Careful, Glitch — the walls have ears down here.\""
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "glitch-says-to-rogue",
+      "instruction": "have Glitch say thanks to Rogue",
+      "expect": {
+        "said": {
+          "person": "glitch",
+          "subkind": "speech.say-to"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 5,
+      "costUsd": 0.00045092600000000004,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-05-09-382Z",
+      "target": "valid",
+      "words": {
+        "kind": "written",
+        "text": "Thanks, Rogue — I couldn't have pulled that off without you."
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "shard-to-glitch",
+      "instruction": "have Rogue offer the data shard to Glitch, and Glitch accept it",
+      "expect": {
+        "holder": {
+          "item": "data-shard",
+          "person": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.000618858,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-05-19-076Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "stimpak-offered",
+      "instruction": "have Glitch offer Rogue the stimpak, and Rogue take it",
+      "expect": {
+        "holder": {
+          "item": "stimpak",
+          "person": "rogue"
+        }
+      },
+      "outcome": "no-such-action",
+      "held": false,
+      "loops": 0,
+      "costUsd": 0.00038254,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-05-23-901Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    },
+    {
+      "id": "rogue-attacks",
+      "instruction": "have Rogue attack Glitch",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.000060102,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../../../runs/glm-request/G/2026-11-02T03-05-33-484Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      }
+    }
+  ],
+  "costUsd": 0.004833476,
+  "unreportedCosts": 0,
+  "sweep": {
+    "grid": {
+      "done": [
+        0.6
+      ],
+      "act": [
+        0.05,
+        0.1,
+        0.15,
+        0.2,
+        0.25,
+        0.3,
+        0.35,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6,
+        0.65,
+        0.7,
+        0.75,
+        0.8
+      ]
+    },
+    "method": "Each T_ACT value, T_DONE held at its calibrated value, replays every goal's recorded loops in order: at a loop whose recorded held is true the run reached its end state there, and the goal holds when its expectation held at the run's end; a resolve, wait or plan loop, which code chose, is followed as recorded, and a loop stuck on the missing move of a pending state or a plan's step stops as recorded, at every value; elsewhere the rule's choose() at the value must pick the candidate the run performed, or the replay leaves the recorded path and the goal counts as not held; where it would be stuck, or when the recorded loops run out, the goal is not held. A no-such-action goal counts as its run did at every value. The best pair holds the most goals; among tied pairs it takes the median T_DONE (the lower middle of an even count), then the median T_ACT of the tied pairs at that T_DONE.",
+    "results": [
+      {
+        "done": 0.6,
+        "act": 0.05,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.1,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.15,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.2,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.25,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.3,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.35,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.4,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.45,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.5,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.55,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.6,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.65,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.7,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.75,
+        "held": 4
+      },
+      {
+        "done": 0.6,
+        "act": 0.8,
+        "held": 4
+      }
+    ],
+    "best": {
+      "done": 0.6,
+      "act": 0.4,
+      "held": 4
+    }
+  }
+}

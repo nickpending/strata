@@ -1,0 +1,86 @@
+{
+  "runId": "2026-11-02T03-21-38-759Z",
+  "instruction": "Rogue should tell Glitch straight to his face, loud enough that nobody could miss it, that his welcome is wearing thin.",
+  "startedAt": "2026-11-02T03:21:38.759Z",
+  "endedAt": "2026-11-02T03:21:43.900Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "anthropic/claude-haiku-5.5",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "rogue",
+        "subkind": "speech.say-to"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "say-to",
+        "fields": {
+          "target": "glitch"
+        }
+      }
+    ]
+  },
+  "words": "Glitch, I'm going to say this plainly so everyone in this room hears it: your welcome here is wearing thin, and you'd better start acting like you know it.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.99
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003369
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.0000428
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000058086
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000058086
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000061866
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000062538
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000074424
+    }
+  ],
+  "costUsd": 0.0006947000000000001,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

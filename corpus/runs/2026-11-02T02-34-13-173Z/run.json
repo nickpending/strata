@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-34-13-173Z",
+  "instruction": "have Rogue attack Glitch",
+  "startedAt": "2026-11-02T02:34:13.173Z",
+  "endedAt": "2026-11-02T02:34:14.947Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no attack verb; the available verbs (depart, say, say-to, whisper, offer, accept, refuse) cannot express Rogue attacking Glitch, so no end state of holding, location, or speaking carries out the instruction."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no attack verb; the available verbs (depart, say, say-to, whisper, offer, accept, refuse) cannot express Rogue attacking Glitch, so no end state of holding, location, or speaking carries out the instruction."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000074612
+    }
+  ],
+  "costUsd": 0.000074612,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

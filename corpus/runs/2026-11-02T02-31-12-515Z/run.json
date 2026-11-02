@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-31-12-515Z",
+  "instruction": "make Rogue drink a shot at the bar",
+  "startedAt": "2026-11-02T02:31:12.515Z",
+  "endedAt": "2026-11-02T02:31:18.929Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The page offers no verb for drinking (only depart, say, say-to, whisper, offer, accept, refuse), and none of the reachable end states — holding an item, being in a room, or having said something — expresses Rogue drinking a shot. There is also no shot item among charge-cell, data-shard, and stimpak, so even 'holding a drink' cannot be represented."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The page offers no verb for drinking (only depart, say, say-to, whisper, offer, accept, refuse), and none of the reachable end states — holding an item, being in a room, or having said something — expresses Rogue drinking a shot. There is also no shot item among charge-cell, data-shard, and stimpak, so even 'holding a drink' cannot be represented."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000493
+    }
+  ],
+  "costUsd": 0.000493,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

@@ -1,0 +1,2 @@
+{"id":"e1","tick":0,"seq":1,"kind":"exchange","subkind":"exchange.offer","actor":"glitch","targets":["rogue"],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"operator","payload":{"item":"stimpak","until":2}}
+{"id":"e2","tick":0,"seq":2,"kind":"exchange","subkind":"exchange.accept","actor":"rogue","targets":["glitch"],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"operator","payload":{"item":"stimpak","from":"glitch"}}

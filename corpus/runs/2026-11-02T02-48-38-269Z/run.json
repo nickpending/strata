@@ -1,0 +1,41 @@
+{
+  "runId": "2026-11-02T02-48-38-269Z",
+  "instruction": "Mux has been hiding among the crates all night. Get him out to the bar.",
+  "startedAt": "2026-11-02T02:48:38.269Z",
+  "endedAt": "2026-11-02T02:48:39.939Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "Mux is in the back-room, whose only route to the bar is the west exit, but the page's exit control offers only 'east', so no depart action can take Mux to chrome-cassette."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "Mux is in the back-room, whose only route to the bar is the west exit, but the page's exit control offers only 'east', so no depart action can take Mux to chrome-cassette."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00016647
+    }
+  ],
+  "costUsd": 0.00016647,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

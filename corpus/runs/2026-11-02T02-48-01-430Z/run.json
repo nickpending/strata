@@ -1,0 +1,52 @@
+{
+  "runId": "2026-11-02T02-48-01-430Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-11-02T02:48:01.430Z",
+  "endedAt": "2026-11-02T02:48:02.296Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "holder": {
+        "item": "stimpak",
+        "person": "glitch"
+      }
+    },
+    "steps": []
+  },
+  "words": null,
+  "outcome": {
+    "kind": "already-held",
+    "expect": {
+      "holder": {
+        "item": "stimpak",
+        "person": "glitch"
+      }
+    }
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00015924
+    }
+  ],
+  "costUsd": 0.00015924,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

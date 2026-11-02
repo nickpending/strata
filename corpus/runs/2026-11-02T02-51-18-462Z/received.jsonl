@@ -1,0 +1,2 @@
+{"thing":"glitch","copy":{"id":"e1","tick":0,"seq":1,"kind":"speech","subkind":"speech.say","actor":"glitch","targets":[],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"operator","payload":{"words":"No no no—Glitch does not crash, Glitch reboots!"}}}
+{"thing":"rogue","copy":{"id":"e1","tick":0,"seq":1,"kind":"speech","subkind":"speech.say","actor":"glitch","targets":[],"place":"chrome-cassette","visibility":{"audience":"place"},"cause":"operator","payload":{"words":"No no no—Glitch does not crash, Glitch reboots!"}}}

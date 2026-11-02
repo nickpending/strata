@@ -1,0 +1,86 @@
+{
+  "runId": "2026-11-02T02-33-38-593Z",
+  "instruction": "Glitch has something for Rogue's ears only. Let him tell her without anyone else catching the words.",
+  "startedAt": "2026-11-02T02:33:38.593Z",
+  "endedAt": "2026-11-02T02:33:47.044Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "said": {
+        "person": "glitch",
+        "subkind": "speech.whisper"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "whisper",
+        "fields": {
+          "target": "rogue"
+        }
+      }
+    ]
+  },
+  "words": "Closer, Rogue... what I found in the old grid... they never deleted me, they just moved me somewhere worse.",
+  "outcome": {
+    "kind": "reached",
+    "loop": 5,
+    "done": 0.98
+  },
+  "loops": 5,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00020313
+    },
+    {
+      "client": "model",
+      "purpose": "words",
+      "costUsd": 0.00001974
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000057456
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000061278
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000061278
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000061404
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000074004
+    }
+  ],
+  "costUsd": 0.00053829,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

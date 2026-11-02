@@ -1,0 +1,4302 @@
+{
+ "A": {
+  "arm": "A",
+  "reached": {
+   "r1": [
+    43,
+    47
+   ],
+   "r2": [
+    41,
+    47
+   ],
+   "r3": [
+    42,
+    47
+   ]
+  },
+  "lossKinds": {
+   "reasoning": 8,
+   "plan": 4,
+   "name": 3
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-32-30-358Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "glitch-takes-the-jolt",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Reka",
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-32-38-003Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "shard-to-glitch",
+    "kind": "plan",
+    "outcome": "ceiling",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-32-52-041Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-34-05-143Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-34-42-364Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "rogue-ends-up-with-the-stim",
+    "kind": "plan",
+    "outcome": "ceiling",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "rogue"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "rogue",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-36-09-496Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "mux-asks-glitch-about-the-cell",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Reka",
+     "Modal"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "mux",
+       "subkind": "speech.say-to"
+      }
+     },
+     "steps": [
+      {
+       "actor": "mux",
+       "verb": "say-to",
+       "fields": {
+        "target": "glitch"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-37-01-332Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-37-05-450Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "stimpak-to-rogue",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "rogue"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "rogue",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-37-23-607Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-38-20-420Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-38-54-411Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say-to\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-41-09-387Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-41-30-859Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "glitch-takes-the-jolt",
+    "kind": "reasoning",
+    "outcome": "already-held",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "glitch"
+      }
+     },
+     "steps": []
+    },
+    "run": "corpus/runs/2026-11-02T02-41-37-429Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-42-48-559Z"
+   }
+  ],
+  "servedByProvider": {
+   "Wafer": 46,
+   "OpenInference": 42,
+   "Reka": 34,
+   "Parasail": 19,
+   "CoreWeave": 12,
+   "Modal": 11,
+   "DigitalOcean": 8,
+   "InferenceNet": 7,
+   "Particle AI": 3,
+   "Crusoe": 3,
+   "Cohere": 3,
+   "DeepInfra": 3
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 1,
+  "retries": {
+   "asked": 1,
+   "rescued": 1
+  },
+  "costUsd": 0.089671433,
+  "joinMismatches": [],
+  "lostGoals": {
+   "calibration/rogue-whispers-glitch": [
+    1,
+    3
+   ],
+   "blind-2-spent/rogue-ends-up-with-the-stim": [
+    2,
+    3
+   ],
+   "blind-2-spent/rogue-warns-glitch-openly": [
+    2,
+    3
+   ],
+   "blind-2-spent/mux-asks-glitch-about-the-cell": [
+    2,
+    3
+   ],
+   "blind-2-spent/read-the-shard": [
+    0,
+    3
+   ],
+   "blind-2-spent/glitch-takes-the-jolt": [
+    1,
+    3
+   ],
+   "blind-2/shard-to-glitch": [
+    2,
+    3
+   ],
+   "blind-2/stimpak-to-rogue": [
+    2,
+    3
+   ],
+   "blind-2/decrypt-the-shard": [
+    0,
+    3
+   ]
+  }
+ },
+ "B": {
+  "arm": "B",
+  "reached": {
+   "r1": [
+    40,
+    47
+   ],
+   "r2": [
+    45,
+    47
+   ],
+   "r3": [
+    40,
+    47
+   ]
+  },
+  "lossKinds": {
+   "reasoning": 7,
+   "name": 8,
+   "plan": 1
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The end state the instruction wants is for mux to have said something, which is available as speech.say, but that speech kind is not among the allowed end states' subkinds only in the sense that it IS listed; however, the matching end state exists, so the correct answer is the goal form."
+    },
+    "run": "corpus/runs/2026-11-02T02-28-33-714Z"
+   },
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "rogue-says-heat",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-28-36-330Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-31-13-697Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-for-mux",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the page shows no exit \"mux\" (it has: west, east)"
+    },
+    "run": "corpus/runs/2026-11-02T02-31-33-941Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-32-00-442Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "mux-mutters",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-32-12-591Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "ceiling",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-32-23-197Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks for Mux to say something funny, and the page supports speech actions, so a plan exists; but of the allowed end states only {said} fits, so the goal should be {said} with person mux and subkind speech.say."
+    },
+    "run": "corpus/runs/2026-11-02T02-32-56-848Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-36-07-485Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants Mux to have said something, which the page does support via the say verb. Since Mux is already in back-room and the say verb requires no other actor or fields, the goal {"
+    },
+    "run": "corpus/runs/2026-11-02T02-36-51-703Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "rogue-says-heat",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-36-53-859Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-36-56-825Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "glitch-confides-in-rogue",
+    "kind": "plan",
+    "outcome": "ceiling",
+    "providers": [
+     "Reka",
+     "InferenceNet"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.whisper"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "whisper",
+       "fields": {
+        "target": "rogue"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-39-09-106Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Modal"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-39-45-013Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "mux-mutters",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-41-10-735Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "ceiling",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-41-22-328Z"
+   }
+  ],
+  "servedByProvider": {
+   "Wafer": 44,
+   "OpenInference": 39,
+   "Reka": 27,
+   "Parasail": 20,
+   "CoreWeave": 13,
+   "DigitalOcean": 9,
+   "Modal": 8,
+   "InferenceNet": 8,
+   "Particle AI": 3,
+   "Crusoe": 3,
+   "Cohere": 3,
+   "DeepInfra": 3
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 0,
+  "retries": {
+   "asked": 0,
+   "rescued": 0
+  },
+  "costUsd": 0.085581398,
+  "joinMismatches": [],
+  "lostGoals": {
+   "calibration/mux-says-funny": [
+    0,
+    3
+   ],
+   "calibration/rogue-says-heat": [
+    1,
+    3
+   ],
+   "calibration/rogue-whispers-glitch": [
+    2,
+    3
+   ],
+   "blind-2-spent/glitch-confides-in-rogue": [
+    2,
+    3
+   ],
+   "blind-2-spent/read-the-shard": [
+    1,
+    3
+   ],
+   "blind-2/stimpak-for-mux": [
+    2,
+    3
+   ],
+   "blind-2/glitch-quiet-word": [
+    1,
+    3
+   ],
+   "blind-2/mux-mutters": [
+    1,
+    3
+   ],
+   "blind-2/decrypt-the-shard": [
+    1,
+    3
+   ]
+  }
+ },
+ "C": {
+  "arm": "C",
+  "reached": {
+   "r1": [
+    41,
+    47
+   ],
+   "r2": [
+    42,
+    47
+   ],
+   "r3": [
+    44,
+    47
+   ]
+  },
+  "lossKinds": {
+   "schema": 3,
+   "name": 4,
+   "reasoning": 5,
+   "plan": 2
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "schema",
+    "outcome": "stopped",
+    "providers": [
+     "DigitalOcean",
+     "DigitalOcean"
+    ],
+    "target": null,
+    "run": "corpus/runs/2026-11-02T02-28-37-159Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say-to\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-31-29-561Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-31-46-706Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-to-rogue",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "rogue"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "rogue",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-32-36-003Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-for-mux",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "mux"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "mux",
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-32-40-607Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-33-29-616Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "schema",
+    "outcome": "stopped",
+    "providers": [
+     "DigitalOcean",
+     "DigitalOcean"
+    ],
+    "target": null,
+    "run": "corpus/runs/2026-11-02T02-33-49-759Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "rogue-says-heat",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"say\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-33-53-208Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-33-57-460Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-36-11-705Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-37-42-588Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "schema",
+    "outcome": "stopped",
+    "providers": [
+     "DigitalOcean",
+     "DigitalOcean"
+    ],
+    "target": null,
+    "run": "corpus/runs/2026-11-02T02-38-11-573Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-40-50-602Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "kind": "name",
+    "outcome": "no-such-action",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the bench serves no speech kind \"whisper\" (it has: speech.say, speech.say-to, speech.whisper)"
+    },
+    "run": "corpus/runs/2026-11-02T02-42-20-938Z"
+   }
+  ],
+  "servedByProvider": {
+   "Wafer": 44,
+   "OpenInference": 40,
+   "Reka": 34,
+   "Parasail": 19,
+   "CoreWeave": 13,
+   "DigitalOcean": 12,
+   "Modal": 8,
+   "InferenceNet": 7,
+   "Particle AI": 3,
+   "Crusoe": 3,
+   "Cohere": 3,
+   "DeepInfra": 3
+  },
+  "garbleByProvider": {
+   "Reka": 1
+  },
+  "garble": [
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "purpose": "words",
+    "provider": "Reka",
+    "content": "{\"words\": \"Come close, Rogue—cipher keys to the Elderon vault, straight from the主干线, just for your ears.\"}"
+   }
+  ],
+  "firstAttemptRefusals": 4,
+  "retries": {
+   "asked": 4,
+   "rescued": 1
+  },
+  "costUsd": 0.08640691500000001,
+  "joinMismatches": [],
+  "lostGoals": {
+   "calibration/mux-says-funny": [
+    0,
+    3
+   ],
+   "calibration/rogue-says-heat": [
+    2,
+    3
+   ],
+   "calibration/rogue-whispers-glitch": [
+    2,
+    3
+   ],
+   "blind-2-spent/rogue-warns-glitch-openly": [
+    2,
+    3
+   ],
+   "blind-2-spent/read-the-shard": [
+    0,
+    3
+   ],
+   "blind-2/stimpak-to-rogue": [
+    2,
+    3
+   ],
+   "blind-2/stimpak-for-mux": [
+    2,
+    3
+   ],
+   "blind-2/glitch-quiet-word": [
+    2,
+    3
+   ],
+   "blind-2/decrypt-the-shard": [
+    1,
+    3
+   ]
+  }
+ },
+ "D": {
+  "arm": "D",
+  "reached": {
+   "r1": [
+    44,
+    47
+   ],
+   "r2": [
+    44,
+    47
+   ],
+   "r3": [
+    47,
+    47
+   ]
+  },
+  "lossKinds": {
+   "reasoning": 6
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-47-55-886Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "glitch-takes-the-jolt",
+    "kind": "reasoning",
+    "outcome": "already-held",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "glitch"
+      }
+     },
+     "steps": []
+    },
+    "run": "corpus/runs/2026-11-02T02-48-01-430Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "mux-comes-out-front",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DeepInfra"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Mux is in the back-room, whose only route to the bar is the west exit, but the page's exit control offers only 'east', so no depart action can take Mux to chrome-cassette."
+    },
+    "run": "corpus/runs/2026-11-02T02-48-38-269Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Modal"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/2026-11-02T02-51-36-532Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "glitch-takes-the-jolt",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "location": {
+       "person": "glitch",
+       "room": "back-room"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-51-54-416Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-52-54-211Z"
+   }
+  ],
+  "servedByProvider": {
+   "Wafer": 76,
+   "Reka": 29,
+   "Modal": 21,
+   "Parasail": 17,
+   "InferenceNet": 16,
+   "CoreWeave": 12,
+   "Crusoe": 6,
+   "Particle AI": 3,
+   "Cohere": 3,
+   "DeepInfra": 3,
+   "Fireworks": 2
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 0,
+  "retries": {
+   "asked": 0,
+   "rescued": 0
+  },
+  "costUsd": 0.08164402000000001,
+  "joinMismatches": [],
+  "lostGoals": {
+   "blind-2-spent/rogue-warns-glitch-openly": [
+    2,
+    3
+   ],
+   "blind-2-spent/read-the-shard": [
+    2,
+    3
+   ],
+   "blind-2-spent/glitch-takes-the-jolt": [
+    1,
+    3
+   ],
+   "blind-2/mux-comes-out-front": [
+    2,
+    3
+   ],
+   "blind-2/decrypt-the-shard": [
+    2,
+    3
+   ]
+  }
+ },
+ "E": {
+  "arm": "E",
+  "reached": {
+   "r1": [
+    42,
+    47
+   ],
+   "r2": [
+    43,
+    47
+   ],
+   "r3": [
+    43,
+    47
+   ]
+  },
+  "lossKinds": {
+   "reasoning": 11,
+   "plan": 2
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "no matching end state"
+    },
+    "run": "corpus/runs/2026-11-02T02-45-38-036Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference",
+     "Parasail"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "say",
+       "fields": {
+        "target": "glitch",
+        "exit": null
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-46-54-264Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "glitch-takes-the-jolt",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "location": {
+       "person": "glitch",
+       "room": "back-room"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-47-16-425Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-to-rogue",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Makora"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "rogue"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "west"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "rogue",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-47-23-151Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-48-13-404Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks for Mux to say something funny, and the page does offer a say verb that Mux can perform without a target, so an end state exists: Mux has said something of kind speech.say. No steps are needed beyond that single utterance."
+    },
+    "run": "corpus/runs/2026-11-02T02-48-35-028Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "rogue-says-heat",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference",
+     "Cohere"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.say-to"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "say-to",
+       "fields": {
+        "target": "glitch"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-48-38-023Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Wafer",
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-51-09-605Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "glitch-takes-the-jolt",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Reka",
+     "Cohere"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-51-18-462Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks for a spoken line, not for an item to change holders or a person to change rooms; the page can only reach the listed end states through holding or location changes."
+    },
+    "run": "corpus/runs/2026-11-02T02-53-07-537Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "OpenInference",
+     "Wafer"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-55-26-627Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "ceiling",
+    "providers": [
+     "OpenInference",
+     "DigitalOcean"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "say-to",
+       "fields": {
+        "target": "rogue"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "item": "data-shard",
+        "exit": null
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-55-53-745Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "stimpak-for-mux",
+    "kind": "plan",
+    "outcome": "ceiling",
+    "providers": [
+     "Reka"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "mux"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "item": "stimpak",
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "mux",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/2026-11-02T02-56-54-732Z"
+   }
+  ],
+  "servedByProvider": {
+   "Wafer": 59,
+   "Reka": 27,
+   "OpenInference": 27,
+   "Parasail": 18,
+   "CoreWeave": 12,
+   "InferenceNet": 12,
+   "Modal": 11,
+   "DigitalOcean": 6,
+   "Cohere": 5,
+   "Crusoe": 4,
+   "Particle AI": 3,
+   "DeepInfra": 3,
+   "Makora": 1,
+   "Fireworks": 1
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 0,
+  "retries": {
+   "asked": 0,
+   "rescued": 0
+  },
+  "costUsd": 0.08553602199999999,
+  "joinMismatches": [],
+  "lostGoals": {
+   "calibration/mux-says-funny": [
+    0,
+    3
+   ],
+   "calibration/rogue-says-heat": [
+    2,
+    3
+   ],
+   "blind-2-spent/rogue-warns-glitch-openly": [
+    1,
+    3
+   ],
+   "blind-2-spent/read-the-shard": [
+    1,
+    3
+   ],
+   "blind-2-spent/glitch-takes-the-jolt": [
+    1,
+    3
+   ],
+   "blind-2/stimpak-to-rogue": [
+    2,
+    3
+   ],
+   "blind-2/stimpak-for-mux": [
+    2,
+    3
+   ],
+   "blind-2/decrypt-the-shard": [
+    2,
+    3
+   ]
+  }
+ },
+ "F": {
+  "arm": "F",
+  "reached": {
+   "r1": [
+    45,
+    47
+   ],
+   "r2": [
+    46,
+    47
+   ],
+   "r3": [
+    46,
+    47
+   ]
+  },
+  "lossKinds": {
+   "plan": 2,
+   "reasoning": 2
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-for-mux",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Z.AI"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "mux"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "west"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "mux",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "mux",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/F/2026-11-02T02-57-19-215Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "rogue-faces-mux",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Z.AI",
+     "Z.AI"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.say-to"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "depart",
+       "fields": {
+        "exit": "west"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "say-to",
+       "fields": {
+        "target": "mux"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/F/2026-11-02T02-58-58-696Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Z.AI",
+     "Z.AI"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/F/2026-11-02T03-05-39-660Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Z.AI",
+     "Z.AI"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "glitch",
+       "subkind": "speech.say"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "say",
+       "fields": {}
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/F/2026-11-02T03-15-23-962Z"
+   }
+  ],
+  "servedByProvider": {
+   "Z.AI": 191
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 0,
+  "retries": {
+   "asked": 0,
+   "rescued": 0
+  },
+  "costUsd": 0.09801102599999999,
+  "joinMismatches": [],
+  "lostGoals": {
+   "blind-2-spent/read-the-shard": [
+    1,
+    3
+   ],
+   "blind-2/stimpak-for-mux": [
+    2,
+    3
+   ],
+   "blind-2/rogue-faces-mux": [
+    2,
+    3
+   ]
+  }
+ },
+ "G": {
+  "arm": "G",
+  "reached": {
+   "r1": [
+    16,
+    47
+   ],
+   "r2": [
+    18,
+    47
+   ],
+   "r3": [
+    18,
+    47
+   ]
+  },
+  "lossKinds": {
+   "reasoning": 83,
+   "plan": 6
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "glitch-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "x"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-17-565Z"
+   },
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "mux-to-bar",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The Chrome Cassette is a room, not an item or a speech kind, so the instruction is carried out by an end state of the form {location: {person: mux, room: chrome-cassette}}, which does exist."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-20-172Z"
+   },
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks for Mux to say something funny, but 'funny' is only a manner of speaking: the page offers say, say-to, and whisper, and any of them with any words would satisfy the form; the page records only that a speech kind happened, not that it was funny."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-23-804Z"
+   },
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants Rogue to whisper to Glitch specifically, and both are already in chrome-cassette, so the end state Rogue has whispered (speech.whisper) is reachable directly: {"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-31-719Z"
+   },
+   {
+    "rep": "r1",
+    "set": "calibration",
+    "goal": "stimpak-offered",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "x"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-48-349Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "glitch-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-52-692Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "rogue-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-57-417Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "stimpak-to-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Rogue's stance toward Glitch is wary tolerance and she is weighing whether he is worth the heat; the page offers no basis for her to accept his stimpak."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-58-59-585Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "shard-to-glitch",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-01-860Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "cell-to-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-06-925Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "rogue-announces",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "no end state above is what the instruction wants"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-10-090Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "glitch-whispers-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The end state the page can record for speech only says that a person has said something of a kind; it cannot capture the instruction's content that the whisper tells Rogue he needs somewhere to hide, so no listed end state carries the instruction out."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-17-450Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-1",
+    "goal": "rogue-addresses-glitch",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Morph",
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.say-to"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "say-to",
+       "fields": {
+        "target": "glitch",
+        "exit": null
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-19-889Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "shard-into-glitchs-hands",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The end state (glitch holds data-shard) is reachable only if rogue offers the shard and glitch accepts, but rogue's stance toward glitch is wary tolerance while he weighs whether glitch is worth the heat; nothing in the instruction or the page gives glitch a way to induce rogue to hand over the shard, so no ordered action list above carries the instruction out."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-30-687Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "fresh-cell-for-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-33-715Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "rogue-goes-to-check-stock",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The page offers no way to reach the wanted end state: the two rooms are connected only via chrome-cassette, and departing is the only movement verb, but rogue departing east lands her in back-room — that part is fine — yet the page's end-state forms are only holding, location, or speaking, and while 'rogue in back-room' is a location end state, the instruction's point is for rogue to see what mux has stacked up, which the page cannot represent or verify; the goal kinds offered do not carry out the instruction as stated."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T02-59-59-648Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "rogue-calls-last-orders",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The page's only whole-room speech verb is say, which carries the instruction (Rogue is already in the bar), but the end-state schema for 'said' records only the person and speech kind; the instruction's content (last orders to the whole bar) is exactly a speech.say by rogue, which is reachable: rogue says to the room. However, since the offered end states must carry the instruction and a plain say by rogue does, the goal is representable."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-03-035Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks Rogue to deliver a pointed, direct warning to Glitch in person — a targeted, out-loud address, which the say-to verb covers, and the page already supports it since Rogue and Glitch are in the same room (chrome-cassette). A bare say to the room would not be straight to his face, and a whisper would fail the 'loud enough that nobody could miss it' requirement."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-06-014Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "glitch-confides-in-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The speech end states are defined only by who spoke and the speech kind (speech.say, speech.say-to, speech.whisper); they do not encode anything about what was said or to whom, so none of them can carry the specific instruction that Glitch privately whispers to Rogue that he'll be gone before sunrise."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-10-886Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "mux-asks-glitch-about-the-cell",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The end state that fits is Mux having said something directly to Glitch out loud, which is speech.say-to. Mux starts in the back-room while Glitch is in the chrome-cassette, so Mux must depart west into the chrome-cassette before speaking to him; whispering would not be out loud, and plain say is not addressed to him directly."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-16-475Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Morph",
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "say-to",
+       "fields": {
+        "target": "rogue",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-20-066Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "shard-to-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-35-900Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-to-rogue",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "rogue"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "target": "rogue",
+        "item": "stimpak"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "accept",
+       "fields": {
+        "item": "stimpak"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-39-052Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "cell-for-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-53-519Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "shard-to-mux",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-00-57-452Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "rogue-checks-back",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants Rogue to go to the back room, which the page models as a departure: Rogue departs chrome-cassette through the east exit into back-room, leaving Rogue in back-room."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-00-792Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-06-268Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "rogue-announces",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants everyone in the bar to hear Rogue's announcement, but the offered end states can only record that Rogue said something of a given kind — none of them captures other people hearing her. Worse, 'everyone in the bar' cannot be satisfied by any sequence here: Mux (the only other person) is in the back-room, and while he could walk to the bar, the end-state forms allow only a single condition, so no reachable end state expresses the instruction's outcome."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-09-092Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "mux-mutters",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Mux speaking aloud is a speech.say end state, but the act panel only exposes verbs through the actor combobox and the Schedule shows no pending acts; nothing on the page carries out Mux saying something."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-21-986Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "rogue-faces-mux",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "ignored per operator override"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-27-072Z"
+   },
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Morph",
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "say-to",
+       "fields": {
+        "target": "rogue",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-30-623Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "glitch-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "this scenario cannot be carried out on the current page"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-44-510Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "mux-to-bar",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "No end state among holder, location, or said carries out the instruction 'have Mux walk out to the Chrome Cassette'."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-46-378Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The page only lets a person say words through a pending action that is executed by the page's controls; it cannot make Mux say something funny on its own, so no listed end state (item held, person in room, or speech of a kind) is produced by the instruction."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-48-931Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-01-57-847Z"
+   },
+   {
+    "rep": "r2",
+    "set": "calibration",
+    "goal": "stimpak-offered",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "replaced"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-13-051Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "glitch-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "never mind"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-17-727Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "rogue-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the provided error message does not contain the details needed to answer; it only shows the usage/help text and no diagnostic message, so there is no flag combination to suggest"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-22-528Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "stimpak-to-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "x"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-24-656Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "cell-to-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "x"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-30-364Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "rogue-announces",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-32-019Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "glitch-whispers-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction names no item to be held and no room a person must end up in, and the only end state it could match is a whisper — but 'said' end states do not specify a target, so they cannot capture Glitch whispering specifically to Rogue. Therefore none of the available end-state forms carries out the instruction."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-37-659Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-1",
+    "goal": "rogue-addresses-glitch",
+    "kind": "plan",
+    "outcome": "stuck",
+    "providers": [
+     "Morph",
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.say-to"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "say-to",
+       "fields": {
+        "target": "glitch"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-40-748Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "shard-into-glitchs-hands",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Rogue's profile is defined by wary tolerance: she lets Glitch stay in her grid while weighing whether he is worth the heat he drags to her door, and Glitch knows he is a danger to her and works to never give her a reason to act. Nothing on the page establishes that she would hand over her data shard on request, and the available verbs (offer/accept/refuse, say/whisper) cannot force her to give it up — an offer must come from her willingly, which the instruction's premise does not support."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-52-855Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "fresh-cell-for-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-02-56-412Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "rogue-goes-to-check-stock",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-26-298Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "rogue-calls-last-orders",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants Rogue to shout to the whole bar, but the page only offers say-to and whisper, which are addressed to a single target person; a room-wide shout is not among the available verbs."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-30-161Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "No listed action can carry out the instruction: 'say' cannot be aimed at Glitch, 'whisper' is the opposite of loud enough for everyone to hear, and 'say-to' only counts as a directed utterance, not a public declaration to the room."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-32-256Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "glitch-confides-in-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-35-384Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "mux-asks-glitch-about-the-cell",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-37-827Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "item": "data-shard",
+        "exit": null
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "exit": null
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-40-919Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "shard-to-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "none"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-46-864Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "cell-for-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-03-57-910Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "shard-to-mux",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-01-416Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "rogue-checks-back",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants Rogue to end up in the back-room, which is a location end state: Rogue departs chrome-cassette east to reach back-room."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-03-555Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Whisper targets are same-room only, so a private aside only works inside a room; the end-state schema only accepts a bare said whisper with no privacy condition, and the page offers no action that can guarantee no one else hears it (speech rooms here always leave the whisper unguarded by any verifiable constraint), so no listed end state carries out 'without anyone else catching the words'."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-08-895Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "rogue-announces",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants everyone in the bar to hear Rogue's announcement, which means Mux must also be in the bar to hear it; but the only end states available are a bare 'said' flag that does not record who heard it, so no reachable end state captures 'everyone in the bar heard it'."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-11-598Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "mux-mutters",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-15-374Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "rogue-faces-mux",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-17-466Z"
+   },
+   {
+    "rep": "r2",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "reached",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-31-190Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "glitch-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "irrelevant"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-42-051Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "mux-to-bar",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "no end state above is what the instruction wants"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-43-669Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "mux-says-funny",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-44-700Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "rogue-whispers-glitch",
+    "kind": "plan",
+    "outcome": "ceiling",
+    "providers": [
+     "Morph",
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "said": {
+       "person": "rogue",
+       "subkind": "speech.whisper"
+      }
+     },
+     "steps": [
+      {
+       "actor": "rogue",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "whisper",
+       "fields": {
+        "target": "glitch",
+        "item": null,
+        "exit": null
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-04-55-047Z"
+   },
+   {
+    "rep": "r3",
+    "set": "calibration",
+    "goal": "stimpak-offered",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-23-901Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-1",
+    "goal": "glitch-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "unused"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-35-197Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-1",
+    "goal": "rogue-to-back-room",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Rogue cannot be moved: the Act combobox only offers the currently selected actor glitch, and depart is only offered through the exit of the actor's own room; no verb takes another person as a movable target, so no sequence of listed actions can place rogue in back-room."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-39-846Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-1",
+    "goal": "stimpak-to-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "unused"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-41-947Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-1",
+    "goal": "cell-to-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Mux holds the charge-cell in the back room while Glitch is in the chrome-cassette; a hand-off requires Mux to walk west to Glitch, offer the charge-cell, and Glitch to accept it."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-47-838Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-1",
+    "goal": "rogue-announces",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "No end state above carries the instruction out."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-50-037Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-1",
+    "goal": "glitch-whispers-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks Glitch to whisper to Rogue, but whisper takes only a target; there is no way to direct the whispered words at Rogue rather than the room. The provided forms (say/say-to/whisper) leave words implicit and target cannot distinguish which audience the instruction intends, so no supported speech action carries out 'quietly whisper to Rogue' as a distinct end state."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-05-56-057Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "shard-into-glitchs-hands",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The end state the instruction wants is within reach: glitch already shares the Chrome Cassette with rogue, the shard's holder, so rogue can offer the data-shard and glitch can accept it."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-06-12-384Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "fresh-cell-for-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "unused"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-06-20-043Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "rogue-ends-up-with-the-stim",
+    "kind": "plan",
+    "outcome": "ceiling",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "rogue"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "offer",
+       "fields": {
+        "item": "stimpak",
+        "exit": "east"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-06-25-980Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "rogue-goes-to-check-stock",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "Mux holds the charge-cell in the back-room, but the instruction only asks for Rogue to be brought back there to see what he has stacked up; that end state is a location goal, and the only action needed is Rogue departing east from the Chrome Cassette into the back-room. However, no item, speech, or handoff is requested, and the listed end-state kinds do include location — so the plan is Rogue departs east."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-06-51-925Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "rogue-calls-last-orders",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "No end state matches: the instruction wants Rogue to address the whole bar (a plain say), but the goal kinds offered only cover holding an item, being in a room, or having said with a subkind — and while speech.say exists as a subkind, a shout to the room is already achievable, so the goal kind does carry it. Reconsidered: it does."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-06-54-551Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "rogue-warns-glitch-openly",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks for a public face-to-face statement to Glitch (a say-to from rogue), which is achievable, but the only end states offered for speech record merely that a person said something of a kind without capturing that it was directed at Glitch aloud to his face; say-to is the right verb, yet the goal form for speech cannot express the required audience (glitch) or the public, non-whispered delivery, so none of the listed end states carries out the instruction as stated."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-06-57-224Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "glitch-confides-in-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction wants Glitch to lean in close and tell Rogue something for her ears only — a private whisper. But the only whisper verb requires a target person, and with only one possible target in the page, the end state would be just 'glitch whispered to rogue', which is not one of the offered end states."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-00-431Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "mux-asks-glitch-about-the-cell",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The end state the instruction wants is Mux having spoken out loud and directly to Glitch, but the only end states the page supports are item-holding, room-location, or 'said' of a person with a speech subkind — none of which capture speaking directly to a specific target person (say-to), so none carries the instruction out."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-03-851Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2-spent",
+    "goal": "read-the-shard",
+    "kind": "reasoning",
+    "outcome": "ceiling",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-08-377Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "shard-to-glitch",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "No end state carries out the instruction."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-21-739Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "cell-for-rogue",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-36-421Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "shard-to-mux",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "none"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-40-089Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "rogue-checks-back",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "the instruction is to move Rogue to the back room, but the Act combobox only offers a single actor/verb/exit triple and no step enqueues an action for a chosen actor; with the page's verbs there is no action whose end state is Rogue being in back-room, so none of the listed end states carries the instruction out"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-42-588Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "glitch-quiet-word",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-47-907Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "rogue-announces",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "The instruction asks for everyone in the bar to hear Rogue, which is an audience-wide effect, but the page's end states can only record that a person said something, holds an item, or is in a room. Rogue already stands in the bar (chrome-cassette), so a plain say there would be an announcement, yet no listed end state captures 'everyone heard her'; the closest (said: rogue, speech.say) does not by itself carry the instruction's meaning on this page."
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-07-55-821Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "mux-mutters",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "none of the end states above is what the instruction wants"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-08-07-209Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "rogue-faces-mux",
+    "kind": "reasoning",
+    "outcome": "no-such-action",
+    "providers": [
+     "Inceptron"
+    ],
+    "target": {
+     "kind": "no-such-action",
+     "reason": "placeholder"
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-08-08-952Z"
+   },
+   {
+    "rep": "r3",
+    "set": "blind-2",
+    "goal": "decrypt-the-shard",
+    "kind": "reasoning",
+    "outcome": "ceiling",
+    "providers": [
+     "Morph"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "data-shard",
+       "person": "glitch"
+      }
+     },
+     "steps": [
+      {
+       "actor": "glitch",
+       "verb": "depart",
+       "fields": {
+        "exit": "east"
+       }
+      },
+      {
+       "actor": "rogue",
+       "verb": "offer",
+       "fields": {
+        "target": "glitch",
+        "item": "data-shard"
+       }
+      },
+      {
+       "actor": "glitch",
+       "verb": "accept",
+       "fields": {
+        "item": "data-shard"
+       }
+      }
+     ]
+    },
+    "run": "corpus/runs/glm-request/G/2026-11-02T03-08-12-185Z"
+   }
+  ],
+  "servedByProvider": {
+   "Inceptron": 89,
+   "Morph": 67
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 0,
+  "retries": {
+   "asked": 0,
+   "rescued": 0
+  },
+  "costUsd": 0.07674305599999999,
+  "joinMismatches": [],
+  "lostGoals": {
+   "calibration/glitch-to-back-room": [
+    0,
+    3
+   ],
+   "calibration/mux-to-bar": [
+    0,
+    3
+   ],
+   "calibration/mux-says-funny": [
+    0,
+    3
+   ],
+   "calibration/rogue-whispers-glitch": [
+    0,
+    3
+   ],
+   "calibration/stimpak-offered": [
+    0,
+    3
+   ],
+   "blind-1/glitch-to-back-room": [
+    0,
+    3
+   ],
+   "blind-1/rogue-to-back-room": [
+    0,
+    3
+   ],
+   "blind-1/stimpak-to-rogue": [
+    0,
+    3
+   ],
+   "blind-1/shard-to-glitch": [
+    2,
+    3
+   ],
+   "blind-1/cell-to-glitch": [
+    0,
+    3
+   ],
+   "blind-1/rogue-announces": [
+    0,
+    3
+   ],
+   "blind-1/glitch-whispers-rogue": [
+    0,
+    3
+   ],
+   "blind-1/rogue-addresses-glitch": [
+    1,
+    3
+   ],
+   "blind-2-spent/shard-into-glitchs-hands": [
+    0,
+    3
+   ],
+   "blind-2-spent/fresh-cell-for-glitch": [
+    0,
+    3
+   ],
+   "blind-2-spent/rogue-ends-up-with-the-stim": [
+    2,
+    3
+   ],
+   "blind-2-spent/rogue-goes-to-check-stock": [
+    0,
+    3
+   ],
+   "blind-2-spent/rogue-calls-last-orders": [
+    0,
+    3
+   ],
+   "blind-2-spent/rogue-warns-glitch-openly": [
+    0,
+    3
+   ],
+   "blind-2-spent/glitch-confides-in-rogue": [
+    0,
+    3
+   ],
+   "blind-2-spent/mux-asks-glitch-about-the-cell": [
+    0,
+    3
+   ],
+   "blind-2-spent/read-the-shard": [
+    0,
+    3
+   ],
+   "blind-2/shard-to-glitch": [
+    0,
+    3
+   ],
+   "blind-2/stimpak-to-rogue": [
+    2,
+    3
+   ],
+   "blind-2/cell-for-rogue": [
+    0,
+    3
+   ],
+   "blind-2/shard-to-mux": [
+    0,
+    3
+   ],
+   "blind-2/rogue-checks-back": [
+    0,
+    3
+   ],
+   "blind-2/glitch-quiet-word": [
+    0,
+    3
+   ],
+   "blind-2/rogue-announces": [
+    0,
+    3
+   ],
+   "blind-2/mux-mutters": [
+    0,
+    3
+   ],
+   "blind-2/rogue-faces-mux": [
+    0,
+    3
+   ],
+   "blind-2/decrypt-the-shard": [
+    0,
+    3
+   ]
+  }
+ },
+ "H": {
+  "arm": "H",
+  "reached": {
+   "r1": [
+    46,
+    47
+   ]
+  },
+  "lossKinds": {
+   "reasoning": 1
+  },
+  "losses": [
+   {
+    "rep": "r1",
+    "set": "blind-2",
+    "goal": "stimpak-for-mux",
+    "kind": "reasoning",
+    "outcome": "already-held",
+    "providers": [
+     "Claude Platform on AWS"
+    ],
+    "target": {
+     "kind": "goal",
+     "expect": {
+      "holder": {
+       "item": "stimpak",
+       "person": "glitch"
+      }
+     },
+     "steps": []
+    },
+    "run": "corpus/runs/glm-request/H/2026-11-02T03-22-11-532Z"
+   }
+  ],
+  "servedByProvider": {
+   "Claude Platform on AWS": 63
+  },
+  "garbleByProvider": {},
+  "garble": [],
+  "firstAttemptRefusals": 0,
+  "retries": {
+   "asked": 0,
+   "rescued": 0
+  },
+  "costUsd": 0.032965164000000005,
+  "joinMismatches": [],
+  "lostGoals": {
+   "blind-2/stimpak-for-mux": [
+    0,
+    1
+   ]
+  }
+ }
+}

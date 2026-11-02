@@ -1,0 +1,104 @@
+{
+  "runId": "2026-11-02T02-51-07-847Z",
+  "instruction": "Rogue's hands are shaking. I want her holding that stimpak by the end of this.",
+  "startedAt": "2026-11-02T02:51:07.847Z",
+  "endedAt": "2026-11-02T02:51:13.229Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "holder": {
+        "item": "stimpak",
+        "person": "rogue"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "offer",
+        "fields": {
+          "target": "rogue",
+          "item": "stimpak"
+        }
+      },
+      {
+        "actor": "rogue",
+        "verb": "accept",
+        "fields": {
+          "item": "stimpak"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 8,
+    "done": 0.72
+  },
+  "loops": 8,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.00018373
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.00005628
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000062244
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000062244
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000062202
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000075726
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000075726
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000072408
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000079926
+    }
+  ],
+  "costUsd": 0.0007304860000000001,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

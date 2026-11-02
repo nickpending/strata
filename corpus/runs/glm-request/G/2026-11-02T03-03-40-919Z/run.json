@@ -1,0 +1,104 @@
+{
+  "runId": "2026-11-02T03-03-40-919Z",
+  "instruction": "Have Glitch jack into the data shard and read out the contacts stored on it.",
+  "startedAt": "2026-11-02T03:03:40.919Z",
+  "endedAt": "2026-11-02T03:03:45.025Z",
+  "parameters": {
+    "url": null,
+    "world": "/Users/rudy/development/projects/strata/world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-schema-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "holder": {
+        "item": "data-shard",
+        "person": "glitch"
+      }
+    },
+    "steps": [
+      {
+        "actor": "rogue",
+        "verb": "offer",
+        "fields": {
+          "item": "data-shard",
+          "exit": null
+        }
+      },
+      {
+        "actor": "glitch",
+        "verb": "accept",
+        "fields": {
+          "exit": null
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 8,
+    "done": 0.96
+  },
+  "loops": 8,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.000077064
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.00005586
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.00005586
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000061824
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000061782
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 5",
+      "costUsd": 0.000075306
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 6",
+      "costUsd": 0.000075306
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 7",
+      "costUsd": 0.000071988
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 8",
+      "costUsd": 0.000079422
+    }
+  ],
+  "costUsd": 0.000614412,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}
