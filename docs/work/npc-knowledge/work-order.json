@@ -1,0 +1,328 @@
+{
+  "workOrder": "npc-knowledge",
+  "what": "Standing knowledge for every person: authored places as boot facts; a required teaches() per registry subkind turning each witness's redacted copy into as-of location and holder facts about things other than the witness's own parts, appended in a known table beside the copy in record()'s transaction; an arrive whose present, set when the clock fires it and narrowed to the mover, teaches the arriver where everyone already there is; a latest-per-subject view and history; GET /api/knowledge/<person>; a Knowledge section in the bench with tick, source and a god's-eye stale marker; the fuzzer's replay and truth check over knowledge; a knows end state in the harness read over the route; and a knowledge goal set scored with the default model, with the three blind sets re-scored to new paths.",
+  "why": "rudy closed the npc-knowledge exploration choosing baseline plus experienced knowledge, all true and as of the tick that taught it, as strata's second block, and decided at the gate that an arriver learns who is already in the room; nothing could show, test or score what an NPC knows; design: docs/work/npc-knowledge/design.md.",
+  "issues": [
+    9
+  ],
+  "stakes": [
+    "Every fact a person knows is an append-only row naming its tick and its source, the teaching event or authored at boot, and no row is ever updated or deleted.",
+    "What each subkind's copies teach is declared once, in its registry entry, and is required for every entry.",
+    "An arriver learns the room of every person already in the room it arrives in, as of the arrive tick, from its own copy, whose `present` is set when the clock fires the arrive; a bystander's copy drops it.",
+    "A taught fact is derived only from the witness's own redacted copy and is written in the same transaction as that copy, and the store refuses a taught row with no copy beside it.",
+    "Every fact matched the world at the tick that taught it, checked by the fuzzer's replay over every seeded run.",
+    "Knowledge holds no fact about a person's own location or an item it holds now; those are read from the location and holder parts, and ties from the ties part.",
+    "A reader gets the latest fact per (fact kind, thing), and every earlier fact stays readable in order.",
+    "The bench serves each person's knowledge on one route and shows it in a Knowledge section with tick, source and a stale marker, adding no control and no text the target's vocabulary reads.",
+    "A knows goal holds only when the knower's latest fact on that subject is not stale; an absent or stale fact never holds.",
+    "The harness reads knowledge only over the bench route and imports nothing from the engine or the server.",
+    "Nothing in the engine's rules or apply path reads whether a fact is stale.",
+    "Real runs use the default model, overwrite no committed score file, and their cost is named to the orchestrator before any is spent."
+  ],
+  "criteria": [
+    {
+      "id": "K1",
+      "given": "the world under world/ booted fresh, and a copy of it whose mux.toml lists places = [\"nowhere\"]",
+      "when": "tests/knowledge.test.ts boots each and reads Engine.knowledge() for glitch, mux and rogue",
+      "then": "it is wrong if any person has a location or holder fact, or lacks a place or tie person: each person's facts are exactly kind place for back-room and chrome-cassette, tick 0, source authored, stale false; each person's people are its tie targets at tick 0 with source authored (glitch: rogue; mux: glitch; rogue: glitch); own location is its world location and own holdings its world item. The broken copy refuses boot with file people/mux.toml, path places.0, rule place-names-room, and creates no database file",
+      "mutations": [
+        {
+          "id": "K1-M1",
+          "change": "skip initialKnown(defs) in Store.create so no authored rows are written"
+        },
+        {
+          "id": "K1-M2",
+          "change": "drop the place-names-room check from checkReferences"
+        },
+        {
+          "id": "K1-M3",
+          "change": "write each tie as a person fact row at boot instead of reading the ties part"
+        }
+      ]
+    },
+    {
+      "id": "K2",
+      "given": "a fresh boot of world/ driven through Engine.act and Engine.step only",
+      "when": "tests/knowledge.test.ts performs, each from a fresh boot: rogue whisper glitch with mux arrived in the bar beforehand; glitch offer stimpak to rogue then rogue refuse after glitch departed east; mux walks to the bar, mux offer charge-cell to glitch, mux departs east, and the clock fires the lapse; glitch say; rogue say-to glitch; and rogue offer data-shard to glitch then glitch accept",
+      "then": "it is wrong if any fact differs from the event's declared teaching: the whisper teaches mux the whisperer's and the target's room {room: chrome-cassette} with source the whisper's id and tick, and mux's copy has no words; the refuse teaches the refuser's room and holder stimpak = glitch, and no fact of glitch's location; the lapse teaches holder charge-cell = mux to whoever holds its copy and no location fact; say teaches the speaker's room; say-to the speaker's and target's; the accept teaches holder data-shard = glitch to rogue and both rooms; every fact's tick is its event's tick and its source its event's id and subkind",
+      "mutations": [
+        {
+          "id": "K2-M1",
+          "change": "make exchange.refuse teach its target's location {room: place}"
+        },
+        {
+          "id": "K2-M2",
+          "change": "make exchange.lapse teach its actor's location {room: place}"
+        },
+        {
+          "id": "K2-M3",
+          "change": "pass teaches() the event instead of the witness's redacted copy in record()"
+        },
+        {
+          "id": "K2-M4",
+          "change": "record the fact's tick as the snapshot's tick after the step instead of the event's tick"
+        }
+      ]
+    },
+    {
+      "id": "K3",
+      "given": "a fresh boot of world/ (rogue and glitch in chrome-cassette, mux in back-room)",
+      "when": "tests/knowledge.test.ts and tests/movement.test.ts have mux depart west and step to the arrive; separately glitch and rogue both depart east in one tick and step to their arrives at the same tick; and separately mux departs west, rogue and glitch depart east before mux arrives, so mux arrives in an empty bar",
+      "then": "it is wrong if the arriver does not learn who was there or a bystander does: mux's arrive event carries present [glitch, rogue] and mux learns location {room: chrome-cassette} for glitch and rogue with that arrive's tick and id; glitch's and rogue's copies of it carry no present and teach them only mux's room; of two arrivals into the back room at one tick the second's present names mux and the first mover, the first's names only mux; the arrive into the empty bar has present []; the schedule entry written at depart carries only from and to; the tests that build or expect an arrive payload (tests/movement.test.ts:77, tests/parts.test.ts:70 and 164, tests/replay.test.ts:84) carry present",
+      "mutations": [
+        {
+          "id": "K3-M1",
+          "change": "compute present when the depart schedules the arrive instead of in fired()"
+        },
+        {
+          "id": "K3-M2",
+          "change": "remove narrow { present: \"participants\" } from physical.arrive's visibility"
+        },
+        {
+          "id": "K3-M3",
+          "change": "compute every due entry's draft from one snapshot taken before the first is recorded in Engine.step"
+        }
+      ]
+    },
+    {
+      "id": "K4",
+      "given": "a fresh boot of world/",
+      "when": "tests/knowledge.test.ts has rogue offer data-shard to glitch and glitch accept, then mux walks to the bar, and reads every person's history and facts",
+      "then": "it is wrong if any person holds a row about its own location or a holder row naming itself: glitch's history has holder data-shard = rogue from the offer and no row holder = glitch; glitch's facts omit the data-shard holder subject and own holdings list data-shard and stimpak; mux's history has no location row with thing mux",
+      "mutations": [
+        {
+          "id": "K4-M1",
+          "change": "drop the own-location filter in learned()"
+        },
+        {
+          "id": "K4-M2",
+          "change": "drop the read-time hiding of holder facts about items the person holds now"
+        }
+      ]
+    },
+    {
+      "id": "K5",
+      "given": "a fresh boot of world/",
+      "when": "tests/knowledge.test.ts records two facts about one subject (glitch says, then glitch departs east), then makes a refused action (mux offer stimpak to rogue) and an invalid one (verb fly), then inserts through the store a taught row for rogue naming an event rogue holds no copy of",
+      "then": "it is wrong if the latest is not the newer fact or the older is gone: rogue's facts give glitch's location as the transit, with stale false, and rogue's history holds the room fact then the transit fact in that order; after the glitch arrive rogue's transit fact is stale true with now {room: back-room} and still carries its tick and source; the refused and invalid actions leave every person's history byte-identical; the row with no copy is refused by FOREIGN KEY constraint failed; no statement in store.ts updates or deletes known",
+      "mutations": [
+        {
+          "id": "K5-M1",
+          "change": "make known_latest pick the row of least seq per subject"
+        },
+        {
+          "id": "K5-M2",
+          "change": "drop the (event, witness) foreign key from the known table"
+        },
+        {
+          "id": "K5-M3",
+          "change": "compute stale as always false"
+        }
+      ]
+    },
+    {
+      "id": "K6",
+      "given": "the registry in src/engine/events.ts",
+      "when": "the root typecheck compiles a type-level test (tests/registry-teaches.test.ts or a checked .ts beside it) that builds a RegistryEntry with no teaches under @ts-expect-error",
+      "then": "the typecheck fails if teaches is optional: an entry without teaches is a type error, and every one of the ten subkinds declares teaches (time.tick's returning no facts)",
+      "mutations": [
+        {
+          "id": "K6-M1",
+          "change": "make teaches optional on RegistryEntry"
+        }
+      ]
+    },
+    {
+      "id": "K7",
+      "given": "the fuzzer under src/driver",
+      "when": "tests/driver.test.ts runs seeded runs of the driver (at least the seeds and action counts it runs today) and one run with a test-only registry whose speech.say teaches its actor's location as the other room",
+      "then": "it is wrong if a seeded run fails or the planted run passes: every seeded run passes the state replay, the knowledge replay (live known rows of every person equal projectKnown's, compared without seq), the truth check and the present check; the planted run fails the truth check naming the witness, the event and both values",
+      "mutations": [
+        {
+          "id": "K7-M1",
+          "change": "make projectKnown return the live store's rows instead of projecting them from the log"
+        },
+        {
+          "id": "K7-M2",
+          "change": "skip the truth check in the driver's replay check"
+        },
+        {
+          "id": "K7-M3",
+          "change": "skip the present check in projectKnown"
+        }
+      ]
+    },
+    {
+      "id": "K8",
+      "given": "a served bench (tests/server.test.ts)",
+      "when": "it GETs /api/knowledge/mux on a fresh world and after an act, /api/knowledge/nobody and /api/knowledge/%E0%A4%A",
+      "then": "it is wrong if the body is not Engine.knowledge(): mux's body carries person, own, people, facts (each with kind, thing, value, tick, source, subkind, now, stale) and history; nobody answers 404 naming the person; the malformed path answers 400; src/adapter/contract.ts fails the root typecheck if a field the harness's KnowledgeBody declares is renamed in the served body",
+      "mutations": [
+        {
+          "id": "K8-M1",
+          "change": "rename stale to isStale in the served knowledge body"
+        },
+        {
+          "id": "K8-M2",
+          "change": "answer 200 with an empty body for a person that does not exist"
+        }
+      ]
+    },
+    {
+      "id": "K9",
+      "given": "a hosted bench in a real browser (tests/page.test.ts)",
+      "when": "it reads the page on a fresh world, after mux walks to the bar and arrives, and after rogue then departs east and arrives in the back room",
+      "then": "it is wrong if the panel adds a control or feeds the vocabulary: the controls are the same list, labels and options as on main and none is unlabeled; vocabulary() gives exactly the world's people, items, rooms and exits each time; the Knowledge section shows for each person the lines own location (location part), own holdings (holder part), knows person and knows place; after mux arrives, mux's line reads 'location of rogue: room chrome-cassette, learned tick 2 from <id> physical.arrive'; after rogue departs east it reads her transit, learned from the physical.depart, with no stale marker; after rogue reaches the back room that line carries ' STALE (operator view): now room back-room', while rogue's line about mux carries none",
+      "mutations": [
+        {
+          "id": "K9-M1",
+          "change": "write holder lines as '<item>: held by <person>'"
+        },
+        {
+          "id": "K9-M2",
+          "change": "head each person's block 'Mux (mux)' at level 3"
+        },
+        {
+          "id": "K9-M3",
+          "change": "drop the stale marker span"
+        }
+      ]
+    },
+    {
+      "id": "K10",
+      "given": "the harness package alone (harness/test) with a Bun.serve stand-in answering fixture knowledge bodies",
+      "when": "harness/test runs holds(), satisfies(), described() and checked() over knows end states, and parses a goal file whose expect is a knows end state",
+      "then": "it is wrong if a stale or absent fact holds: holds({knows: {person: mux, location: rogue}}) is true only when the body has a location fact on rogue with stale false, false when it is stale and false when absent; the holder form likewise; satisfies() is false for knows; described() reads 'mux knows where rogue is now' and 'glitch knows who holds charge-cell now'; checked() turns a knows naming a person or an item the page does not show into no-such-action naming it; the goal file parses with expectSchema",
+      "mutations": [
+        {
+          "id": "K10-M1",
+          "change": "make holds() for knows ignore stale"
+        },
+        {
+          "id": "K10-M2",
+          "change": "make namesOf() check a holder form's item against the people"
+        }
+      ]
+    },
+    {
+      "id": "K11",
+      "given": "a hosted bench in a real browser, a model stand-in typing {kind: goal, expect: {knows: {person: mux, location: glitch}}, steps: [glitch depart east]} and a Jev stand-in",
+      "when": "tests/player.test.ts runs the run command as the operator does",
+      "then": "it is wrong if the run ends other than reached by the code check: the plan's depart is performed, the wait presses Step to the arrive, the next loop reads held true from /api/knowledge/mux, the outcome is reached, run.json's target is the knows end state, and events.jsonl and received.jsonl are written as for any reached run",
+      "mutations": [
+        {
+          "id": "K11-M1",
+          "change": "make holds() return true for every knows end state"
+        }
+      ]
+    },
+    {
+      "id": "K12",
+      "given": "tests/harness-boundary.test.ts as it stands",
+      "when": "the gate runs it at the job's base and head",
+      "then": "it fails if any harness file names a path outside harness/: the package copied alone type-checks and its tests pass at both",
+      "holds": true
+    },
+    {
+      "id": "K13",
+      "given": "the job's worktree with the code passing the gate, the default model z-ai/glm-5.3-flash on Z.AI, and the orchestrator's approval of the run list at about $0.04",
+      "when": "the builder runs bun run score --goals corpus/goals/knowledge.json --tick-minutes 10, and the same for corpus/goals/blind-1.json, blind-2.json and blind-2-spent.json, and commits the score files and runs",
+      "then": "it is wrong if a committed file is overwritten or a loss is unexplained: four new score files land at <set>.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json and git diff shows no change to any score file committed before the job; corpus/goals/knowledge.json holds the six goals of the design, author claude-opus-5-5 (npc-knowledge shaper); docs/work/npc-knowledge/results/real-runs.md gives each set's held of total and cost, computed by a script over the score files, names each goal not held with its cause read from its run's loops.jsonl and run.json, and compares each blind set with arm F of corpus/experiments/glm-request; a loss a code path decided (a vocabulary or checked() refusal, holds() misreading the route) is fixed before merge"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "K9",
+      "when": "after merge, on main: bun run start --tick-minutes 10, open http://127.0.0.1:4800, act mux depart west, press Step twice, then act rogue depart east and press Step",
+      "then": "the Knowledge section shows under What Mux knows 'location of rogue: room chrome-cassette, learned tick 2 from ... physical.arrive'; after rogue departs east that line reads her transit to back-room; after the Step that brings her there it is marked STALE (operator view): now room back-room, and What Rogue knows shows mux's room with no stale marker; each line reads as labelled",
+      "by": "operator"
+    },
+    {
+      "criterion": "K7",
+      "when": "after merge, on main: bun run driver --seed 7 --actions 400 --tick-minutes 10",
+      "then": "it exits 0 reporting every replay and invariant check passed, the knowledge replay, truth and present checks among them",
+      "by": "driver"
+    }
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "A bystander already in a room learns nothing about the others there from someone else's arrival, since `present` is narrowed to the arriver; it learns them when they act or are addressed.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/npc-knowledge/shape/sacrifice-freq.sh",
+        "records": "physical.arrive events in corpus/runs/*/events.jsonl with two or more non-movers holding a copy in received.jsonl",
+        "count": 171,
+        "total": 502
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A refuse teaches nothing of the giver's location, and a lapse teaches nobody's location, since neither event guarantees who is in its room.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/npc-knowledge/shape/sacrifice-freq.sh",
+        "records": "exchange.refuse and exchange.lapse events among all events in corpus/runs/*/events.jsonl",
+        "count": 3,
+        "total": 2904
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Speech teaches only where its speaker and its addressee are; nothing said is learned as a fact, since being told is the gossip block's.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/npc-knowledge/shape/sacrifice-freq.sh",
+        "records": "speech events among all events in corpus/runs/*/events.jsonl",
+        "count": 427,
+        "total": 2904
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Every person's authored place list is both rooms of the two-room world, so place knowledge distinguishes no one yet.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "Authored content of three definition files, not a path any run or reader exercises differently."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "No decision reads knowledge yet; how it enters an NPC's snapshot waits for the mind and plan blocks.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "No decision path exists yet that could read it; the deferral is the exploration's (npc-knowledge.md Deferred)."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A knows end state is never served by a pending state's resolution, since a pending after carries no knowledge; the rule reaches it only through the plan's steps or Jev's choice.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "No committed goal has a knows end state; it bites only the new knowledge set, whose runs report it."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Every loop's page text, read by Jev and by the target call, grows by the Knowledge section, and every target prompt by the two knows end states and the sentence on learning.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/npc-knowledge/shape/sacrifice-freq.sh",
+        "records": "loops in corpus/runs/*/loops.jsonl, each of which reads the page",
+        "count": 7447,
+        "total": 7447
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Committed runs' events.jsonl hold arrive events without `present`; they are history read as files, never re-parsed against the registry, and are not rewritten.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/npc-knowledge/shape/sacrifice-freq.sh",
+        "records": "physical.arrive events among all events in corpus/runs/*/events.jsonl, each committed without present",
+        "count": 502,
+        "total": 2904
+      }
+    }
+  ]
+}
