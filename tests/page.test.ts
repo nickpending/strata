@@ -67,7 +67,7 @@ const controlsOf = (got: PageRead) => got.controls.map((c) => `${c.kind} ${c.lab
 function knowledgeOf(text: string): Record<string, string[]> {
   const section = text.slice(
     text.indexOf('heading "Knowledge"'),
-    text.indexOf('heading "Received"'),
+    text.indexOf('heading "Encounters"'),
   );
   // Split on each heading, kept: [before, heading, its lines, heading, its lines, ...].
   const parts = section.split(/- heading "(What [^"]+)" \[level=3\]/);
@@ -77,6 +77,80 @@ function knowledgeOf(text: string): Record<string, string[]> {
     blocks[parts[i] ?? ""] = lines.map((m) => m[1] ?? "");
   }
   return blocks;
+}
+
+/**
+ * The Encounters section, keyed by each person's level-3 heading: each other person's item text
+ * keyed to the lines under it, or the block's one bare line when it has no items.
+ */
+function encountersOn(text: string): Record<string, Record<string, string[]> | string> {
+  const section = text.slice(
+    text.indexOf('heading "Encounters"'),
+    text.indexOf('heading "Received"'),
+  );
+  const parts = section.split(/- heading "([^"]+)" \[level=3\]\n/);
+  const blocks: Record<string, Record<string, string[]> | string> = {};
+  for (let i = 1; i < parts.length; i += 2) {
+    const body = parts[i + 1] ?? "";
+    const bare = /^\s*- text: "?([^"\n]*)"?\n/.exec(body);
+    if (bare !== null) {
+      blocks[parts[i] ?? ""] = bare[1] ?? "";
+      continue;
+    }
+    const items: Record<string, string[]> = {};
+    // An other person's item is the one list item with children; each encounter line has text.
+    for (const item of body.split(/\n\s*- listitem:\n/).slice(1)) {
+      const head = /- text: "?([^"\n]*)"?/.exec(item)?.[1] ?? "";
+      items[head] = [...item.matchAll(/listitem: "?([^"\n]*)"?(?:\n|$)/g)].map((m) => m[1] ?? "");
+    }
+    blocks[parts[i] ?? ""] = items;
+  }
+  return blocks;
+}
+
+/** The world's own names, which vocabulary() must give exactly. */
+function worldNames() {
+  const loaded = loadWorld(WORLD);
+  if (!loaded.ok) throw new Error(loaded.refusal.message);
+  const { defs } = loaded;
+  return {
+    people: defs.people.map((p) => p.id),
+    items: defs.items.map((i) => i.id),
+    rooms: defs.rooms.map((r) => r.id),
+    exits: [...new Set(defs.rooms.flatMap((r) => Object.keys(r.exits)))],
+  };
+}
+
+// The controls of the bench before the Knowledge section, on a fresh world.
+const MAIN_CONTROLS = [
+  ["select", "actor", ["glitch", "mux", "rogue"]],
+  ["select", "verb", ["depart", "say", "say-to", "whisper", "offer", "accept", "refuse"]],
+  ["select", "exit", ["east"]],
+  ["button", "Act", []],
+  ["button", "Step", []],
+  ["button", "Reset", []],
+  ["select", "person", ["glitch", "mux", "rogue"]],
+];
+
+/** The page's text, once its controls are main's, all labelled, and its vocabulary the world's. */
+async function seenText(): Promise<string> {
+  const { subkinds } = await (await fetch(new URL("/api/subkinds", base))).json();
+  const got = await read();
+  expect(got.controls.map((c) => [c.kind, c.label, c.options])).toEqual(MAIN_CONTROLS);
+  expect(unlabeled(got.controls).map(nameOf)).toEqual([]);
+  const { verbs: _verbs, speech: _speech, ...names } = vocabulary(got, subkinds);
+  expect(names).toEqual(worldNames());
+  return got.text;
+}
+
+/** POST to the bench and return the events the answer carries. */
+async function events(path: string, body?: unknown): Promise<{ id: string }[]> {
+  const response = await fetch(new URL(path, base), {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body ?? {}),
+  });
+  return ((await response.json()) as { events: { id: string }[] }).events;
 }
 
 // Runs first, so the labelled-control test below reads the page with these pending states on it.
@@ -173,45 +247,60 @@ describe("W7: a room's exit line reads '(1 tick)' for a one-tick exit and '(n ti
   }, 30_000);
 });
 
+// Runs after the tests above: it resets the bench they share.
+describe("E5: each person's encounters, shown in a labelled Encounters section on the bench page", () => {
+  test("the section adds no control, feeds no name to the vocabulary, and labels every line", async () => {
+    await events("/api/reset");
+    const people = ["Glitch", "Mux", "Rogue"].map(
+      (name) => `What has passed between ${name} and others`,
+    );
+    const fresh = encountersOn(await seenText());
+    expect(fresh).toEqual(
+      Object.fromEntries(people.map((heading) => [heading, "no encounters yet"])),
+    );
+
+    await events("/api/actions", { actor: "mux", verb: "depart", exit: "west" });
+    const arrive = (await events("/api/step"))[1]?.id;
+    const whisper = (
+      await events("/api/actions", {
+        actor: "rogue",
+        verb: "whisper",
+        target: "glitch",
+        words: "psst",
+      })
+    )[0]?.id;
+    const witnessed = (kind: string, event: string | undefined) =>
+      `role witnessed (bystander), kind ${kind}, tick 1, event ${event}`;
+    const direct = (kind: string, event: string | undefined) =>
+      `role direct (actor or target), kind ${kind}, tick 1, event ${event}`;
+    const after = encountersOn(await seenText());
+    // Each block lists the other people in the order of its first encounter with each.
+    expect(Object.values(after).map((block) => Object.keys(block))).toEqual([
+      ["with mux", "with rogue"],
+      ["with rogue", "with glitch"],
+      ["with mux", "with glitch"],
+    ]);
+    expect(after).toEqual({
+      "What has passed between Glitch and others": {
+        "with mux": [witnessed("physical.arrive", arrive)],
+        "with rogue": [direct("speech.whisper", whisper)],
+      },
+      "What has passed between Mux and others": {
+        "with rogue": [witnessed("speech.whisper", whisper)],
+        "with glitch": [witnessed("speech.whisper", whisper)],
+      },
+      "What has passed between Rogue and others": {
+        "with mux": [witnessed("physical.arrive", arrive)],
+        "with glitch": [direct("speech.whisper", whisper)],
+      },
+    });
+  }, 60_000);
+});
+
 // Runs last: it resets the bench the tests above share.
 describe("K9: what each person knows, shown in a Knowledge section on the bench page", () => {
   test("the section adds no control, feeds no name to the vocabulary, and marks stale facts", async () => {
-    const loaded = loadWorld(WORLD);
-    if (!loaded.ok) throw new Error(loaded.refusal.message);
-    const { defs } = loaded;
-    const world = {
-      people: defs.people.map((p) => p.id),
-      items: defs.items.map((i) => i.id),
-      rooms: defs.rooms.map((r) => r.id),
-      exits: [...new Set(defs.rooms.flatMap((r) => Object.keys(r.exits)))],
-    };
-    const { subkinds } = await (await fetch(new URL("/api/subkinds", base))).json();
-    // The controls of the bench before the Knowledge section, on a fresh world.
-    const MAIN_CONTROLS = [
-      ["select", "actor", ["glitch", "mux", "rogue"]],
-      ["select", "verb", ["depart", "say", "say-to", "whisper", "offer", "accept", "refuse"]],
-      ["select", "exit", ["east"]],
-      ["button", "Act", []],
-      ["button", "Step", []],
-      ["button", "Reset", []],
-      ["select", "person", ["glitch", "mux", "rogue"]],
-    ];
-    const seen = async () => {
-      const got = await read();
-      expect(got.controls.map((c) => [c.kind, c.label, c.options])).toEqual(MAIN_CONTROLS);
-      expect(unlabeled(got.controls).map(nameOf)).toEqual([]);
-      const { verbs: _verbs, speech: _speech, ...names } = vocabulary(got, subkinds);
-      expect(names).toEqual(world);
-      return knowledgeOf(got.text);
-    };
-    const events = async (path: string, body?: unknown) => {
-      const response = await fetch(new URL(path, base), {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(body ?? {}),
-      });
-      return ((await response.json()) as { events: { id: string }[] }).events;
-    };
+    const seen = async () => knowledgeOf(await seenText());
     await events("/api/reset");
 
     const fresh = await seen();

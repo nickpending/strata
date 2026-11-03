@@ -1,9 +1,11 @@
 /**
  * The world panel: rooms with who is present, what they hold and their ties; who is in transit;
- * the items with any pending offer; what each person knows; the clock and its schedule; each
+ * the items with any pending offer; what each person knows; what has passed between each person
+ * and each other; the clock and its schedule; each
  * pending state with who closes it and what the clock fires; the act form built from the served
  * verbs; step and reset; the history; and one person's received copies.
  */
+import { encountersSection } from "./encounters.js";
 import { knowledgeSection } from "./knowledge.js";
 
 function h(tag, attrs, ...children) {
@@ -44,6 +46,8 @@ export async function mount(root, api) {
     received: [],
     /** Every person's knowledge body, in the snapshot's person order. */
     knowledge: [],
+    /** Every person's encounters body, in the snapshot's person order. */
+    encounters: [],
     form: { actor: null, verb: null, fields: {} },
     /** A rule's refusal of the last action (422): `{ code, message }`, code from the closed set. */
     refusal: null,
@@ -66,6 +70,9 @@ export async function mount(root, api) {
     state.received = state.viewer === null ? [] : (await api.received(state.viewer)).body.copies;
     state.knowledge = await Promise.all(
       people.map(async (person) => (await api.knowledge(person)).body),
+    );
+    state.encounters = await Promise.all(
+      people.map(async (person) => (await api.encounters(person)).body),
     );
     render();
   }
@@ -384,6 +391,7 @@ export async function mount(root, api) {
       transitSection(),
       itemsSection(),
       knowledgeSection(h, state.knowledge),
+      encountersSection(h, state.encounters),
       receivedSection(),
       historySection(),
     );

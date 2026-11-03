@@ -4,6 +4,7 @@ import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:f
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
+import type { EncountersView } from "../src/engine/encounters.ts";
 import { boot } from "../src/engine/engine.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 import type { KnowledgeView } from "../src/engine/knowledge.ts";
@@ -101,6 +102,11 @@ describe("C10: the bench and its API over HTTP", () => {
       {
         path: "/bench/panels/knowledge.js",
         file: "bench/panels/knowledge.js",
+        type: "text/javascript",
+      },
+      {
+        path: "/bench/panels/encounters.js",
+        file: "bench/panels/encounters.js",
         type: "text/javascript",
       },
     ];
@@ -276,6 +282,39 @@ describe("K8: GET /api/knowledge/<person> serves Engine.knowledge()", () => {
     expect(nobody.status).toBe(404);
     expect(await nobody.json()).toEqual({ error: 'no person "nobody"' });
     const malformed = await fetch(`${served.base}/api/knowledge/%E0%A4%A`);
+    expect(malformed.status).toBe(400);
+    expect(await malformed.json()).toEqual({ error: "the path is not valid percent-encoding" });
+  });
+});
+
+describe("E4: GET /api/encounters/<person> serves Engine.encounters()", () => {
+  test("rogue's body after a whisper; nobody is a 404 naming it; a malformed path is a 400", async () => {
+    const served = serve(false);
+    const api = client(served);
+    const dir = mkdtempSync(join(tmpdir(), "strata-server-"));
+    temps.push(dir);
+    const booted = boot(WORLD, { tickMinutes: 10, dbPath: join(dir, "world.sqlite") });
+    if (!booted.ok) throw new Error(booted.refusal.message);
+    const engine = booted.engine;
+    stops.push(() => engine.close());
+
+    const whisper = { actor: "rogue", verb: "whisper", target: "glitch", words: "psst" };
+    const [event] = await api.act(whisper);
+    engine.act(whisper);
+    const body = await api.get<EncountersView>("/api/encounters/rogue");
+    expect(body).toEqual(JSON.parse(JSON.stringify(engine.encounters("rogue"))));
+    expect(body).toEqual({
+      person: "rogue",
+      name: "Rogue",
+      encounters: [
+        { with: "glitch", role: "direct", subkind: "speech.whisper", tick: 0, event: event?.id },
+      ],
+    });
+
+    const nobody = await fetch(`${served.base}/api/encounters/nobody`);
+    expect(nobody.status).toBe(404);
+    expect(await nobody.json()).toEqual({ error: 'no person "nobody"' });
+    const malformed = await fetch(`${served.base}/api/encounters/%E0%A4%A`);
     expect(malformed.status).toBe(400);
     expect(await malformed.json()).toEqual({ error: "the path is not valid percent-encoding" });
   });
@@ -458,6 +497,7 @@ describe("the bench page keeps refusals, invalid actions and refused resets apar
       events: (since: number) => call("GET", `/api/events?since=${since}`),
       received: (thing: string) => call("GET", `/api/received/${thing}`),
       knowledge: (thing: string) => call("GET", `/api/knowledge/${thing}`),
+      encounters: (thing: string) => call("GET", `/api/encounters/${thing}`),
       verbs: () => call("GET", "/api/verbs"),
       act: (action: unknown) => call("POST", "/api/actions", action),
       step: () => call("POST", "/api/step"),

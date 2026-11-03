@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { dueEntries, fired, tickDraft } from "./clock.ts";
 import { type DefinitionRefusal, loadWorld, type WorldDefs } from "./definitions.ts";
+import { type EncountersView, encountersOf } from "./encounters.ts";
 import {
   type Copy,
   type EventDraft,
@@ -139,6 +140,20 @@ export class Engine {
       latest: this.store.latestKnown(person),
       copies: this.store.received(person),
     });
+  }
+
+  /**
+   * What has passed between `person` and each other person, read from the copies it holds now.
+   * Nothing in act(), step() or record() calls it.
+   */
+  encounters(person: string): EncountersView {
+    const def = this.defs.people.find((p) => p.id === person);
+    if (def === undefined) throw new Error(`"${person}" names no person`);
+    return {
+      person,
+      name: def.name,
+      encounters: encountersOf(this.store.received(person), person, (id) => this.isPerson(id)),
+    };
   }
 
   isPerson(id: string): boolean {

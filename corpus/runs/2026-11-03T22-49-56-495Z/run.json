@@ -1,0 +1,77 @@
+{
+  "runId": "2026-11-03T22-49-56-495Z",
+  "instruction": "have Mux come out front to the Chrome Cassette",
+  "startedAt": "2026-11-03T22:49:56.495Z",
+  "endedAt": "2026-11-03T22:50:01.944Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-object-z-ai-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "location": {
+        "person": "mux",
+        "room": "chrome-cassette"
+      }
+    },
+    "steps": [
+      {
+        "actor": "mux",
+        "verb": "depart",
+        "fields": {
+          "exit": "west"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 4,
+    "done": 0.98
+  },
+  "loops": 4,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003979,
+      "provider": "Z.AI"
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000071358
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000071358
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000080892
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 4",
+      "costUsd": 0.000102438
+    }
+  ],
+  "costUsd": 0.000723946,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

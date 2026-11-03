@@ -5,6 +5,7 @@
  * rules or the apply path reads `now` or `stale`: they are the operator's view.
  */
 import type { WorldDefs } from "./definitions.ts";
+import { encountersOf } from "./encounters.ts";
 import { type Copy, registry, type Subkind } from "./events.ts";
 import { lookup, type Snapshot } from "./snapshot.ts";
 import type { Location } from "./things.ts";
@@ -112,17 +113,15 @@ function sourced(row: StoredKnown): Sourced {
   return { kind, thing, value, tick, source: event ?? "authored", subkind } as Sourced;
 }
 
-/** Each tie target as the ties part holds it, then each other person a copy names as actor or target. */
+/** Each tie target as the ties part holds it, then each other person as of its first encounter. */
 function peopleOf({ person, snapshot, copies }: KnowledgeOf): KnownPerson[] {
   const known = new Map<string, KnownPerson>();
   for (const { target } of lookup(snapshot.people, person)?.ties ?? []) {
     known.set(target, { person: target, tick: 0, source: "authored", subkind: null });
   }
-  for (const copy of copies) {
-    for (const named of [copy.actor, ...copy.targets]) {
-      if (named === person || known.has(named) || !Object.hasOwn(snapshot.people, named)) continue;
-      known.set(named, { person: named, tick: copy.tick, source: copy.id, subkind: copy.subkind });
-    }
+  const isPerson = (id: string) => Object.hasOwn(snapshot.people, id);
+  for (const { with: other, tick, event, subkind } of encountersOf(copies, person, isPerson)) {
+    if (!known.has(other)) known.set(other, { person: other, tick, source: event, subkind });
   }
   return [...known.values()];
 }
