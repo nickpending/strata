@@ -32,7 +32,12 @@ The question: what a relationship is, how one forms, what it holds, and the smal
    - Memory is its own block.
    - The open part of the proposal is per-encounter Jev judgments (how much it mattered, better or worse) feeding standing.
 9. **Smallest slice first (rudy).** Keep the relationship isolated from the rest of the engine as far as possible: relationships that exist and are visible but do not change yet, or edge formation alone. Authoring standing at boot first needs a decision on what standing holds.
-10. **Reverie carry-over found (rudy).** TOML and the tie shape were chosen in the world-bench shape without a decision from rudy, and the tie shape and its three ties were re-authored from reverie (`docs/work/world-bench/design.md:22`). Ties are to be designed from a blank slate here, and the rest of strata is audited for other carry-overs.
+10. **Reverie carry-over found (rudy).** TOML and the tie shape were chosen in the world-bench shape without a decision from rudy, and the tie shape and its three ties were re-authored from reverie (`docs/work/world-bench/design.md:22`). Ties are to be designed from a blank slate here, and the rest of strata is audited for other carry-overs. The audit came back with rudy's rulings (issue #11):
+    - **Kept:** the world, the items as test content, TOML, the person file minus ties, the map, the speech kinds and consensual give.
+    - **Redone:** ties, here.
+    - **Light redo:** descriptions are atmosphere only and never restate a fact the typed data owns.
+    - **Travel:** symmetric at 1 tick each way. The test that needed the asymmetry gets its own fixture world.
+    - **Offer window:** stays at 2 ticks as a placeholder.
 
 ## Decisions
 
