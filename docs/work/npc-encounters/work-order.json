@@ -1,0 +1,190 @@
+{
+  "workOrder": "npc-encounters",
+  "what": "Encounters, step 1 of the relationships build order: encountersOf() in a new src/engine/encounters.ts derives, from each person's own received copies, one encounter per other person among each copy's actor and targets, with role direct or witnessed, the event's subkind as kind, and its tick and event; knowledge's peopleOf() reads its experienced people from it; Engine.encounters(person) serves it on GET /api/encounters/<person>; a labelled Encounters section after Knowledge shows it per person grouped by the other person; and the knowledge and three blind sets are re-run once with the default model as a regression.",
+  "why": "Motivations' measurement, standing and an edge forming all work from encounters, and nothing records or shows what has passed between one person and another; design: docs/work/npc-encounters/design.md.",
+  "issues": [
+    14
+  ],
+  "stakes": [
+    "Each copy a person holds yields exactly one encounter per other person among its actor and targets, and none when it names no other person.",
+    "An encounter's role is direct exactly when its holder is the copy's actor or a target, and witnessed otherwise.",
+    "An encounter's kind is its event's subkind; no other list of kinds exists.",
+    "Every encounter names its event's id and tick, and a person's encounters come only from copies it holds.",
+    "Encounters are read from the witnessed copies on every request and are never stored, so they cannot drift from the copies.",
+    "Who a copy is with is computed in one place, encountersOf, and knowledge's experienced people are read from it.",
+    "Encounters read only the copy's envelope, never its payload and never a registry entry, so a new subkind needs no change to yield them.",
+    "Nothing in the engine's rules or apply path reads encounters.",
+    "The bench serves each person's encounters on one route and shows them per person, grouped by the other person, in an Encounters section whose every line is labelled, adding no control and no text the target's vocabulary reads.",
+    "No motivation, measurement, standing, edge or summary is built.",
+    "Real runs use the default model, overwrite no committed score file, and their cost is named to the orchestrator before any is spent."
+  ],
+  "criteria": [
+    {
+      "id": "E1",
+      "given": "world/ booted fresh and driven only through Engine.act and Engine.step, each case from its own fresh boot",
+      "when": "tests/encounters.test.ts performs: mux departs west and the clock brings the arrive, then rogue whisper glitch; glitch say; rogue offer data-shard to glitch then glitch accept, with mux walked to the bar first; and mux walks to the bar, mux offer charge-cell to glitch, mux departs east, and the clock fires the lapse",
+      "then": "it is wrong if any encounter's with, role or kind differs: for the whisper rogue holds exactly one encounter with glitch, role direct, glitch exactly one with rogue, role direct, and mux exactly two, with rogue then with glitch, both role witnessed, all three kind speech.whisper with the whisper's tick and id; glitch's say gives glitch none and rogue one witnessed with glitch; the offer and the accept each give rogue and glitch one direct encounter with each other and mux one witnessed with rogue and one with glitch, kinds exchange.offer and exchange.accept; the lapse gives mux one direct with glitch and glitch one direct with mux, kind exchange.lapse, though mux is no longer in the room; every encounter's tick and event are its event's",
+      "mutations": [
+        {
+          "id": "E1-M1",
+          "change": "give a bystander a witnessed encounter with the actor only"
+        },
+        {
+          "id": "E1-M2",
+          "change": "set role direct only when the holder is the actor, so a target reads witnessed"
+        },
+        {
+          "id": "E1-M3",
+          "change": "set kind to the event's family (kindOf) instead of its subkind"
+        },
+        {
+          "id": "E1-M4",
+          "change": "drop the de-duplication and the holder filter so a direct holder also meets itself"
+        }
+      ]
+    },
+    {
+      "id": "E2",
+      "given": "world/ booted fresh, each case from its own fresh boot",
+      "when": "tests/encounters.test.ts reads every person's encounters on the fresh world; after mux departs west and the clock brings the arrive into the bar where rogue and glitch are; after glitch departs east while mux is in the back room; after a refused action (mux offer stimpak to rogue) and an invalid one (verb fly); and after a Step that records only time.tick",
+      "then": "it is wrong if an own act with nobody else, a payload field, or an event the person holds no copy of makes an encounter: the fresh world gives every person an empty list; mux's depart and arrive give mux none although its arrive copy's present names glitch and rogue, while rogue and glitch each hold one witnessed physical.arrive encounter with mux; glitch's depart gives rogue one witnessed physical.depart with glitch and mux, in the other room, none from that depart; the refused and invalid actions and the tick-only Step leave every person's encounters deep-equal to before",
+      "mutations": [
+        {
+          "id": "E2-M1",
+          "change": "read the arrive payload's present as people the arriver meets"
+        },
+        {
+          "id": "E2-M2",
+          "change": "derive encounters from Engine.events() instead of the person's received copies"
+        }
+      ]
+    },
+    {
+      "id": "E3",
+      "given": "the knowledge tests in tests/knowledge.test.ts as they stand at base",
+      "when": "they run at base and at head, after peopleOf() reads its experienced people from encountersOf()",
+      "then": "it is wrong if knowledge's people list changes: every knowledge test passes at base and at head unchanged, each person's people still its tie targets at tick 0 with source authored followed by each other person first experienced with that copy's tick, id and subkind",
+      "holds": true,
+      "mutations": [
+        {
+          "id": "E3-M1",
+          "change": "have peopleOf take each person's last encounter instead of its first"
+        }
+      ]
+    },
+    {
+      "id": "E4",
+      "given": "a hosted bench (tests/server.test.ts)",
+      "when": "it requests GET /api/encounters/rogue after rogue whisper glitch, GET /api/encounters/nobody, and GET /api/encounters/%E0%A4%A",
+      "then": "it is wrong if the body is not the engine's: the first answers 200 with a body deep-equal to Engine.encounters(\"rogue\"), naming person rogue, name Rogue and the one direct encounter with glitch; the second answers 404 naming nobody; the third answers 400",
+      "mutations": [
+        {
+          "id": "E4-M1",
+          "change": "leave /api/encounters/ out of PERSON_ROUTES"
+        }
+      ]
+    },
+    {
+      "id": "E5",
+      "given": "a hosted bench in a real browser (tests/page.test.ts)",
+      "when": "it reads the page on a fresh world, and after mux walks to the bar and arrives and rogue whisper glitch",
+      "then": "it is wrong if the section adds a control, feeds the vocabulary or shows an unlabeled line: the controls are the same list, labels and options as on main and none is unlabeled; vocabulary() gives exactly the world's people, items, rooms and exits both times; on the fresh world each person's block under the level-3 heading 'What has passed between <name> and others' reads 'no encounters yet'; after the whisper Mux's block has a 'with rogue' item whose line reads 'role witnessed (bystander), kind speech.whisper, tick <n>, event <id>' and a 'with glitch' item with the same line, and Rogue's block has 'with mux' reading 'role witnessed (bystander), kind physical.arrive, ...' and 'with glitch' reading 'role direct (actor or target), kind speech.whisper, ...'",
+      "mutations": [
+        {
+          "id": "E5-M1",
+          "change": "head each person's block '<name> (<id>)' at level 3"
+        },
+        {
+          "id": "E5-M2",
+          "change": "write each line as '<id>: held by <role>'"
+        },
+        {
+          "id": "E5-M3",
+          "change": "drop the role label so a line starts with the bare role value"
+        }
+      ]
+    },
+    {
+      "id": "E6",
+      "given": "the job's built code passing the gate, and corpus/goals/knowledge.json, blind-1.json, blind-2.json and blind-2-spent.json copied unchanged to corpus/experiments/npc-encounters/",
+      "when": "after the run list and its cost (44 goals, about $0.05) are sent to the orchestrator, bun run score --goals corpus/experiments/npc-encounters/<set>.json --tick-minutes 10 runs for each of the four with the default model",
+      "then": "it is wrong if a committed score file changes or a loss goes unexplained: git diff -- corpus/goals is empty; four score files exist under corpus/experiments/npc-encounters/; docs/work/npc-encounters/real-runs.md gives held and costUsd per set beside npc-knowledge's run of the same sets, the page size each set's first loop read, and every goal not held with its cause from its loops.jsonl and run.json; any loss a code path decided (a vocabulary or checked() refusal) is fixed before merge"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "E5",
+      "when": "after merge, on main: bun run start --tick-minutes 10, open http://127.0.0.1:4800, act mux depart west, press Step, then act rogue whisper with target glitch and any words",
+      "then": "the Encounters section, after Knowledge, shows under 'What has passed between Mux and others' a 'with rogue' and a 'with glitch' item, each with a line 'role witnessed (bystander), kind speech.whisper, tick 1, event <id>'; under Rogue's block 'with mux' reads 'role witnessed (bystander), kind physical.arrive, tick 1, ...' and 'with glitch' reads 'role direct (actor or target), kind speech.whisper, tick 1, ...'; Glitch's block shows 'with mux' (the arrive, witnessed) and 'with rogue' (the whisper, direct); every line reads as labelled",
+      "by": "operator"
+    }
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "An actor's own act with no other participant (a depart, an arrive, a say to the room) makes no encounter for it, though each bystander who received it holds a witnessed encounter with the actor.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-encounters/shape/sweep.py . (output docs/work/npc-encounters/shape/sweep.txt)",
+        "records": "corpus/runs/**/received.jsonl: copies naming no participant but their holder, of all copies",
+        "count": 1295,
+        "total": 4786
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "An arriver holds no encounter with the people its copy's present names; they each hold a witnessed one with it.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-encounters/shape/sweep2.py . (output docs/work/npc-encounters/shape/sweep-sacrifices.txt)",
+        "records": "corpus/runs/**/received.jsonl: physical.arrive events some non-mover holds a copy of, of all arrive events",
+        "count": 544,
+        "total": 544
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A speaker saying something to the room holds no encounter with its listeners.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-encounters/shape/sweep2.py . (output docs/work/npc-encounters/shape/sweep-sacrifices.txt)",
+        "records": "corpus/runs/**/received.jsonl: speech.say events some non-speaker holds a copy of, of all say events",
+        "count": 127,
+        "total": 207
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Each line of a conversation is its own encounter; whether a conversation is one encounter or many stays deferred.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-encounters/shape/sweep.py . (output docs/work/npc-encounters/shape/sweep.txt)",
+        "records": "corpus/runs/**/received.jsonl: direct speech.say-to and speech.whisper encounters, of all encounters",
+        "count": 490,
+        "total": 3579
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A lapse is a direct encounter between giver and receiver even when they are apart and neither acted at its tick.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-encounters/shape/sweep.py . (output docs/work/npc-encounters/shape/sweep.txt)",
+        "records": "corpus/runs/**/received.jsonl: direct exchange.lapse encounters (an upper bound on those between people apart), of all encounters",
+        "count": 6,
+        "total": 3579
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Every loop's page text, read by Jev and by the target call, grows by the Encounters section.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-encounters/shape/sweep2.py . (output docs/work/npc-encounters/shape/sweep-sacrifices.txt)",
+        "records": "corpus/runs/**/loops.jsonl: loops, each of which reads the page",
+        "count": 7924,
+        "total": 7924
+      }
+    }
+  ]
+}
