@@ -1,0 +1,8 @@
+# W6 driver walk on main at 5609c00, 2026-11-03T21:51:46Z
+$ bun run driver --seed 7 --actions 800 --tick-minutes 10
+exit 0
+ok True seed 7 actions 800 steps 160
+refused {"already-offered": 6, "giver-absent": 1, "in-transit": 46, "no-such-exit": 12, "not-holding": 43, "not-in-room": 52, "not-offered-to-you": 228, "self-target": 30}
+codes refused at least once: 8 of 8
+recorded {"exchange.accept": 4, "exchange.lapse": 18, "exchange.offer": 29, "exchange.refuse": 7, "physical.arrive": 77, "physical.depart": 77, "speech.say": 60, "speech.say-to": 55, "speech.whisper": 37, "time.tick": 160}
+other keys ['checks']
