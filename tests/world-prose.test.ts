@@ -35,34 +35,41 @@ function names(text: string, word: string): boolean {
   return new RegExp(`(?<!\\w)${escaped}(?!\\w)`, "i").test(text);
 }
 
+/** A described room or item: its label, its id and its description. */
+type Described = { thing: string; id: string; description: string };
+
+/** Every room and item description of a world. */
+function describedThings(defs: WorldDefs): Described[] {
+  return [
+    ...defs.rooms.map(({ id, description }) => ({ thing: `room ${id}`, id, description })),
+    ...defs.items.map(({ id, description }) => ({ thing: `item ${id}`, id, description })),
+  ];
+}
+
+/** A description that names one of its world's typed words. */
+type Named = { world: string; thing: string; description: string; word: string };
+
+/** Every typed word of a world that a description of a thing other than its own holds. */
+function namedIn(world: string, defs: WorldDefs): Named[] {
+  const typed = typedWords(defs);
+  return describedThings(defs).flatMap(({ thing, id, description }) => {
+    const words = new Set(typed.filter((t) => t.of !== id).map((t) => t.word.toLowerCase()));
+    return [...words]
+      .filter((word) => names(description, word))
+      .map((word) => ({ world, thing, description, word }));
+  });
+}
+
 describe("W1: no description in a committed world names an exit key or another thing", () => {
   test("every room and item description in world/ and tests/worlds/ is free of the world's typed words", () => {
     const read: string[] = [];
-    const named: { world: string; thing: string; description: string; word: string }[] = [];
+    const named: Named[] = [];
     for (const dir of committedWorlds()) {
       const loaded = loadWorld(dir);
       if (!loaded.ok) throw new Error(loaded.refusal.message);
       const world = relative(ROOT, dir);
       read.push(world);
-      const typed = typedWords(loaded.defs);
-      const described = [
-        ...loaded.defs.rooms.map(({ id, description }) => ({
-          thing: `room ${id}`,
-          id,
-          description,
-        })),
-        ...loaded.defs.items.map(({ id, description }) => ({
-          thing: `item ${id}`,
-          id,
-          description,
-        })),
-      ];
-      for (const { thing, id, description } of described) {
-        const words = new Set(typed.filter((t) => t.of !== id).map((t) => t.word.toLowerCase()));
-        for (const word of words) {
-          if (names(description, word)) named.push({ world, thing, description, word });
-        }
-      }
+      named.push(...namedIn(world, loaded.defs));
     }
     expect(read).toContain("world");
     expect(read).toContain(join("tests", "worlds", "two-tick"));
