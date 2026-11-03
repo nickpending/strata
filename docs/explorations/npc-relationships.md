@@ -38,18 +38,27 @@ The question: what a relationship is, how one forms, what it holds, and the smal
     - **Light redo:** descriptions are atmosphere only and never restate a fact the typed data owns.
     - **Travel:** symmetric at 1 tick each way. The test that needed the asymmetry gets its own fixture world.
     - **Offer window:** stays at 2 ticks as a placeholder.
+11. **A relationship is two directed edges (rudy).** There is no shared object that each side keeps a copy of. Mux → Glitch is Mux's edge, and Glitch → Mux is Glitch's, and either may not exist. Each NPC knows only its own edge and never how the other feels. Authored and generated edges have the same shape. Even the encounters behind an edge are one side's: only what that NPC received.
+12. **"Content, strength, feeling" dropped (rudy, worked through with the reverie session).** It was a summary label, not his model, and it pulled prose back in. His working model is in Decisions below. It is exploratory, not decided.
 
 ## Decisions
 
-**rudy's model, the basis for this exploration**
-- A relationship has content, strength and each side's feeling.
-- Each side's feeling is that character's personality applied to the other entity, so one connection reads differently from each end.
+**Settled**
+- A relationship is two independent directed edges. Each NPC knows only its own edge. Authored and generated edges share one shape.
 - An encounter, such as a purchase, is not a relationship. It leaves memory, not an edge.
-- An edge forms from accumulated encounters, or from one that mattered a lot.
-- Whether an edge exists, its strength and its feeling are separate ("a regular, but a prick").
-- Kind, count and quality are distinct measures. Quality is not good-or-bad.
-- Standing is stored per edge, as raw numbers and perhaps generated prose for prompts. History is derived from the log. Memory is its own block.
+- History is derived from the log. Memory is its own block.
 - The smallest isolated slice is built first.
+
+**rudy's working model (exploratory, not decided)**
+- **Encounter.** One thing that happened between two people, from one side's view, derived from an event that NPC received. It carries:
+  - **Role:** direct, as actor or target, or witnessed, as a bystander. It is read from the copy.
+  - **Kind:** the event's existing subkind, so it is typed with no new list.
+  - **What it did to each motivation:** for each of that NPC's wants and values, how much the encounter mattered and in which direction, advanced or set back. Jev judges this with narrow nouls against the NPC's motivations. "A prick, but I need him" means his help advances Mux's business while his manner sets back Mux's comfort.
+- **Standing:** the rolled-up current state of one side toward the other, a calculation over that side's encounters.
+- **Formed:** the point where standing crosses a threshold, so that it is a relationship rather than encounters.
+- **Summary:** generated prose of standing, for voice only.
+
+**Dropped:** "content, strength, feeling", a summary label rather than rudy's model.
 
 **Rejected as reverie baggage**
 - Reverie's disposition, trust and obligation axes, and their decay table.
@@ -64,6 +73,12 @@ None yet. The exploration is open.
 
 Open, still being explored:
 - Which entity types an edge can point at: people, organizations, the world.
-- What turns encounters into an edge.
-- What standing holds.
-- Who generates the prose, and when.
+- The standing calculation.
+- Fading over time.
+- Asymmetry: whether one betrayal outweighs many favors.
+- Personality as a lens on the weighting.
+- How the kind of relationship (friend, rival, client) emerges.
+- Whether a conversation is one encounter or many.
+- When the summary is generated.
+
+Proposed smallest first slice: encounters only, recorded and visible on the bench, with nothing rolled up yet.
