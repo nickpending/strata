@@ -110,7 +110,10 @@ export async function mount(root, api) {
               {},
               "exits: ",
               Object.entries(room.exits)
-                .map(([exit, to]) => `${exit} -> ${to.to} (${to.travel_ticks} ticks)`)
+                .map(
+                  ([exit, to]) =>
+                    `${exit} -> ${to.to} (${to.travel_ticks} ${to.travel_ticks === 1 ? "tick" : "ticks"})`,
+                )
                 .join("; "),
             ),
             h("ul", {}, (views.presence[room.id] ?? []).map(personLine)),

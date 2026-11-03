@@ -1,0 +1,5 @@
+id = "mux"
+name = "Mux"
+location = "yard"
+places = ["hall", "yard"]
+ties = []

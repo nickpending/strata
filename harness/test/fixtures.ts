@@ -58,9 +58,9 @@ export const PAGE: PageRead = {
   text: [
     '- heading "Rooms" [level=2]',
     '- heading "The Yard (yard)" [level=3]',
-    '- text: "A yard. exits: north -> hall (1 ticks)"',
+    '- text: "A yard. exits: north -> hall (1 tick)"',
     '- heading "The Hall (hall)" [level=3]',
-    '- text: "A hall. exits: south -> yard (1 ticks); up -> loft (2 ticks)"',
+    '- text: "A hall. exits: south -> yard (1 tick); up -> loft (2 ticks)"',
     '- heading "Items" [level=2]',
     "- list:",
     '  - listitem: "lamp: held by ada"',

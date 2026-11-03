@@ -1,6 +1,6 @@
 id = "chrome-cassette"
 name = "The Chrome Cassette"
-description = "A cramped bar thick with smoke and bass. A fixer works the corner booth. The back room is east."
+description = "A cramped bar thick with smoke and bass."
 
 [exits]
 east = { to = "back-room", travel_ticks = 1 }

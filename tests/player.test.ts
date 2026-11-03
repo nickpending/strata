@@ -391,15 +391,15 @@ describe("the plan: code performs the target's typed steps, resolving and waitin
   }, 60_000);
 
   test("a walk then a say-to: Step is pressed through wait loops until Mux arrives, then the say-to", async () => {
+    // The fixture world's north exit takes 2 ticks, so the plan waits on the depart twice.
     const said = { said: { person: "mux", subkind: "speech.say-to" } };
     const target = {
       ...goal(said),
-      steps: [step("mux", "depart", { exit: "west" }), step("mux", "say-to", { target: "glitch" })],
+      steps: [step("mux", "depart", { exit: "north" }), step("mux", "say-to", { target: "bo" })],
     };
-    const ran = await play(
-      "have Mux go out front and ask Glitch about the cell",
-      endpoints(model(target, { words: LINE }), preferring([])),
-    );
+    const world = ["--world", join("tests", "worlds", "two-tick")];
+    const flags = [...endpoints(model(target, { words: LINE }), preferring([])), ...world];
+    const ran = await play("have Mux walk to the hall and ask Bo about the token", flags);
     const loops = lines<LoopRecord>(join(ran.runDir, "loops.jsonl"));
     const history = lines<WorldEvent>(join(ran.runDir, "events.jsonl")).map((e) => e.subkind);
     expect({ outcome: ran.record.outcome?.kind, kinds: kinds(loops) }).toEqual({

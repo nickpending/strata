@@ -1,0 +1,5 @@
+id = "bo"
+name = "Bo"
+location = "hall"
+places = ["hall", "yard"]
+ties = []

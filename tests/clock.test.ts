@@ -6,7 +6,8 @@ import { dueEntries, fired } from "../src/engine/clock.ts";
 import { boot, type Engine } from "../src/engine/engine.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
-const WORLD = join(import.meta.dir, "..", "world");
+/** The fixture world whose 2-tick walk and 2-tick offer window make an arrive and a lapse coincide. */
+const WORLD = join(import.meta.dir, "worlds", "two-tick");
 
 const temps: string[] = [];
 const engines: Engine[] = [];
@@ -35,12 +36,12 @@ function recorded(engine: Engine, action: Record<string, string>): WorldEvent {
 describe("C8: entries due at the same tick fire in the order they were scheduled", () => {
   test("an arrive and a lapse due at tick 2 fire after the second step, nothing early", () => {
     const engine = fresh();
-    const depart = recorded(engine, { actor: "mux", verb: "depart", exit: "west" });
+    const depart = recorded(engine, { actor: "mux", verb: "depart", exit: "north" });
     const offer = recorded(engine, {
-      actor: "rogue",
+      actor: "bo",
       verb: "offer",
-      target: "glitch",
-      item: "data-shard",
+      target: "cy",
+      item: "token",
     });
     expect(depart.payload).toMatchObject({ arrivesAt: 2 });
     expect(offer.payload).toMatchObject({ until: 2 });
@@ -67,12 +68,12 @@ describe("C8: entries due at the same tick fire in the order they were scheduled
 
   test("fired makes each due entry its draft: an arrive's present from the snapshot it is given, a lapse as scheduled", () => {
     const engine = fresh();
-    const depart = recorded(engine, { actor: "mux", verb: "depart", exit: "west" });
+    const depart = recorded(engine, { actor: "mux", verb: "depart", exit: "north" });
     const offer = recorded(engine, {
-      actor: "rogue",
+      actor: "bo",
       verb: "offer",
-      target: "glitch",
-      item: "data-shard",
+      target: "cy",
+      item: "token",
     });
     const snapshot = engine.snapshot();
     const [arrive, lapse] = dueEntries(snapshot.schedule, 2);
@@ -83,17 +84,17 @@ describe("C8: entries due at the same tick fire in the order they were scheduled
       cause: depart.id,
       actor: "mux",
       targets: [],
-      place: "chrome-cassette",
-      payload: { from: "back-room", to: "chrome-cassette", present: ["glitch", "rogue"] },
+      place: "hall",
+      payload: { from: "yard", to: "hall", present: ["bo", "cy"] },
     });
     expect(fired(lapse, 2, snapshot)).toEqual({
       subkind: "exchange.lapse",
       tick: 2,
       cause: offer.id,
-      actor: "rogue",
-      targets: ["glitch"],
-      place: "chrome-cassette",
-      payload: { item: "data-shard", from: "rogue", to: "glitch" },
+      actor: "bo",
+      targets: ["cy"],
+      place: "hall",
+      payload: { item: "token", from: "bo", to: "cy" },
     });
     expect(dueEntries(snapshot.schedule, 1)).toEqual([]);
   });

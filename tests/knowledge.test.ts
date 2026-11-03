@@ -50,10 +50,9 @@ function stepTo(engine: Engine, subkind: string): WorldEvent {
   return found;
 }
 
-/** Mux walks west to the bar: the depart, then two steps to the arrive. */
+/** Mux walks west to the bar: the depart, then one step to the arrive. */
 function muxToBar(engine: Engine): WorldEvent {
   act(engine, { actor: "mux", verb: "depart", exit: "west" });
-  engine.step();
   return stepTo(engine, "physical.arrive");
 }
 
@@ -178,8 +177,8 @@ describe("K2: each subkind teaches what its registry entry declares, from the wi
     stepTo(engine, "physical.arrive");
     const lapse = stepTo(engine, "exchange.lapse");
     expect(PEOPLE.filter((p) => engine.received(p).some((c) => c.id === lapse.id))).toEqual(PEOPLE);
-    // Read at tick 4, the offer's rows are still as of the offer's tick 2.
-    expect([offer.tick, lapse.tick, engine.snapshot().tick]).toEqual([2, 4, 4]);
+    // Read at tick 3, the offer's rows are still as of the offer's tick 1.
+    expect([offer.tick, lapse.tick, engine.snapshot().tick]).toEqual([1, 3, 3]);
     expect(from(engine, "glitch", offer)).toEqual([
       taught(offer, "location", "mux", bar),
       taught(offer, "holder", "charge-cell", "mux"),
@@ -229,7 +228,6 @@ describe("K3: an arriver learns who is already in the room, from its own copy al
     expect(engine.snapshot().schedule.map((entry) => entry.payload)).toEqual([
       { from: "back-room", to: "chrome-cassette" },
     ]);
-    engine.step();
     const arrive = stepTo(engine, "physical.arrive");
     expect(arrive.payload).toEqual({
       from: "back-room",
@@ -263,7 +261,6 @@ describe("K3: an arriver learns who is already in the room, from its own copy al
     act(engine, { actor: "mux", verb: "depart", exit: "west" });
     act(engine, { actor: "rogue", verb: "depart", exit: "east" });
     act(engine, { actor: "glitch", verb: "depart", exit: "east" });
-    engine.step();
     const arrive = stepTo(engine, "physical.arrive");
     expect([arrive.actor, arrive.payload]).toEqual([
       "mux",

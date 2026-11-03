@@ -2,6 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { loadWorld } from "../src/engine/definitions.ts";
 import { boot, type Engine } from "../src/engine/engine.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
@@ -84,5 +85,36 @@ describe("C5: Glitch departs east, then the clock steps once", () => {
     expect(engine.snapshot().people.glitch?.location).toEqual({ room: "back-room" });
     expect(witnesses(engine, arrive)).toEqual(["glitch", "mux"]);
     expect(witnesses(engine, tick)).toEqual([]);
+  });
+});
+
+describe("W2: every world/ exit takes 1 tick, and world/'s offer window is 2", () => {
+  test("each exit's travel_ticks is 1, a depart either way arrives on the one step, the window 2", () => {
+    const loaded = loadWorld(WORLD);
+    if (!loaded.ok) throw new Error(loaded.refusal.message);
+    const exits = loaded.defs.rooms.flatMap((room) =>
+      Object.entries(room.exits).map(([exit, to]) => [room.id, exit, to.travel_ticks]),
+    );
+    expect(exits.length).toBeGreaterThan(0);
+    expect(exits.filter(([, , ticks]) => ticks !== 1)).toEqual([]);
+    expect(loaded.defs.offerWindowTicks).toBe(2);
+
+    for (const [actor, exit] of [
+      ["mux", "west"],
+      ["glitch", "east"],
+    ] as const) {
+      const engine = fresh();
+      const acted = engine.act({ actor, verb: "depart", exit });
+      if (acted.outcome !== "recorded") throw new Error(JSON.stringify(acted));
+      const [depart] = acted.events;
+      expect(depart?.tick).toBe(0);
+      expect(depart?.payload).toMatchObject({ travelTicks: 1, arrivesAt: 1 });
+      const stepped = engine.step();
+      expect(stepped.map((event) => [event.tick, event.subkind, event.actor])).toContainEqual([
+        1,
+        "physical.arrive",
+        actor,
+      ]);
+    }
   });
 });

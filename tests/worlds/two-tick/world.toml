@@ -1,0 +1,3 @@
+[rules]
+# Ticks an offer stays open before it lapses unanswered.
+offer_window_ticks = 2

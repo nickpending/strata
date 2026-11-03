@@ -7,6 +7,7 @@ import { hostBench } from "../src/adapter/host.ts";
 import { loadWorld } from "../src/engine/definitions.ts";
 
 const WORLD = join(import.meta.dir, "..", "world");
+const TWO_TICK = join(import.meta.dir, "worlds", "two-tick");
 
 let browser: Browser;
 let base: string;
@@ -45,9 +46,9 @@ async function post(path: string, body: unknown): Promise<void> {
 }
 
 /** The page read as the player reads it, once the Act form has rendered. */
-async function read(): Promise<PageRead> {
+async function read(url = base): Promise<PageRead> {
   const page = await browser.newPage();
-  await page.goto(base);
+  await page.goto(url);
   await page.getByRole("button", { name: "Act", exact: true }).waitFor();
   const got = await readPage(page);
   await page.close();
@@ -155,6 +156,23 @@ describe("C10: every control on a strata page carries a label", () => {
   }, 30_000);
 });
 
+describe("W7: a room's exit line reads '(1 tick)' for a one-tick exit and '(n ticks)' otherwise", () => {
+  test("world/'s exits read '(1 tick)', no line reads '1 ticks', and the fixture's read '(2 ticks)'", async () => {
+    const { text } = await read();
+    expect(text).toContain("west -> chrome-cassette (1 tick)");
+    expect(text).toContain("east -> back-room (1 tick)");
+    expect(text.split("\n").filter((line) => line.includes("1 ticks"))).toEqual([]);
+
+    const fixture = hostBench({ worldDir: TWO_TICK, tickMinutes: 10 });
+    if (!fixture.ok) throw new Error(fixture.message);
+    try {
+      expect((await read(fixture.base)).text).toContain("north -> hall (2 ticks)");
+    } finally {
+      fixture.stop();
+    }
+  }, 30_000);
+});
+
 // Runs last: it resets the bench the tests above share.
 describe("K9: what each person knows, shown in a Knowledge section on the bench page", () => {
   test("the section adds no control, feeds no name to the vocabulary, and marks stale facts", async () => {
@@ -212,13 +230,12 @@ describe("K9: what each person knows, shown in a Knowledge section on the bench 
     expect(fresh["What Mux knows"]).toContain("own holdings (holder part): charge-cell");
 
     await events("/api/actions", { actor: "mux", verb: "depart", exit: "west" });
-    await events("/api/step");
     const arrive = (await events("/api/step"))[1]?.id;
     const arrived = await seen();
     const aboutRogue = (lines: string[] | undefined) =>
       (lines ?? []).filter((line) => line.startsWith("location of rogue: "));
     expect(aboutRogue(arrived["What Mux knows"])).toEqual([
-      `location of rogue: room chrome-cassette, learned tick 2 from ${arrive} physical.arrive`,
+      `location of rogue: room chrome-cassette, learned tick 1 from ${arrive} physical.arrive`,
     ]);
 
     // Mux offers Glitch the charge cell: Glitch learns who holds it, in a line no item pattern reads.
@@ -233,13 +250,13 @@ describe("K9: what each person knows, shown in a Knowledge section on the bench 
     const offered = await seen();
     expect(
       (offered["What Glitch knows"] ?? []).filter((line) => line.startsWith("holder of ")),
-    ).toEqual([`holder of charge-cell: mux, learned tick 2 from ${offer} exchange.offer`]);
+    ).toEqual([`holder of charge-cell: mux, learned tick 1 from ${offer} exchange.offer`]);
     expect(offered["What Glitch knows"]?.some((line) => line.includes(": held by "))).toBe(false);
 
     const depart = (
       await events("/api/actions", { actor: "rogue", verb: "depart", exit: "east" })
     )[0]?.id;
-    const transit = `location of rogue: in transit chrome-cassette -> back-room, arrives tick 3, learned tick 2 from ${depart} physical.depart`;
+    const transit = `location of rogue: in transit chrome-cassette -> back-room, arrives tick 2, learned tick 1 from ${depart} physical.depart`;
     expect(aboutRogue((await seen())["What Mux knows"])).toEqual([transit]);
 
     await events("/api/step");
@@ -251,7 +268,7 @@ describe("K9: what each person knows, shown in a Knowledge section on the bench 
     expect(
       (landed["What Rogue knows"] ?? []).filter((line) => line.startsWith("location of mux: ")),
     ).toEqual([
-      `location of mux: room chrome-cassette, learned tick 2 from ${offer} exchange.offer`,
+      `location of mux: room chrome-cassette, learned tick 1 from ${offer} exchange.offer`,
     ]);
   }, 60_000);
 });

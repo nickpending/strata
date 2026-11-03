@@ -1,0 +1,72 @@
+{
+  "runId": "2026-11-03T21-34-37-136Z",
+  "instruction": "Glitch needs to get out of sight for a while. Put him in the back room.",
+  "startedAt": "2026-11-03T21:34:37.136Z",
+  "endedAt": "2026-11-03T21:34:40.952Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-object-z-ai-retry"
+  },
+  "target": {
+    "kind": "goal",
+    "expect": {
+      "location": {
+        "person": "glitch",
+        "room": "back-room"
+      }
+    },
+    "steps": [
+      {
+        "actor": "glitch",
+        "verb": "depart",
+        "fields": {
+          "exit": "east"
+        }
+      }
+    ]
+  },
+  "words": null,
+  "outcome": {
+    "kind": "reached",
+    "loop": 3,
+    "done": 0.98
+  },
+  "loops": 3,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0003411,
+      "provider": "Z.AI"
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 1",
+      "costUsd": 0.000067704
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 2",
+      "costUsd": 0.000084756
+    },
+    {
+      "client": "jev",
+      "purpose": "loop 3",
+      "costUsd": 0.000099288
+    }
+  ],
+  "costUsd": 0.000592848,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": true
+}

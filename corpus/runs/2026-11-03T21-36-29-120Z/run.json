@@ -1,0 +1,42 @@
+{
+  "runId": "2026-11-03T21-36-29-120Z",
+  "instruction": "Glitch is crashing. Have him jab the stimpak into his own arm.",
+  "startedAt": "2026-11-03T21:36:29.120Z",
+  "endedAt": "2026-11-03T21:36:44.601Z",
+  "parameters": {
+    "url": null,
+    "world": "world",
+    "tickMinutes": 10,
+    "maxLoops": 24,
+    "headed": false,
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    },
+    "jevModel": "typesafe/jev-1.13",
+    "wordsModel": "z-ai/glm-5.3-flash",
+    "request": "json-object-z-ai-retry"
+  },
+  "target": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Glitch to use the stimpak on himself, but the page offers no use/inject verb. The only item actions (offer, accept, refuse) transfer an item between people, and Glitch already holds the stimpak, so no ordered actions on this page can express jabbing it into his own arm."
+  },
+  "words": null,
+  "outcome": {
+    "kind": "no-such-action",
+    "reason": "The instruction wants Glitch to use the stimpak on himself, but the page offers no use/inject verb. The only item actions (offer, accept, refuse) transfer an item between people, and Glitch already holds the stimpak, so no ordered actions on this page can express jabbing it into his own arm."
+  },
+  "loops": 0,
+  "calls": [
+    {
+      "client": "model",
+      "purpose": "target",
+      "costUsd": 0.0008063,
+      "provider": "Z.AI"
+    }
+  ],
+  "costUsd": 0.0008063,
+  "unreportedCosts": 0,
+  "benchFailures": [],
+  "held": false
+}

@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
 import { projectKnown } from "../src/driver/replay.ts";
 import { type DriverReport, runDriver } from "../src/driver/run.ts";
+import { loadWorld } from "../src/engine/definitions.ts";
 import { boot, type Engine } from "../src/engine/engine.ts";
 import { type RegistryEntry, registry, subkinds, type WorldEvent } from "../src/engine/events.ts";
 import type { KnownRow } from "../src/engine/knowledge.ts";
@@ -39,7 +40,7 @@ function hashTree(dir: string): Record<string, string> {
 /** The C1 command, run as the operator runs it. */
 function runC1(): { exitCode: number; report: DriverReport; stderr: string } {
   const run = Bun.spawnSync(
-    [process.execPath, "run", MAIN, "--seed", "7", "--actions", "400", "--tick-minutes", "10"],
+    [process.execPath, "run", MAIN, "--seed", "7", "--actions", "800", "--tick-minutes", "10"],
     { cwd: ROOT, stdout: "pipe", stderr: "pipe" },
   );
   return {
@@ -50,24 +51,34 @@ function runC1(): { exitCode: number; report: DriverReport; stderr: string } {
 }
 
 describe("C1 and C11: a seeded driver run over the committed world", () => {
-  test("seed 7, 400 actions, a step every 5: every subkind, every code, every check passed, and world/ untouched", () => {
+  test("seed 7, 800 actions, a step every 5: every subkind, every code, every check passed, and world/ untouched", () => {
+    // The run is held on the committed world with 1-tick travel each way: every exit takes 1 tick.
+    const loaded = loadWorld(WORLD);
+    if (!loaded.ok) throw new Error(loaded.refusal.message);
+    const travel = loaded.defs.rooms.flatMap((room) =>
+      Object.entries(room.exits).map(([exit, to]) => [room.id, exit, to.travel_ticks]),
+    );
+    expect(travel).toEqual([
+      ["back-room", "west", 1],
+      ["chrome-cassette", "east", 1],
+    ]);
     const before = hashTree(WORLD);
     const first = runC1();
     expect(first.report.failure ?? null).toBeNull();
     expect(first.stderr).toBe("");
     expect(first.exitCode).toBe(0);
-    expect(first.report).toMatchObject({ ok: true, seed: 7, actions: 400, steps: 80 });
+    expect(first.report).toMatchObject({ ok: true, seed: 7, actions: 800, steps: 160 });
     const { recorded, refused } = first.report.tally;
     expect(subkinds.filter((subkind) => !((recorded[subkind] ?? 0) > 0))).toEqual([]);
     expect(Object.values(CODES).filter((code) => !((refused[code] ?? 0) > 0))).toEqual([]);
     expect(Object.keys(refused).sort()).toEqual(Object.values(CODES).sort());
     expect(first.report.tally.invalid).toBeGreaterThan(0);
     expect(first.report.checks).toEqual({
-      replay: 480,
-      knowledge: 480,
-      truth: 480,
-      present: 480,
-      invariants: 480,
+      replay: 960,
+      knowledge: 960,
+      truth: 960,
+      present: 960,
+      invariants: 960,
     });
 
     const second = runC1();
@@ -124,7 +135,6 @@ describe("K7: the fuzzer replays knowledge from the log and checks every fact ag
     if (!booted.ok) throw new Error(booted.refusal.message);
     engines.push(booted.engine);
     booted.engine.act({ actor: "mux", verb: "depart", exit: "west" });
-    booted.engine.step();
     const arrive = booted.engine.step().find((event) => event.subkind === "physical.arrive");
     if (arrive === undefined) throw new Error("mux never arrived");
     return { engine: booted.engine, events: booted.engine.events(), arrive };
@@ -146,7 +156,7 @@ describe("K7: the fuzzer replays knowledge from the log and checks every fact ag
     kind: "location",
     thing,
     value: { room: "chrome-cassette" },
-    tick: 2,
+    tick: 1,
     event,
   });
 
