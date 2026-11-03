@@ -55,6 +55,7 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 - History is derived from the log. Memory is its own block.
 - The smallest isolated slice is built first.
 - Build order: encounters (role and kind), then motivations, then the Jev measurement of encounters against motivations, then standing.
+- Arriving in a room is an encounter between the arriver and everyone already present, the lowest rung, with a role of its own (rudy, 2026-11-03). Its frequency still counts, at the level of recognizing a face. npc-encounters (#14) shipped without it, because the arrive envelope names only the mover. It is carried into the next relationships work order.
 
 **rudy's working model (exploratory, not decided)**
 - **Encounter.** One thing that happened between two people, from one side's view, derived from an event that NPC received. It carries:
@@ -87,5 +88,6 @@ Open, still being explored:
 - How the kind of relationship (friend, rival, client) emerges.
 - Whether a conversation is one encounter or many.
 - When the summary is generated.
+- Where speech to the whole room sits on the ladder. Today the speaker gets no encounter with the listeners.
 
 Proposed smallest first slice: encounters only, recorded and visible on the bench, with nothing rolled up yet.
