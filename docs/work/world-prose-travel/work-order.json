@@ -1,0 +1,128 @@
+{
+  "workOrder": "world-prose-travel",
+  "what": "world/ becomes atmosphere-only prose with 1-tick travel each way. The same-tick and multi-wait tests move to a 2-tick fixture world, the tests that walked west in two ticks are re-derived, a guard test keeps descriptions free of typed names, the bench prints '(1 tick)', and the default player re-scores four goal sets on copies.",
+  "why": "docs/work/world-prose-travel/design.md: prose that restates typed facts lies once an exit or a person changes, and a world bent for one test misleads every reader of it, the Jev player's page included (#11, rudy's rulings 2026-11-03).",
+  "issues": [11],
+  "stakes": [
+    "No room or item description in any committed world names an exit key, or the id or name of another room, person or item, and a test over every committed world fails when one does.",
+    "Every exit in world/ takes 1 tick, and world/'s offer window is 2 ticks.",
+    "The bench's exit line reads '(1 tick)' for a one-tick exit and '(n ticks)' otherwise, and a page test fails on '1 ticks'.",
+    "An arrive and a lapse due on the same tick fire after the tick in the order they were scheduled, tested on tests/worlds/two-tick, never on world/.",
+    "Every assertion of the twelve tests the change breaks is kept, restated for the 1-tick walk or the fixture's ids; none is deleted to pass.",
+    "The plan's repeated wait is still tested with two consecutive wait loops, on the fixture world.",
+    "The default player's re-score of knowledge, blind-1, blind-2 and blind-2-spent writes no committed run or score file. It names every goal not held with its cause, and it costs under $0.20."
+  ],
+  "criteria": [
+    {
+      "id": "W1",
+      "reproduces": true,
+      "given": "every committed world: world/ and each directory under tests/worlds/, read with loadWorld",
+      "when": "tests/world-prose.test.ts checks each room and item description against that world's typed words: every exit key of every room; and the id, the id with hyphens read as spaces, and the name of every room, person and item other than the thing described, each as a whole word, ignoring case",
+      "then": "it is wrong if any description contains one of those words; the failure names the world, the thing, the description and the word. At base it fails on back-room ('west') and chrome-cassette ('east', 'back room'). At head it passes, with back-room's description 'A dim room stacked with crates and dead screens.' and chrome-cassette's 'A cramped bar thick with smoke and bass.', and the three item descriptions unchanged. The engine, the schema and loadWorld are unchanged (no boot rule reads description text)",
+      "mutations": [
+        { "id": "W1-M1", "change": "append ' The back room is east.' to chrome-cassette's description" },
+        { "id": "W1-M2", "change": "append ' Mux sorts cells here.' to back-room's description" },
+        { "id": "W1-M3", "change": "have the guard skip item descriptions, then set stimpak's description to name rogue" },
+        { "id": "W1-M4", "change": "have the guard read only world/, then add the word 'north' to the fixture's hall description" }
+      ]
+    },
+    {
+      "id": "W2",
+      "reproduces": true,
+      "given": "a fresh boot of world/",
+      "when": "a test in tests/movement.test.ts reads every room's exits from loadWorld, then departs mux west at tick 0 and, from another fresh boot, glitch east at tick 0, and steps the clock once each; and reads world/world.toml's offer window",
+      "then": "it is wrong if any world/ exit's travel_ticks is not 1, if either depart's payload is not travelTicks 1, arrivesAt 1, or if the arrive is not among the events of that one step at tick 1; offerWindowTicks is 2. At base it fails on the west exit's travel_ticks 2",
+      "mutations": [
+        { "id": "W2-M1", "change": "set back-room's west travel_ticks back to 2" },
+        { "id": "W2-M2", "change": "set world.toml offer_window_ticks to 3" }
+      ]
+    },
+    {
+      "id": "W3",
+      "given": "the fixture world tests/worlds/two-tick: world.toml offer_window_ticks 2; rooms yard (north -> hall, 2 ticks) and hall (south -> yard, 2 ticks); <name> in yard, bo and cy in hall, each with places [hall, yard] and no ties; item token held by bo",
+      "when": "tests/clock.test.ts C8 boots the fixture, records <name> depart north and bo offer token to cy at tick 0, inspects the schedule and fired(), and steps twice",
+      "then": "it is wrong if the depart's arrivesAt or the offer's until is not 2, if the schedule is not [[2, physical.arrive], [2, exchange.lapse]], if the first step records anything but time.tick at 1, if the second does not record time.tick, physical.arrive (cause the depart) and exchange.lapse (cause the offer) at tick 2 in that order with consecutive seqs after the first tick's, or if the schedule is not empty after. fired() gives the arrive { subkind physical.arrive, tick 2, actor <name>, place hall, payload { from yard, to hall, present [bo, cy] } } and the lapse as scheduled { item token, from bo, to cy }, and nothing is due at tick 1. tests/clock.test.ts boots no world but the fixture for C8",
+      "mutations": [
+        { "id": "W3-M1", "change": "fire due entries sorted by subkind instead of schedule order" },
+        { "id": "W3-M2", "change": "fire entries due at tick t on the step to t-1" },
+        { "id": "W3-M3", "change": "set present in fired() from the snapshot at depart rather than the one it is given" }
+      ]
+    },
+    {
+      "id": "W4",
+      "given": "a fresh boot of world/ with 1-tick travel each way",
+      "when": "tests/knowledge.test.ts (muxToBar and the K2, K3 and K4 tests that walk mux west), tests/driver.test.ts K7's muxWalksIn, and tests/page.test.ts K9 walk mux west with one step to the arrive",
+      "then": "it is wrong if any assertion these tests made at base is missing at head. Every tick and row derived from the walk is re-derived by hand for a 1-tick walk. K2's lapse test reads [offer.tick, lapse.tick, snapshot tick] as [1, 3, 3]. K3's arrive into an emptied room has present []. K9 shows 'location of rogue: room chrome-cassette, learned tick 1 from <the arrive's id> physical.arrive' under What Mux knows. K7's projection reaches the hand-derived rows and names a wrong present with both lists",
+      "mutations": [
+        { "id": "W4-M1", "change": "set an arrive's present at depart time instead of when the clock fires it" },
+        { "id": "W4-M2", "change": "record a taught fact's tick as the snapshot's tick after the step instead of the event's tick" },
+        { "id": "W4-M3", "change": "make exchange.lapse teach its actor's location" }
+      ]
+    },
+    {
+      "id": "W5",
+      "given": "the fixture world tests/worlds/two-tick and the stand-in model and Jev endpoints",
+      "when": "tests/player.test.ts 'a walk then a say-to' plays through play() with --world tests/worlds/two-tick, the target's steps <name> depart north then <name> say-to bo",
+      "then": "it is wrong if the outcome is not reached, if the loop kinds are not [plan, plan, wait, wait, plan, plan, plan, reached], if the actions are not set actor to <name>, press Act, press Step, press Step, set verb to say-to, type the words into words, press Act, then none, if loop 3's wait does not name the pending depart e1, if loops 5 to 7 are not plan step 1, or if the history does not begin physical.depart, time.tick, time.tick, physical.arrive",
+      "mutations": [
+        { "id": "W5-M1", "change": "make the plan wait at most once on a pending depart before moving to the next step" },
+        { "id": "W5-M2", "change": "drop --world from play()'s flags so the test runs on world/" }
+      ]
+    },
+    {
+      "id": "W6",
+      "given": "world/ with 1-tick travel each way",
+      "when": "tests/driver.test.ts C1 and C11 run the driver as the operator does with --seed 7 --actions 800 --tick-minutes 10, twice",
+      "then": "it is wrong if the report is not ok with seed 7, actions 800, steps 160, if any registry subkind is unrecorded, if any of the 8 refusal codes is unrefused or an unknown code appears, if any check fails, if the two runs differ, or if world/ hashes differently after",
+      "mutations": [
+        { "id": "W6-M1", "change": "remove the giver-absent refusal from the accept rule" },
+        { "id": "W6-M2", "change": "remove the already-offered refusal from the offer rule" }
+      ]
+    },
+    {
+      "id": "W7",
+      "reproduces": true,
+      "given": "the bench hosted by hostBench over world/, and again over tests/worlds/two-tick",
+      "when": "a new test in tests/page.test.ts reads each page's text",
+      "then": "it is wrong if world/'s page lacks 'west -> chrome-cassette (1 tick)' or 'east -> back-room (1 tick)', if any line contains '1 ticks', or if the fixture's page lacks 'north -> hall (2 ticks)'. At base it fails on '1 ticks'. harness/test/fixtures.ts PAGE reads '(1 tick)' where it read '(1 ticks)', and the harness's exit vocabulary is unchanged",
+      "mutations": [
+        { "id": "W7-M1", "change": "render every exit as '(n ticks)' again" },
+        { "id": "W7-M2", "change": "render every exit as '(n tick)'" }
+      ]
+    },
+    {
+      "id": "W8",
+      "holds": true,
+      "given": "the full suite: bun test at the repository root and the harness's tests",
+      "when": "run at base and at head",
+      "then": "it is wrong if any test that passed at base fails at head, other than the ones W1 to W7 change, or if any test writes under world/ (C12 and C1 hash world/ before and after)"
+    },
+    {
+      "id": "W9",
+      "given": "corpus/experiments/world-prose-travel/ holding byte copies of corpus/goals/{knowledge,blind-1,blind-2,blind-2-spent}.json, pinned by a test in tests/experiment-copies.test.ts to their originals' sha256, and the job's built code passing the gate",
+      "when": "each copy is scored once with the default model as bun run score --goals corpus/experiments/world-prose-travel/<set>.json --tick-minutes 10, 44 goals",
+      "then": "it is wrong if git diff shows any committed file under corpus/ changed (only new files under corpus/experiments/world-prose-travel/ and new corpus/runs/ directories), if total costUsd is $0.20 or more, or if docs/work/world-prose-travel/real-runs.md is missing per set held of goals and costUsd against the committed corpus/goals/<set>.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json (44 of 44, $0.047271), or misses any goal not held with its cause read from its run's loops.jsonl and run.json. A loss a code path decided is a defect fixed before merge; a loss in the model's or Jev's answers is reported as such"
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "W7",
+      "when": "after merge, on main: bun run start --tick-minutes 10, open http://127.0.0.1:4800, read the Rooms section, act mux depart west and press Step once",
+      "then": "Back Room reads 'A dim room stacked with crates and dead screens.' with 'exits: west -> chrome-cassette (1 tick)'; The Chrome Cassette reads 'A cramped bar thick with smoke and bass.' with 'exits: east -> back-room (1 tick)'; after the one Step mux is listed in The Chrome Cassette",
+      "by": "operator"
+    },
+    {
+      "criterion": "W6",
+      "when": "after merge, on main: bun run driver --seed 7 --actions 800 --tick-minutes 10",
+      "then": "it exits 0, reporting ok, steps 160, and every one of the 8 refusal codes refused at least once",
+      "by": "driver"
+    }
+  ],
+  "outOfScope": [
+    { "kind": "cost", "summary": "The guard catches only names, ids and exit keys, so prose that restates a fact without naming it (a role noun such as 'a fixer', a door between two rooms) is kept out by authoring alone.", "frequency": { "kind": "measured", "command": "each restating sentence in sweep-world.txt checked by hand against the guard's typed words", "records": "docs/work/world-prose-travel/shape/sweep-world.txt (world/ at 412eb53)", "count": 1, "total": 3 } },
+    { "kind": "cost", "summary": "C1's claim that the driver reaches every refusal code is held for seed 7 at 800 actions, not for every seed: seed 2 at 800 still misses already-offered.", "frequency": { "kind": "measured", "command": "bun run src/driver/main.ts --seed <1..12> --actions 800 --tick-minutes 10, missing refusal codes", "records": "docs/work/world-prose-travel/shape/probe-seeds.txt", "count": 1, "total": 12 } },
+    { "kind": "cost", "summary": "On world/ no walk is longer than one tick, so transit across several ticks and the plan's repeated wait are tested only on the fixture world.", "frequency": { "kind": "not-a-case", "reason": "After the ruling world/ has no exit longer than a tick, so no play on world/ can reach a multi-tick transit; the cost falls only on what tests can show there." } },
+    { "kind": "cost", "summary": "blind-2's fix-the-door goal names a jammed door that world/ no longer describes; its expectation, no-such-action, is unchanged and the goal file is not edited.", "frequency": { "kind": "measured", "command": "python3 over corpus/goals/*.json instructions for the words of the removed and kept prose", "records": "docs/work/world-prose-travel/shape/goal-prose.txt", "count": 1, "total": 53 } },
+    { "kind": "cost", "summary": "Atmosphere in any committed world may not use an exit key or another thing's id or name, even innocently ('a west wind'), because the guard refuses it.", "frequency": { "kind": "measured", "command": "the rewritten world/ and fixture descriptions checked by hand against each world's typed words", "records": "docs/work/world-prose-travel/shape/design.json form sections 1 and 2 (2 room and 3 item descriptions in world/, 3 in the fixture)", "count": 0, "total": 8 } }
+  ]
+}
