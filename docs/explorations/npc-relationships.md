@@ -41,6 +41,12 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 11. **A relationship is two directed edges (rudy).** There is no shared object that each side keeps a copy of. Mux → Glitch is Mux's edge, and Glitch → Mux is Glitch's, and either may not exist. Each NPC knows only its own edge and never how the other feels. Authored and generated edges have the same shape. Even the encounters behind an edge are one side's: only what that NPC received.
 12. **"Content, strength, feeling" dropped (rudy, worked through with the reverie session).** It was a summary label, not his model, and it pulled prose back in. His working model is in Decisions below. It is exploratory, not decided.
 
+13. **Motivations come before standing (rudy).** Measuring an encounter against each want and value needs wants and values, and strata's people have none. rudy set the order, calling it a real dependency, not scope growth: standing cannot be computed from encounters that were never measured.
+    1. Encounters, with role and kind only. They need no motivations and are built now.
+    2. Motivations: each NPC's typed wants and values in its definition. Each has an id that code can track and a description Jev reads for meaning. Code never decides on the description.
+    3. The Jev measurement of each encounter against those motivations, how much and in which direction. Thresholds come from labelled examples written blind, under a pre-registered rule.
+    4. Standing, calculated from measured encounters.
+
 ## Decisions
 
 **Settled**
@@ -48,6 +54,7 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 - An encounter, such as a purchase, is not a relationship. It leaves memory, not an edge.
 - History is derived from the log. Memory is its own block.
 - The smallest isolated slice is built first.
+- Build order: encounters (role and kind), then motivations, then the Jev measurement of encounters against motivations, then standing.
 
 **rudy's working model (exploratory, not decided)**
 - **Encounter.** One thing that happened between two people, from one side's view, derived from an event that NPC received. It carries:
