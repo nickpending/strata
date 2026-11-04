@@ -21,7 +21,7 @@ Reverie showed the failure to avoid. Its gig engine kept NPC knowledge as a thir
 
 1. **Where knowledge comes from.** Three sources were named: what an NPC witnesses, what is authored for it, and what it is told. Reverie's desync narrowed this at once. Knowledge is never a hand-kept record. It is derived from events, with authored facts allowed only as boot state, which the founding decisions already require of every part (line 99).
 2. **Experienced, not witnessed.** rudy corrected the word. An NPC experiences the world: it both sees and does. Received copies already include the NPC's own acts, since its copy names it as actor, so "experienced" is already in the data.
-3. **Two more kinds were named: told and inferred.** Being told carries a claim, not a fact, so it can be wrong or a lie. Pursuing it would turn knowledge into belief: source, certainty, rumor. rudy asked whether the founding exploration went there. It did not: it mentions "source and certainty" once and lists gossip as a separate later block (line 176). Taking belief on here was the scope spiral the founding journey warns about (item 3). Chosen: baseline plus experienced, all true. Told, belief, rumor and lies wait for the gossip block.
+3. **Two more kinds were named: told and inferred.** Being told carries a claim, not a fact, so it can be wrong or a lie. Pursuing it would turn knowledge into claims: source, certainty, rumor. rudy asked whether the founding exploration went there. It did not: it mentions "source and certainty" once and lists gossip as a separate later block (line 176). Taking claims on here was the scope spiral the founding journey warns about (item 3). Chosen: baseline plus experienced, all true. Told, belief, rumor and lies wait for the gossip block.
 4. **True is not current (rudy).** Every fact carries the tick it was learned. Mux seeing Rogue in the bar at tick 3 stays true as of tick 3 after she leaves at tick 5. It is stale, not false, and needs no belief machinery.
 5. **Where the facts an event teaches are declared.** Per event kind, in the registry, derived from each person's own redacted copy. This is the same one-place pattern as visibility and pending states. Redaction already limits what a witness learns: a bystander to a whisper learns that a whisper happened, not its words. A person's own acts teach it too.
 6. **Many facts about one subject (relayed from the reverie session, at rudy's direction).** Each fact is kept as its own as-of row rather than overwritten, and a reader asks for the latest per subject. Rows are written when the event lands, in the same transaction as the copy, so knowledge is a projection kept current as events land, never re-derived by replay (founding journey item 5). A subject is a fact kind plus a thing, such as Rogue's location or the shard's holder.
@@ -40,7 +40,7 @@ Reverie showed the failure to avoid. Its gig engine kept NPC knowledge as a thir
 
 **Scope**
 - The knowledge block is baseline (authored) plus experienced knowledge, all true.
-- Being told, belief, rumor and lies wait for the gossip block.
+- Being told, claims, rumor and lies wait for the gossip block. ("Belief" was renamed "claim" on 2026-11-03: belief now names a layer of the mind, under values; see [npc-relationships](npc-relationships.md).)
 
 **Facts**
 - Every fact carries the tick that taught it: the teaching event's tick, or boot for authored facts. An NPC knows things as of a time. A fact can be stale, never false.
@@ -66,7 +66,7 @@ Reverie showed the failure to avoid. Its gig engine kept NPC knowledge as a thir
 
 ## Deferred
 
-- **Being told, belief, rumor, lies and certainty**: the gossip block.
+- **Being told, claims, rumor, lies and certainty**: the gossip block.
 - **Inferred knowledge** (Rogue left east, so she is probably in the back room): a reasoning question, for the mind block.
 - **Forgetting**: the memory block.
 - **How knowledge feeds what an NPC decides** (its share of the snapshot, what a plan may name): the mind and plan blocks.

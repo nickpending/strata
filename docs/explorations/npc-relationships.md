@@ -47,6 +47,11 @@ The question: what a relationship is, how one forms, what it holds, and the smal
     3. The Jev measurement of each encounter against those motivations, how much and in which direction. Thresholds come from labelled examples written blind, under a pre-registered rule.
     4. Standing, calculated from measured encounters.
 
+14. **Two things were mixed (rudy).** Establishment, where encounters build up until a relationship exists, is separate from standing on an established relationship, where each new encounter builds on it or detracts from it. A single minor encounter never moves standing directly.
+15. **The mind is the lens, not "motivations" (rudy).** There is far more to a person than what motivates them. Whether an encounter builds or detracts is judged from that NPC's point of view, so the same event can build for one NPC and detract for another. Judging from the encounter alone would give what most people think, which is wrong. A minimal slice of the mind has to come first.
+16. **Values: a fixed, comprehensive catalogue (rudy).** It is one list for the world that every NPC draws on. Values may conflict, and conflicts are to be tested both when an NPC holds conflicting values and when one event touches both. The starting point is Schwartz's theory of basic human values: ten broad values, arranged so that neighbours fit together and opposites conflict. A refined version has 19.
+17. **Beliefs sit a layer below values (rudy).** "Cops are the enemy" is not a value. It is a specific stance a layer down, and rudy named that layer belief. Gossip's told-and-maybe-false content, which the knowledge exploration called belief, is renamed claim. Sources to model on: real psychology, game theory (repeated games, where trust builds or breaks over many exchanges) and tabletop RPGs (D&D's ideals, bonds and flaws; Burning Wheel's Beliefs).
+
 ## Decisions
 
 **Settled**
@@ -54,7 +59,7 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 - An encounter, such as a purchase, is not a relationship. It leaves memory, not an edge.
 - History is derived from the log. Memory is its own block.
 - The smallest isolated slice is built first.
-- Build order: encounters (role and kind), then motivations, then the Jev measurement of encounters against motivations, then standing.
+- The build order through motivations is superseded by journey items 14 to 17. Relationships split into establishment and standing. The judgment is build-or-detract from the NPC's point of view, made through its mind. The mind's first layers are values, a fixed catalogue with Schwartz as the starting point, and beliefs below them. "Claim" replaces "belief" for gossip's told content.
 - An encounter is formed with every other person who received the same event (rudy, 2026-11-03: any entity you experience in an event is an encounter). That covers arriving into a room with people in it, speaking to the room, and watching as a bystander, with no special cases. npc-encounters (#14) shipped a narrower rule, the event's actor and targets only, which misses the people present at an arrival and a room speech's listeners. The corrected rule is carried into the next relationships work order.
 
 **rudy's working model (exploratory, not decided)**
@@ -88,5 +93,8 @@ Open, still being explored:
 - How the kind of relationship (friend, rival, client) emerges.
 - Whether a conversation is one encounter or many.
 - When the summary is generated.
+- Whether values are ranked per NPC, and whether the first slice holds Schwartz's ten or the refined 19.
+- Whether beliefs join values in the first mind slice.
+- Whether a stranger carries any standing.
 
 Proposed smallest first slice: encounters only, recorded and visible on the bench, with nothing rolled up yet.
