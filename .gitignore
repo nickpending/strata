@@ -16,3 +16,6 @@ docs/work/*/shape/
 node_modules/
 strata.sqlite
 strata.sqlite-*
+
+# Raw model-run output is point-in-time and stays local; committed scores and reports carry the results (ember#250).
+corpus/runs/

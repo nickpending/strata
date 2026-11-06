@@ -1,3 +1,2 @@
-corpus/runs/** -diff
 corpus/experiments/*/*/calls.jsonl -diff
 corpus/experiments/*/analysis.json -diff

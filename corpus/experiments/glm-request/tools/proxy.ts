@@ -6,7 +6,7 @@
  * usage: bun proxy.ts <port> <arm A|B|C|E> <log.jsonl> [ignore,providers|-] [provider prefs JSON]
  */
 import { appendFileSync } from "node:fs";
-import { getKey } from "/Users/rudy/development/projects/strata/node_modules/@voidwire/apiconf/dist/index.js";
+import { getKey } from "@voidwire/apiconf";
 
 const [portArg, arm, logPath, ignoreArg] = Bun.argv.slice(2);
 if (!portArg || !arm || !logPath || !["A", "B", "C", "E"].includes(arm)) {

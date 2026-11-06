@@ -1,6 +1,6 @@
 #!/bin/bash
 # usage: arm.sh <arm dir name> <port> <model> <reps...>
-cd /Users/rudy/development/projects/strata || exit 1
+cd "$(dirname "$0")/../../../.." || exit 1
 E=corpus/experiments/glm-request
 name=$1
 port=$2
