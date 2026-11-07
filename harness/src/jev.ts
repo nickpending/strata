@@ -1,6 +1,7 @@
 /**
- * The Jev client: one POST to OpenRouter's decisions endpoint per `decide`, keyed by the apiconf
- * key `sable-openrouter`; an endpoint override is sent no key unless one is named for it. A
+ * The Jev client: one POST to OpenRouter's decisions endpoint per `decide`, keyed by a named apiconf
+ * key, else OPENROUTER_API_KEY, else the apiconf key `sable-openrouter`; an endpoint override is
+ * sent no key unless one is named for it. A
  * question that cannot be answered is a typed refusal, never a throw and never an empty answer;
  * the caller branches on `refusal.kind`. Each call is made once: a refusal stops the caller, which
  * names its kind.
@@ -9,8 +10,10 @@ import { ConfigNotFoundError, getKey, KeyNotFoundError, ParseError } from "@void
 
 export const DECISIONS_URL = "https://openrouter.ai/api/alpha/decisions";
 export const JEV_MODEL = "typesafe/jev-1.13";
-/** The apiconf key every OpenRouter request is authorised with. */
+/** The apiconf key an OpenRouter request is authorised with when no key is named and ENV_KEY is unset. */
 export const KEY_NAME = "sable-openrouter";
+/** The environment variable that carries an OpenRouter key when no key is named. */
+export const ENV_KEY = "OPENROUTER_API_KEY";
 
 /** Why a call went unanswered: `config` (no key, before any request), `network` (the request did
  * not complete), `status` (a non-2xx answer, `status` set) or `parse` (a body not of the answer
@@ -100,7 +103,7 @@ function apiconfRefusal(keyName: string, error: unknown): { ok: false; refusal: 
  * The bearer key for a POST to `target`, or null when none is sent: an endpoint override gets no
  * key unless `keyName` names one for it, and a key goes only over https or to this machine.
  */
-function keyFor(
+export function keyFor(
   target: string,
   what: string,
   options: ClientOptions,
@@ -118,6 +121,12 @@ function keyFor(
       "config",
       `the ${what} endpoint ${where.origin} is neither https nor this machine: a key is never sent there`,
     );
+  }
+  // A named key always comes from apiconf; with none named, OPENROUTER_API_KEY lets a checkout
+  // run without apiconf, and apiconf's default name is the fallback.
+  const fromEnv = process.env[ENV_KEY];
+  if (options.keyName === undefined && fromEnv !== undefined && fromEnv !== "") {
+    return { ok: true, key: fromEnv };
   }
   const keyName = options.keyName ?? KEY_NAME;
   try {

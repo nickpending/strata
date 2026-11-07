@@ -649,7 +649,7 @@ describe("C7: a refusal from either client stops the run naming its kind", () =>
 
 describe("S1: a words answer refused at parse is asked once more, every attempt a call", () => {
   test("GLM's garbled words, then a valid line: reached, the refused answer kept whole", async () => {
-    const glm = join(ROOT, "corpus", "runs", "2026-11-01T21-15-09-855Z", "run.json");
+    const glm = join(ROOT, "tests", "fixtures", "runs", "2026-11-01T21-15-09-855Z", "run.json");
     const recorded = JSON.parse(readFileSync(glm, "utf8")) as RunRecord;
     const excerpt = recorded.stopped?.message.replace("the model's answer is not JSON: ", "") ?? "";
     const garbled = `${excerpt}${"<unused2133> ন্".repeat(6)}`;
@@ -737,7 +737,11 @@ describe("the key goes only where it is named, never in the clear, and never int
       `import { DECISIONS_URL, postJson } from ${JSON.stringify(join(ROOT, "harness", "src", "jev.ts"))};`,
       `console.log(JSON.stringify(await postJson(DECISIONS_URL, "decisions", {}, {})));`,
     ].join("\n");
-    const ran = await spawned([process.execPath, "-e", code], { ...process.env, HOME: home });
+    const ran = await spawned([process.execPath, "-e", code], {
+      ...process.env,
+      HOME: home,
+      OPENROUTER_API_KEY: "",
+    });
     expect(ran.exitCode).toBe(0);
     const posted = JSON.parse(ran.stdout) as {
       ok: boolean;
@@ -1262,7 +1266,7 @@ describe("M2: a --model that is not <provider>/<model> is refused before the run
 });
 
 describe("H6: a fresh run's files carry the committed run's keys", () => {
-  const COMMITTED = join(ROOT, "corpus", "runs", "2026-10-31T14-36-50-377Z");
+  const COMMITTED = join(ROOT, "tests", "fixtures", "runs", "2026-10-31T14-36-50-377Z");
 
   test("run.json, its parameters, and every loops.jsonl line have the committed run's key sets", async () => {
     const m = model(goal(MUX_SAYS, true), { words: LINE });
