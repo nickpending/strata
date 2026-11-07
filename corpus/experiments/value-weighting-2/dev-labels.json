@@ -1,0 +1,290 @@
+[
+  {
+    "id": "b01-mux-a",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b01-mux-b",
+    "set": "B",
+    "rationale": "He is getting out alive, and he came to tell you to your face. You will miss him, but this is what you would have wished for him."
+  },
+  {
+    "id": "b01-mux-b",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b01-mux-a",
+    "set": "B",
+    "rationale": "Your best regular just walked out on the business, cell on the bench and all. That is money leaving the room."
+  },
+  {
+    "id": "b01-mux-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "You lose a customer and the deck you kept alive, but a friend is getting out of the line of fire. Slightly better, with a pang."
+  },
+  {
+    "id": "b02-mux-a",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b02-mux-b",
+    "set": "B",
+    "rationale": "He turned down a corp run with a sweep on the block. For once he is keeping himself alive; slightly better."
+  },
+  {
+    "id": "b02-mux-b",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b02-mux-a",
+    "set": "B",
+    "rationale": "A month's keep on the table and he passes. A runner who won't run doesn't pay for parts."
+  },
+  {
+    "id": "b02-rogue-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "His caution about the sweep is the kind you want in your grid, but you put the job in front of him yourself and he said no in front of Mux. The refusal weighs slightly more."
+  },
+  {
+    "id": "b02-rogue-b",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "A month's keep for one night's run and he hides behind a sweep. You expected more nerve."
+  },
+  {
+    "id": "b03-glitch-a",
+    "direction": "build",
+    "magnitude": 3,
+    "kind": "opposite",
+    "pair": "b03-glitch-b",
+    "set": "B",
+    "rationale": "He is going to stand in front of Rogue and vouch that the pings were the hardware. That keeps your place under her roof safe, and he did it without being asked."
+  },
+  {
+    "id": "b03-glitch-b",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b03-glitch-a",
+    "set": "B",
+    "rationale": "Nobody asked him to go explain you to Rogue. Your business is yours to handle."
+  },
+  {
+    "id": "b03-rogue-c",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Mux came in from the back. You don't know why yet; it is just an arrival."
+  },
+  {
+    "id": "b04-rogue-a",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b04-rogue-b",
+    "set": "B",
+    "rationale": "He said he was going dark and then let a fresh cell sit unanswered rather than jack in. He meant it, and the heat stays off your grid."
+  },
+  {
+    "id": "b04-rogue-b",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b04-rogue-a",
+    "set": "B",
+    "rationale": "Two pings and he has gone to ground so hard he won't even pick up a cell. The runner is turning into a mouse."
+  },
+  {
+    "id": "b05-glitch-a",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Mux grumbling about runners to the bar. You never thought you were a god; it is bar talk and touches nothing you care about."
+  },
+  {
+    "id": "b05-glitch-b",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "He just told the whole bar that runners are kids with toys, with you sitting right there. Your skill is your name, and he just sold it short."
+  },
+  {
+    "id": "b06-glitch-a",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b06-glitch-b",
+    "set": "B",
+    "rationale": "She took what you had and the rent is settled. You are square with the woman who shelters you; slightly better."
+  },
+  {
+    "id": "b06-glitch-b",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b06-glitch-a",
+    "set": "B",
+    "rationale": "She squeezed the last thing you owned out of you and pocketed it. Paying tribute grates."
+  },
+  {
+    "id": "b07-mux-b",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b07-mux-a",
+    "set": "B",
+    "rationale": "Rogue is bringing you in on her own business with a real cut. That is standing and margin both."
+  },
+  {
+    "id": "b07-mux-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b07-mux-b",
+    "set": "B",
+    "rationale": "Fencing black-market contacts, no questions asked, is not your trade. She is pulling you into dirt you would rather stay out of."
+  },
+  {
+    "id": "b07-mux-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "She trusts you with a deal and ten percent, which your pride likes, but no-questions corp contacts can bring trouble to your door. Slightly better."
+  },
+  {
+    "id": "b07-glitch-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b07-glitch-b",
+    "set": "B",
+    "rationale": "Mux just took a shard of corp contacts into the back room where you hide. That is heat you didn't ask for, from the man you trust with your deck."
+  },
+  {
+    "id": "b07-glitch-b",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b07-glitch-a",
+    "set": "B",
+    "rationale": "The parts man took a real cut on a real job from Rogue. Nice to see him play bigger than a solder bench."
+  },
+  {
+    "id": "b08-mux-a",
+    "direction": "detract",
+    "magnitude": 3,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "He is asking you to steal from the woman whose roof you both live under. If it goes wrong it costs you the room and maybe more; that he would even offer it changes how you see him."
+  },
+  {
+    "id": "b08-mux-c",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "There is money in it and he is bringing you in, but it is theft from Rogue that could burn your shop and both of you. Slightly worse."
+  },
+  {
+    "id": "b09-rogue-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "He stepped into your business with your tenant, and a stim is not rent. But he put himself out for one of your people, and that counts with you. Slightly better."
+  },
+  {
+    "id": "b09-mux-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "Having a runner pay your rent in front of the bar stings your pride, but he gave up what he had to keep your room. A friend; slightly better."
+  },
+  {
+    "id": "b09-mux-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "Your room is safe now, but she took a man's only stim to pay someone else's rent, and took it without a word. It sits badly."
+  },
+  {
+    "id": "b10-glitch-a",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "She said she was checking stock and went to check stock. Nothing in it."
+  },
+  {
+    "id": "b11-mux-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "You held out help and he walked off with a dying deck rather than take it from you. His pride put distance between you; it stings a little."
+  },
+  {
+    "id": "b11-mux-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "The friend in you hates that he left with a dying deck, but he would rather pay his way than run up more on your bench, and you respect a customer who does."
+  },
+  {
+    "id": "b12-mux-b",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Rogue coming into the back room. It's her building; routine."
+  },
+  {
+    "id": "b12-mux-a",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Small talk about the generator you mentioned. Nothing to think better or worse of."
+  },
+  {
+    "id": "b13-glitch-c",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Mux came out front. People do; nothing in it."
+  }
+]

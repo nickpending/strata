@@ -1,0 +1,53 @@
+{
+  "note": "Experiment material for the value-weighting-2 experiment, not strata's design. Schwartz's ten basic values, defining goals paraphrased from Schwartz, S. H. (2012), An Overview of the Schwartz Theory of Basic Values, Online Readings in Psychology and Culture 2(1). Importance is an integer from 0 to 4 per value, read by the scale below.",
+  "importance_scale": {
+    "0": "does not matter to this person",
+    "1": "matters a little",
+    "2": "matters",
+    "3": "matters a lot",
+    "4": "central to who this person is"
+  },
+  "values": [
+    {
+      "id": "self_direction",
+      "description": "independent thought and action: choosing your own course, creating, exploring"
+    },
+    {
+      "id": "stimulation",
+      "description": "excitement, novelty and challenge in life"
+    },
+    {
+      "id": "hedonism",
+      "description": "pleasure and enjoyment for yourself"
+    },
+    {
+      "id": "achievement",
+      "description": "personal success through showing competence by the standards of those around you"
+    },
+    {
+      "id": "power",
+      "description": "status and prestige, control or dominance over people and resources"
+    },
+    {
+      "id": "security",
+      "description": "safety, harmony and stability of your society, your relationships and yourself"
+    },
+    {
+      "id": "conformity",
+      "description": "restraint of actions and impulses likely to upset or harm others or break social expectations"
+    },
+    {
+      "id": "tradition",
+      "description": "respect for and commitment to the customs and ideas your culture or faith provides"
+    },
+    {
+      "id": "benevolence",
+      "description": "preserving and enhancing the welfare of the people close to you"
+    },
+    {
+      "id": "universalism",
+      "description": "understanding, tolerance and protection for the welfare of all people and of nature"
+    }
+  ],
+  "structure": "Neighbours fit together and opposites conflict: openness to change (self_direction, stimulation) opposes conservation (security, conformity, tradition); self-enhancement (achievement, power) opposes self-transcendence (benevolence, universalism); hedonism sits between openness and self-enhancement."
+}
