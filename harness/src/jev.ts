@@ -1,4 +1,6 @@
 /**
+ * Read docs/jev.md before writing any Jev question: its rules and measured shapes govern every use.
+ *
  * The Jev client: one POST to OpenRouter's decisions endpoint per `decide`, keyed by a named apiconf
  * key, else OPENROUTER_API_KEY, else the apiconf key `sable-openrouter`; an endpoint override is
  * sent no key unless one is named for it. A

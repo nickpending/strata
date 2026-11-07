@@ -63,6 +63,8 @@ The models it calls:
 
 A run of the four goal sets (44 goals) costs about five cents.
 
+How strata asks Jev, and where Jev fails: [docs/jev.md](docs/jev.md).
+
 ## Layout
 
 | Path | What it holds |
