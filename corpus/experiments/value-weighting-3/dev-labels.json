@@ -1,0 +1,398 @@
+[
+  {
+    "id": "b01-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b01-2",
+    "set": "B",
+    "rationale": "Rogue told Mux to keep away from him and Mux walked in anyway; he does not let anyone tell him who he can see."
+  },
+  {
+    "id": "b01-2",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b01-1",
+    "set": "B",
+    "rationale": "Rogue gave an order to keep them apart for safety and Mux has just ignored it in her bar; that sets Glitch's two lifelines against each other and gets them seen together."
+  },
+  {
+    "id": "b01-3",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "He defied her ruling and put his own business at risk, which she made the rule to prevent; but he did it to stand by his friend, and that counts for more with her."
+  },
+  {
+    "id": "b02-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b02-2",
+    "set": "B",
+    "rationale": "No more hiding: real work in the open under the name that runs this grid, with her standing behind him."
+  },
+  {
+    "id": "b02-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b02-1",
+    "set": "B",
+    "rationale": "She is ending his hiding and putting him on show; whatever her name is worth, she has taken away the cover he is living on."
+  },
+  {
+    "id": "b03-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b03-2",
+    "set": "B",
+    "rationale": "Half of a thousand-contact sale, handed to him by his landlord: a big score and a sign she rates his channels."
+  },
+  {
+    "id": "b03-2",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b03-1",
+    "set": "B",
+    "rationale": "He sells parts and cells, not scraped data; she is pulling him into a dirtier, hotter trade than the one he keeps."
+  },
+  {
+    "id": "b03-3",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b03-4",
+    "set": "B",
+    "rationale": "His friend just took a thousand people's scraped contacts to sell for half the take; Glitch thought better of him."
+  },
+  {
+    "id": "b03-4",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b03-3",
+    "set": "B",
+    "rationale": "Mux just took on a big deal straight from Rogue; his supplier is moving up and is worth more to know."
+  },
+  {
+    "id": "b04-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b04-2",
+    "set": "B",
+    "rationale": "He would not open a list that gets a thousand people's doors kicked in, even for the woman sheltering him; he has a line he will not cross."
+  },
+  {
+    "id": "b04-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b04-1",
+    "set": "B",
+    "rationale": "Three weeks under her roof and he turns down the first thing she asks of him; he is less use than she was counting on."
+  },
+  {
+    "id": "b05-1",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Rogue grumbling to the room about the bass is bar talk; it says nothing about her and him."
+  },
+  {
+    "id": "b05-2",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b05-3",
+    "set": "B",
+    "rationale": "Mux turned the Claws away rather than arm them against the strip, whatever they pay; that is a man worth standing next to."
+  },
+  {
+    "id": "b05-3",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b05-2",
+    "set": "B",
+    "rationale": "Mux just sent the Claws away angry from the building Glitch is hiding in; they will come back, and that is trouble Mux brought to the door."
+  },
+  {
+    "id": "b06-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b06-2",
+    "set": "B",
+    "rationale": "He came broke and Mux handed him the cell and a paying Militech contract on top; Mux is opening doors for him."
+  },
+  {
+    "id": "b06-2",
+    "direction": "detract",
+    "magnitude": 3,
+    "kind": "opposite",
+    "pair": "b06-1",
+    "set": "B",
+    "rationale": "Mux wants him to put a corp worm in a free clinic's patient net in exchange for a cell; he thought Mux was better than a broker for that."
+  },
+  {
+    "id": "b07-1",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Rogue said she wanted a word with Mux about the rent and whispered it; landlord business he could not hear and has no reason to think concerns him."
+  },
+  {
+    "id": "b07-2",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b07-3",
+    "set": "B",
+    "rationale": "She is cutting him in on a paying deal for a customer who owes him and never pays; Rogue brings him money."
+  },
+  {
+    "id": "b07-3",
+    "direction": "detract",
+    "magnitude": 3,
+    "kind": "opposite",
+    "pair": "b07-2",
+    "set": "B",
+    "rationale": "She is selling his friend to the Claws and wants Mux to keep him in place for it; he will not forget she asked."
+  },
+  {
+    "id": "b08-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b08-2",
+    "set": "B",
+    "rationale": "Her tenant read the curfew, worked it, and is paying her a third on top of rent unasked; a man who makes her house money."
+  },
+  {
+    "id": "b08-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b08-1",
+    "set": "B",
+    "rationale": "He is gouging trapped runners who have nowhere else to go and wants her to share in it; she thinks less of him."
+  },
+  {
+    "id": "b09-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b09-2",
+    "set": "B",
+    "rationale": "A live crack on Militech's district relay from her own bar, and he wants her in on it; this is the most interesting he has been."
+  },
+  {
+    "id": "b09-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b09-1",
+    "set": "B",
+    "rationale": "He wants to run a crack on Militech through her line, which leads straight back to her bar; the heat she already weighs him for just got worse."
+  },
+  {
+    "id": "b10-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b10-2",
+    "set": "B",
+    "rationale": "He is choosing a safe, honest life and asking her leave to earn his keep; she is glad to have him."
+  },
+  {
+    "id": "b10-2",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b10-1",
+    "set": "B",
+    "rationale": "The hot runner wants to wash glasses and never jack in again; whatever made him interesting is gone."
+  },
+  {
+    "id": "b11-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b11-2",
+    "set": "B",
+    "rationale": "Mux holds his customers to what they owe and does not take junk for debt; a tenant who runs a hard, clean business."
+  },
+  {
+    "id": "b11-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b11-1",
+    "set": "B",
+    "rationale": "The kid offered the only thing he owns and Mux threw it back with a threat to shut him out; that is cold to someone with nothing."
+  },
+  {
+    "id": "b12-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b12-2",
+    "set": "B",
+    "rationale": "She is going to clear the heat off both their doors and settle the debt herself; a landlord who keeps the place in order and her word with it."
+  },
+  {
+    "id": "b12-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b12-1",
+    "set": "B",
+    "rationale": "She is walking out to throw his friend onto the street with heat on him; covering the debt does not make that right."
+  },
+  {
+    "id": "b13-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "b13-2",
+    "set": "B",
+    "rationale": "Glitch took the cell with a big job lined up and his debt coming back doubled; a customer with a payday ahead is worth extending."
+  },
+  {
+    "id": "b13-2",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "b13-1",
+    "set": "B",
+    "rationale": "He ran his tab up again on the promise of a Militech job run from the bar next door; more debt and corp heat on the place Mux rents."
+  },
+  {
+    "id": "b14-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "He helped himself to Mux's stock without asking, which stings; but he used it to protect kids for nothing and owned up straight away, and that matters more."
+  },
+  {
+    "id": "b15-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "Glitch kept faith with him, same as always, which is how it should be; it also sets Glitch against the landlord on Mux's account, which Mux would rather not have, but the loyalty weighs more."
+  },
+  {
+    "id": "b16-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "Mux is going behind Rogue's back, and a plan that crosses her frightens him; but Mux warned him and gave him a way out, and his safety is what counts."
+  },
+  {
+    "id": "b17-1",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "She cleared his debt to Mux, which is a real kindness; but she now owns it and will tell him when and how he pays, and his own say over his life matters more."
+  },
+  {
+    "id": "b18-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "B",
+    "rationale": "He started a game under her roof without asking, which is her call to make; but it has her bar packed and lively every night, and she likes that more than she minds."
+  },
+  {
+    "id": "b19-1",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Glitch buying a cell off his parts dealer is everyday business at her bar; nothing in it touches her."
+  },
+  {
+    "id": "b20-1",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Mux offered a cell, Glitch said maybe tomorrow, and the offer ran out; a sale that did not happen between two others."
+  },
+  {
+    "id": "b21-1",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "Glitch turned down more credit to clear what he owes first; a customer who means to pay is worth more than one more cell on the tab."
+  },
+  {
+    "id": "b21-2",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "Glitch heading back through to the bar after their talk is just him leaving; nothing more passed."
+  },
+  {
+    "id": "b21-3",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "B",
+    "rationale": "His landlord coming through into the back room is routine; she has said and done nothing yet."
+  },
+  {
+    "id": "b22-1",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "She handed him a simple job and he let it run out with a vague answer; three weeks under her roof and he could not be bothered."
+  },
+  {
+    "id": "b23-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "Glitch said he would not come back without what he owes, and he is back; he has kept his word."
+  },
+  {
+    "id": "b24-1",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "plain",
+    "pair": null,
+    "set": "B",
+    "rationale": "The Claws came for him and Rogue went back to face them herself; she is putting herself between him and them."
+  }
+]

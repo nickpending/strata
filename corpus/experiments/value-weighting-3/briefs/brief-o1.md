@@ -1,0 +1,9 @@
+You are the author of arm **O1: Jev applies importance.**
+
+## What makes it O1 (hard rules, checked against your code before the freeze)
+- The holder's importances reach Jev only as named words in a state: buckets such as "central to who you are", "matters a lot", "matters", "matters a little" (catalogue.json's `importance_scale` gives one wording; you may choose your own). Never a number.
+- Code may leave out values whose bucket is "does not matter". Nothing else in code may depend on an importance: not which questions are asked, not which steps run, and not the score (the contract's `score(bag)` receives none). In particular, the score must treat every value and every bucket alike; giving an answer more weight because it concerns a "central" value is code applying importance, which is arm O2.
+- So the weighting across values has to happen inside Jev's answers. A legal and probably strong shape is per-value: a state carrying the event (and only the context it needs), one value's description and that value's bucket in words, and questions whose answer already reflects how much that value matters to this person ("How much does `event` set back something you hold at `importance`?"), summed in code with equal weights. Another is a gate step first, then such questions only where the gate passes, the gate not depending on importance. Find the strongest shape; narrow nouls, a gate first and chained requests are all open to you.
+
+## What both arms must keep
+Interpretation reduced to direct, literal questions about what is visible in the event from the holder's side (rules 2 and 3); a small named JSON state per request holding only the fields its questions need, the instructions naming the fields (rule 7); answers used as typed (rule 6: a score by its most probable level or against a threshold, a choice by its pick or one option's probability against a threshold, never an expectation as a magnitude).
