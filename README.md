@@ -84,6 +84,10 @@ A run of the four goal sets (44 goals) costs about five cents.
 
 strata is built with Claude Code, through a shape-then-build workflow. Each piece is explored in conversation, shaped into a design and a work order with testable criteria, built, reviewed, and then walked by a person before it closes. `docs/work/` holds those records.
 
+## License
+
+MIT. See [LICENSE](LICENSE).
+
 ## A note on history
 
 Earlier commits contain the author's local checkout path (`/Users/...`) inside committed run logs and a few experiment tools. Run logs are no longer committed, and the current tree has no such paths. The old ones were left in history knowingly, because they are harmless.
