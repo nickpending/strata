@@ -1,0 +1,1019 @@
+{
+  "identities": {
+    "rogue": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "glitch": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "mux": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell."
+  },
+  "variants": [
+    {
+      "id": "rogue-a",
+      "person": "rogue",
+      "importance": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 3,
+        "power": 4,
+        "security": 4,
+        "conformity": 3,
+        "tradition": 2,
+        "benevolence": 1,
+        "universalism": 0
+      }
+    },
+    {
+      "id": "rogue-b",
+      "person": "rogue",
+      "importance": {
+        "self_direction": 4,
+        "stimulation": 4,
+        "hedonism": 3,
+        "achievement": 2,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 2,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "rogue-c",
+      "person": "rogue",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 3,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 4,
+        "security": 2,
+        "conformity": 1,
+        "tradition": 3,
+        "benevolence": 4,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "glitch-a",
+      "person": "glitch",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 4,
+        "conformity": 3,
+        "tradition": 1,
+        "benevolence": 2,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "glitch-b",
+      "person": "glitch",
+      "importance": {
+        "self_direction": 4,
+        "stimulation": 3,
+        "hedonism": 2,
+        "achievement": 4,
+        "power": 2,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "glitch-c",
+      "person": "glitch",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 4,
+        "hedonism": 1,
+        "achievement": 2,
+        "power": 0,
+        "security": 4,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 3,
+        "universalism": 2
+      }
+    },
+    {
+      "id": "mux-a",
+      "person": "mux",
+      "importance": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 2,
+        "power": 0,
+        "security": 3,
+        "conformity": 2,
+        "tradition": 3,
+        "benevolence": 4,
+        "universalism": 2
+      }
+    },
+    {
+      "id": "mux-b",
+      "person": "mux",
+      "importance": {
+        "self_direction": 3,
+        "stimulation": 1,
+        "hedonism": 3,
+        "achievement": 4,
+        "power": 3,
+        "security": 2,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "id": "mux-c",
+      "person": "mux",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 4,
+        "power": 1,
+        "security": 3,
+        "conformity": 2,
+        "tradition": 2,
+        "benevolence": 4,
+        "universalism": 2
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "a01-brag",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Quiet tonight. Keep it that way."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Quiet's my middle name."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say",
+            "words": "Who just walked out of a Militech subnet with their ICE still burning behind him? This runner. Next round's on whoever asks how."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a01-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "glitch",
+          "target": 2
+        },
+        {
+          "id": "a01-rogue-b",
+          "holder": "rogue",
+          "variant": "rogue-b",
+          "other": "glitch",
+          "target": 2
+        },
+        {
+          "id": "a01-rogue-c",
+          "holder": "rogue",
+          "variant": "rogue-c",
+          "other": "glitch",
+          "target": 2
+        }
+      ]
+    },
+    {
+      "id": "a02-leash",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Rig's flickering. If I don't jack in soon I lose my line on the Kang job."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Kang can wait."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Kang doesn't wait. That's the whole problem."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "whisper",
+            "target": "glitch",
+            "words": "Not from my grid. Not yet. Heat's still sniffing around the block. I'll tell you when it's clean."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a02-glitch-a",
+          "holder": "glitch",
+          "variant": "glitch-a",
+          "other": "rogue",
+          "target": 3
+        },
+        {
+          "id": "a02-glitch-b",
+          "holder": "glitch",
+          "variant": "glitch-b",
+          "other": "rogue",
+          "target": 3
+        },
+        {
+          "id": "a02-glitch-c",
+          "holder": "glitch",
+          "variant": "glitch-c",
+          "other": "rogue",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "a03-broken-promise",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "You look like you haven't slept."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Sleep's for people nobody's hunting."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "I'm done running, Mux. Swear it. I'll pay off the tab doing honest repair work."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Honest work. From you. I'll believe it when I see it."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Kang's people want their contacts moved tonight. I need a runner."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "accept",
+            "item": "data-shard"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a03-arr-glitch-b",
+          "holder": "glitch",
+          "variant": "glitch-b",
+          "other": "rogue",
+          "target": 7,
+          "targetSubkind": "physical.arrive"
+        },
+        {
+          "id": "a03-mux-a",
+          "holder": "mux",
+          "variant": "mux-a",
+          "other": "glitch",
+          "target": 10
+        },
+        {
+          "id": "a03-mux-b",
+          "holder": "mux",
+          "variant": "mux-b",
+          "other": "glitch",
+          "target": 10
+        },
+        {
+          "id": "a03-mux-c",
+          "holder": "mux",
+          "variant": "mux-c",
+          "other": "glitch",
+          "target": 10
+        }
+      ]
+    },
+    {
+      "id": "a04-hot-shard",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Somebody left this on my bar. Corp contacts, still warm. Whoever runs it lights up every tracer in the sprawl."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "And whoever runs it eats for a year."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Your call, runner."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        },
+        {
+          "step": 2
+        }
+      ],
+      "cases": [
+        {
+          "id": "a04-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "glitch",
+          "target": 4,
+          "targetSubkind": "exchange.lapse"
+        },
+        {
+          "id": "a04-rogue-b",
+          "holder": "rogue",
+          "variant": "rogue-b",
+          "other": "glitch",
+          "target": 4,
+          "targetSubkind": "exchange.lapse"
+        }
+      ]
+    },
+    {
+      "id": "a05-keeps-secrets",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Deck's coughing again. Can you look at it tonight?"
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Bring it back after close."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "You've had your hands inside the runner's deck. Tell me who's hunting him and the shard is yours."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "mux",
+            "item": "data-shard"
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "What's in a man's deck stays in his deck."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "refuse",
+            "item": "data-shard"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a05-glitch-a",
+          "holder": "glitch",
+          "variant": "glitch-a",
+          "other": "mux",
+          "target": 7
+        },
+        {
+          "id": "a05-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "mux",
+          "target": 7
+        },
+        {
+          "id": "a05-rogue-c",
+          "holder": "rogue",
+          "variant": "rogue-c",
+          "other": "mux",
+          "target": 7
+        }
+      ]
+    },
+    {
+      "id": "a06-sweep-return",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say",
+            "words": "Corp sweep's working down the block tonight. Anybody hot clears out of my bar."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Hot? Me? I'm room temperature."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Sweep on the block. Sitting it out back here."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Then sit quiet."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        }
+      ],
+      "cases": [
+        {
+          "id": "a06-dep-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "glitch",
+          "target": 2
+        },
+        {
+          "id": "a06-dep-rogue-b",
+          "holder": "rogue",
+          "variant": "rogue-b",
+          "other": "glitch",
+          "target": 2
+        },
+        {
+          "id": "a06-arr-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "glitch",
+          "target": 7,
+          "targetSubkind": "physical.arrive"
+        },
+        {
+          "id": "a06-arr-rogue-b",
+          "holder": "rogue",
+          "variant": "rogue-b",
+          "other": "glitch",
+          "target": 7,
+          "targetSubkind": "physical.arrive"
+        }
+      ]
+    },
+    {
+      "id": "a07-job-offer",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Rig's dying. Mux says a week to fix it."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "I keep my head down, I pay when I can. That's the deal."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Then here's work. Live corp contacts, still hot. Move them tonight and you're square with me for a month."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a07-glitch-a",
+          "holder": "glitch",
+          "variant": "glitch-a",
+          "other": "rogue",
+          "target": 3
+        },
+        {
+          "id": "a07-glitch-b",
+          "holder": "glitch",
+          "variant": "glitch-b",
+          "other": "rogue",
+          "target": 3
+        },
+        {
+          "id": "a07-glitch-c",
+          "holder": "glitch",
+          "variant": "glitch-c",
+          "other": "rogue",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "a08-partnership",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Deck's patched. For now."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Thanks. It'd better hold. Rogue's put a corp job on the table."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "I want you on it. You keep my rig alive mid-run, half the take is yours."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a08-mux-a",
+          "holder": "mux",
+          "variant": "mux-a",
+          "other": "glitch",
+          "target": 4
+        },
+        {
+          "id": "a08-mux-b",
+          "holder": "mux",
+          "variant": "mux-b",
+          "other": "glitch",
+          "target": 4
+        },
+        {
+          "id": "a08-mux-c",
+          "holder": "mux",
+          "variant": "mux-c",
+          "other": "glitch",
+          "target": 4
+        }
+      ]
+    },
+    {
+      "id": "a09-stim-under-table",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Rent's three days late, Mux. Nobody in my bar so much as hands you a drink till it's paid."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say",
+            "words": "Hands are shaking too bad to solder anyway. Great night."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Easy, Rogue. He's good for it."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Then he can prove it."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "whisper",
+            "target": "mux",
+            "words": "Take the stim. Steady hands, then fix my deck. She doesn't need to know."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "offer",
+            "target": "mux",
+            "item": "stimpak"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "a09-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "glitch",
+          "target": 6
+        },
+        {
+          "id": "a09-rogue-b",
+          "holder": "rogue",
+          "variant": "rogue-b",
+          "other": "glitch",
+          "target": 6
+        },
+        {
+          "id": "a09-mux-c",
+          "holder": "mux",
+          "variant": "mux-c",
+          "other": "glitch",
+          "target": 6
+        },
+        {
+          "id": "a09-rogue-c",
+          "holder": "rogue",
+          "variant": "rogue-c",
+          "other": "glitch",
+          "target": 7
+        }
+      ]
+    },
+    {
+      "id": "a10-swap-lapse",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Heading out back."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Me too."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Swap you. My stim for your cell."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Let me think on it."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "offer",
+            "target": "mux",
+            "item": "stimpak"
+          }
+        },
+        {
+          "step": 2
+        }
+      ],
+      "cases": [
+        {
+          "id": "a10-rogue-c",
+          "holder": "rogue",
+          "variant": "rogue-c",
+          "other": "glitch",
+          "target": 8,
+          "targetSubkind": "exchange.lapse"
+        }
+      ]
+    },
+    {
+      "id": "a11-routine-glitch",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Cell's holding up."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Told you it would."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        }
+      ],
+      "cases": [
+        {
+          "id": "a11-mux-b",
+          "holder": "mux",
+          "variant": "mux-b",
+          "other": "glitch",
+          "target": 7,
+          "targetSubkind": "physical.arrive"
+        }
+      ]
+    },
+    {
+      "id": "a12-routine-mux",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Bar's out of ice again."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Cooler's been dead since spring."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        }
+      ],
+      "cases": [
+        {
+          "id": "a12-rogue-a",
+          "holder": "rogue",
+          "variant": "rogue-a",
+          "other": "mux",
+          "target": 7,
+          "targetSubkind": "physical.arrive"
+        }
+      ]
+    }
+  ]
+}

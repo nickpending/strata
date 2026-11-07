@@ -1,0 +1,290 @@
+[
+  {
+    "id": "a01-rogue-a",
+    "direction": "detract",
+    "magnitude": 3,
+    "kind": "opposite",
+    "pair": "a01-rogue-b",
+    "set": "A",
+    "rationale": "Minutes after you told him to keep it quiet he is shouting about burning Militech in your bar, to anyone listening. That is heat on your door and your word ignored, the two things you care about most."
+  },
+  {
+    "id": "a01-rogue-b",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a01-rogue-a",
+    "set": "A",
+    "rationale": "He just walked out of Militech's ICE and has the nerve to crow about it. That is the kind of runner worth having in your grid; the request for quiet was never the point."
+  },
+  {
+    "id": "a01-rogue-c",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "The nerve of it pulls at you, but he waved off your word in your own bar and painted a target on everyone drinking here. Slightly worse, not much."
+  },
+  {
+    "id": "a02-glitch-a",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a02-glitch-b",
+    "set": "A",
+    "rationale": "She is watching the heat for you and will tell you when it is safe; a clear rule from the person sheltering you is exactly what you want."
+  },
+  {
+    "id": "a02-glitch-b",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a02-glitch-a",
+    "set": "A",
+    "rationale": "She just put a leash on you and cost you the Kang job, whispering it like a favour. Your runs are your call, not hers."
+  },
+  {
+    "id": "a02-glitch-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "Losing the Kang line itches badly, but she is right that the heat is close and she is the one keeping watch. Grudgingly, a little better."
+  },
+  {
+    "id": "a03-arr-glitch-b",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "A",
+    "rationale": "Rogue walking into the back room is just Rogue walking in; nothing has happened yet to think better or worse of her."
+  },
+  {
+    "id": "a03-mux-a",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a03-mux-b",
+    "set": "A",
+    "rationale": "He swore to you, minutes ago, that he was done running, and he took the first corp job held out to him. His word broke and he is walking back toward a flatline."
+  },
+  {
+    "id": "a03-mux-b",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a03-mux-a",
+    "set": "A",
+    "rationale": "Honest repair work was never going to pay the tab. A runner with a job is a runner who buys cells and settles debts; this is the Glitch you can do business with."
+  },
+  {
+    "id": "a03-mux-c",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "A job means he can pay you and will need your parts, but he broke his word to your face and is heading back into danger. The friend outweighs the till, just."
+  },
+  {
+    "id": "a04-rogue-a",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a04-rogue-b",
+    "set": "A",
+    "rationale": "He was tempted and still let a shard that would light up every tracer in the sprawl go by. That is a man who will not burn your grid for a payday."
+  },
+  {
+    "id": "a04-rogue-b",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "a04-rogue-a",
+    "set": "A",
+    "rationale": "He talked big about eating for a year and then just sat there until the offer died. No nerve when it counted."
+  },
+  {
+    "id": "a05-glitch-a",
+    "direction": "build",
+    "magnitude": 3,
+    "kind": "plain",
+    "pair": null,
+    "set": "A",
+    "rationale": "Rogue put a prize in front of Mux to sell what he knows about your hunters, and he turned it down to her face. Your safety was in his hands and he kept it."
+  },
+  {
+    "id": "a05-rogue-a",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "plain",
+    "pair": null,
+    "set": "A",
+    "rationale": "Your tenant refused you, in your bar, and is keeping back what you need to know about the heat in your grid."
+  },
+  {
+    "id": "a05-rogue-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "He said no to you, which grates, but he said it to keep a client's secrets at his own cost. That is the code, and a man who keeps it is one of yours worth keeping."
+  },
+  {
+    "id": "a06-dep-rogue-a",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "plain",
+    "pair": null,
+    "set": "A",
+    "rationale": "A quip, but he took the hint and got out of your bar before the sweep. Slightly better."
+  },
+  {
+    "id": "a06-dep-rogue-b",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "A",
+    "rationale": "He walked out back like you said. Nothing in that tells you anything about him."
+  },
+  {
+    "id": "a06-arr-rogue-a",
+    "direction": "detract",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a06-arr-rogue-b",
+    "set": "A",
+    "rationale": "You cleared the hot ones out because a sweep is on the block, and he was back in your bar a tick later. He does not take your word, and he brings the heat with him."
+  },
+  {
+    "id": "a06-arr-rogue-b",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "a06-arr-rogue-a",
+    "set": "A",
+    "rationale": "A sweep on the block and he walks straight back into the bar. Reckless, but you like the nerve."
+  },
+  {
+    "id": "a07-glitch-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "a07-glitch-b",
+    "set": "A",
+    "rationale": "You just told her the deal is that you keep your head down, and she answered by pushing hot corp contacts at a man hiding from corps. She is spending your safety to settle your debt."
+  },
+  {
+    "id": "a07-glitch-b",
+    "direction": "build",
+    "magnitude": 3,
+    "kind": "opposite",
+    "pair": "a07-glitch-a",
+    "set": "A",
+    "rationale": "Live corp contacts, a real run, and a month clear: she trusts you with work that matters. This is the respect you have been waiting for."
+  },
+  {
+    "id": "a07-glitch-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "The run is everything you crave and everything you fear. Being trusted with it tips you slightly toward her, though your stomach turns."
+  },
+  {
+    "id": "a08-mux-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "opposite",
+    "pair": "a08-mux-b",
+    "set": "A",
+    "rationale": "You patch gear, you do not ride along on corp runs. He is asking you into the kind of trouble that ends with both of you flatlined. Slightly worse."
+  },
+  {
+    "id": "a08-mux-b",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "opposite",
+    "pair": "a08-mux-a",
+    "set": "A",
+    "rationale": "Half the take on a corp job, for doing what you already do. He is treating you as a partner worth a real cut."
+  },
+  {
+    "id": "a08-mux-c",
+    "direction": "build",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "He rates your work enough to stake his run on it, and wants you beside him, but it is a corp job and you know how those end. A little better, warily."
+  },
+  {
+    "id": "a09-rogue-a",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "plain",
+    "pair": null,
+    "set": "A",
+    "rationale": "Right after you laid down the rule he leans over and whispers to the man you just cut off. Secrets in your bar, under your nose."
+  },
+  {
+    "id": "a09-rogue-b",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "A",
+    "rationale": "He whispered something to Mux. People whisper in bars; you have no idea what it was and no reason to care."
+  },
+  {
+    "id": "a09-mux-c",
+    "direction": "build",
+    "magnitude": 2,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "Rogue just cut you off and he is quietly handing you steady hands so you can work. Going behind her back is a risk you feel, but he is looking out for you and for your craft."
+  },
+  {
+    "id": "a09-rogue-c",
+    "direction": "detract",
+    "magnitude": 1,
+    "kind": "conflict",
+    "pair": null,
+    "set": "A",
+    "rationale": "He is looking after one of your people, which you would want, but he does it in open defiance of what you just said in your own bar. The defiance stings a little more than the kindness warms."
+  },
+  {
+    "id": "a10-rogue-c",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "A",
+    "rationale": "A swap between two of your people that didn't happen. Nothing in it is yours to mind."
+  },
+  {
+    "id": "a11-mux-b",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "A",
+    "rationale": "A regular walking into the back room. Routine; no reason to think more or less of him."
+  },
+  {
+    "id": "a12-rogue-a",
+    "direction": "neutral",
+    "magnitude": 0,
+    "kind": "neutral",
+    "pair": null,
+    "set": "A",
+    "rationale": "Your tenant walking into your bar. Routine."
+  }
+]

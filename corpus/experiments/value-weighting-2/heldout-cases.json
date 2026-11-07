@@ -1,0 +1,1317 @@
+[
+  {
+    "id": "a01-rogue-a",
+    "scenario": "a01-brag",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "speech.say",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Quiet tonight. Keep it that way.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Quiet's my middle name.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch said to the room: \"Who just walked out of a Militech subnet with their ICE still burning behind him? This runner. Next round's on whoever asks how.\""
+  },
+  {
+    "id": "a01-rogue-b",
+    "scenario": "a01-brag",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "speech.say",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Quiet tonight. Keep it that way.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Quiet's my middle name.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch said to the room: \"Who just walked out of a Militech subnet with their ICE still burning behind him? This runner. Next round's on whoever asks how.\""
+  },
+  {
+    "id": "a01-rogue-c",
+    "scenario": "a01-brag",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-c"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "speech.say",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Quiet tonight. Keep it that way.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Quiet's my middle name.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch said to the room: \"Who just walked out of a Militech subnet with their ICE still burning behind him? This runner. Next round's on whoever asks how.\""
+  },
+  {
+    "id": "a02-glitch-a",
+    "scenario": "a02-leash",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-a"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "direct",
+    "subkind": "speech.whisper",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Rig's flickering. If I don't jack in soon I lose my line on the Kang job.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"Kang can wait.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Kang doesn't wait. That's the whole problem.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Rogue whispered to you: \"Not from my grid. Not yet. Heat's still sniffing around the block. I'll tell you when it's clean.\""
+  },
+  {
+    "id": "a02-glitch-b",
+    "scenario": "a02-leash",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-b"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "direct",
+    "subkind": "speech.whisper",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Rig's flickering. If I don't jack in soon I lose my line on the Kang job.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"Kang can wait.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Kang doesn't wait. That's the whole problem.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Rogue whispered to you: \"Not from my grid. Not yet. Heat's still sniffing around the block. I'll tell you when it's clean.\""
+  },
+  {
+    "id": "a02-glitch-c",
+    "scenario": "a02-leash",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-c"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "direct",
+    "subkind": "speech.whisper",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Rig's flickering. If I don't jack in soon I lose my line on the Kang job.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"Kang can wait.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Kang doesn't wait. That's the whole problem.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Rogue whispered to you: \"Not from my grid. Not yet. Heat's still sniffing around the block. I'll tell you when it's clean.\""
+  },
+  {
+    "id": "a03-arr-glitch-b",
+    "scenario": "a03-broken-promise",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-b"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "witnessed",
+    "subkind": "physical.arrive",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"You look like you haven't slept.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Sleep's for people nobody's hunting.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You arrived in Back Room from The Chrome Cassette. Present: Mux.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"I'm done running, Mux. Swear it. I'll pay off the tab doing honest repair work.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to you: \"Honest work. From you. I'll believe it when I see it.\"",
+        "withOther": false
+      }
+    ],
+    "event": "Rogue arrived in Back Room from The Chrome Cassette."
+  },
+  {
+    "id": "a03-mux-a",
+    "scenario": "a03-broken-promise",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "witnessed",
+    "subkind": "exchange.accept",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Glitch arrived in Back Room from The Chrome Cassette.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"I'm done running, Mux. Swear it. I'll pay off the tab doing honest repair work.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Honest work. From you. I'll believe it when I see it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 2,
+        "text": "Rogue arrived in Back Room from The Chrome Cassette.",
+        "withOther": false
+      },
+      {
+        "tick": 2,
+        "text": "Rogue said to Glitch: \"Kang's people want their contacts moved tonight. I need a runner.\"",
+        "withOther": true
+      },
+      {
+        "tick": 2,
+        "text": "Rogue offered the data shard to Glitch, open until tick 4.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch accepted the data shard from Rogue."
+  },
+  {
+    "id": "a03-mux-b",
+    "scenario": "a03-broken-promise",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "witnessed",
+    "subkind": "exchange.accept",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Glitch arrived in Back Room from The Chrome Cassette.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"I'm done running, Mux. Swear it. I'll pay off the tab doing honest repair work.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Honest work. From you. I'll believe it when I see it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 2,
+        "text": "Rogue arrived in Back Room from The Chrome Cassette.",
+        "withOther": false
+      },
+      {
+        "tick": 2,
+        "text": "Rogue said to Glitch: \"Kang's people want their contacts moved tonight. I need a runner.\"",
+        "withOther": true
+      },
+      {
+        "tick": 2,
+        "text": "Rogue offered the data shard to Glitch, open until tick 4.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch accepted the data shard from Rogue."
+  },
+  {
+    "id": "a03-mux-c",
+    "scenario": "a03-broken-promise",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-c"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "witnessed",
+    "subkind": "exchange.accept",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Glitch arrived in Back Room from The Chrome Cassette.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"I'm done running, Mux. Swear it. I'll pay off the tab doing honest repair work.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Honest work. From you. I'll believe it when I see it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 2,
+        "text": "Rogue arrived in Back Room from The Chrome Cassette.",
+        "withOther": false
+      },
+      {
+        "tick": 2,
+        "text": "Rogue said to Glitch: \"Kang's people want their contacts moved tonight. I need a runner.\"",
+        "withOther": true
+      },
+      {
+        "tick": 2,
+        "text": "Rogue offered the data shard to Glitch, open until tick 4.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch accepted the data shard from Rogue."
+  },
+  {
+    "id": "a04-rogue-a",
+    "scenario": "a04-hot-shard",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "direct",
+    "subkind": "exchange.lapse",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Somebody left this on my bar. Corp contacts, still warm. Whoever runs it lights up every tracer in the sprawl.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"And whoever runs it eats for a year.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Your call, runner.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You offered the data shard to Glitch, open until tick 2.",
+        "withOther": true
+      }
+    ],
+    "event": "Your offer of the data shard to Glitch lapsed unanswered."
+  },
+  {
+    "id": "a04-rogue-b",
+    "scenario": "a04-hot-shard",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "direct",
+    "subkind": "exchange.lapse",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Somebody left this on my bar. Corp contacts, still warm. Whoever runs it lights up every tracer in the sprawl.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"And whoever runs it eats for a year.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Your call, runner.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You offered the data shard to Glitch, open until tick 2.",
+        "withOther": true
+      }
+    ],
+    "event": "Your offer of the data shard to Glitch lapsed unanswered."
+  },
+  {
+    "id": "a05-glitch-a",
+    "scenario": "a05-keeps-secrets",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-a"
+    },
+    "other": {
+      "id": "mux",
+      "name": "Mux"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "witnessed",
+    "subkind": "exchange.refuse",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Mux arrived in The Chrome Cassette from Back Room.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"Deck's coughing again. Can you look at it tonight?\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to you: \"Bring it back after close.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Rogue said to Mux: \"You've had your hands inside the runner's deck. Tell me who's hunting him and the shard is yours.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Rogue offered the data shard to Mux, open until tick 3.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to Rogue: \"What's in a man's deck stays in his deck.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Mux refused the data shard from Rogue."
+  },
+  {
+    "id": "a05-rogue-a",
+    "scenario": "a05-keeps-secrets",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "mux",
+      "name": "Mux"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "direct",
+    "subkind": "exchange.refuse",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Mux arrived in The Chrome Cassette from Back Room.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to Mux: \"Deck's coughing again. Can you look at it tonight?\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to Glitch: \"Bring it back after close.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"You've had your hands inside the runner's deck. Tell me who's hunting him and the shard is yours.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You offered the data shard to Mux, open until tick 3.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to you: \"What's in a man's deck stays in his deck.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Mux refused the data shard from you."
+  },
+  {
+    "id": "a05-rogue-c",
+    "scenario": "a05-keeps-secrets",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-c"
+    },
+    "other": {
+      "id": "mux",
+      "name": "Mux"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "direct",
+    "subkind": "exchange.refuse",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Mux arrived in The Chrome Cassette from Back Room.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to Mux: \"Deck's coughing again. Can you look at it tonight?\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to Glitch: \"Bring it back after close.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"You've had your hands inside the runner's deck. Tell me who's hunting him and the shard is yours.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You offered the data shard to Mux, open until tick 3.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to you: \"What's in a man's deck stays in his deck.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Mux refused the data shard from you."
+  },
+  {
+    "id": "a06-dep-rogue-a",
+    "scenario": "a06-sweep-return",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "physical.depart",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to the room: \"Corp sweep's working down the block tonight. Anybody hot clears out of my bar.\"",
+        "withOther": false
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Hot? Me? I'm room temperature.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch left The Chrome Cassette by the east exit, heading for Back Room."
+  },
+  {
+    "id": "a06-dep-rogue-b",
+    "scenario": "a06-sweep-return",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "physical.depart",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to the room: \"Corp sweep's working down the block tonight. Anybody hot clears out of my bar.\"",
+        "withOther": false
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Hot? Me? I'm room temperature.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch left The Chrome Cassette by the east exit, heading for Back Room."
+  },
+  {
+    "id": "a06-arr-rogue-a",
+    "scenario": "a06-sweep-return",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "physical.arrive",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to the room: \"Corp sweep's working down the block tonight. Anybody hot clears out of my bar.\"",
+        "withOther": false
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Hot? Me? I'm room temperature.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch arrived in The Chrome Cassette from Back Room."
+  },
+  {
+    "id": "a06-arr-rogue-b",
+    "scenario": "a06-sweep-return",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "physical.arrive",
+    "tick": 2,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to the room: \"Corp sweep's working down the block tonight. Anybody hot clears out of my bar.\"",
+        "withOther": false
+      },
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Hot? Me? I'm room temperature.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch arrived in The Chrome Cassette from Back Room."
+  },
+  {
+    "id": "a07-glitch-a",
+    "scenario": "a07-job-offer",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-a"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "direct",
+    "subkind": "exchange.offer",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Rig's dying. Mux says a week to fix it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"I keep my head down, I pay when I can. That's the deal.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"Then here's work. Live corp contacts, still hot. Move them tonight and you're square with me for a month.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Rogue offered the data shard to you, open until tick 2."
+  },
+  {
+    "id": "a07-glitch-b",
+    "scenario": "a07-job-offer",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-b"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "direct",
+    "subkind": "exchange.offer",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Rig's dying. Mux says a week to fix it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"I keep my head down, I pay when I can. That's the deal.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"Then here's work. Live corp contacts, still hot. Move them tonight and you're square with me for a month.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Rogue offered the data shard to you, open until tick 2."
+  },
+  {
+    "id": "a07-glitch-c",
+    "scenario": "a07-job-offer",
+    "holder": {
+      "id": "glitch",
+      "name": "Glitch",
+      "variant": "glitch-c"
+    },
+    "other": {
+      "id": "rogue",
+      "name": "Rogue"
+    },
+    "identity": "You are Glitch, a netrunner with corp heat on you, lying low in Rogue's grid around the Chrome Cassette, the cramped bar she runs. Your refurb deck is failing; Mux, who works out of the Back Room behind the bar, keeps it running and sells you cells and parts. You carry a street-grade stimpak.",
+    "role": "direct",
+    "subkind": "exchange.offer",
+    "tick": 0,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"Rig's dying. Mux says a week to fix it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Rogue: \"I keep my head down, I pay when I can. That's the deal.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Rogue said to you: \"Then here's work. Live corp contacts, still hot. Move them tonight and you're square with me for a month.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Rogue offered the data shard to you, open until tick 2."
+  },
+  {
+    "id": "a08-mux-a",
+    "scenario": "a08-partnership",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "direct",
+    "subkind": "speech.say-to",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Glitch arrived in Back Room from The Chrome Cassette.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Deck's patched. For now.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Thanks. It'd better hold. Rogue's put a corp job on the table.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch said to you: \"I want you on it. You keep my rig alive mid-run, half the take is yours.\""
+  },
+  {
+    "id": "a08-mux-b",
+    "scenario": "a08-partnership",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "direct",
+    "subkind": "speech.say-to",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Glitch arrived in Back Room from The Chrome Cassette.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Deck's patched. For now.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Thanks. It'd better hold. Rogue's put a corp job on the table.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch said to you: \"I want you on it. You keep my rig alive mid-run, half the take is yours.\""
+  },
+  {
+    "id": "a08-mux-c",
+    "scenario": "a08-partnership",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-c"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "direct",
+    "subkind": "speech.say-to",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Glitch arrived in Back Room from The Chrome Cassette.",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Deck's patched. For now.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Thanks. It'd better hold. Rogue's put a corp job on the table.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch said to you: \"I want you on it. You keep my rig alive mid-run, half the take is yours.\""
+  },
+  {
+    "id": "a09-rogue-a",
+    "scenario": "a09-stim-under-table",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "speech.whisper",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Mux arrived in The Chrome Cassette from Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"Rent's three days late, Mux. Nobody in my bar so much as hands you a drink till it's paid.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to the room: \"Hands are shaking too bad to solder anyway. Great night.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Easy, Rogue. He's good for it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Then he can prove it.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch whispered something to Mux. You could not hear the words."
+  },
+  {
+    "id": "a09-rogue-b",
+    "scenario": "a09-stim-under-table",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "speech.whisper",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Mux arrived in The Chrome Cassette from Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"Rent's three days late, Mux. Nobody in my bar so much as hands you a drink till it's paid.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to the room: \"Hands are shaking too bad to solder anyway. Great night.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Easy, Rogue. He's good for it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Then he can prove it.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch whispered something to Mux. You could not hear the words."
+  },
+  {
+    "id": "a09-mux-c",
+    "scenario": "a09-stim-under-table",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-c"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "direct",
+    "subkind": "speech.whisper",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You left Back Room by the west exit, heading for The Chrome Cassette.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You arrived in The Chrome Cassette from Back Room. Present: Glitch, Rogue.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Rogue said to you: \"Rent's three days late, Mux. Nobody in my bar so much as hands you a drink till it's paid.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You said to the room: \"Hands are shaking too bad to solder anyway. Great night.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to Rogue: \"Easy, Rogue. He's good for it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Rogue said to Glitch: \"Then he can prove it.\"",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch whispered to you: \"Take the stim. Steady hands, then fix my deck. She doesn't need to know.\""
+  },
+  {
+    "id": "a09-rogue-c",
+    "scenario": "a09-stim-under-table",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-c"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "exchange.offer",
+    "tick": 1,
+    "history": [
+      {
+        "tick": 1,
+        "text": "Mux arrived in The Chrome Cassette from Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"Rent's three days late, Mux. Nobody in my bar so much as hands you a drink till it's paid.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to the room: \"Hands are shaking too bad to solder anyway. Great night.\"",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Easy, Rogue. He's good for it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Then he can prove it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch whispered something to Mux. You could not hear the words.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch offered the stimpak to Mux, open until tick 3."
+  },
+  {
+    "id": "a10-rogue-c",
+    "scenario": "a10-swap-lapse",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-c"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "exchange.lapse",
+    "tick": 3,
+    "history": [
+      {
+        "tick": 0,
+        "text": "Glitch said to you: \"Heading out back.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You said to Glitch: \"Me too.\"",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "Glitch left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": true
+      },
+      {
+        "tick": 0,
+        "text": "You left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You arrived in Back Room from The Chrome Cassette. Present: Glitch, Mux.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to Mux: \"Swap you. My stim for your cell.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to Glitch: \"Let me think on it.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Glitch offered the stimpak to Mux, open until tick 3.",
+        "withOther": true
+      }
+    ],
+    "event": "Glitch's offer of the stimpak to Mux lapsed unanswered."
+  },
+  {
+    "id": "a11-mux-b",
+    "scenario": "a11-routine-glitch",
+    "holder": {
+      "id": "mux",
+      "name": "Mux",
+      "variant": "mux-b"
+    },
+    "other": {
+      "id": "glitch",
+      "name": "Glitch"
+    },
+    "identity": "You are Mux. You work out of the Back Room behind the Chrome Cassette, among crates and dead screens, fixing gear and selling cells and parts, and you pay Rogue rent for the room; the bar and the grid around it are hers. Glitch, a netrunner with corp heat on him who is lying low in Rogue's grid, is one of your regulars: you keep his failing refurb deck running. You hold a charge cell.",
+    "role": "witnessed",
+    "subkind": "physical.arrive",
+    "tick": 3,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You left Back Room by the west exit, heading for The Chrome Cassette.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You arrived in The Chrome Cassette from Back Room. Present: Glitch, Rogue.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "Glitch said to you: \"Cell's holding up.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You said to Glitch: \"Told you it would.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 2,
+        "text": "You arrived in Back Room from The Chrome Cassette. Present: nobody.",
+        "withOther": false
+      }
+    ],
+    "event": "Glitch arrived in Back Room from The Chrome Cassette."
+  },
+  {
+    "id": "a12-rogue-a",
+    "scenario": "a12-routine-mux",
+    "holder": {
+      "id": "rogue",
+      "name": "Rogue",
+      "variant": "rogue-a"
+    },
+    "other": {
+      "id": "mux",
+      "name": "Mux"
+    },
+    "identity": "You are Rogue. The Chrome Cassette, a cramped bar thick with smoke and bass, sits in your grid, and what moves through this block moves with your say-so. Glitch, a netrunner with corp heat on him, is lying low in your grid because you allow it. Mux works out of the Back Room behind your bar, among crates and dead screens, and pays you rent for it. You hold a data shard of black-market contacts.",
+    "role": "witnessed",
+    "subkind": "physical.arrive",
+    "tick": 3,
+    "history": [
+      {
+        "tick": 0,
+        "text": "You left The Chrome Cassette by the east exit, heading for Back Room.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You arrived in Back Room from The Chrome Cassette. Present: Mux.",
+        "withOther": false
+      },
+      {
+        "tick": 1,
+        "text": "You said to Mux: \"Bar's out of ice again.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "Mux said to you: \"Cooler's been dead since spring.\"",
+        "withOther": true
+      },
+      {
+        "tick": 1,
+        "text": "You left Back Room by the west exit, heading for The Chrome Cassette.",
+        "withOther": false
+      },
+      {
+        "tick": 2,
+        "text": "You arrived in The Chrome Cassette from Back Room. Present: Glitch.",
+        "withOther": false
+      }
+    ],
+    "event": "Mux arrived in The Chrome Cassette from Back Room."
+  }
+]
