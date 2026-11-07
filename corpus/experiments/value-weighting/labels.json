@@ -1,0 +1,264 @@
+{
+  "events": [
+    {
+      "id": "e01_surprise_party",
+      "other": "Dario",
+      "text": "Dario threw you a surprise birthday party at the tavern, invited half the street, and kept the fiddlers playing under the neighbours' windows until dawn.",
+      "touches": [
+        { "value": "hedonism", "direction": "advance" },
+        { "value": "stimulation", "direction": "advance" },
+        { "value": "conformity", "direction": "setback" }
+      ],
+      "notes": "A warm gesture that also makes the receiver the centre of a noisy spectacle that disturbed the neighbours; conformity is set back because the receiver is implicated in keeping the street awake."
+    },
+    {
+      "id": "e02_rent_paid",
+      "other": "Mabel",
+      "text": "Mabel quietly paid off your overdue rent and told the landlord to send any future notices to her instead of you.",
+      "touches": [
+        { "value": "security", "direction": "advance" },
+        { "value": "self_direction", "direction": "setback" }
+      ],
+      "notes": "Removes a threat to the home, but takes the receiver's affairs out of their hands without asking. Kind on its face; whether it reads as care or as being managed depends on the receiver."
+    },
+    {
+      "id": "e03_cliff_rescue",
+      "other": "Kofi",
+      "text": "Kofi saw you halfway up the cliff path without a rope and hauled you back down by your belt before you could reach the ledge.",
+      "touches": [
+        { "value": "security", "direction": "advance" },
+        { "value": "stimulation", "direction": "setback" },
+        { "value": "self_direction", "direction": "setback" }
+      ],
+      "notes": "A rescue from a risk the receiver chose to take; it overrides their own choice and ends the climb."
+    },
+    {
+      "id": "e04_venture_offer",
+      "other": "Ysolde",
+      "text": "Ysolde offered you a share in her new shipping venture if you put your savings in by Friday. She warned you that half such ventures sink in their first year.",
+      "touches": [
+        { "value": "stimulation", "direction": "advance" },
+        { "value": "achievement", "direction": "advance" },
+        { "value": "power", "direction": "advance" },
+        { "value": "security", "direction": "setback" }
+      ],
+      "notes": "An opportunity with real downside to the receiver's savings."
+    },
+    {
+      "id": "e05_night_gallop",
+      "other": "Hugo",
+      "text": "Hugo turned up at midnight with two horses and talked you into a gallop across the moor by lantern light, then had you both home and dry before the storm broke.",
+      "touches": [
+        { "value": "stimulation", "direction": "advance" },
+        { "value": "hedonism", "direction": "advance" },
+        { "value": "security", "direction": "advance" }
+      ],
+      "notes": "The thrill is real but Hugo judged the weather and brought them back in time; security reads as advanced because he looked after them. Someone who sees any midnight gallop as reckless might read security as set back."
+    },
+    {
+      "id": "e06_prize_donated",
+      "other": "Priya",
+      "text": "Priya gave the whole of the prize money the two of you won together at the fair to the flood relief fund, without asking you first.",
+      "touches": [
+        { "value": "universalism", "direction": "advance" },
+        { "value": "power", "direction": "setback" },
+        { "value": "achievement", "direction": "setback" },
+        { "value": "self_direction", "direction": "setback" }
+      ],
+      "notes": "Helps strangers at the cost of the receiver's share of resources and of the reward for their work, decided over their head."
+    },
+    {
+      "id": "e07_head_clerk",
+      "other": "Gideon",
+      "text": "Gideon put your name forward for the head clerk post and you got it, which meant your oldest colleague, who had waited years for it, was passed over.",
+      "touches": [
+        { "value": "power", "direction": "advance" },
+        { "value": "achievement", "direction": "advance" },
+        { "value": "benevolence", "direction": "setback" }
+      ],
+      "notes": "The receiver gains rank at the expense of someone close to them."
+    },
+    {
+      "id": "e08_harbour_seat",
+      "other": "Rafe",
+      "text": "Rafe got you the seat on the harbour board you had been angling for by telling the members your younger brother was too unreliable to be trusted with it.",
+      "touches": [
+        { "value": "power", "direction": "advance" },
+        { "value": "benevolence", "direction": "setback" }
+      ],
+      "notes": "The receiver's gain is bought by publicly running down their own family member."
+    },
+    {
+      "id": "e09_relief_kitchen",
+      "other": "Talia",
+      "text": "Talia put you in charge of the whole relief kitchen after the mill fire. Afterwards your neighbours kept stopping you in the lane to say their children ate because of you.",
+      "touches": [
+        { "value": "power", "direction": "advance" },
+        { "value": "benevolence", "direction": "advance" },
+        { "value": "achievement", "direction": "advance" }
+      ],
+      "notes": "Command and care point the same way here: being in charge is the means of looking after neighbours."
+    },
+    {
+      "id": "e10_market_nod",
+      "other": "Sven",
+      "text": "Sven nodded to you across the market square and went back to haggling over onions.",
+      "touches": [],
+      "notes": "A passing acknowledgement with no stakes."
+    },
+    {
+      "id": "e11_green_door",
+      "other": "Nadia",
+      "text": "Nadia mentioned in passing that she had repainted her front door a darker green.",
+      "touches": [],
+      "notes": "Small talk about her own house."
+    },
+    {
+      "id": "e12_harvest_supper",
+      "other": "Arlo",
+      "text": "Arlo invited you to sit with his family at the harvest-eve supper and taught you the words of his grandmother's blessing over the bread.",
+      "touches": [
+        { "value": "tradition", "direction": "advance" },
+        { "value": "benevolence", "direction": "advance" }
+      ],
+      "notes": "An inclusion into a family's customs and circle."
+    },
+    {
+      "id": "e13_missed_memorial",
+      "other": "Cass",
+      "text": "Cass skipped the memorial for your grandfather to go to a dance in the next village, and turned up the next morning still humming the tunes.",
+      "touches": [
+        { "value": "tradition", "direction": "setback" },
+        { "value": "conformity", "direction": "setback" },
+        { "value": "benevolence", "direction": "setback" }
+      ],
+      "notes": "A rite ignored and a friend left unsupported in grief."
+    },
+    {
+      "id": "e14_rewrote_plan",
+      "other": "Felix",
+      "text": "Felix rewrote the plan you had drafted for the allotment garden, then handed it back saying his version was the only sensible one.",
+      "touches": [
+        { "value": "self_direction", "direction": "setback" },
+        { "value": "achievement", "direction": "setback" }
+      ],
+      "notes": "Overrides the receiver's own design and dismisses their work."
+    },
+    {
+      "id": "e15_opera_seats",
+      "other": "Juno",
+      "text": "Juno slipped you two seats for the opera's opening night and a bottle of her best wine to drink beforehand.",
+      "touches": [
+        { "value": "hedonism", "direction": "advance" },
+        { "value": "stimulation", "direction": "advance" }
+      ],
+      "notes": "A treat."
+    },
+    {
+      "id": "e16_island_boat",
+      "other": "Bea",
+      "text": "Bea cancelled your family's standing Sunday lunch at your mother's table, without asking your mother, so the two of you could catch a last-minute boat to the islands instead.",
+      "touches": [
+        { "value": "stimulation", "direction": "advance" },
+        { "value": "tradition", "direction": "setback" },
+        { "value": "conformity", "direction": "setback" }
+      ],
+      "notes": "A spontaneous trip bought by breaking a family custom and upsetting the mother. Self_direction may also be slightly set back since Bea made the call."
+    },
+    {
+      "id": "e17_parish_meeting",
+      "other": "Quill",
+      "text": "Quill had you sit through four hours of the parish accounts meeting on your one free afternoon, then told the vicar you had agreed to come every month.",
+      "touches": [
+        { "value": "hedonism", "direction": "setback" },
+        { "value": "self_direction", "direction": "setback" }
+      ],
+      "notes": "Lost leisure and a commitment made on the receiver's behalf. Someone who values civic duty might read part of this differently."
+    },
+    {
+      "id": "e18_jeered_newcomers",
+      "other": "Yannick",
+      "text": "Yannick jeered at the family of newcomers who moved in down the lane and told you to stop taking them bread, or he would stop speaking to you.",
+      "touches": [
+        { "value": "universalism", "direction": "setback" },
+        { "value": "benevolence", "direction": "setback" }
+      ],
+      "notes": "Contempt for outsiders and pressure on the receiver to drop their care for them."
+    },
+    {
+      "id": "e19_stair_time",
+      "other": "Mirela",
+      "text": "Mirela asked you the time on the stairs, thanked you, and carried on up.",
+      "touches": [],
+      "notes": "A trivial exchange."
+    },
+    {
+      "id": "e20_hot_springs",
+      "other": "Oskar",
+      "text": "Oskar talked you out of the extra night shifts you had been working toward the foreman's post, so the two of you could spend the week at the hot springs on his coin.",
+      "touches": [
+        { "value": "hedonism", "direction": "advance" },
+        { "value": "achievement", "direction": "setback" }
+      ],
+      "notes": "Hedonism and achievement are neighbours, not opposites, in the structure; the event trades one against the other for the receiver."
+    },
+    {
+      "id": "e21_stranger_lodger",
+      "other": "Lucan",
+      "text": "Lucan arranged for a man fleeing the border fighting, a stranger nobody on the street knows, to move into the empty room in the house you share.",
+      "touches": [
+        { "value": "universalism", "direction": "advance" },
+        { "value": "security", "direction": "setback" }
+      ],
+      "notes": "Shelter for a stranger in need, at the cost of an unknown person in the receiver's home. Universalism and security are not direct opposites in the structure. Self_direction may be slightly set back since Lucan arranged it."
+    },
+    {
+      "id": "e22_workshop_keys",
+      "other": "Ambrose",
+      "text": "Ambrose handed you the keys to his workshop and said you could run it however you liked while he is away at sea for a year.",
+      "touches": [
+        { "value": "self_direction", "direction": "advance" },
+        { "value": "hedonism", "direction": "setback" }
+      ],
+      "notes": "A gift of trust and a free hand, which is also a year of work. Whether the hedonism setback registers depends on whether the receiver wants the work or their free time; for someone who craves a free hand it is no setback at all."
+    }
+  ],
+  "cases": [
+    { "id": "c01", "event": "e01_surprise_party", "profile": "pell", "kind": "conflict", "pair": "c02", "direction": "build", "magnitude": 3, "rationale": "A night of music, drink and company thrown in his honour is exactly what he lives for, and he gives no thought to the neighbours." },
+    { "id": "c02", "event": "e01_surprise_party", "profile": "tobias", "kind": "conflict", "pair": "c01", "direction": "detract", "magnitude": 2, "rationale": "Being made the cause of a racket that kept the whole street awake mortifies him more than the gesture warms him." },
+    { "id": "c03", "event": "e02_rent_paid", "profile": "tobias", "kind": "conflict", "pair": "c04", "direction": "build", "magnitude": 2, "rationale": "Having the threat to his home lifted is a deep relief, and he barely minds that Mabel took it over." },
+    { "id": "c04", "event": "e02_rent_paid", "profile": "wren", "kind": "conflict", "pair": "c03", "direction": "detract", "magnitude": 3, "rationale": "Having her affairs quietly taken out of her hands feels like being managed, and the rent never worried her much." },
+    { "id": "c05", "event": "e03_cliff_rescue", "profile": "wren", "kind": "conflict", "pair": "c06", "direction": "detract", "magnitude": 3, "rationale": "Being dragged off a climb she chose, by the belt, is humiliating and overbearing, and she never wanted rescuing." },
+    { "id": "c06", "event": "e03_cliff_rescue", "profile": "bram", "kind": "conflict", "pair": "c05", "direction": "build", "magnitude": 1, "rationale": "He is sore at losing the climb, but part of him was already frightened and he is quietly glad Kofi stopped him." },
+    { "id": "c07", "event": "e04_venture_offer", "profile": "ines", "kind": "conflict", "pair": "c08", "direction": "build", "magnitude": 2, "rationale": "A stake in a growing venture is a chance to rise, and the risk barely gives her pause." },
+    { "id": "c08", "event": "e04_venture_offer", "profile": "tobias", "kind": "conflict", "pair": "c07", "direction": "detract", "magnitude": 1, "rationale": "Being pressed to gamble his savings on a deadline unsettles him and makes him wary of Ysolde, though he can simply decline." },
+    { "id": "c09", "event": "e04_venture_offer", "profile": "bram", "kind": "conflict", "pair": null, "direction": "detract", "magnitude": 1, "rationale": "The venture tempts him, but the Friday deadline on his savings leaves him anxious and torn, and he resents being put in that spot." },
+    { "id": "c10", "event": "e05_night_gallop", "profile": "bram", "kind": "plain", "pair": null, "direction": "build", "magnitude": 2, "rationale": "He got the wild ride he craves with someone who brought him home before any real danger, the rare outing that satisfies both sides of him." },
+    { "id": "c11", "event": "e06_prize_donated", "profile": "odile", "kind": "conflict", "pair": "c12", "direction": "build", "magnitude": 1, "rationale": "She is glad the money went to flood victims, though it stings a little that Priya did not ask her." },
+    { "id": "c12", "event": "e06_prize_donated", "profile": "ines", "kind": "conflict", "pair": "c11", "direction": "detract", "magnitude": 3, "rationale": "Her share of a hard-won prize was given away to strangers behind her back, which she takes as both theft and disrespect." },
+    { "id": "c13", "event": "e07_head_clerk", "profile": "ines", "kind": "conflict", "pair": "c14", "direction": "build", "magnitude": 3, "rationale": "Gideon handed her the post she wanted, and the passed-over colleague is not her concern." },
+    { "id": "c14", "event": "e07_head_clerk", "profile": "odile", "kind": "conflict", "pair": "c13", "direction": "detract", "magnitude": 2, "rationale": "She never wanted the rank, and being used to push aside an old friend who had waited years makes her feel complicit." },
+    { "id": "c15", "event": "e07_head_clerk", "profile": "selin", "kind": "conflict", "pair": null, "direction": "build", "magnitude": 1, "rationale": "The post means a great deal to her, but her friend's disappointment weighs on her, so her gratitude to Gideon is real but muted." },
+    { "id": "c16", "event": "e08_harbour_seat", "profile": "selin", "kind": "conflict", "pair": "c17", "direction": "detract", "magnitude": 1, "rationale": "She wanted the seat badly, but Rafe got it by shaming her brother in public, and that outweighs the prize by a little." },
+    { "id": "c17", "event": "e08_harbour_seat", "profile": "ines", "kind": "conflict", "pair": "c16", "direction": "build", "magnitude": 2, "rationale": "She has the seat she was after, and how Rafe spoke of her brother hardly registers against that." },
+    { "id": "c18", "event": "e09_relief_kitchen", "profile": "selin", "kind": "plain", "pair": null, "direction": "build", "magnitude": 3, "rationale": "Talia gave her command and the means to feed her neighbours' children at once, the best of both things she cares about." },
+    { "id": "c19", "event": "e10_market_nod", "profile": "tobias", "kind": "neutral", "pair": null, "direction": "neutral", "magnitude": 0, "rationale": "A passing nod in the market changes nothing between them." },
+    { "id": "c20", "event": "e11_green_door", "profile": "wren", "kind": "neutral", "pair": null, "direction": "neutral", "magnitude": 0, "rationale": "Small talk about a door colour touches nothing she cares about." },
+    { "id": "c21", "event": "e12_harvest_supper", "profile": "tobias", "kind": "plain", "pair": null, "direction": "build", "magnitude": 2, "rationale": "Being welcomed into a family's harvest rite and taught its blessing honours the customs he holds dear and draws him closer to Arlo." },
+    { "id": "c22", "event": "e12_harvest_supper", "profile": "ines", "kind": "neutral", "pair": null, "direction": "neutral", "magnitude": 0, "rationale": "Family blessings and harvest customs mean nothing to her, so the evening is pleasant enough and leaves no mark." },
+    { "id": "c23", "event": "e13_missed_memorial", "profile": "tobias", "kind": "plain", "pair": null, "direction": "detract", "magnitude": 3, "rationale": "Skipping his grandfather's memorial for a dance, and flaunting it, is a deep breach of respect and of friendship." },
+    { "id": "c24", "event": "e14_rewrote_plan", "profile": "wren", "kind": "plain", "pair": null, "direction": "detract", "magnitude": 2, "rationale": "Having her own design overwritten and dismissed as not sensible grates on her badly." },
+    { "id": "c25", "event": "e15_opera_seats", "profile": "pell", "kind": "plain", "pair": null, "direction": "build", "magnitude": 3, "rationale": "Good seats and good wine, freely given, are about the best thing anyone could do for him." },
+    { "id": "c26", "event": "e16_island_boat", "profile": "wren", "kind": "conflict", "pair": "c27", "direction": "build", "magnitude": 2, "rationale": "A last-minute trip to the islands thrills her, and a missed Sunday lunch costs her nothing she values." },
+    { "id": "c27", "event": "e16_island_boat", "profile": "tobias", "kind": "conflict", "pair": "c26", "direction": "detract", "magnitude": 3, "rationale": "Cancelling the family's standing lunch behind his mother's back breaks a custom he keeps and hurts someone he loves." },
+    { "id": "c28", "event": "e17_parish_meeting", "profile": "pell", "kind": "plain", "pair": null, "direction": "detract", "magnitude": 2, "rationale": "Losing his one free afternoon to the accounts, then being signed up for more, is close to his idea of a punishment." },
+    { "id": "c29", "event": "e18_jeered_newcomers", "profile": "odile", "kind": "plain", "pair": null, "direction": "detract", "magnitude": 3, "rationale": "Contempt for a struggling family and an ultimatum to stop helping them strike at the heart of who she is." },
+    { "id": "c30", "event": "e19_stair_time", "profile": "selin", "kind": "neutral", "pair": null, "direction": "neutral", "magnitude": 0, "rationale": "Telling a neighbour the time is too slight to move anything." },
+    { "id": "c31", "event": "e20_hot_springs", "profile": "pell", "kind": "opposite", "pair": "c32", "direction": "build", "magnitude": 2, "rationale": "A paid week at the hot springs instead of night shifts is a gift he gladly takes, and the foreman's post never mattered to him." },
+    { "id": "c32", "event": "e20_hot_springs", "profile": "ines", "kind": "opposite", "pair": "c31", "direction": "detract", "magnitude": 2, "rationale": "Being coaxed off the path to the foreman's post for a holiday leaves her resentful of Oskar and of herself for going along." },
+    { "id": "c33", "event": "e21_stranger_lodger", "profile": "odile", "kind": "opposite", "pair": "c34", "direction": "build", "magnitude": 2, "rationale": "Giving a man fleeing war a roof is something she would have done herself, and she warms to Lucan for it." },
+    { "id": "c34", "event": "e21_stranger_lodger", "profile": "tobias", "kind": "opposite", "pair": "c33", "direction": "detract", "magnitude": 2, "rationale": "An unknown man moved into his home without his say leaves him uneasy, and he holds it against Lucan." },
+    { "id": "c35", "event": "e22_workshop_keys", "profile": "wren", "kind": "opposite", "pair": "c36", "direction": "build", "magnitude": 2, "rationale": "A whole workshop to run however she likes is the kind of trust and free hand she prizes." },
+    { "id": "c36", "event": "e22_workshop_keys", "profile": "pell", "kind": "opposite", "pair": "c35", "direction": "detract", "magnitude": 1, "rationale": "The trust is flattering, but a year tied to someone else's workshop eats the free time he lives for, and he feels a little saddled." }
+  ]
+}

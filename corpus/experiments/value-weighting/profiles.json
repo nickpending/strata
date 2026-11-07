@@ -1,0 +1,37 @@
+[
+  {
+    "id": "wren",
+    "name": "Wren Halloway",
+    "importance": { "self_direction": 4, "stimulation": 4, "hedonism": 3, "achievement": 2, "power": 1, "security": 0, "conformity": 0, "tradition": 0, "benevolence": 2, "universalism": 2 }
+  },
+  {
+    "id": "tobias",
+    "name": "Tobias Merrin",
+    "importance": { "self_direction": 1, "stimulation": 0, "hedonism": 1, "achievement": 2, "power": 1, "security": 4, "conformity": 4, "tradition": 3, "benevolence": 3, "universalism": 1 }
+  },
+  {
+    "id": "ines",
+    "name": "Ines Varga",
+    "importance": { "self_direction": 2, "stimulation": 2, "hedonism": 2, "achievement": 4, "power": 4, "security": 2, "conformity": 1, "tradition": 0, "benevolence": 0, "universalism": 0 }
+  },
+  {
+    "id": "odile",
+    "name": "Odile Fenwick",
+    "importance": { "self_direction": 2, "stimulation": 1, "hedonism": 1, "achievement": 0, "power": 0, "security": 2, "conformity": 2, "tradition": 1, "benevolence": 4, "universalism": 4 }
+  },
+  {
+    "id": "bram",
+    "name": "Bram Okafor",
+    "importance": { "self_direction": 2, "stimulation": 4, "hedonism": 2, "achievement": 1, "power": 0, "security": 4, "conformity": 1, "tradition": 1, "benevolence": 2, "universalism": 1 }
+  },
+  {
+    "id": "selin",
+    "name": "Selin Marsh",
+    "importance": { "self_direction": 1, "stimulation": 1, "hedonism": 1, "achievement": 3, "power": 4, "security": 2, "conformity": 2, "tradition": 2, "benevolence": 4, "universalism": 0 }
+  },
+  {
+    "id": "pell",
+    "name": "Pell Drummond",
+    "importance": { "self_direction": 2, "stimulation": 2, "hedonism": 4, "achievement": 0, "power": 0, "security": 1, "conformity": 0, "tradition": 0, "benevolence": 1, "universalism": 1 }
+  }
+]
