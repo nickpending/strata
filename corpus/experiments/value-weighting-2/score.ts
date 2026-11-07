@@ -14,9 +14,11 @@
  *  4. Band: taken from the calls' `band` for that (arm, variant); if it varies, the first call's band is used and
  *     a warning is printed. M5 reads neutral when |score| < band, else by sign (score 0 with band 0 reads neutral
  *     only if 0 < 0, i.e. never; it then reads sign 0 which is no direction and counts wrong for build/detract).
- *  5. Pairs (M3): cases of kind "opposite" grouped by their `pair` string. A pair holds when both members are
- *     in the scored case set and both get the right sign (M1 rule on the case mean). A pair with a member
- *     outside the case set is dropped from the count (printed). A pair with a member lacking a score fails.
+ *  5. Pairs (M3): on an opposite case `pair` is the id of its partner. A pair is the unordered {id, pair}, both
+ *     labelled opposite and pointing at each other; counted once. It holds when both members get the right sign
+ *     (M1 rule on the case mean); a member lacking a score fails. A pair whose partner is outside the case set
+ *     is dropped from the count and printed in the header. An opposite case whose partner is unlabelled, not
+ *     opposite, or does not point back is an error naming both ids (exit 1).
  *  6. M4: kind == "conflict" and direction build/detract, M1 rule.
  *  7. Spearman is over cases with a score; label values are +magnitude / -magnitude / 0. Within-build and
  *     within-detract use the same score vs signed label over that direction only (constant labels give NaN).
@@ -141,6 +143,30 @@ function mcnemar(b: number, c: number): number {
   return Math.min(1, (2 * sum) / 2 ** n);
 }
 
+// ---------- opposite pairs ----------
+// `pair` on an opposite case is the id of its partner. A pair is the unordered {id, pair}; each counted once.
+const PAIRS: [string, string][] = [];
+const droppedPairs: string[] = [];
+{
+  const seen = new Set<string>();
+  for (const l of labels) {
+    if (l.kind !== "opposite") continue;
+    if (!caseSet.has(l.id)) continue;
+    const pid = l.pair;
+    const partner = pid ? labelById.get(pid) : undefined;
+    if (!pid || !partner || partner.kind !== "opposite" || partner.pair !== l.id) {
+      console.error(`ERROR: opposite case ${l.id} has pair ${pid ?? "null"}, but ${pid ?? "(none)"} ` +
+        `${!partner ? "is not a labelled case" : partner.kind !== "opposite" ? "is not opposite" : `points to ${partner.pair ?? "null"}, not back to ${l.id}`}`);
+      process.exit(1);
+    }
+    if (!caseSet.has(pid)) { droppedPairs.push(`${l.id}~${pid}`); continue; }
+    const key = [l.id, pid].sort().join("\u0000");
+    if (seen.has(key)) continue;
+    seen.add(key);
+    PAIRS.push([l.id, pid]);
+  }
+}
+
 // ---------- per (arm, variant) ----------
 const keys: string[] = [];
 const byKey = new Map<string, Call[]>();
@@ -199,25 +225,14 @@ function compute(key: string): Stats {
     if (l.direction !== "neutral") m1ok.set(id, s !== null && sign(s) === dirSign[l.direction]);
     m5ok.set(id, s !== null && readM5(s, band) === dirSign[l.direction]);
   }
-  // pairs
-  const pairs = new Map<string, string[]>();
-  for (const id of caseIds) {
-    const l = labelById.get(id)!;
-    if (l.kind === "opposite" && l.pair) {
-      if (!pairs.has(l.pair)) pairs.set(l.pair, []);
-      pairs.get(l.pair)!.push(id);
-    }
-  }
-  let held = 0, total = 0;
+  // pairs (computed once, see PAIRS below)
+  let held = 0;
+  const total = PAIRS.length;
   const rightSign = (id: string) => {
     const s = caseScore.get(id)!;
     return s !== null && sign(s) === dirSign[labelById.get(id)!.direction];
   };
-  for (const [, ids] of pairs) {
-    if (ids.length < 2) continue; // member outside the case set: dropped
-    total++;
-    if (ids.every(rightSign)) held++;
-  }
+  for (const [x, y] of PAIRS) if (rightSign(x) && rightSign(y)) held++;
   const xs: number[] = [], ys: number[] = [];
   for (const id of caseIds) {
     const s = caseScore.get(id)!;
@@ -270,6 +285,7 @@ for (const st of stats) {
 const repsAll = [...new Set(calls.map((c) => String(c.rep)))].sort();
 P(`- reps: ${repsAll.length} (${repsAll.join(", ")})`);
 P(`- cases: ${caseIds.length}`);
+P(`- opposite pairs: ${PAIRS.length}${droppedPairs.length ? ` (dropped, partner outside the case set: ${droppedPairs.join(", ")})` : ""}`);
 const tally = (g: (l: Label) => string) => {
   const m = new Map<string, number>();
   for (const id of caseIds) {
@@ -356,8 +372,6 @@ if (o1f.length === 1 && o2f.length === 1) {
   const a = o1f[0], b = o2f[0];
   P(`O1 = ${a.key}, O2 = ${b.key}`);
   P();
-  const dropped = [...new Set(caseIds.map((i) => labelById.get(i)!).filter((l) => l.kind === "opposite" && l.pair).map((l) => l.pair!))].length;
-  void dropped;
   let verdict = "";
   const dq = (s: Stats) => s.pairsTotal > 0 && s.pairsHeld * 2 < s.pairsTotal;
   P(`1. Disqualification (fewer than half the opposite pairs): O1 holds ${s2(a)}, ${dq(a) ? "DISQUALIFIED" : "ok"}; O2 holds ${s2(b)}, ${dq(b) ? "DISQUALIFIED" : "ok"}`);

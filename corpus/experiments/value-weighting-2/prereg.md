@@ -102,5 +102,34 @@ arm depends on its wording. It never changes the verdict.
 
 ## Freeze addendum
 
-(Filled after tuning and before the held-out run: each arm's final variant and band, the dev scores that chose
-them, the commit holding the arm modules, and the held-out split's sha256.)
+Written after tuning and before any held-out run. Both modules are frozen in the commit that adds this
+addendum; nothing in `arms/` changes after it.
+
+- **O1 final: `lens-late-s5`, band 0.1** (`arms/o1.ts`, 12 variants, 1,280 dev calls). Identity, history and
+  encounter, then each value turned into how this person judges others, tiered by importance ("Central to who you
+  are: you warm to people who …; you resent anyone who …"), placed after the encounter, and one five-step choice
+  question scored as its expected value. No numbers reach Jev.
+- **O2 final: `C-hyb-top-sig2`, band 0.03** (`arms/o2.ts`, 10 variants, 1,091 dev calls). Same identity, history
+  and encounter; no importances. Per value, the holder's stake (personal-focus values) or the other's conduct
+  (social-focus values), plus one "beyond routine?" gate whose square scales the sum; only values the holder rates
+  3 or 4 count, weighted in code. 21 questions in one call.
+- **Dev scores of the finals** (score.ts after the M3 pair fix, at the frozen bands):
+
+  | | M1 | M3 | M5 | M2 ρ | neutral hits | USD per judgment |
+  |---|---|---|---|---|---|---|
+  | O1 `lens-late-s5` | 21/26 | 5/7 | 21/32 | 0.58 | 2/6 | 4.3e-5 |
+  | O2 `C-hyb-top-sig2` | 20/26 | 4/7 | 23/32 | 0.67 | 5/6 | 1.8e-4 |
+
+  On dev the rule gives a tie (M5 McNemar p = 0.75, M1 p = 1, ρ difference 0.09).
+- **Scorer fix during tuning.** score.ts grouped opposite pairs by the `pair` string, but each case's `pair`
+  names its partner, so M3 read 0/0. The O1 author reported it; the scorer fixed it. Both authors' choices were
+  made on their own pair counts, which match the fixed scorer.
+- **Bands in dev logs.** Some dev calls logged a band from an earlier draft of a module; the bands above are
+  the frozen files'. The held-out run logs the frozen bands.
+- **Author wording, accepted.** O1's per-value "warm to / resent" lines and O2's per-value cue lines (paraphrases
+  of Schwartz's PVQ items) are each author's own general wording, fixed per catalogue value, naming no case,
+  scenario or variant (checked by grep).
+- **Held-out files**: unchanged since the split; their sha256 are under Split above and are checked again when
+  they enter the repository.
+- **Spend so far** about 0.19 USD (dev). Held-out estimate: finals 320 calls (about 0.04 USD), secondary
+  about 1,900 calls (about 0.15 USD).
