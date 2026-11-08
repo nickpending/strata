@@ -1,0 +1,362 @@
+[
+ {
+  "id": "C01a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C01b",
+  "set": "C",
+  "character": true,
+  "rationale": "Twenty years without missing a day. Reliable; that's the kind of man you build on."
+ },
+ {
+  "id": "C01b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C01a",
+  "set": "C",
+  "character": true,
+  "rationale": "Twenty years of the same hour, same crates. That's not a life, it's a rut."
+ },
+ {
+  "id": "C01c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "Mux came out front, as he does."
+ },
+ {
+  "id": "C01d",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "He went back to his crates. Routine."
+ },
+ {
+  "id": "C02a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C02b",
+  "set": "C",
+  "character": false,
+  "rationale": "A night off and drinks on her. She's good to me."
+ },
+ {
+  "id": "C02b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C02a",
+  "set": "C",
+  "character": false,
+  "rationale": "A night's sales gone because she says when my shop closes."
+ },
+ {
+  "id": "C02c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "The patrol leaving my shop alone is worth something, but bribing them to break curfew is not how things are done; that weighs more."
+ },
+ {
+  "id": "C03a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C03b",
+  "set": "C",
+  "character": false,
+  "rationale": "A corp vault score, and he brings it to me. That's the kind of chance I want."
+ },
+ {
+  "id": "C03b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C03a",
+  "set": "C",
+  "character": false,
+  "rationale": "She's just said no side deals, and he wants me cutting her out on a corp vault job while I'm hunted."
+ },
+ {
+  "id": "C03c",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "plain",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "I tell him no side deals, and the next breath he's whispering something to Glitch behind my back."
+ },
+ {
+  "id": "C04a",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C04b",
+  "set": "C",
+  "character": true,
+  "rationale": "Robbing a guard and bragging about it in the bar. That's not how a man carries himself."
+ },
+ {
+  "id": "C04b",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C04a",
+  "set": "C",
+  "character": true,
+  "rationale": "He takes what he wants and hands the spoils to the boss. Smart."
+ },
+ {
+  "id": "C04c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "plain",
+  "pair": null,
+  "set": "C",
+  "character": true,
+  "rationale": "It's a gift to me, but it came off a man he beat on the way here, and that's what it says about him."
+ },
+ {
+  "id": "C05a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C05b",
+  "set": "C",
+  "character": false,
+  "rationale": "He took it as payment, properly. One less debt hanging over me."
+ },
+ {
+  "id": "C05b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C05a",
+  "set": "C",
+  "character": true,
+  "rationale": "He'd take a man's last medicine over three cells."
+ },
+ {
+  "id": "C05c",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "conflict",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "He brought hunters toward my door, but he did it because he wouldn't leave a kid alone on the strip, and that weighs far more with me."
+ },
+ {
+  "id": "C06a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C06b",
+  "set": "C",
+  "character": true,
+  "rationale": "He keeps a clear head when it counts. Steady."
+ },
+ {
+  "id": "C06b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C06a",
+  "set": "C",
+  "character": true,
+  "rationale": "One good night on offer and he plays the sensible one. Dull."
+ },
+ {
+  "id": "C06c",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "plain",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "He's right, and he's staying sharp so I'm covered if they come."
+ },
+ {
+  "id": "C07a",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C07b",
+  "set": "C",
+  "character": false,
+  "rationale": "She's telling me she might throw me out. My place here is not safe."
+ },
+ {
+  "id": "C07b",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C07a",
+  "set": "C",
+  "character": true,
+  "rationale": "She won't let a favour cloud her judgment. Hard, clear-eyed; that's how you run a grid."
+ },
+ {
+  "id": "C08a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C08b",
+  "set": "C",
+  "character": true,
+  "rationale": "A stranger's kid bleeding in an alley and she goes herself. That's who she is."
+ },
+ {
+  "id": "C08b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C08a",
+  "set": "C",
+  "character": true,
+  "rationale": "The boss of the grid running out for a nobody. Soft."
+ },
+ {
+  "id": "C08c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "He wants the bass down. Fine."
+ },
+ {
+  "id": "C09a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C09b",
+  "set": "C",
+  "character": false,
+  "rationale": "She's here, so the party's on, in my room. Great night ahead."
+ },
+ {
+  "id": "C09b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C09a",
+  "set": "C",
+  "character": false,
+  "rationale": "She's here to take over my shop for a party: no sales tonight and nobody asked me."
+ },
+ {
+  "id": "C09c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "He's keeping my rig alive, but with money from a crew that squeezes the stalls; the stalls weigh more."
+ },
+ {
+  "id": "C10a",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C10b",
+  "set": "C",
+  "character": true,
+  "rationale": "Corp money on the table and the boss asking him to his face, and he just lets it hang. Soft, and foolish with it."
+ },
+ {
+  "id": "C10b",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C10a",
+  "set": "C",
+  "character": true,
+  "rationale": "He said never again for the corp and he meant it; he just quietly didn't pick it up."
+ },
+ {
+  "id": "C11a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "C11b",
+  "set": "C",
+  "character": false,
+  "rationale": "Roofs to the coast, right now? Yes."
+ },
+ {
+  "id": "C11b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C11a",
+  "set": "C",
+  "character": false,
+  "rationale": "He wants me to walk off and leave my grid untended on a whim."
+ },
+ {
+  "id": "C11c",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "She's telling the whole bar I'm the best runner in the city. More eyes on me, but the name is worth it."
+ },
+ {
+  "id": "C12a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C12b",
+  "set": "C",
+  "character": true,
+  "rationale": "He wants more and says so to her face. Ambition; I like that in him."
+ },
+ {
+  "id": "C12b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "C12a",
+  "set": "C",
+  "character": true,
+  "rationale": "Eyeing the boss's chair while she's still in it. That kind of reaching unsettles things."
+ },
+ {
+  "id": "C12c",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "plain",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "He's already measuring my chair. My grid isn't his to plan for."
+ },
+ {
+  "id": "C12d",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "C",
+  "character": false,
+  "rationale": "She took the month's cut, as always."
+ }
+]
