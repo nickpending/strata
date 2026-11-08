@@ -135,3 +135,55 @@ As v2, with M7 widened for chained requests.
 
 The secondary run and the consensus subset are reported to show how much each arm depends on its wording and on
 one labeller. They never change the verdict.
+
+## Freeze addendum
+
+Written after tuning and before any held-out run. Both modules are frozen in the commit that adds this
+addendum; nothing in `arms/` changes after it. The orchestrator checked both against "The arms" above: O1 reads
+an importance only to drop "does not matter" values and to put a bucket's words in the state (`held()`), and its
+score treats every value alike; O2's `ask` receives no importance (the contract's types), and only its score reads
+them. Neither module names a dev case, scenario or variant, or a proper noun from a dev script (checked by
+script). The dev numbers below were recomputed by the orchestrator from the authors' dev logs with score.ts.
+
+- **O1 final: `nogate-sides-sq`, band 2** (`arms/o1.ts`, 5 variants, 0.468 USD dev). One request per value the
+  holder holds, in parallel. State: `you_are` (identity), `earlier` (history lines), `just_now`, `other_person`,
+  `value: {what, how_much}`, where `how_much` is the bucket in words. Questions: `dir`, a choice between `serves`
+  and `harms` (a literal per-value statement of each) and `neither`; `care`, a 4-level score of how much the holder
+  cares what `just_now` does to the value, where Jev applies the importance. Code: direction +1 or −1 when that
+  option's probability is at least 0.6, weight [0, 1, 4, 9] by `care`'s most probable level, equal sum over values.
+  Contenders: `gate-sides-sq`, `gate-sides-lin`, `gate-generic-sq`, `gate-sides-nouls-sq` (each with a first
+  importance-free gate noul, "Does `just_now` give you a real reason to think better or worse of
+  `other_person`?").
+- **O2 final: `d4-top`, band 0.05** (`arms/o2.ts`, 5 variants, 0.281 USD dev). Request `gate`: 41 nouls on one
+  state (`you`, `who_you_are`, `earlier`, `now`, `your_part`). Per value, two channels (the holder's own stake;
+  the other's deed for or against the value), each with a one-sided "advanced" and a one-sided "set back" noul,
+  plus reverie's touches noul. Request `how`, chained: a 3-level strength score for each statement whose noul is
+  at least 0.4, read by its most probable level. Code: per value, sum of sign × P(noul) × level; weighted mean
+  over values; times P(touches). Contenders: `d4-sq`, `d4-lin`, `d4-sq-thr`, `gc-top` (the brief's starting shape:
+  per-value gate noul, then direction choice and strength score).
+- **Dev scores of the finals** (44 dev cases, 2 reps):
+
+  | | M1 | M3 | M5 | M2 ρ | neutral hits | requests / questions per judgment | USD per judgment |
+  |---|---|---|---|---|---|---|---|
+  | O1 `nogate-sides-sq` | 27/38 | 6/14 | 29/44 | 0.59 | 5/6 | 8.0 / 16.0 | 2.5e-4 |
+  | O2 `d4-top` | 30/38 | 10/14 | 33/44 | 0.59 | 5/6 | 2.0 / 54.3 | 2.3e-4 |
+
+  O1's final holds fewer than half the dev pairs, so on dev the rule would disqualify it at step 1. Its author
+  reports no honest wording that cleared the bar; the ungated final was chosen because a gate can only zero a
+  directional case.
+- **Deviations, accepted and named.**
+  - O2's final weights a value by a step function of importance (1 at 3 or 4, else 0) where the prereg says
+    "multiplies by the holder's importance". It is still code applying importance; the literal linear weighting
+    (`d4-lin`) and the square (`d4-sq`) are contenders in the secondary run.
+  - O1's final sends the identity and history with every value request, bending rule 7; its author measured a
+    dev run without the identity as worse, since standing facts (cover, debt, rent) live there. Its direction is a
+    3-option choice with generic keys, where docs/jev.md prefers one noul per candidate; the noul form
+    (`gate-sides-nouls-sq`) did worse on dev and is a contender.
+  - O1's [0, 1, 4, 9] map acts on Jev's `care` level, the same for every value, so code never sees a bucket; a
+    strict reader could call the steepening code-side weighting.
+  - O1's dev logs flag `gate-sides-sq` as final; the author swapped the final after that run. The held-out run
+    logs the frozen flag.
+- **Second labeller.** It labelled all 44 held-out cases blind before this freeze; `labels2.json` sha256
+  `a1eefb6d155d3148adaa918b6936b340c523617ed2a22e802b52a503cea376d2`. Neither arm author saw it or its agreement.
+- **Spend so far** 0.75 USD (dev). Held-out estimate: finals 440 judgments (about 0.11 USD), secondary 8 contenders
+  × 44 × 3 = 1,056 judgments (about 0.25 USD).
