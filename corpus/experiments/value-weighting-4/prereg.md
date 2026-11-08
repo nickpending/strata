@@ -140,3 +140,44 @@ the differences on every metric, M8 included, as description. With C2 there are 
 report names that, and a C2 win at p between 0.025 and 0.05 is reported as not surviving a Bonferroni correction.
 
 The secondary run and the consensus subset never change a verdict.
+
+## Freeze addendum
+
+Written after tuning and before any held-out run. Both modules are frozen in the commit that adds this addendum;
+nothing in `arms/` changes after it. B was frozen first (d585958), before the C author began. The orchestrator checked
+both against "Arms" above: neither `ask` receives an importance (the contract's types), only `score` reads them, and
+neither module names a dev case, scenario or a proper noun from a dev script (checked by script).
+
+- **B final: `lin`, band 0.05** (`arms/b.ts`, 0.097 USD dev). v3's `d4` ask, imported unchanged: request one, 41
+  nouls (stake and deed, up and down, per value, plus touches); request two, chained, a 3-level strength score per
+  statement at 0.4 or above. Code: per value, the sum of ±P(noul) × level; weighted mean with w = importance; times
+  P(touches). **τ = 0: no touches threshold lifted** on dev or on v3's 88 logged cases (neutrals' touches read 0.13 to
+  0.58, and directional character cases read as low as 0.17), so the neutral-gate fix is not in the final; thresholded
+  variants are contenders (`lin-g22`, `lin-g20-flat`). Contenders also `sq`, `lin1`.
+- **C final: `put-rt`, band 0.05** (`arms/c.ts`, 0.263 USD dev). B's final unchanged, plus one request run in
+  parallel on a 3-field state (`you`, `earlier`, `now`): per value, "In what {o} did, did they put X first?" and "...
+  did they set X aside for something else?" (X a concrete paraphrase of the catalogue description), and a gate noul,
+  "Does what {o} did tell you something about what kind of person {o} is?". Code: score = B + [P(reveal) ≥ 0.7] ×
+  (1 − P(touches)) × Σ imp·(P(up) − P(down)) / Σ imp. Contenders: `first-rt`, `care-rt` (the orchestrator's starting
+  wording, "show that they care about <description>", weakest on dev), `put-r`, `put-t`. **No C2**: the author found no
+  lift from top-importance-only or squared congruence outside a lone peak.
+- **Dev scores of the finals** (36 dev cases, 2 reps):
+
+  | | M1 | M3 | M4 | M5 | neutral hits | M8 | ρ all / build / detract | USD per judgment | requests |
+  |---|---|---|---|---|---|---|---|---|---|
+  | B `lin` | 23/32 | 6/12 | 3/4 | 24/36 | 3/4 | 9/15 | 0.66 / 0.62 / 0.54 | 2.2e-4 | 2 |
+  | C `put-rt` | 25/32 | 7/12 | 3/4 | 25/36 | 2/4 | 11/15 | 0.64 / 0.68 / 0.26 | 2.9e-4 | 3 |
+
+  On dev the rule would read a tie at step 5 (M5 McNemar b 2, c 3; M1 b 0, c 2).
+- **Deviations, accepted and named.**
+  - C adds a gate noul of its own (`reveal`) and the (1 − touches) factor. Each is a knob on how the channel counts,
+    which the prereg leaves to the author, and each was measured: over 124 logged cases the reveal gate took neutral
+    hits from 3 to 10 at equal M1, and (1 − touches) added about 2 M1 on each of three wordings.
+  - C bends docs/jev.md rule 3: the reveal noul judges character outright, and "did they put X first" reads a
+    priority off an act, one hop past the surface. That reading is the channel's purpose; `put` measured no worse than
+    the more indirect wordings. Rule 1: some X name two or three things, as B's statements do.
+  - B carries v3's bends unchanged: identity and history in all 41 nouls (rule 7); touches joins four things (rule 1).
+- **Second labeller.** It labelled all 72 held-out cases blind before this freeze; `labels2.json` sha256
+  `8f79122433987632b7d16631beef499061386d32ad28cee73a65b6ad8b2eac03`. Neither arm author saw it.
+- **Spend so far** 0.36 USD (dev). Held-out: finals 72 × 5 × 2 = 720 judgments (about 0.19 USD); secondary 8
+  contenders × 72 × 3 = 1,728 judgments (about 0.45 USD).
