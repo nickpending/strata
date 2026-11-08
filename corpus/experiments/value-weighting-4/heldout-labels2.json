@@ -1,0 +1,434 @@
+[
+ {
+  "id": "A01a",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "An ambitious, status-minded Glitch sees turning down triple pay as soft, money-losing sentiment."
+ },
+ {
+  "id": "A01b",
+  "direction": "build",
+  "magnitude": 3,
+  "rationale": "Mux refusing to arm a crew that preys on poor stall owners speaks straight to Glitch's central care for everyone's welfare."
+ },
+ {
+  "id": "A01c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "Mux just walking in says nothing about him."
+ },
+ {
+  "id": "A02a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A big-paying job and an advance fit Glitch's hunger for success and standing."
+ },
+ {
+  "id": "A02b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "For a safety-first Glitch, Mux pushing a corp-adjacent run on a hunted man is reckless and endangering."
+ },
+ {
+  "id": "A02c",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "Glitch passing on Mux's profitable job costs Mux the deal, though the hunters make the refusal understandable."
+ },
+ {
+  "id": "A03a",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A rule-and-custom minded Mux sees Rogue collecting rent under the agreed deal as legitimate, if hard."
+ },
+ {
+  "id": "A03b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A deeply caring Mux sees Rogue taking a shaking friend's only stim as cruel."
+ },
+ {
+  "id": "A03c",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "Rogue accepting the stim settles the debt and keeps Glitch's shelter, which a security-driven Glitch values."
+ },
+ {
+  "id": "A04a",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "An ambition-driven Mux sees Glitch leaving half a profitable take on the table over scruples as weak."
+ },
+ {
+  "id": "A04b",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "Caring Mux admires Glitch refusing to sell out people who would get hurt."
+ },
+ {
+  "id": "A04c",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A power- and security-focused Rogue sees Glitch defying her and blocking her profit."
+ },
+ {
+  "id": "A05a",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "Rogue, who prizes security and control, sees Mux turning away a chance to clear the heat and claiming a veto in her grid."
+ },
+ {
+  "id": "A05b",
+  "direction": "build",
+  "magnitude": 3,
+  "rationale": "A Rogue for whom caring for others is central sees Mux's refusal to sell out Glitch as deep loyalty."
+ },
+ {
+  "id": "A05c",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "Right after Glitch begged Mux not to tell Rogue, Mux whispering to her looks like a betrayal to a safety-fearing Glitch."
+ },
+ {
+  "id": "A06a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A thrill-seeking, independent Rogue likes Glitch going after a big, risky score."
+ },
+ {
+  "id": "A06b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A security-obsessed Rogue sees Glitch bringing big corp heat into her own back room."
+ },
+ {
+  "id": "A06c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A remark about a buzzing speaker reveals nothing."
+ },
+ {
+  "id": "A07a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A Mux who prizes restraint and keeping obligations respects Glitch refusing to sink deeper into debt."
+ },
+ {
+  "id": "A07b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A power-minded Mux loses a sale and leverage when Glitch lets the offer lapse."
+ },
+ {
+  "id": "A07c",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "Mux overriding Glitch's stated refusal and piling on debt grates on an independent, status-minded Glitch."
+ },
+ {
+  "id": "A08a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A deeply caring Rogue sees Mux wiping a struggling man's debt as real kindness."
+ },
+ {
+  "id": "A08b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A power- and achievement-minded Rogue sees writing off debts as soft business."
+ },
+ {
+  "id": "A08c",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A Glitch who cares about all people is troubled that Rogue bought his safety by giving strangers to the corp, even though she did it for him."
+ },
+ {
+  "id": "A09a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "Mux covering his rent protects the shelter a security-driven Glitch depends on."
+ },
+ {
+  "id": "A09b",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "Mux covering the rent helps Glitch, though a status-minded Glitch gains little standing from being carried."
+ },
+ {
+  "id": "A09c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "Rogue confirming the usual arrangement is routine."
+ },
+ {
+  "id": "A10a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A safety-first Glitch values Rogue keeping him in and protected."
+ },
+ {
+  "id": "A10b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A Glitch who cares for everyone is put off by Rogue's indifference to a pinched kid."
+ },
+ {
+  "id": "A10c",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A caring Mux dislikes Rogue's shrug at the kid, though she is protecting Glitch."
+ },
+ {
+  "id": "A11a",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "Mux showing up out front against his own warning exposes Glitch and the grid, which a security-focused Rogue resents."
+ },
+ {
+  "id": "A11b",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A Rogue who cares little for security barely registers Mux coming out front."
+ },
+ {
+  "id": "A11c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "Complaining about the ice machine says nothing about Glitch."
+ },
+ {
+  "id": "A12a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A rule- and custom-bound Mux respects Rogue keeping strictly to the agreed cut."
+ },
+ {
+  "id": "A12b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A power-minded Mux finds his attempt to buy goodwill with Rogue rebuffed."
+ },
+ {
+  "id": "A12c",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "A security- and rule-minded Glitch finds Rogue's strict adherence to terms reassuringly predictable."
+ },
+ {
+  "id": "B01a",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A Mux torn between respect for rules and mild kindness sees Rogue letting a thief off with a meal as neither clearly right nor wrong."
+ },
+ {
+  "id": "B01b",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A deeply caring Mux warms to Rogue feeding a hungry kid instead of punishing him."
+ },
+ {
+  "id": "B01c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "Asking who's buying reveals nothing."
+ },
+ {
+  "id": "B02a",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "An ambitious, power-hungry Glitch is drawn by the promise to become somebody, tempered by losing his independence."
+ },
+ {
+  "id": "B02b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "An independent, universalist Glitch resents being coerced into working Rogue's targets."
+ },
+ {
+  "id": "B02c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A note about a sticking door is mundane."
+ },
+ {
+  "id": "B02d",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A security-first Glitch values Rogue shutting down the scouts hunting him, despite the violence."
+ },
+ {
+  "id": "B03a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A power- and security-driven Rogue likes a deal that pays her the bigger half and moves the heat off her grid."
+ },
+ {
+  "id": "B03b",
+  "direction": "detract",
+  "magnitude": 3,
+  "rationale": "A Rogue for whom caring for others is central is repelled by Mux offering to sell Glitch to the corp."
+ },
+ {
+  "id": "B03c",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "Mux whispering to Rogue right after her remark about getting rich off the hunted makes Glitch a little suspicious."
+ },
+ {
+  "id": "B04a",
+  "direction": "build",
+  "magnitude": 3,
+  "rationale": "A deeply caring Rogue admires Glitch walking into the hunters to protect Mux."
+ },
+ {
+  "id": "B04b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A security-focused Rogue sees Glitch heading straight into the hunters at her back door, drawing more trouble."
+ },
+ {
+  "id": "B05a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A pleasure- and thrill-loving Rogue likes the invitation to celebrate on the roof."
+ },
+ {
+  "id": "B05b",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A security- and power-minded Rogue has little stake in a celebratory stim."
+ },
+ {
+  "id": "B05c",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A caring Glitch feels slightly snubbed when Rogue ignores his offer to share the moment."
+ },
+ {
+  "id": "B06a",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "A thrill-seeking Rogue enjoys Mux taking up the bet."
+ },
+ {
+  "id": "B06b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A security-minded Rogue dislikes Mux backing a corp-relay hack from her own booth."
+ },
+ {
+  "id": "B07a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "An achievement-driven Glitch is flattered to be called the best runner and handed a big job."
+ },
+ {
+  "id": "B07b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A security-first Glitch is alarmed that Rogue swaps the stim for a solo corp job."
+ },
+ {
+  "id": "B07c",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A caring Mux sees Rogue sparing the stim only to send Glitch alone into danger."
+ },
+ {
+  "id": "B08a",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "A Mux who values obligation respects Glitch not taking what he cannot repay."
+ },
+ {
+  "id": "B08b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "An ambition-driven Mux thinks Glitch foolish for refusing a year's wealth."
+ },
+ {
+  "id": "B08c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "Mux arriving reveals nothing."
+ },
+ {
+  "id": "B08d",
+  "direction": "build",
+  "magnitude": 3,
+  "rationale": "A power- and achievement-hungry Mux is given control of the whole strip's parts trade."
+ },
+ {
+  "id": "B09a",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A rule-bound, security-minded Mux disapproves of Glitch defying Rogue and exposing himself."
+ },
+ {
+  "id": "B09b",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "A pleasure-loving Mux likes Glitch going out to dance, though he cares about his friend's safety."
+ },
+ {
+  "id": "B09c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "Glitch coming back in is unremarkable."
+ },
+ {
+  "id": "B10a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "An achievement-driven Glitch sees Rogue's arrival as being picked for the vault job."
+ },
+ {
+  "id": "B10b",
+  "direction": "detract",
+  "magnitude": 2,
+  "rationale": "A security-first Glitch sees Rogue's arrival as being drafted into a dangerous corp vault job."
+ },
+ {
+  "id": "B10c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A rule- and security-minded Mux weighs Glitch honoring the debt against the risky stolen-corp source of the cash."
+ },
+ {
+  "id": "B11a",
+  "direction": "build",
+  "magnitude": 2,
+  "rationale": "A caring Rogue admires Glitch giving his own stim to a shaking Mux."
+ },
+ {
+  "id": "B11b",
+  "direction": "neutral",
+  "magnitude": 0,
+  "rationale": "A power- and security-focused Rogue has little reason to care about Glitch's gift."
+ },
+ {
+  "id": "B11c",
+  "direction": "build",
+  "magnitude": 1,
+  "rationale": "A thrill- and pleasure-loving Rogue likes the band, though being committed without a say rubs her independence."
+ },
+ {
+  "id": "B12a",
+  "direction": "detract",
+  "magnitude": 3,
+  "rationale": "A universalist Glitch is repelled by Rogue ordering a struggling vendor's power taken."
+ },
+ {
+  "id": "B12b",
+  "direction": "detract",
+  "magnitude": 1,
+  "rationale": "A rule-minded Glitch sees enforcement of the cut, but cutting a poor vendor's power is harsh."
+ },
+ {
+  "id": "B12c",
+  "direction": "detract",
+  "magnitude": 3,
+  "rationale": "A deeply caring Mux is repelled at being told to take a struggling woman's power cell."
+ }
+]

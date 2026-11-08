@@ -1,0 +1,722 @@
+[
+ {
+  "id": "A01a",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A01b",
+  "set": "A",
+  "character": true,
+  "rationale": "Turning down triple money over stall owners he doesn't even know: soft and small-time. Nobody gets ahead like that."
+ },
+ {
+  "id": "A01b",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A01a",
+  "set": "A",
+  "character": true,
+  "rationale": "He'd rather go broke than arm people who prey on the stalls. That's a man with a spine."
+ },
+ {
+  "id": "A01c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "Mux walking out of his back room into the bar is the most ordinary thing in the world."
+ },
+ {
+  "id": "A02a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A02b",
+  "set": "A",
+  "character": false,
+  "rationale": "A paying job and an advance in hand: Mux is putting me where the real money is."
+ },
+ {
+  "id": "A02b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A02a",
+  "set": "A",
+  "character": false,
+  "rationale": "He knows corp hunters are on me and he's pushing a corp-adjacent run into my hands."
+ },
+ {
+  "id": "A02c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "plain",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "I lined up a buyer and fronted the cell, and he turns it down; my runner and my cut walk away."
+ },
+ {
+  "id": "A03a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A03b",
+  "set": "A",
+  "character": true,
+  "rationale": "Rent was the deal and she holds people to it. That's how a house stays a house."
+ },
+ {
+  "id": "A03b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A03a",
+  "set": "A",
+  "character": true,
+  "rationale": "She took a shaking kid's last stim over rent. Cold."
+ },
+ {
+  "id": "A03c",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "Losing the stim hurts, but she took it as rent and I keep my place under her roof; being safe here weighs more."
+ },
+ {
+  "id": "A04a",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A04b",
+  "set": "A",
+  "character": true,
+  "rationale": "Half a corp list, the boss herself asking, and he turns it down for strangers. Soft."
+ },
+ {
+  "id": "A04b",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A04a",
+  "set": "A",
+  "character": true,
+  "rationale": "He won't sell people to get hurt, not even for half the take. Good kid."
+ },
+ {
+  "id": "A04c",
+  "direction": "detract",
+  "magnitude": 3,
+  "kind": "plain",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "He lives in my grid on my say-so and he refuses my job to my face. That sale was mine."
+ },
+ {
+  "id": "A05a",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A05b",
+  "set": "A",
+  "character": false,
+  "rationale": "He turned away a deal that would have taken the heat off my grid, and now tells me who gets handed over here. That's my call."
+ },
+ {
+  "id": "A05b",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A05a",
+  "set": "A",
+  "character": true,
+  "rationale": "He stood between a hunted kid and the corp and wouldn't sell him. Loyal."
+ },
+ {
+  "id": "A05c",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "plain",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "I asked him not to tell her, and the next thing he's whispering in her ear."
+ },
+ {
+  "id": "A06a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A06b",
+  "set": "A",
+  "character": false,
+  "rationale": "Finally some action. He's going after a corp convoy and I get a cut of the ride."
+ },
+ {
+  "id": "A06b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A06a",
+  "set": "A",
+  "character": false,
+  "rationale": "He's dragging a corp freight job and all its heat into my back room without asking me."
+ },
+ {
+  "id": "A06c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "A buzzing speaker. Nothing in it either way."
+ },
+ {
+  "id": "A07a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A07b",
+  "set": "A",
+  "character": true,
+  "rationale": "He won't run up debt he can't pay, even when I push it on him. He keeps his word."
+ },
+ {
+  "id": "A07b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A07a",
+  "set": "A",
+  "character": false,
+  "rationale": "A sale gone and one less hook in him. He walked away from my offer."
+ },
+ {
+  "id": "A07c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "I need that cell, but I just said no more credit and he's pushing me deeper into his debt anyway; I won't be kept on a hook."
+ },
+ {
+  "id": "A08a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A08b",
+  "set": "A",
+  "character": true,
+  "rationale": "He wiped a hunted kid's debt without being asked. Decent man."
+ },
+ {
+  "id": "A08b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A08a",
+  "set": "A",
+  "character": false,
+  "rationale": "Wiping debts in my grid tells everyone debts here are optional, and my cut rides on what he collects."
+ },
+ {
+  "id": "A08c",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "conflict",
+  "pair": null,
+  "set": "A",
+  "character": true,
+  "rationale": "She bought me a month by selling two strangers to the corp. I'm safer, but people I'll never meet pay for it, and that weighs more."
+ },
+ {
+  "id": "A09a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A09b",
+  "set": "A",
+  "character": false,
+  "rationale": "He covered my rent. My place under her roof is safe another week."
+ },
+ {
+  "id": "A09b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A09a",
+  "set": "A",
+  "character": false,
+  "rationale": "I didn't ask him to pay my way, and now the boss sees me as Mux's charity case."
+ },
+ {
+  "id": "A09c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "Same arrangement as every night. Nothing new."
+ },
+ {
+  "id": "A10a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A10b",
+  "set": "A",
+  "character": false,
+  "rationale": "She's keeping me in and keeping me safe. That's what I need from her."
+ },
+ {
+  "id": "A10b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A10a",
+  "set": "A",
+  "character": true,
+  "rationale": "A kid got taken and she shrugs: not her grid, not her problem."
+ },
+ {
+  "id": "A10c",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "Cold about the kid on the strip, but she's keeping my friend safe, and that matters more to me."
+ },
+ {
+  "id": "A11a",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "A11b",
+  "set": "A",
+  "character": false,
+  "rationale": "He knew walking out front would show the corp eyes where Glitch hides, in my bar, and he did it anyway."
+ },
+ {
+  "id": "A11b",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A11a",
+  "set": "A",
+  "character": true,
+  "rationale": "Said he'd hide in the back and then walked out anyway. He's got more nerve than I gave him credit for."
+ },
+ {
+  "id": "A11c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "A",
+  "character": false,
+  "rationale": "The ice machine is dead again. That says nothing about him."
+ },
+ {
+  "id": "A12a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A12b",
+  "set": "A",
+  "character": true,
+  "rationale": "The cut's the cut. She keeps to the terms we agreed and won't be sweetened. I respect that."
+ },
+ {
+  "id": "A12b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "A12a",
+  "set": "A",
+  "character": false,
+  "rationale": "I was buying a little goodwill, and she won't sell it. No edge with her."
+ },
+ {
+  "id": "A12c",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "plain",
+  "pair": null,
+  "set": "A",
+  "character": true,
+  "rationale": "She keeps one set of terms and can't be bought off them; that makes her someone I can count on."
+ },
+ {
+  "id": "B01a",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B01b",
+  "set": "B",
+  "character": true,
+  "rationale": "A thief gets a meal for stealing. If she bends her own house rules, the rules mean nothing."
+ },
+ {
+  "id": "B01b",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B01a",
+  "set": "B",
+  "character": true,
+  "rationale": "A hungry kid steals and she feeds him. That's a good heart."
+ },
+ {
+  "id": "B01c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "Bar talk. Nothing riding on it."
+ },
+ {
+  "id": "B02a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B02b",
+  "set": "B",
+  "character": false,
+  "rationale": "She's offering me real work and a name in this grid. That's a way up."
+ },
+ {
+  "id": "B02b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B02a",
+  "set": "B",
+  "character": false,
+  "rationale": "My work, my targets, my choices, all hers now, pointed wherever she likes."
+ },
+ {
+  "id": "B02c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "A sticking door. Routine."
+ },
+ {
+  "id": "B02d",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "Breaking a man's arm sits badly with me, but nobody comes asking after me now, and being safe weighs more."
+ },
+ {
+  "id": "B03a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B03b",
+  "set": "B",
+  "character": false,
+  "rationale": "He brings it to me, my call, my bigger half, and the heat leaves my grid. That's how it should work."
+ },
+ {
+  "id": "B03b",
+  "direction": "detract",
+  "magnitude": 3,
+  "kind": "opposite",
+  "pair": "B03a",
+  "set": "B",
+  "character": true,
+  "rationale": "He'd sell the kid who calls him a friend for fifty grand. Rotten."
+ },
+ {
+  "id": "B03c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "plain",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "Right after she talks about getting rich off whoever the corp is hunting, Mux leans in and whispers to her. I don't like it."
+ },
+ {
+  "id": "B04a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B04b",
+  "set": "B",
+  "character": true,
+  "rationale": "Hunters at the door and he runs toward them to stand by his friend. Brave and loyal."
+ },
+ {
+  "id": "B04b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B04a",
+  "set": "B",
+  "character": false,
+  "rationale": "He's walking the fight straight into my back room instead of taking it away from it."
+ },
+ {
+  "id": "B05a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B05b",
+  "set": "B",
+  "character": false,
+  "rationale": "A stim and the roof at night? Now he's fun."
+ },
+ {
+  "id": "B05b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B05a",
+  "set": "B",
+  "character": true,
+  "rationale": "Hunted, and his idea of a plan is getting high on a roof in plain view. Careless; not someone I can count on."
+ },
+ {
+  "id": "B05c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "plain",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "I offered to share something with her and she let it hang without a word."
+ },
+ {
+  "id": "B06a",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B06b",
+  "set": "B",
+  "character": true,
+  "rationale": "He took the bet. Mux is game after all."
+ },
+ {
+  "id": "B06b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B06a",
+  "set": "B",
+  "character": false,
+  "rationale": "He just set a corp-relay hack running from a booth in my bar for a stim."
+ },
+ {
+  "id": "B07a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B07b",
+  "set": "B",
+  "character": false,
+  "rationale": "She won't take a stim; she wants the best runner she's seen on a real job. That's recognition."
+ },
+ {
+  "id": "B07b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B07a",
+  "set": "B",
+  "character": false,
+  "rationale": "I tried to pay her safely and she'd rather send me alone at a corp relay with hunters on me."
+ },
+ {
+  "id": "B07c",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "plain",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "She turned down his stim to send my friend alone against a corp relay."
+ },
+ {
+  "id": "B08a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B08b",
+  "set": "B",
+  "character": true,
+  "rationale": "He won't take what he can't repay. That's the old way, and he keeps it."
+ },
+ {
+  "id": "B08b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B08a",
+  "set": "B",
+  "character": false,
+  "rationale": "A free fortune and he waves it off out of pride; that was money he could have paid me with."
+ },
+ {
+  "id": "B08c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "Mux comes out front. Nothing more to it."
+ },
+ {
+  "id": "B08d",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "The whole strip's trade under me is a big step up, even with the corp watching it; the step up weighs more."
+ },
+ {
+  "id": "B09a",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B09b",
+  "set": "B",
+  "character": true,
+  "rationale": "The boss said stay, and he shrugs it off for a dance. No respect for the order of things."
+ },
+ {
+  "id": "B09b",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B09a",
+  "set": "B",
+  "character": true,
+  "rationale": "A band and a month without dancing? Good on him for living a little."
+ },
+ {
+  "id": "B09c",
+  "direction": "neutral",
+  "magnitude": 0,
+  "kind": "neutral",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "He went to the back and now he's back out front. People come and go."
+ },
+ {
+  "id": "B10a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B10b",
+  "set": "B",
+  "character": false,
+  "rationale": "She walked in. She picked me for the vault job."
+ },
+ {
+  "id": "B10b",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B10a",
+  "set": "B",
+  "character": false,
+  "rationale": "She walked in, so she's putting me on a corp vault job while I'm being hunted."
+ },
+ {
+  "id": "B10c",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "He's paying what he owes in full, as a man should, even if it's hot corp money coming into my shop; the debt paid weighs more."
+ },
+ {
+  "id": "B11a",
+  "direction": "build",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B11b",
+  "set": "B",
+  "character": true,
+  "rationale": "He's hurting too and gives his stim away free to a friend. Kind."
+ },
+ {
+  "id": "B11b",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B11a",
+  "set": "B",
+  "character": false,
+  "rationale": "He's the one with hunters coming, and he gives away his only steadiness. That makes him a liability in my grid."
+ },
+ {
+  "id": "B11c",
+  "direction": "detract",
+  "magnitude": 1,
+  "kind": "conflict",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "I do love that band, but he booked my Friday and told the strip before asking me; being decided for weighs more."
+ },
+ {
+  "id": "B12a",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "opposite",
+  "pair": "B12b",
+  "set": "B",
+  "character": true,
+  "rationale": "Stripping a struggling woman's stall of power over one bad month. Cruel."
+ },
+ {
+  "id": "B12b",
+  "direction": "build",
+  "magnitude": 1,
+  "kind": "opposite",
+  "pair": "B12a",
+  "set": "B",
+  "character": true,
+  "rationale": "Same rule for everyone, no exceptions. That's what keeps a grid steady."
+ },
+ {
+  "id": "B12c",
+  "direction": "detract",
+  "magnitude": 2,
+  "kind": "plain",
+  "pair": null,
+  "set": "B",
+  "character": false,
+  "rationale": "She wants me to go pull the power from a woman who's already going under."
+ }
+]
