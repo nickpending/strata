@@ -1,10 +1,11 @@
 {
   "workOrder": "npc-values",
-  "what": "The first mind slice and its two prerequisites: world/values.toml holds Schwartz's ten values (id and description) and the 0 to 4 importance words; every person file rates all ten (Rogue, Glitch and Mux with drafted, experiment-grade importances), validated at boot with file, path and rule; Engine.values serves each person's values on GET /api/values/<person> and a labelled Values section shows them with the importance as number and words; harness/src/jev.ts sends a JSON-object state and asks and parses score questions (score, legend, probabilities, confidence), pinned by a live body saved as a fixture; encountersOf forms one encounter per other recipient of each event, read by knowledge's people too; and the four goal sets re-run once as a page regression.",
-  "why": "Design B judges each encounter per value and weights the answers by the NPC's importance in code; that needs values on NPCs, a Jev client that asks in docs/jev.md's shapes, and encounters with everyone an NPC experienced in an event. Design: docs/work/npc-values/shape/design.md.",
+  "what": "The first mind slice and its two prerequisites: world/values.toml holds Schwartz's ten values (id and description) and the 0 to 4 importance words; every person file rates all ten (Rogue, Glitch and Mux with drafted, experiment-grade importances), validated at boot with file, path and rule; Engine.values serves each person's values on GET /api/values/<person> and a labelled Values section shows them with the importance as number and words; harness/src/jev.ts sends a JSON-object state and asks and parses score questions (score, legend, probabilities, confidence), pinned by a live body saved as a fixture; encountersOf forms one encounter per other recipient of each event, read by knowledge's people too; the bench splits into a player region (main: Act, Clock, Pending, Rooms, In transit, Items, History), the only part the harness reads, and an operator region (aside: Values, Knowledge, Encounters, Received), fully open; each score file records the page size its player read (#10); and the four goal sets re-run once against npc-encounters' 43 of 44.",
+  "why": "Design B judges each encounter per value and weights the answers by the NPC's importance in code; that needs values on NPCs, a Jev client that asks in docs/jev.md's shapes, and encounters with everyone an NPC experienced in an event. The first run held 37 of 44 against 43 with the page doubled, so operator panels move out of the player's read by structure (#10). Design: docs/work/npc-values/shape/design.md.",
   "issues": [
     16,
-    15
+    15,
+    10
   ],
   "stakes": [
     "The world's values are exactly the entries of world/values.toml, in its order, each an id and a description; no value id or description is written in code.",
@@ -12,14 +13,16 @@
     "Every person file rates every catalogue value with an integer from 0 to 4 and names no other value; a world that breaks this, or whose catalogue is missing, malformed or repeats an id, does not boot, and the refusal names the file, the path inside it and the rule.",
     "Rogue, Glitch and Mux carry the drafted importances this design lists, each file marked as a draft.",
     "Values are read from the loaded definitions on request and are never written to the state table or carried in the snapshot.",
-    "The bench serves each person's values on one route and shows them in a Values section, each line labelled with the value's id, its importance as a number and in words, and its description, adding no control and no text the target's vocabulary reads.",
+    "The page has one player region, the main landmark, holding Act, Clock, Pending, Rooms, In transit, Items and History, and one operator region, an aside holding Values, Knowledge, Encounters and Received fully open; the harness reads text and controls from the main landmark alone, so no operator panel's text reaches Jev's state, the target prompt or the vocabulary, and a page without exactly one main is a page stop.",
+    "Every score file records the mean and maximum page characters its runs' player read and the loop count they cover.",
+    "The bench serves each person's values on one route and shows them in a Values section in the operator region, each line labelled with the value's id, its importance as a number and in words, and its description, adding no control.",
     "A person's encounters from an event it received are exactly one per other person who received that event, with role direct when it is the event's actor or a target and witnessed otherwise, read with no payload field and no subkind case.",
     "Who a copy is with is computed only in encountersOf, and knowledge's people read it.",
     "The Jev client sends a JSON-object state as an object and a string state as a string, and parses score answers (score, legend, probabilities, confidence) beside noul and choice, refusing as parse any answer missing a field or with level keys other than the question's levels as the live body keys them.",
     "The harness imports nothing from the engine.",
     "The score parser is tested against a raw body from one live call, saved as a fixture.",
-    "The live probe and the four real-run sets spend at most $0.10 together, use the default model and overwrite no committed score file.",
-    "No per-encounter judgment, standing, edge, belief or summary is built."
+    "No per-encounter judgment, standing, edge, belief or summary is built.",
+    "The live probe and the first run of the four sets spent under the first $0.10; one re-run of the four sets after the page split spends at most a further $0.10, uses the default model and overwrites no committed score file."
   ],
   "criteria": [
     {
@@ -99,10 +102,10 @@
     },
     {
       "id": "V5",
-      "given": "the bench served over world/ booted fresh, read by tests/page.test.ts's page reader",
-      "when": "the page is read fresh and again after rogue whisper glitch",
-      "then": "it is wrong if the Values section is missing, unlabelled or changes what the player reads: a heading 'Values' stands before the 'Knowledge' heading; under it each person has a level-3 heading 'What <name> values' with no parentheses, then ten list items in catalogue order each reading '<id>: importance <n>, <words>, <description>' (Rogue's power line reads 'power: importance 4, central to who this person is, status and prestige, control or dominance over people and resources'); the page's controls are the same as before the section, no control is unlabelled, and vocabulary() over the page gives exactly the world's people, items, rooms and exits",
-      "atBase": "base's page has no Values heading, so the section lookup finds nothing",
+      "given": "the bench served over world/ booted fresh",
+      "when": "tests/page.test.ts reads the page's operator region, the aside landmark labelled Operator, fresh and again after rogue whisper glitch",
+      "then": "it is wrong if the Values section is missing, unlabelled or closed: the aside's first h2 is 'Values'; under it each person has a level-3 heading 'What <name> values' with no parentheses, then ten list items, visible without any click, in catalogue order each reading '<id>: importance <n>, <words>, <description>' (Rogue's power line reads 'power: importance 4, central to who this person is, status and prestige, control or dominance over people and resources'); the section adds no control",
+      "atBase": "base's page has no aside and no Values heading, so the section lookup finds nothing",
       "proof": [
         "tests/page.test.ts"
       ]
@@ -196,7 +199,7 @@
     },
     {
       "id": "V12",
-      "given": "The approved spend (strata-d3 for rudy, 2026-11-10): at most $0.10 USD in all for the one live probe call of V12 and the four real-run sets of V13 together, default model and default Jev; no further approval is needed within it, and the builder stops and reports if a run would pass it. The built jev.ts, before its score key rule is final.",
+      "given": "The approved spend (strata-d3 for rudy, 2026-11-10): at most $0.10 USD for this probe call and the first run of the four sets together, already spent at $0.069170. The built jev.ts, before its score key rule is final.",
       "when": "the builder runs bun corpus/experiments/npc-values/probe.ts once, which sends through decide() the JSON state { event: { text } } with one noul, one choice and one three-level score question, each instruction naming event.text",
       "then": "it is wrong if the fixture is not a real, scrubbed body: harness/test/fixtures/jev-score-body.json exists, its top-level keys are exactly answers, model and usage, its answers hold the three question names, and corpus/experiments/npc-values/probe.txt records the run's date, its costUsd and the parsed answers; harness/test/jev.test.ts asserts the fixture's keys",
       "atBase": "no fixture exists at base, so reading it fails",
@@ -206,12 +209,46 @@
     },
     {
       "id": "V13",
-      "given": "The approved spend (strata-d3 for rudy, 2026-11-10): at most $0.10 USD in all for the one live probe call of V12 and the four real-run sets of V13 together, default model and default Jev; no further approval is needed within it, and the builder stops and reports if a run would pass it. The job's built code passing the gate, and corpus/goals/knowledge.json, blind-1.json, blind-2.json and blind-2-spent.json copied unchanged to corpus/experiments/npc-values/.",
-      "when": "bun run score --goals corpus/experiments/npc-values/<set>.json --tick-minutes 10 runs once for each of the four with the default model",
-      "then": "it is wrong if a committed score file changes or a loss goes unexplained: each copy's sha256 equals its corpus/goals original's; git diff -- corpus/goals is empty; four score files exist under corpus/experiments/npc-values/; docs/work/npc-values/real-runs.md gives held and costUsd per set beside npc-encounters' run of the same sets (corpus/experiments/npc-encounters/<set>.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json), the total spend with the probe's, the page size each set's first loop read, and every goal not held with its cause from its loops.jsonl and run.json; any loss a code path decided (a vocabulary or checked() refusal) is fixed before merge",
+      "given": "The approved spend (strata-d3 for rudy, 2026-11-10): the probe and the first run of the four sets spent $0.069170 of a first $0.10; one re-run of the four sets after V14 and V15 are built may spend up to a further $0.10 USD, default model and default Jev, with no further approval needed within it; the builder stops and reports if it would pass it. mux-speaks-up lost to a bare `say` for `speech.say` is accepted as a model naming loss (strata-d3, 2026-11-10). The job's built code, V14 and V15 included, passing the gate, and corpus/goals/knowledge.json, blind-1.json, blind-2.json and blind-2-spent.json copied unchanged to corpus/experiments/npc-values/.",
+      "when": "bun run score --goals corpus/experiments/npc-values/<set>.json --tick-minutes 10 runs once for each of the four with the default model, after the player region is built, replacing the first run's score files",
+      "then": "it is wrong if a committed score file changes, a loss goes unexplained, or the page result is missing: each copy's sha256 equals its corpus/goals original's; git diff -- corpus/goals is empty; four score files exist under corpus/experiments/npc-values/, each with its page field; docs/work/npc-values/real-runs.md gives held and costUsd per set beside npc-encounters' run of the same sets (43 of 44 in all, the bar), each set's page meanChars and maxChars beside npc-encounters' computed the same way from its loops.jsonl, the first run's totals (37 of 44, page doubled) as the record that led here, the total spend, and every goal not held with its cause from its loops.jsonl and run.json; any loss a code path decided (a vocabulary or checked() refusal of a name the page served) is fixed before merge; the run directories are copied to the main checkout's corpus/runs before the job's result is handed back",
       "atBase": "no copies, score files or real-runs.md exist under the npc-values paths, so the checks fail",
       "proof": [
         "tests/experiment-copies.test.ts"
+      ]
+    },
+    {
+      "id": "V14",
+      "given": "the bench served over world/ booted fresh and driven, read by harness/src/page.ts readPage",
+      "when": "tests/page.test.ts reads the page fresh and after mux walks to the bar, rogue whisper glitch and rogue offer data-shard to glitch, renders the read into renderState and the target prompt, and separately serves a page with no main element and one with two",
+      "then": "it is wrong if any operator panel's text reaches the player: the read's text holds none of the headings Values, Knowledge, Encounters or Received, no 'What <name> values' or 'What has passed between' heading and no value line, and neither does renderState()'s nor the target prompt's text; main's h2 headings are exactly Act, Clock, Pending, Rooms, In transit, Items and History in that order; the read's controls are exactly the controls inside main, so the Received viewer select is not among them; vocabulary() gives exactly the world's people, items, rooms and exits; and the run over a page with no main, or with two, stops with kind page naming it, before any loop",
+      "atBase": "base's readPage reads the whole body, so the read's text holds the Knowledge and Encounters headings and the viewer select is among its controls",
+      "proof": [
+        "tests/page.test.ts"
+      ],
+      "mutations": [
+        {
+          "id": "V14-M1",
+          "change": "read the body when no main is found"
+        },
+        {
+          "id": "V14-M2",
+          "change": "render the Knowledge section inside main"
+        },
+        {
+          "id": "V14-M3",
+          "change": "collect controls from the whole document"
+        }
+      ]
+    },
+    {
+      "id": "V15",
+      "given": "a goal set whose runs' loops.jsonl states are written by hand with known page texts after 'The page now:\\n' (three loops of 10, 20 and 60 characters)",
+      "when": "tests/score.test.ts scores the set",
+      "then": "it is wrong if the page size is missing or miscounted: the score file's page is { loops: 3, meanChars: 30, maxChars: 60 }, and a set whose loops are none gives { loops: 0, meanChars: 0, maxChars: 0 }",
+      "atBase": "base's score file has no page field",
+      "proof": [
+        "tests/score.test.ts"
       ]
     }
   ],
@@ -219,9 +256,9 @@
     {
       "criterion": "V5",
       "when": "after merge, on main: bun run start --tick-minutes 10, open http://127.0.0.1:4800, act mux depart west, press Step",
-      "then": "a Values section stands before Knowledge with 'What Rogue values', 'What Glitch values' and 'What Mux values', each ten lines such as 'power: importance 4, central to who this person is, ...' under Rogue; the Encounters section under 'What has passed between Mux and others' shows 'with glitch' and 'with rogue', each a line 'role direct (actor or target), kind physical.arrive, tick 1, event <id>'; every line reads as labelled",
+      "then": "the page shows the World region with Act, Clock, Pending, Rooms, In transit, Items and History, and beside or below it the Operator region, fully open, with Values ('What Rogue values', 'What Glitch values', 'What Mux values', ten lines each such as 'power: importance 4, central to who this person is, ...' under Rogue), Knowledge, Encounters (under 'What has passed between Mux and others', 'with glitch' and 'with rogue', each 'role direct (actor or target), kind physical.arrive, tick 1, event <id>') and Received; every line reads as labelled",
       "by": "operator",
-      "operatorOnly": "Whether the Values and Encounters sections read clearly to a person at a glance is a human reading of the rendered page; the page test proves the text and the vocabulary, but no command can judge legibility."
+      "operatorOnly": "Whether the two regions and the Values and Encounters sections read clearly to a person at a glance is a human reading of the rendered page; the page tests prove the text, the regions and the vocabulary, but no command can judge legibility."
     }
   ],
   "outOfScope": [
@@ -282,21 +319,29 @@
     },
     {
       "kind": "cost",
-      "summary": "Every loop's page text grows by a Values section of one line per person per value, and by the added encounters.",
-      "frequency": {
-        "kind": "measured",
-        "command": "python3 -I docs/work/npc-values/shape/sacrifices.py . (output docs/work/npc-values/shape/sacrifices.txt)",
-        "records": "corpus/runs/**/loops.jsonl: loops, each of which reads the whole page",
-        "count": 8164,
-        "total": 8164
-      }
-    },
-    {
-      "kind": "cost",
       "summary": "The client returns a score answer as the wire gives it, with no most-probable level; a caller buckets the score itself.",
       "frequency": {
         "kind": "not-a-case",
         "reason": "No caller asks a score question yet (grep -rn '\"score\"' harness/src src outside jev.ts counts 0); the first, the per-encounter judgment, buckets its score itself per docs/jev.md rule 6."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The player no longer reads the Knowledge, Encounters and Received panels, and the Received viewer select is no longer a candidate it can choose; the knows end state is still checked on its route.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/panels.py . (output docs/work/npc-values/shape/panels.txt)",
+        "records": "corpus/runs/**/loops.jsonl: loops whose page carried a Knowledge, Encounters or Values panel, of all loops",
+        "count": 947,
+        "total": 8394
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "A bench page with no main landmark, or two, stops the run instead of being read whole.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "The harness reads one page, the bench, which this design gives exactly one main landmark; grep -rn 'readPage' harness/src finds run.ts as its only production caller."
       }
     },
     {
