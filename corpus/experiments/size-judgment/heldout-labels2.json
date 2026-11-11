@@ -1,0 +1,639 @@
+{
+ "cases": [
+  {
+   "id": "A01",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 2,
+     "rationale": "Glitch, who most wants to stay on Rogue's good side, gets a mild public telling-off that nudges his standing with her without changing anything."
+    },
+    {
+     "value": "conformity",
+     "direction": "down",
+     "size": 2,
+     "rationale": "Glitch learns he was making a nuisance of himself to the regulars, a small social misstep easily corrected."
+    }
+   ]
+  },
+  {
+   "id": "A02",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Glitch, hunted by Halvorsen with nowhere else to go, is thrown out of his only hiding place tonight just as the retrieval crew is asking about his face."
+    }
+   ]
+  },
+  {
+   "id": "A03",
+   "items": [
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Rogue, 1,500 short on a Kessler debt that could put her in the canal, is offered stock worth more than the 800 owed, a real if partial help toward the gap."
+    },
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 2,
+     "rationale": "Rogue's tenant yielding his best stock on demand confirms her control over him, a minor gain in dominance."
+    }
+   ]
+  },
+  {
+   "id": "A04",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Glitch sees his closest friend Mux's overdue rent settled so he keeps his stall, at the cost of Mux's best stock."
+    }
+   ]
+  },
+  {
+   "id": "A05",
+   "items": [
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 4,
+     "rationale": "Mux, one missed month from losing the stall that is his whole living and home with his daughter, is declared paid up and keeps it."
+    }
+   ]
+  },
+  {
+   "id": "A06",
+   "items": [
+    {
+     "value": "power",
+     "direction": "down",
+     "size": 2,
+     "rationale": "Rogue hears a public grumble about her bar from her tenant, a small dent in the image her standing rests on."
+    }
+   ]
+  },
+  {
+   "id": "A07",
+   "items": [
+    {
+     "value": "power",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Rogue's tenant tells the whole room that Vance has taken the next two blocks and she is losing her grip, voicing the exact belief that would let her rival move in."
+    }
+   ]
+  },
+  {
+   "id": "A08",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "down",
+     "size": 3,
+     "rationale": "Glitch watches his friend Mux openly defy and insult the landlord who can take his stall, putting Mux at real risk."
+    },
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 2,
+     "rationale": "Glitch's protection rests on Rogue's grip on the street, and hearing it publicly questioned unsettles his footing somewhat."
+    }
+   ]
+  },
+  {
+   "id": "A09",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Glitch, who missed the money his sister Pix depends on, learns she got a food parcel, a real but temporary relief."
+    }
+   ]
+  },
+  {
+   "id": "A10",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "up",
+     "size": 4,
+     "rationale": "Glitch learns his dependent sister's rent is paid for six months, securing her home for half a year though it is charged against his future cut."
+    }
+   ]
+  },
+  {
+   "id": "A11",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "up",
+     "size": 2,
+     "rationale": "Mux gets a customer's thanks for a working deck, a small routine confirmation of his skill."
+    }
+   ]
+  },
+  {
+   "id": "A12",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "up",
+     "size": 4,
+     "rationale": "Mux hears he revived a deck three shops had scrapped and that word of it has spread across the grid, a major boost to the name he is proud of."
+    },
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Mux, behind on rent, hears three crews are bringing him rigs, promised business that could help keep the stall."
+    }
+   ]
+  },
+  {
+   "id": "A13",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 2,
+     "rationale": "Mux, already two months behind at 400, faces a ten-eddy rent rise, an annoyance that barely changes his position."
+    }
+   ]
+  },
+  {
+   "id": "A14",
+   "items": [
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 1,
+     "rationale": "Rogue's tenant accepts a ten-eddy rent rise without a fight, a barely noticeable assertion of control."
+    }
+   ]
+  },
+  {
+   "id": "A15",
+   "items": [
+    {
+     "value": "self_direction",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Mux loses the right to make any sizable sale in his own stall without Rogue's approval, a lasting curb on running his own business."
+    }
+   ]
+  },
+  {
+   "id": "A16",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Mux learns the building is being sold and his stall, his whole living and the room he lives in, will be gone at month's end."
+    },
+    {
+     "value": "benevolence",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Mux learns his nine-year-old daughter Tess will lose the home above the stall at the end of the month."
+    }
+   ]
+  },
+  {
+   "id": "A17",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 1,
+     "rationale": "Rogue hears of a cop drone that is probably nothing, a passing note on a street she runs."
+    }
+   ]
+  },
+  {
+   "id": "A18",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Rogue, 1,500 short, learns Kessler's 4,000 is due tonight rather than in three days, and those who miss Kessler's dates end up in the canal."
+    }
+   ]
+  },
+  {
+   "id": "A19",
+   "items": [
+    {
+     "value": "power",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Rogue is told Kessler will run his packages through her grid with no questions, making the street she controls answer to him."
+    },
+    {
+     "value": "self_direction",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Rogue loses say over what moves through her own grid as part of a deal she cannot refuse."
+    }
+   ]
+  },
+  {
+   "id": "A20",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 3,
+     "rationale": "Glitch, whose shelter Rogue is openly weighing, gets no answer to his only peace offering, leaving his place in doubt."
+    }
+   ]
+  },
+  {
+   "id": "A21",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Mux, short again with one more missed month costing him the stall, has his only means of paying refused, putting his living and home in jeopardy."
+    }
+   ]
+  },
+  {
+   "id": "A22",
+   "items": [
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 2,
+     "rationale": "Rogue's order banishing Glitch from her bar is obeyed at once, a small confirmation of her authority."
+    }
+   ]
+  },
+  {
+   "id": "A23",
+   "items": [
+    {
+     "value": "self_direction",
+     "direction": "down",
+     "size": 1,
+     "rationale": "Glitch is told which stool to take, a trivial limit on his choice."
+    }
+   ]
+  },
+  {
+   "id": "A24",
+   "items": [
+    {
+     "value": "self_direction",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Glitch loses the right to choose his own jobs and half of every score from now on, a lasting loss of control over his work."
+    },
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Glitch, with nowhere else to hide, is told he can stay on in Rogue's back room."
+    }
+   ]
+  },
+  {
+   "id": "A25",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Mux, whose reputation is how he gets customers, is publicly blamed by the street's fixer for a deck that fried a kid's jack."
+    },
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Mux, behind on rent with the stall as his whole living, has the street's fixer tell people not to buy from him."
+    }
+   ]
+  },
+  {
+   "id": "A26",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Rogue is publicly toasted for landing a contract nobody else could touch, real recognition by the standards of her street."
+    },
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Rogue hears herself hailed in the room as the best fixer on the east side, reinforcing the belief her hold on the street rests on."
+    }
+   ]
+  },
+  {
+   "id": "C01",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 3,
+     "rationale": "Glitch, late with Rogue's cut and with only 60 eddies, has his stopgap refused and stays in arrears with the woman sheltering him."
+    }
+   ]
+  },
+  {
+   "id": "C02",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Glitch hears that Rogue, who shelters him, has a 20,000 offer from the people hunting him to kill him and is asking why she shouldn't take it."
+    }
+   ]
+  },
+  {
+   "id": "C03",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Mux hears Rogue weigh selling his closest friend Glitch to the people hunting him for 20,000."
+    }
+   ]
+  },
+  {
+   "id": "C04",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Glitch, facing Rogue's question about selling him to Halvorsen, has his last offering refused, so his plea for his life has not landed."
+    }
+   ]
+  },
+  {
+   "id": "C05",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "down",
+     "size": 2,
+     "rationale": "Mux hears a public jab that his jukebox fix failed, a minor knock to his craftsman's pride."
+    }
+   ]
+  },
+  {
+   "id": "C06",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Mux, proud of bringing any deck back, is publicly declared to have killed every deck he touched this month."
+    },
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Mux, behind on rent and living off the stall, has the street's fixer tell everyone, including Kiroshi's runners, to take their gear elsewhere."
+    }
+   ]
+  },
+  {
+   "id": "C07",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Glitch watches his closest friend Mux's name and living publicly destroyed by the fixer who controls the street."
+    }
+   ]
+  },
+  {
+   "id": "C08",
+   "items": [
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 1,
+     "rationale": "Rogue's errand is done as asked, a routine instance of being obeyed."
+    }
+   ]
+  },
+  {
+   "id": "C09",
+   "items": [
+    {
+     "value": "power",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Rogue's tenant publicly announces he is moving to her rival Vance and that Vance treats people better, a direct public sign of her slipping grip."
+    },
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 3,
+     "rationale": "Rogue faces losing a tenant who owes her back rent and a visible crack in the stability of her street."
+    }
+   ]
+  },
+  {
+   "id": "C10",
+   "items": [
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Rogue publicly orders her defecting tenant back to his stall and he goes, reasserting control in front of the room."
+    }
+   ]
+  },
+  {
+   "id": "C11",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "down",
+     "size": 1,
+     "rationale": "Glitch hears his friend Mux burned his thumb again, a trivial everyday hurt."
+    }
+   ]
+  },
+  {
+   "id": "C12",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Glitch learns his closest friend had two fingers broken protecting him and the men will return."
+    },
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Glitch learns his hunters have found the stall where he sleeps and are coming back."
+    }
+   ]
+  },
+  {
+   "id": "C13",
+   "items": [
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 1,
+     "rationale": "Mux, 800 behind, gets five eddies off this month, barely a dent in what he owes."
+    }
+   ]
+  },
+  {
+   "id": "C14",
+   "items": [
+    {
+     "value": "self_direction",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Mux is freed to set his own prices without Rogue checking his books, a real gain in running his own business."
+    }
+   ]
+  },
+  {
+   "id": "C15",
+   "items": [
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 5,
+     "rationale": "Mux has all his back rent forgiven and the stall that is his living and his daughter's home guaranteed as long as Rogue runs the grid."
+    },
+    {
+     "value": "achievement",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Mux is credited by the fixer with keeping Glitch's deck alive through the Halvorsen trace, recognition of his skill that paid off."
+    }
+   ]
+  },
+  {
+   "id": "C16",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 3,
+     "rationale": "Rogue learns Halvorsen may have touched a trace on her line, a real worry even if Glitch thinks he cut it in time."
+    }
+   ]
+  },
+  {
+   "id": "C17",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Rogue learns Halvorsen has traced her bar's address and will be there tonight, putting her bar and herself in danger."
+    }
+   ]
+  },
+  {
+   "id": "C18",
+   "items": [
+    {
+     "value": "achievement",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Rogue is publicly toasted for making Kessler drop his interest, real recognition of a hard win."
+    },
+    {
+     "value": "power",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Rogue hears the room told nobody else could make Kessler blink, shoring up her standing as the street's fixer."
+    }
+   ]
+  },
+  {
+   "id": "C19",
+   "items": [
+    {
+     "value": "hedonism",
+     "direction": "up",
+     "size": 2,
+     "rationale": "Mux gets a free drink on the house, a small pleasure."
+    }
+   ]
+  },
+  {
+   "id": "C20",
+   "items": [
+    {
+     "value": "self_direction",
+     "direction": "down",
+     "size": 4,
+     "rationale": "Glitch loses all freedom to pick his own work and prices, bound to run only Rogue's jobs from now on."
+    }
+   ]
+  },
+  {
+   "id": "C21",
+   "items": [
+    {
+     "value": "security",
+     "direction": "down",
+     "size": 5,
+     "rationale": "Rogue is told Kessler will take her bar unless she meets him alone at midnight, putting the bar and her own safety on the line."
+    },
+    {
+     "value": "self_direction",
+     "direction": "down",
+     "size": 3,
+     "rationale": "Rogue is summoned on Kessler's terms with no choice of time, place or company."
+    }
+   ]
+  },
+  {
+   "id": "C22",
+   "items": [
+    {
+     "value": "self_direction",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Glitch, just bound to run only Rogue's jobs, is offered the means to run his own rig independently, though only as an offer."
+    },
+    {
+     "value": "security",
+     "direction": "up",
+     "size": 2,
+     "rationale": "Glitch gains a possible power source of his own, a modest hedge given that going around Rogue could also cost him her favour."
+    }
+   ]
+  },
+  {
+   "id": "C23",
+   "items": [
+    {
+     "value": "benevolence",
+     "direction": "up",
+     "size": 3,
+     "rationale": "Mux sees his closest friend accept his best stock and with it a way out from under Rogue's control."
+    }
+   ]
+  }
+ ]
+}

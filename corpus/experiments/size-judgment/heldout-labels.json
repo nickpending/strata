@@ -1,0 +1,762 @@
+{
+  "cases": [
+    {
+      "id": "A01",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "A mild rebuke from the woman whose tolerance is his only shelter is noticed, but nothing about his place changes."
+        },
+        {
+          "value": "conformity",
+          "direction": "down",
+          "size": 2,
+          "rationale": "He has been told he is bothering the room, a small lapse from his rule of never making trouble."
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 5,
+          "rationale": "He is being thrown out of his only hiding place onto streets where a kill team is already asking for him by face."
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 3,
+          "rationale": "A cell worth more than two months' rent is real money toward the 1,500 she is short on Kessler's deadline, though it does not close the gap."
+        },
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 2,
+          "rationale": "Her tenant hands over his best stock on her terms, a small confirmation of her hold over him."
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "set": "A",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "up",
+          "size": 3,
+          "rationale": "His one friend's arrears are settled and his stall is no longer about to be taken, which Glitch will be relieved about for days."
+        }
+      ]
+    },
+    {
+      "id": "A05",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 5,
+          "rationale": "The stall that is his whole living and his daughter's home, one missed month from being taken, is now safe."
+        }
+      ]
+    },
+    {
+      "id": "A06",
+      "set": "A",
+      "items": [
+        {
+          "value": "power",
+          "direction": "down",
+          "size": 1,
+          "rationale": "A grumble about warm beer from her own tenant is a passing jab that barely touches her standing."
+        }
+      ]
+    },
+    {
+      "id": "A07",
+      "set": "A",
+      "items": [
+        {
+          "value": "power",
+          "direction": "down",
+          "size": 4,
+          "rationale": "Her own tenant tells her bar that she is losing her grip and that Vance pays better, the exact belief that lets her rival move in."
+        }
+      ]
+    },
+    {
+      "id": "A08",
+      "set": "A",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "down",
+          "size": 3,
+          "rationale": "His only friend has just publicly insulted the woman who can take his stall, a danger to Mux that Glitch will worry over."
+        },
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "A quarrel between his landlady-protector and his friend makes the place he hides a little less settled."
+        }
+      ]
+    },
+    {
+      "id": "A09",
+      "set": "A",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "up",
+          "size": 2,
+          "rationale": "One food parcel for his sister is a welcome small kindness that changes nothing about the money she needs."
+        }
+      ]
+    },
+    {
+      "id": "A10",
+      "set": "A",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "up",
+          "size": 4,
+          "rationale": "The sister who depends on money he could not send now has her home secured for half a year."
+        }
+      ]
+    },
+    {
+      "id": "A11",
+      "set": "A",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "up",
+          "size": 2,
+          "rationale": "A customer's thanks for a working deck is a small, pleasant nod to his craft."
+        }
+      ]
+    },
+    {
+      "id": "A12",
+      "set": "A",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "up",
+          "size": 4,
+          "rationale": "His name as the man who revives dead decks is now spreading across the grid and is already drawing new crews."
+        },
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 3,
+          "rationale": "Three new crews of customers is real money for a stall two months behind on rent."
+        }
+      ]
+    },
+    {
+      "id": "A13",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "Ten more eddies on a 400 rent is an annoyance he notices but it does not change his position."
+        }
+      ]
+    },
+    {
+      "id": "A14",
+      "set": "A",
+      "items": [
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 1,
+          "rationale": "Her tenant shrugs off a ten-eddy rise without argument, which barely registers."
+        }
+      ]
+    },
+    {
+      "id": "A15",
+      "set": "A",
+      "items": [
+        {
+          "value": "self_direction",
+          "direction": "down",
+          "size": 3,
+          "rationale": "He can no longer make his own bigger sales without her sign-off, a real cut into how he runs his own stall."
+        }
+      ]
+    },
+    {
+      "id": "A16",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 5,
+          "rationale": "He is losing the stall that is his whole living and the room above it where he and his daughter live."
+        },
+        {
+          "value": "benevolence",
+          "direction": "down",
+          "size": 4,
+          "rationale": "His nine-year-old daughter is about to lose her home."
+        }
+      ]
+    },
+    {
+      "id": "A17",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "A drone circling the block is a small worry she notes and likely forgets."
+        }
+      ]
+    },
+    {
+      "id": "A18",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 5,
+          "rationale": "A debt she is 1,500 short on, to a crew that kills people who miss dates, is now due tonight instead of in three days."
+        }
+      ]
+    },
+    {
+      "id": "A19",
+      "set": "A",
+      "items": [
+        {
+          "value": "power",
+          "direction": "down",
+          "size": 4,
+          "rationale": "Her own grid is being put to work for Kessler on his orders, a lasting loss of control over what is hers."
+        },
+        {
+          "value": "self_direction",
+          "direction": "down",
+          "size": 3,
+          "rationale": "She is told what her grid will carry and that she may not ask, a real limit on choosing her own course."
+        }
+      ]
+    },
+    {
+      "id": "A20",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 3,
+          "rationale": "While she is openly weighing whether to keep him, she lets his last offering go unanswered, a bad sign for his shelter he will keep turning over."
+        }
+      ]
+    },
+    {
+      "id": "A21",
+      "set": "A",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 4,
+          "rationale": "She will not take his best stock for the arrears, so he is still one missed month from losing his living."
+        }
+      ]
+    },
+    {
+      "id": "A22",
+      "set": "A",
+      "items": [
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 2,
+          "rationale": "The runner does as he is told at once in front of her room, a small, noticed show of her control."
+        }
+      ]
+    },
+    {
+      "id": "A23",
+      "set": "A",
+      "items": [
+        {
+          "value": "self_direction",
+          "direction": "down",
+          "size": 1,
+          "rationale": "Being told which stool to take barely registers."
+        }
+      ]
+    },
+    {
+      "id": "A24",
+      "set": "A",
+      "items": [
+        {
+          "value": "self_direction",
+          "direction": "down",
+          "size": 4,
+          "rationale": "He no longer chooses his own work, and half his earnings go to her, a lasting loss of say over his life."
+        },
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 3,
+          "rationale": "She has said he can stay, which matters greatly to a hunted man whose shelter was in doubt."
+        }
+      ]
+    },
+    {
+      "id": "A25",
+      "set": "A",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "down",
+          "size": 4,
+          "rationale": "The fixer who runs the street just told her bar his work is dangerous, striking at the name his customers come for."
+        },
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 3,
+          "rationale": "Customers warned off by Rogue mean less money for a stall already two months behind."
+        }
+      ]
+    },
+    {
+      "id": "A26",
+      "set": "A",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "up",
+          "size": 3,
+          "rationale": "Her success is named to the whole bar as something no other fixer could do."
+        },
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 2,
+          "rationale": "Public praise in her own bar adds a little to her standing on the street."
+        }
+      ]
+    },
+    {
+      "id": "C01",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "She will not take a stand-in for a day-late cut, a small, noticed strain on his footing with her."
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 5,
+          "rationale": "The woman sheltering him says aloud she is weighing selling him to the people who will kill him."
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "set": "C",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "down",
+          "size": 4,
+          "rationale": "His closest friend may be sold to a kill team by the woman sheltering him."
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 4,
+          "rationale": "With his life in her hands, she turns down everything he has to offer, leaving him with less reason to think she will keep him."
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "set": "C",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "down",
+          "size": 2,
+          "rationale": "A public dig at one skipping jukebox repair stings a little but is soon fixed and forgotten."
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "set": "C",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "down",
+          "size": 4,
+          "rationale": "The fixer who runs the street declared his work a failure to the whole bar, striking at the name his trade rests on."
+        },
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 3,
+          "rationale": "Customers told to go elsewhere means less money for a stall already two months behind."
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "set": "C",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "down",
+          "size": 3,
+          "rationale": "His one friend's trade was publicly trashed by the most powerful person on the grid, a real blow to Mux he will worry over."
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "set": "C",
+      "items": [
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 1,
+          "rationale": "The runner fetching glasses when asked barely registers."
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "set": "C",
+      "items": [
+        {
+          "value": "power",
+          "direction": "down",
+          "size": 4,
+          "rationale": "Her own tenant announces to her bar that he is defecting to her rival, the very loss of belief that lets Vance move in."
+        },
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "Losing a tenant's rent is a small further dent while she is short on Kessler's money."
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "set": "C",
+      "items": [
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 3,
+          "rationale": "Right after announcing his defection, her tenant obeys her order and walks back to his stall in front of the room, restoring her face."
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "set": "C",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "down",
+          "size": 1,
+          "rationale": "His friend's burned thumb is a trivial mishap he forgets at once."
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "set": "C",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "down",
+          "size": 4,
+          "rationale": "His closest friend was maimed by men hunting him, a serious harm to someone he cares for."
+        },
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 5,
+          "rationale": "The hunters have found the very room he sleeps in and have said they will return."
+        }
+      ]
+    },
+    {
+      "id": "C13",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 2,
+          "rationale": "Five eddies off a 400 rent is a small, welcome easing that changes nothing about his arrears."
+        }
+      ]
+    },
+    {
+      "id": "C14",
+      "set": "C",
+      "items": [
+        {
+          "value": "self_direction",
+          "direction": "up",
+          "size": 2,
+          "rationale": "Setting his own prices without her checking is a noticed bit of freedom in running his stall."
+        }
+      ]
+    },
+    {
+      "id": "C15",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 5,
+          "rationale": "The arrears that had his living and his daughter's home a month from being taken are wiped, and the stall is his for as long as Rogue runs the grid."
+        },
+        {
+          "value": "achievement",
+          "direction": "up",
+          "size": 3,
+          "rationale": "His skill is named as the thing that saved her money, a recognition he will remember."
+        }
+      ]
+    },
+    {
+      "id": "C16",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 2,
+          "rationale": "A brushed trace that was probably cut is a small worry about heat she notes."
+        }
+      ]
+    },
+    {
+      "id": "C17",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 5,
+          "rationale": "A corporate retrieval team now knows where her bar is and is coming tonight, putting her place and her life on the line."
+        }
+      ]
+    },
+    {
+      "id": "C18",
+      "set": "C",
+      "items": [
+        {
+          "value": "achievement",
+          "direction": "up",
+          "size": 3,
+          "rationale": "Her feat of moving Kessler is named before the bar as something no one else manages."
+        },
+        {
+          "value": "power",
+          "direction": "up",
+          "size": 2,
+          "rationale": "Being toasted as the best fixer on the east side adds a little to her standing."
+        }
+      ]
+    },
+    {
+      "id": "C19",
+      "set": "C",
+      "items": [
+        {
+          "value": "hedonism",
+          "direction": "up",
+          "size": 1,
+          "rationale": "A free drink is a small pleasure that barely registers."
+        }
+      ]
+    },
+    {
+      "id": "C20",
+      "set": "C",
+      "items": [
+        {
+          "value": "self_direction",
+          "direction": "down",
+          "size": 3,
+          "rationale": "He can no longer pick his own work or set his own price, a real limit on his course."
+        }
+      ]
+    },
+    {
+      "id": "C21",
+      "set": "C",
+      "items": [
+        {
+          "value": "security",
+          "direction": "down",
+          "size": 4,
+          "rationale": "The crew she owes is threatening to take the bar unless she walks into a midnight meeting alone."
+        },
+        {
+          "value": "self_direction",
+          "direction": "down",
+          "size": 4,
+          "rationale": "She is being told where to be, when and how, on pain of losing the bar, a serious loss of her own choice."
+        }
+      ]
+    },
+    {
+      "id": "C22",
+      "set": "C",
+      "items": [
+        {
+          "value": "self_direction",
+          "direction": "up",
+          "size": 3,
+          "rationale": "A cell to power his own rig gives him a real way to work without Rogue's line."
+        },
+        {
+          "value": "security",
+          "direction": "up",
+          "size": 2,
+          "rationale": "Something worth real money in the hands of a man with 60 eddies is a small cushion."
+        }
+      ]
+    },
+    {
+      "id": "C23",
+      "set": "C",
+      "items": [
+        {
+          "value": "benevolence",
+          "direction": "up",
+          "size": 3,
+          "rationale": "His friend now has the means to run his own rig and stand a little freer of Rogue, which Mux will be glad of for days."
+        }
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "a": "A01",
+      "b": "A02",
+      "value": "security",
+      "direction": "down"
+    },
+    {
+      "a": "A11",
+      "b": "A12",
+      "value": "achievement",
+      "direction": "up"
+    },
+    {
+      "a": "A06",
+      "b": "A07",
+      "value": "power",
+      "direction": "down"
+    },
+    {
+      "a": "A09",
+      "b": "A10",
+      "value": "benevolence",
+      "direction": "up"
+    },
+    {
+      "a": "A13",
+      "b": "A16",
+      "value": "security",
+      "direction": "down"
+    },
+    {
+      "a": "A17",
+      "b": "A18",
+      "value": "security",
+      "direction": "down"
+    },
+    {
+      "a": "C01",
+      "b": "C04",
+      "value": "security",
+      "direction": "down"
+    },
+    {
+      "a": "C05",
+      "b": "C06",
+      "value": "achievement",
+      "direction": "down"
+    },
+    {
+      "a": "C08",
+      "b": "C10",
+      "value": "power",
+      "direction": "up"
+    },
+    {
+      "a": "C11",
+      "b": "C12",
+      "value": "benevolence",
+      "direction": "down"
+    },
+    {
+      "a": "C13",
+      "b": "C15",
+      "value": "security",
+      "direction": "up"
+    },
+    {
+      "a": "C16",
+      "b": "C17",
+      "value": "security",
+      "direction": "down"
+    }
+  ]
+}
