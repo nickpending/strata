@@ -111,6 +111,9 @@ function planLines(goal: Goal, plan: PlanProgress): string[] {
   ];
 }
 
+/** The line in the state Jev reads after which the page's text follows to the end. */
+export const PAGE_NOW = "The page now:";
+
 /** The state Jev reads: the goal, its end state and its plan, rendered by code, then the page. */
 export function renderState(goal: Goal, pageText: string, plan: PlanProgress): string {
   return [
@@ -119,7 +122,7 @@ export function renderState(goal: Goal, pageText: string, plan: PlanProgress): s
     ...planLines(goal, plan),
     ...(goal.words === null ? [] : [`Words to use: ${goal.words}`]),
     "",
-    "The page now:",
+    PAGE_NOW,
     pageText,
   ].join("\n");
 }

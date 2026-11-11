@@ -17,6 +17,17 @@ export const roomSchema = z.strictObject({
   exits: z.record(id, exitSchema),
 });
 
+const phrase = z.string().min(1);
+
+/**
+ * values.toml: the words for each importance from 0 to 4, and the world's values in their authored
+ * order. Every value id and description is data read from this file, never named in code.
+ */
+export const valuesFileSchema = z.strictObject({
+  importance: z.strictObject({ "0": phrase, "1": phrase, "2": phrase, "3": phrase, "4": phrase }),
+  values: z.array(z.strictObject({ id, description: phrase })).min(1),
+});
+
 export const tieSchema = z.strictObject({ target: id, kind: z.string().min(1), note: z.string() });
 
 export const personSchema = z.strictObject({
@@ -26,6 +37,8 @@ export const personSchema = z.strictObject({
   ties: z.array(tieSchema),
   /** The rooms the person knows of from boot. */
   places: z.array(id),
+  /** How much each catalogue value matters to the person, from 0 to 4; every value is rated. */
+  values: z.record(id, z.number().int().min(0).max(4)),
 });
 
 export const itemSchema = z.strictObject({
@@ -39,11 +52,16 @@ export type RoomDef = z.infer<typeof roomSchema>;
 export type PersonDef = z.infer<typeof personSchema>;
 export type ItemDef = z.infer<typeof itemSchema>;
 export type Tie = z.infer<typeof tieSchema>;
+export type ValueDef = { id: string; description: string };
 
 /** The validated world, each definition keyed by id and sorted by id. */
 export type WorldDefs = {
   dir: string;
   offerWindowTicks: number;
+  /** The world's values, in values.toml's order. */
+  values: ValueDef[];
+  /** The words for each importance, indexed 0 to 4. */
+  importanceWords: string[];
   rooms: RoomDef[];
   people: PersonDef[];
   items: ItemDef[];
@@ -65,6 +83,7 @@ function refuse(file: string, path: string, rule: string, message: string): neve
 }
 
 function parseFile<T>(file: string, schema: z.ZodType<T>): T {
+  if (!existsSync(file)) refuse(file, "", "missing-file", "the world directory has no such file");
   let raw: unknown;
   try {
     raw = Bun.TOML.parse(readFileSync(file, "utf8"));
@@ -103,14 +122,39 @@ function loadKind<T extends { id: string }>(
   return loaded.sort((a, b) => a.def.id.localeCompare(b.def.id));
 }
 
-/** Cross-reference checks: every id a definition names must be defined. */
+/** values.toml read and checked: its values in file order, each id once, and the importance words. */
+function loadValues(file: string): { values: ValueDef[]; importanceWords: string[] } {
+  const parsed = parseFile(file, valuesFileSchema);
+  const seen = new Set<string>();
+  parsed.values.forEach(({ id }, i) => {
+    if (seen.has(id)) {
+      refuse(file, `values.${i}.id`, "unique-value-id", `value "${id}" is defined twice`);
+    }
+    seen.add(id);
+  });
+  const { importance } = parsed;
+  return {
+    values: parsed.values,
+    importanceWords: [
+      importance["0"],
+      importance["1"],
+      importance["2"],
+      importance["3"],
+      importance["4"],
+    ],
+  };
+}
+
+/** Cross-reference checks: every id a definition names must be defined, and every value rated. */
 function checkReferences(
+  values: ValueDef[],
   rooms: { file: string; def: RoomDef }[],
   people: { file: string; def: PersonDef }[],
   items: { file: string; def: ItemDef }[],
 ): void {
   const roomIds = new Set(rooms.map((r) => r.def.id));
   const personIds = new Set(people.map((p) => p.def.id));
+  const valueIds = new Set(values.map((v) => v.id));
   for (const { file, def } of rooms) {
     for (const [exit, { to }] of Object.entries(def.exits)) {
       if (!roomIds.has(to)) {
@@ -142,6 +186,21 @@ function checkReferences(
         refuse(file, `places.${i}`, "place-names-room", `place "${place}" names no room`);
       }
     });
+    for (const value of Object.keys(def.values)) {
+      if (!valueIds.has(value)) {
+        refuse(
+          file,
+          `values.${value}`,
+          "value-names-catalogue",
+          `value "${value}" names no value in values.toml`,
+        );
+      }
+    }
+    for (const { id: value } of values) {
+      if (!Object.hasOwn(def.values, value)) {
+        refuse(file, `values.${value}`, "value-rated", `value "${value}" is not rated`);
+      }
+    }
   }
   for (const { file, def } of items) {
     if (!personIds.has(def.holder)) {
@@ -151,21 +210,25 @@ function checkReferences(
 }
 
 /**
- * Read and validate every definition under `dir` (world.toml, rooms/, people/, items/). Nothing is
- * written. The first broken definition refuses the load, naming its file, path and rule.
+ * Read and validate every definition under `dir` (world.toml, values.toml, rooms/, people/,
+ * items/). Nothing is written. The first broken definition refuses the load, naming its file, path
+ * and rule.
  */
 export function loadWorld(dir: string): LoadResult {
   try {
     const world = parseFile(join(dir, "world.toml"), worldFileSchema);
+    const { values, importanceWords } = loadValues(join(dir, "values.toml"));
     const rooms = loadKind(join(dir, "rooms"), roomSchema);
     const people = loadKind(join(dir, "people"), personSchema);
     const items = loadKind(join(dir, "items"), itemSchema);
-    checkReferences(rooms, people, items);
+    checkReferences(values, rooms, people, items);
     return {
       ok: true,
       defs: {
         dir,
         offerWindowTicks: world.rules.offer_window_ticks,
+        values,
+        importanceWords,
         rooms: rooms.map((r) => r.def),
         people: people.map((p) => p.def),
         items: items.map((i) => i.def),

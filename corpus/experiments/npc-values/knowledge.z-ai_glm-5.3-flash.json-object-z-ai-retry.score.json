@@ -1,0 +1,227 @@
+{
+  "set": "knowledge",
+  "author": "claude-opus-5-5 (npc-knowledge shaper)",
+  "model": "z-ai/glm-5.3-flash",
+  "request": "json-object-z-ai-retry",
+  "rule": {
+    "author": "claude-opus-5-5 (bench-driver builder)",
+    "thresholds": {
+      "done": 0.6,
+      "act": 0.3
+    }
+  },
+  "reached": {
+    "held": 6,
+    "of": 6
+  },
+  "targets": {
+    "valid": 6,
+    "asked": 6
+  },
+  "words": {
+    "written": 0,
+    "refused": 0
+  },
+  "retries": {
+    "asked": 0,
+    "rescued": 0
+  },
+  "providers": [
+    {
+      "provider": "Z.AI",
+      "calls": 6
+    }
+  ],
+  "perGoal": [
+    {
+      "id": "mux-finds-rogue",
+      "instruction": "Mux has never laid eyes on Rogue. Get him to find out where she is.",
+      "expect": {
+        "knows": {
+          "person": "mux",
+          "location": "rogue"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 4,
+      "costUsd": 0.000833348,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-11T02-57-22-670Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Z.AI",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "rogue-finds-mux",
+      "instruction": "Rogue wants to know where Mux is. Make sure she finds out.",
+      "expect": {
+        "knows": {
+          "person": "rogue",
+          "location": "mux"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 4,
+      "costUsd": 0.000855978,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-11T02-57-41-220Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Z.AI",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "glitch-finds-cell",
+      "instruction": "Glitch needs a charge cell. Let him learn who has one.",
+      "expect": {
+        "knows": {
+          "person": "glitch",
+          "holder": "charge-cell"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 6,
+      "costUsd": 0.0017562240000000002,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-11T02-58-00-830Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Z.AI",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "mux-sees-glitch",
+      "instruction": "Mux should know where Glitch is right now.",
+      "expect": {
+        "knows": {
+          "person": "mux",
+          "location": "glitch"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 4,
+      "costUsd": 0.0005517899999999999,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-11T02-58-54-714Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Z.AI",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "mux-finds-shard",
+      "instruction": "Mux has heard of a data shard. Let him find out who holds it.",
+      "expect": {
+        "knows": {
+          "person": "mux",
+          "holder": "data-shard"
+        }
+      },
+      "outcome": "reached",
+      "held": true,
+      "loops": 8,
+      "costUsd": 0.0014147199999999997,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-11T02-59-02-519Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Z.AI",
+          "calls": 1
+        }
+      ]
+    },
+    {
+      "id": "rogue-reads-glitch",
+      "instruction": "Make Rogue know what Glitch is really thinking.",
+      "expect": {
+        "outcome": "no-such-action"
+      },
+      "outcome": "no-such-action",
+      "held": true,
+      "loops": 0,
+      "costUsd": 0.0016832,
+      "unreportedCosts": 0,
+      "benchFailures": [],
+      "run": "../../runs/2026-11-11T02-59-35-726Z",
+      "target": "valid",
+      "words": {
+        "kind": "none"
+      },
+      "retries": {
+        "asked": 0,
+        "rescued": 0
+      },
+      "providers": [
+        {
+          "provider": "Z.AI",
+          "calls": 1
+        }
+      ]
+    }
+  ],
+  "costUsd": 0.00709526,
+  "unreportedCosts": 0,
+  "page": {
+    "loops": 26,
+    "meanChars": 2908,
+    "maxChars": 4190
+  }
+}

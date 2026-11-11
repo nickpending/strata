@@ -1,7 +1,8 @@
 /**
  * The Encounters section of the world panel: for each person, what has passed between it and each
- * other person, grouped by the other person in the order of its first encounter, one labelled line
- * per encounter in event order. No line reads as a page name the player's vocabulary takes: no
+ * other person who received the same event, direct when it was the event's actor or a target and
+ * witnessed otherwise, grouped by the other person in the order of its first encounter, one labelled
+ * line per encounter in event order. No line reads as a page name the player's vocabulary takes: no
  * "<id>: held by", no "exits:", no " -> ", and no heading with parentheses. The section adds no control.
  */
 

@@ -1,0 +1,38 @@
+date: 2026-11-11T02:20:36.212Z
+model in body: typesafe/jev-1.13-20260917
+top-level keys received: model, answers, usage, id, provider
+costUsd: 0.000018102
+state: {"event":{"text":"Rogue lets Glitch stay in her bar for one more night."}}
+questions: {"lets":{"type":"noul","instructions":"Does `event.text` say that Rogue lets Glitch stay?"},"who":{"type":"choice","instructions":"Who does `event.text` say is allowed to stay?","criteria":{"glitch":"Glitch","rogue":"Rogue","nobody":"nobody"}},"warmth":{"type":"score","instructions":"How warmly does `event.text` describe what Rogue does for Glitch?","criteria":["coldly","neutrally","warmly"]}}
+decide() returned: {
+  "ok": true,
+  "answers": {
+    "lets": {
+      "noul": 0.98
+    },
+    "who": {
+      "choice": "glitch",
+      "confidence": 1,
+      "probabilities": {
+        "glitch": 1,
+        "rogue": 0,
+        "nobody": 0
+      }
+    },
+    "warmth": {
+      "score": 1.32,
+      "confidence": 0.47,
+      "legend": {
+        "0": "coldly",
+        "1": "neutrally",
+        "2": "warmly"
+      },
+      "probabilities": {
+        "0": 0.01,
+        "1": 0.65,
+        "2": 0.34
+      }
+    }
+  },
+  "costUsd": 0.000018102
+}

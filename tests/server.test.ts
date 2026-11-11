@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
 import type { EncountersView } from "../src/engine/encounters.ts";
-import { boot } from "../src/engine/engine.ts";
+import { boot, type ValuesView } from "../src/engine/engine.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 import type { KnowledgeView } from "../src/engine/knowledge.ts";
 import { actionSchemas, type Verb } from "../src/engine/rules.ts";
@@ -109,6 +109,7 @@ describe("C10: the bench and its API over HTTP", () => {
         file: "bench/panels/encounters.js",
         type: "text/javascript",
       },
+      { path: "/bench/panels/values.js", file: "bench/panels/values.js", type: "text/javascript" },
     ];
     for (const { path, file, type } of files) {
       const response = await fetch(`${main.base}${path}`);
@@ -320,6 +321,34 @@ describe("E4: GET /api/encounters/<person> serves Engine.encounters()", () => {
   });
 });
 
+describe("V4: GET /api/values/<person> serves Engine.values()", () => {
+  test("rogue's body; nobody is a 404 naming it; a malformed path is a 400", async () => {
+    const served = serve(false);
+    const api = client(served);
+    const dir = mkdtempSync(join(tmpdir(), "strata-server-"));
+    temps.push(dir);
+    const booted = boot(WORLD, { tickMinutes: 10, dbPath: join(dir, "world.sqlite") });
+    if (!booted.ok) throw new Error(booted.refusal.message);
+    const engine = booted.engine;
+    stops.push(() => engine.close());
+
+    const body = await api.get<ValuesView>("/api/values/rogue");
+    expect(body).toEqual(JSON.parse(JSON.stringify(engine.values("rogue"))));
+    expect(body.values).toHaveLength(10);
+    expect(body.values.find((value) => value.id === "power")).toMatchObject({
+      importance: 4,
+      words: "central to who this person is",
+    });
+
+    const nobody = await fetch(`${served.base}/api/values/nobody`);
+    expect(nobody.status).toBe(404);
+    expect(await nobody.json()).toEqual({ error: 'no person "nobody"' });
+    const malformed = await fetch(`${served.base}/api/values/%E0%A4%A`);
+    expect(malformed.status).toBe(400);
+    expect(await malformed.json()).toEqual({ error: "the path is not valid percent-encoding" });
+  });
+});
+
 describe("a reset that cannot boot keeps the current world", () => {
   test("a broken definition refuses the reset with 422 and the world keeps serving", async () => {
     const served = serve(true);
@@ -498,6 +527,7 @@ describe("the bench page keeps refusals, invalid actions and refused resets apar
       received: (thing: string) => call("GET", `/api/received/${thing}`),
       knowledge: (thing: string) => call("GET", `/api/knowledge/${thing}`),
       encounters: (thing: string) => call("GET", `/api/encounters/${thing}`),
+      values: (thing: string) => call("GET", `/api/values/${thing}`),
       verbs: () => call("GET", "/api/verbs"),
       act: (action: unknown) => call("POST", "/api/actions", action),
       step: () => call("POST", "/api/step"),
@@ -510,10 +540,11 @@ describe("the bench page keeps refusals, invalid actions and refused resets apar
     });
     try {
       const panel = (await import(join(ROOT, "bench", "panels", "world.js"))) as {
-        mount: (root: FakeNode, api: unknown) => Promise<void>;
+        mount: (regions: { player: FakeNode; operator: FakeNode }, api: unknown) => Promise<void>;
       };
+      // The player region: the act form, the clock and the history all render here.
       const root = new FakeNode("div");
-      await panel.mount(root, api);
+      await panel.mount({ player: root, operator: new FakeNode("div") }, api);
       const shows = async (text: string) => {
         for (let i = 0; i < 200 && !root.text.includes(text); i++) await Bun.sleep(5);
         expect(root.text).toContain(text);

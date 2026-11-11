@@ -39,6 +39,13 @@ export type BootRefusal = DefinitionRefusal | { rule: "tick-minutes-required"; m
 
 export type BootResult = { ok: true; engine: Engine } | { ok: false; refusal: BootRefusal };
 
+/** One person's values, in the catalogue's order, each with its importance and that importance's words. */
+export type ValuesView = {
+  person: string;
+  name: string;
+  values: { id: string; description: string; importance: number; words: string }[];
+};
+
 export type ActResult =
   | { outcome: "recorded"; events: WorldEvent[] }
   | { outcome: "refused"; refused: Refusal }
@@ -139,7 +146,14 @@ export class Engine {
       rows: this.store.known(person),
       latest: this.store.latestKnown(person),
       copies: this.store.received(person),
+      others: this.othersOf(person),
     });
+  }
+
+  /** Who else received each event `person` holds a copy of, from one read of the store. */
+  private othersOf(person: string): (event: string) => string[] {
+    const corecipients = this.store.corecipients(person);
+    return (event) => corecipients.get(event) ?? [];
   }
 
   /**
@@ -152,7 +166,28 @@ export class Engine {
     return {
       person,
       name: def.name,
-      encounters: encountersOf(this.store.received(person), person, (id) => this.isPerson(id)),
+      encounters: encountersOf(this.store.received(person), person, this.othersOf(person)),
+    };
+  }
+
+  /**
+   * How much each catalogue value matters to `person`, read from the loaded definitions on request.
+   * Nothing in act(), step() or record() calls it, and it writes no state row.
+   */
+  values(person: string): ValuesView {
+    const def = this.defs.people.find((p) => p.id === person);
+    if (def === undefined) throw new Error(`"${person}" names no person`);
+    return {
+      person,
+      name: def.name,
+      values: this.defs.values.map(({ id, description }) => {
+        const importance = def.values[id];
+        const words = importance === undefined ? undefined : this.defs.importanceWords[importance];
+        if (importance === undefined || words === undefined) {
+          throw new Error(`"${person}" has no importance for "${id}"`);
+        }
+        return { id, description, importance, words };
+      }),
     };
   }
 

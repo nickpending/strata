@@ -106,6 +106,8 @@ export type KnowledgeOf = {
   rows: StoredKnown[];
   latest: StoredKnown[];
   copies: Copy[];
+  /** Who else received each event the person holds a copy of. */
+  others: (event: string) => string[];
 };
 
 function sourced(row: StoredKnown): Sourced {
@@ -114,13 +116,12 @@ function sourced(row: StoredKnown): Sourced {
 }
 
 /** Each tie target as the ties part holds it, then each other person as of its first encounter. */
-function peopleOf({ person, snapshot, copies }: KnowledgeOf): KnownPerson[] {
+function peopleOf({ person, snapshot, copies, others }: KnowledgeOf): KnownPerson[] {
   const known = new Map<string, KnownPerson>();
   for (const { target } of lookup(snapshot.people, person)?.ties ?? []) {
     known.set(target, { person: target, tick: 0, source: "authored", subkind: null });
   }
-  const isPerson = (id: string) => Object.hasOwn(snapshot.people, id);
-  for (const { with: other, tick, event, subkind } of encountersOf(copies, person, isPerson)) {
+  for (const { with: other, tick, event, subkind } of encountersOf(copies, person, others)) {
     if (!known.has(other)) known.set(other, { person: other, tick, source: event, subkind });
   }
   return [...known.values()];

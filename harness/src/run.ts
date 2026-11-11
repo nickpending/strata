@@ -26,6 +26,7 @@ import { type ClientOptions, JEV_MODEL, type Refusal } from "./jev.ts";
 import {
   type Control,
   locate,
+  NoPlayerRegion,
   nameOf,
   type PageRead,
   readPage,
@@ -104,7 +105,7 @@ export type DriveOptions = {
 
 /**
  * Why a run stopped short: a client's refusal (config, network, status, parse), a bench that would
- * not boot, a page with an unlabeled control, a browser the harness cannot work, a bench route
+ * not boot, a page with no single main landmark or with an unlabeled control, a browser the harness cannot work, a bench route
  * the run could not read, or the operator ending a headed run at its hold. `call` names where:
  * boot, launch, target, words or the loop.
  */
@@ -599,9 +600,19 @@ function recordAttempts(hooks: Hooks, purpose: string, attempts: Attempt[]): voi
   }
 }
 
-/** The page read, or null after stopping the run when it has a control with no label. */
+/**
+ * The page read, or null after stopping the run when the page has no single player region or a
+ * control with no label.
+ */
 async function labelledRead(page: Page, hooks: Hooks, at: string): Promise<PageRead | null> {
-  const read = await readPage(page);
+  let read: PageRead;
+  try {
+    read = await readPage(page);
+  } catch (error) {
+    if (!(error instanceof NoPlayerRegion)) throw error;
+    hooks.finish({ kind: "stopped", stopped: { kind: "page", message: error.message, call: at } });
+    return null;
+  }
   const missing = unlabeled(read.controls);
   if (missing.length === 0) return read;
   hooks.finish({

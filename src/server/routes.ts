@@ -1,7 +1,7 @@
 import { existsSync, statSync } from "node:fs";
 import { resolve, sep } from "node:path";
 import type { EncountersView } from "../engine/encounters.ts";
-import { type BootRefusal, boot, type Engine } from "../engine/engine.ts";
+import { type BootRefusal, boot, type Engine, type ValuesView } from "../engine/engine.ts";
 import { type Copy, kindOf, type Subkind, subkinds, type WorldEvent } from "../engine/events.ts";
 import type { KnowledgeView } from "../engine/knowledge.ts";
 import type { Pending } from "../engine/pending.ts";
@@ -43,6 +43,9 @@ export type KnowledgeBody = KnowledgeView;
 
 /** The body of GET /api/encounters/<person>: that person's encounters, as Engine.encounters() reads them. */
 export type EncountersBody = EncountersView;
+
+/** The body of GET /api/values/<person>: that person's values, as Engine.values() reads them. */
+export type ValuesBody = ValuesView;
 
 export type Started =
   | { ok: true; server: Bun.Server<undefined>; stop: () => void }
@@ -96,7 +99,12 @@ function decoded(segment: string): string | null {
 const MALFORMED_PATH = { error: "the path is not valid percent-encoding" };
 
 /** The routes that take a person's id as their last path segment. */
-const PERSON_ROUTES = ["/api/received/", "/api/knowledge/", "/api/encounters/"] as const;
+const PERSON_ROUTES = [
+  "/api/received/",
+  "/api/knowledge/",
+  "/api/encounters/",
+  "/api/values/",
+] as const;
 
 function staticFile(path: string): Response {
   const file = resolve(BENCH_DIR, path);
@@ -153,8 +161,9 @@ class Bench {
   }
 
   /**
-   * GET /api/received/<person>, /api/knowledge/<person> and /api/encounters/<person>: 400 on
-   * malformed percent-encoding, 404 naming a name that is no person; null for any other path.
+   * GET /api/received/<person>, /api/knowledge/<person>, /api/encounters/<person> and
+   * /api/values/<person>: 400 on malformed percent-encoding, 404 naming a name that is no person;
+   * null for any other path.
    */
   private ofPerson(path: string): Response | null {
     const route = PERSON_ROUTES.find((prefix) => path.startsWith(prefix));
@@ -168,6 +177,7 @@ class Bench {
     if (route === "/api/encounters/") {
       return json(this.engine.encounters(person) satisfies EncountersBody);
     }
+    if (route === "/api/values/") return json(this.engine.values(person) satisfies ValuesBody);
     return json(this.engine.knowledge(person) satisfies KnowledgeBody);
   }
 

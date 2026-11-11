@@ -14,6 +14,7 @@ import { dirname, join } from "node:path";
 import { useAccountBrowsers } from "harness/page.ts";
 import { RULE_AUTHOR, T_ACT, T_DONE } from "harness/rule.ts";
 import type { LoopRecord, RunRecord } from "harness/run.ts";
+import * as scoring from "harness/score.ts";
 import { GRID, type ScoreFile, scorePath } from "harness/score.ts";
 import type { WorldEvent } from "../src/engine/events.ts";
 
@@ -899,5 +900,25 @@ describe("S5: each goal and the score file count the retries asked and rescued",
     expect(written.perGoal.map((g) => g.target)).toEqual(["valid", "valid", "invalid", "valid"]);
     expect(written.targets).toEqual({ valid: 3, asked: 4 });
     expect(written.words).toEqual({ written: 1, refused: 0 });
+    // The page size covers every loop the set's runs recorded.
+    expect(written.page.loops).toBe(written.perGoal.reduce((sum, g) => sum + g.loops, 0));
   }, 120_000);
+});
+
+describe("V15: every score file records the page size its runs' player read", () => {
+  /** A loop as loops.jsonl records it, cut to its state: the rendered goal, then the page. */
+  const loop = (page: string): Pick<LoopRecord, "state"> => ({
+    state: `Goal: have Rogue give Glitch the data shard\nEnd state: glitch holds data-shard\n\nThe page now:\n${page}`,
+  });
+
+  test("three loops of 10, 20 and 60 page characters, and a set with no loops", () => {
+    expect(typeof scoring.pageSize).toBe("function");
+    const page = scoring.pageSize([
+      loop("a".repeat(10)),
+      loop("b\n".repeat(10)),
+      loop("c".repeat(60)),
+    ]);
+    expect(page).toEqual({ loops: 3, meanChars: 30, maxChars: 60 });
+    expect(scoring.pageSize([])).toEqual({ loops: 0, meanChars: 0, maxChars: 0 });
+  });
 });

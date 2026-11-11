@@ -64,8 +64,38 @@ function everyone(engine: Engine): Record<string, Encounter[]> {
   return Object.fromEntries(PEOPLE.map((p) => [p, engine.encounters(p).encounters]));
 }
 
-describe("E1: one encounter per other participant of each copy, direct for a participant, kind its subkind", () => {
-  test("a whisper: actor and target direct with each other, the bystander witnessed with both", () => {
+/** What `event` gave each person: their encounters from it, keyed by person. */
+function fromEach(engine: Engine, event: WorldEvent): Record<string, Encounter[]> {
+  return Object.fromEntries(PEOPLE.map((p) => [p, from(engine, p, event)]));
+}
+
+describe("V6: one encounter per other recipient of each event, direct for its actor or a target", () => {
+  test("mux's depart gives mux none; its arrive gives mux one direct with each in the room, each there one witnessed with every other", () => {
+    const engine = fresh();
+    const depart = act(engine, { actor: "mux", verb: "depart", exit: "west" });
+    expect(fromEach(engine, depart)).toEqual({ glitch: [], mux: [], rogue: [] });
+    const arrive = stepTo(engine, "physical.arrive");
+    expect(arrive.subkind).toBe("physical.arrive");
+    expect(fromEach(engine, arrive)).toEqual({
+      glitch: [met(arrive, "mux", "witnessed"), met(arrive, "rogue", "witnessed")],
+      mux: [met(arrive, "glitch", "direct"), met(arrive, "rogue", "direct")],
+      rogue: [met(arrive, "glitch", "witnessed"), met(arrive, "mux", "witnessed")],
+    });
+    expect(engine.encounters("mux").encounters).toEqual(from(engine, "mux", arrive));
+  });
+
+  test("then glitch's say: glitch direct with each listener, each listener witnessed with glitch and with the other", () => {
+    const engine = fresh();
+    muxToBar(engine);
+    const say = act(engine, { actor: "glitch", verb: "say", words: "hello" });
+    expect(fromEach(engine, say)).toEqual({
+      glitch: [met(say, "mux", "direct"), met(say, "rogue", "direct")],
+      mux: [met(say, "glitch", "witnessed"), met(say, "rogue", "witnessed")],
+      rogue: [met(say, "glitch", "witnessed"), met(say, "mux", "witnessed")],
+    });
+  });
+
+  test("rogue's whisper to glitch: actor and target direct with both others, the bystander witnessed with both", () => {
     const engine = fresh();
     muxToBar(engine);
     const whisper = act(engine, {
@@ -74,124 +104,34 @@ describe("E1: one encounter per other participant of each copy, direct for a par
       target: "glitch",
       words: "psst",
     });
-    expect(whisper.tick).toBe(1);
-    expect(from(engine, "rogue", whisper)).toEqual([met(whisper, "glitch", "direct")]);
-    expect(from(engine, "glitch", whisper)).toEqual([met(whisper, "rogue", "direct")]);
-    expect(from(engine, "mux", whisper)).toEqual([
-      met(whisper, "rogue", "witnessed"),
-      met(whisper, "glitch", "witnessed"),
-    ]);
-    for (const person of PEOPLE) {
-      for (const encounter of from(engine, person, whisper)) {
-        expect(encounter.subkind).toBe("speech.whisper");
-      }
-    }
-  });
-
-  test("a say to the room: the speaker meets nobody, the listener is witnessed with the speaker", () => {
-    const engine = fresh();
-    const say = act(engine, { actor: "glitch", verb: "say", words: "hello" });
-    expect(engine.encounters("glitch").encounters).toEqual([]);
-    expect(engine.encounters("rogue").encounters).toEqual([met(say, "glitch", "witnessed")]);
-    expect(engine.encounters("mux").encounters).toEqual([]);
-  });
-
-  test("an offer then an accept: giver and receiver direct with each other, the bystander witnessed with both", () => {
-    const engine = fresh();
-    muxToBar(engine);
-    const offer = act(engine, {
-      actor: "rogue",
-      verb: "offer",
-      target: "glitch",
-      item: "data-shard",
+    expect(whisper.subkind).toBe("speech.whisper");
+    expect(fromEach(engine, whisper)).toEqual({
+      glitch: [met(whisper, "mux", "direct"), met(whisper, "rogue", "direct")],
+      mux: [met(whisper, "glitch", "witnessed"), met(whisper, "rogue", "witnessed")],
+      rogue: [met(whisper, "glitch", "direct"), met(whisper, "mux", "direct")],
     });
-    const accept = act(engine, { actor: "glitch", verb: "accept", item: "data-shard" });
-    expect(offer.subkind).toBe("exchange.offer");
-    expect(accept.subkind).toBe("exchange.accept");
-    expect(from(engine, "rogue", offer)).toEqual([met(offer, "glitch", "direct")]);
-    expect(from(engine, "glitch", offer)).toEqual([met(offer, "rogue", "direct")]);
-    expect(from(engine, "mux", offer)).toEqual([
-      met(offer, "rogue", "witnessed"),
-      met(offer, "glitch", "witnessed"),
-    ]);
-    expect(from(engine, "glitch", accept)).toEqual([met(accept, "rogue", "direct")]);
-    expect(from(engine, "rogue", accept)).toEqual([met(accept, "glitch", "direct")]);
-    expect(from(engine, "mux", accept)).toEqual([
-      met(accept, "glitch", "witnessed"),
-      met(accept, "rogue", "witnessed"),
-    ]);
   });
 
-  test("a lapse after the giver walked out: giver and receiver direct with each other", () => {
-    const engine = fresh();
-    muxToBar(engine);
-    act(engine, { actor: "mux", verb: "offer", target: "glitch", item: "charge-cell" });
-    act(engine, { actor: "mux", verb: "depart", exit: "east" });
-    stepTo(engine, "physical.arrive");
-    const lapse = stepTo(engine, "exchange.lapse");
-    expect(engine.snapshot().people.mux?.location).toEqual({ room: "back-room" });
-    expect(from(engine, "mux", lapse)).toEqual([met(lapse, "glitch", "direct")]);
-    expect(from(engine, "glitch", lapse)).toEqual([met(lapse, "mux", "direct")]);
-    expect(lapse.subkind).toBe("exchange.lapse");
-  });
-
-  test("every encounter's tick and event are those of the event it came from", () => {
-    const engine = fresh();
-    muxToBar(engine);
-    act(engine, { actor: "rogue", verb: "whisper", target: "glitch", words: "psst" });
-    act(engine, { actor: "glitch", verb: "say-to", target: "mux", words: "hi" });
-    const events = new Map(engine.events().map((event) => [event.id, event]));
-    // The arrive gives two, the whisper four and the say-to four.
-    expect(Object.values(everyone(engine)).flat()).toHaveLength(10);
-    for (const person of PEOPLE) {
-      const held = new Set(engine.received(person).map((copy) => copy.id));
-      for (const encounter of engine.encounters(person).encounters) {
-        expect(held.has(encounter.event)).toBe(true);
-        expect(events.get(encounter.event)).toMatchObject({
-          tick: encounter.tick,
-          subkind: encounter.subkind,
-        });
-        expect(encounter.with).not.toBe(person);
-      }
-    }
-  });
-});
-
-describe("E2: no encounter from an own act alone, a payload field, or an event not held", () => {
-  test("a fresh world gives every person an empty list", () => {
-    const engine = fresh();
-    for (const person of PEOPLE) {
-      expect(engine.encounters(person)).toEqual({
-        person,
-        name: engine.defs.people.find((p) => p.id === person)?.name ?? "",
-        encounters: [],
-      });
-    }
-  });
-
-  test("mux's depart and arrive give mux none, though its arrive's present names the room", () => {
-    const engine = fresh();
-    const { arrive } = muxToBar(engine);
-    const held = engine.received("mux").find((copy) => copy.id === arrive.id);
-    expect(held?.payload.present).toEqual(["glitch", "rogue"]);
-    expect(engine.encounters("mux").encounters).toEqual([]);
-    expect(engine.encounters("rogue").encounters).toEqual([met(arrive, "mux", "witnessed")]);
-    expect(engine.encounters("glitch").encounters).toEqual([met(arrive, "mux", "witnessed")]);
-  });
-
-  test("glitch's depart gives the bystander one, and mux, in the other room, none", () => {
+  test("glitch's depart east: glitch direct with the one who saw it, that one witnessed, mux in the back room none", () => {
     const engine = fresh();
     const depart = act(engine, { actor: "glitch", verb: "depart", exit: "east" });
-    expect(engine.encounters("rogue").encounters).toEqual([met(depart, "glitch", "witnessed")]);
-    expect(engine.encounters("glitch").encounters).toEqual([]);
-    expect(engine.encounters("mux").encounters).toEqual([]);
+    expect(engine.received("mux").map((copy) => copy.id)).not.toContain(depart.id);
+    expect(everyone(engine)).toEqual({
+      glitch: [met(depart, "rogue", "direct")],
+      mux: [],
+      rogue: [met(depart, "glitch", "witnessed")],
+    });
   });
 
   test("a refused action, an invalid one and a tick-only step leave every person's encounters", () => {
     const engine = fresh();
-    act(engine, { actor: "rogue", verb: "say", words: "hello" });
+    const say = act(engine, { actor: "rogue", verb: "say", words: "hello" });
     const before = everyone(engine);
-    expect(before.glitch).toHaveLength(1);
+    expect(before).toEqual({
+      glitch: [met(say, "rogue", "witnessed")],
+      mux: [],
+      rogue: [met(say, "glitch", "direct")],
+    });
     expect(
       engine.act({ actor: "mux", verb: "offer", target: "rogue", item: "stimpak" }).outcome,
     ).toBe("refused");
@@ -200,18 +140,39 @@ describe("E2: no encounter from an own act alone, a payload field, or an event n
     expect(engine.step().map((event) => event.subkind)).toEqual(["time.tick"]);
     expect(everyone(engine)).toEqual(before);
   });
+
+  test("every encounter is of a copy its holder holds, with that event's subkind and tick, the others sorted by id", () => {
+    const engine = fresh();
+    muxToBar(engine);
+    act(engine, { actor: "rogue", verb: "whisper", target: "glitch", words: "psst" });
+    act(engine, { actor: "glitch", verb: "say-to", target: "mux", words: "hi" });
+    const events = new Map(engine.events().map((event) => [event.id, event]));
+    // The arrive, the whisper and the say-to each reach all three: two others for each of three.
+    expect(Object.values(everyone(engine)).flat()).toHaveLength(18);
+    for (const person of PEOPLE) {
+      const held = new Set(engine.received(person).map((copy) => copy.id));
+      const encounters = engine.encounters(person).encounters;
+      for (const encounter of encounters) {
+        expect(held.has(encounter.event)).toBe(true);
+        expect(events.get(encounter.event)).toMatchObject({
+          tick: encounter.tick,
+          subkind: encounter.subkind,
+        });
+        expect(encounter.with).not.toBe(person);
+      }
+      for (const event of new Set(encounters.map((e) => e.event))) {
+        const others = encounters.filter((e) => e.event === event).map((e) => e.with);
+        expect(others).toEqual([...others].sort());
+      }
+    }
+  });
 });
 
-describe("E3: knowledge's people are its tie targets, then each other person first experienced", () => {
-  test("each person's people keep the tie and the first copy naming each other person", () => {
+describe("V7: knowledge's people are its tie targets, then each other person as of the first encounter", () => {
+  test("each person's people keep the tie, then the arrive that first put each other with it", () => {
     const engine = fresh();
     const { arrive } = muxToBar(engine);
-    const whisper = act(engine, {
-      actor: "rogue",
-      verb: "whisper",
-      target: "glitch",
-      words: "psst",
-    });
+    act(engine, { actor: "rogue", verb: "whisper", target: "glitch", words: "psst" });
     act(engine, { actor: "rogue", verb: "say-to", target: "mux", words: "hi" });
     act(engine, { actor: "mux", verb: "say-to", target: "glitch", words: "yo" });
     const first = (event: WorldEvent, person: string) => ({
@@ -221,7 +182,7 @@ describe("E3: knowledge's people are its tie targets, then each other person fir
       subkind: event.subkind,
     });
     const authored = (person: string) => ({ person, tick: 0, source: "authored", subkind: null });
-    expect(engine.knowledge("mux").people).toEqual([authored("glitch"), first(whisper, "rogue")]);
+    expect(engine.knowledge("mux").people).toEqual([authored("glitch"), first(arrive, "rogue")]);
     expect(engine.knowledge("glitch").people).toEqual([authored("rogue"), first(arrive, "mux")]);
     expect(engine.knowledge("rogue").people).toEqual([authored("glitch"), first(arrive, "mux")]);
   });

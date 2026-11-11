@@ -165,6 +165,20 @@ export class Store {
       .map((row) => JSON.parse(row.json) as Copy);
   }
 
+  /** For each event `witness` holds a copy of, the other witnesses of that event, sorted by id. */
+  corecipients(witness: string): Map<string, string[]> {
+    const rows = this.db
+      .query<{ event: string; other: string }, [string, string]>(
+        "SELECT w1.event AS event, w2.witness AS other FROM witnessed w1 " +
+          "JOIN witnessed w2 ON w2.event = w1.event " +
+          "WHERE w1.witness = ? AND w2.witness <> ? ORDER BY w1.event, w2.witness",
+      )
+      .all(witness, witness);
+    const others = new Map<string, string[]>();
+    for (const { event, other } of rows) others.set(event, [...(others.get(event) ?? []), other]);
+    return others;
+  }
+
   /** Append one known row. A taught row must stand beside its witness's copy of its event. */
   know(row: KnownRow): void {
     this.db

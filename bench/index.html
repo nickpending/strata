@@ -24,7 +24,10 @@
   </head>
   <body>
     <h1>strata bench</h1>
-    <main id="panels"></main>
+    <!-- The player region: the only part of the page the harness reads. -->
+    <main id="world" aria-label="World"></main>
+    <!-- The operator region: panels for the operator, never read by the harness. -->
+    <aside id="operator" aria-label="Operator"></aside>
     <script type="module" src="/bench/app.js"></script>
   </body>
 </html>

@@ -15,7 +15,7 @@ import { parseArgs } from "node:util";
 import { type Browser, chromium } from "playwright";
 import { z } from "zod";
 import { type Expectation, expectSchema, holds } from "./goal.ts";
-import { choose, REGISTERED, RULE_AUTHOR, T_DONE, type Thresholds } from "./rule.ts";
+import { choose, PAGE_NOW, REGISTERED, RULE_AUTHOR, T_DONE, type Thresholds } from "./rule.ts";
 import {
   type BenchFailure,
   type DriveOptions,
@@ -117,8 +117,32 @@ export type ScoreFile = {
   costUsd: number;
   /** How many calls across the set came back with no reported cost. */
   unreportedCosts: number;
+  /** The page the set's runs' player read: over every loop recorded (pageSize). */
+  page: PageSize;
   sweep?: { grid: typeof GRID; method: string; results: SweepResult[]; best: SweepResult };
 };
+
+/** How many loops a set's runs recorded, and the mean (floored) and largest page each read, in characters. */
+export type PageSize = { loops: number; meanChars: number; maxChars: number };
+
+/**
+ * The page size over `loops`: each loop's page is the text after the PAGE_NOW line of its state
+ * (none when the state has no such line); a set with no loops reads zero.
+ */
+export function pageSize(loops: Pick<LoopRecord, "state">[]): PageSize {
+  const marker = `${PAGE_NOW}\n`;
+  const chars = loops.map(({ state }) => {
+    const at = state.indexOf(marker);
+    return at === -1 ? 0 : state.length - at - marker.length;
+  });
+  if (chars.length === 0) return { loops: 0, meanChars: 0, maxChars: 0 };
+  const total = chars.reduce((sum, n) => sum + n, 0);
+  return {
+    loops: chars.length,
+    meanChars: Math.floor(total / chars.length),
+    maxChars: Math.max(...chars),
+  };
+}
 
 /** The decisions code makes whatever the thresholds: a replay follows them as recorded. */
 const CODE_LED: string[] = ["resolve", "wait", "plan"];
@@ -307,6 +331,7 @@ export async function score(
     perGoal,
     costUsd: perGoal.reduce((sum, g) => sum + g.costUsd, 0),
     unreportedCosts: perGoal.reduce((sum, g) => sum + g.unreportedCosts, 0),
+    page: pageSize(goals.flatMap((g) => g.loops)),
     ...(withSweep ? { sweep: sweep(goals) } : {}),
   };
   writeFileSync(path, `${JSON.stringify(scored, null, 2)}\n`);

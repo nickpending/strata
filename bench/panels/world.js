@@ -1,12 +1,14 @@
 /**
- * The world panel: rooms with who is present, what they hold and their ties; who is in transit;
- * the items with any pending offer; what each person knows; what has passed between each person
- * and each other; the clock and its schedule; each
- * pending state with who closes it and what the clock fires; the act form built from the served
- * verbs; step and reset; the history; and one person's received copies.
+ * The world panel. In the player region: the act form built from the served verbs; the clock and
+ * its schedule, step and reset; each pending state with who closes it and what the clock fires;
+ * rooms with who is present, what they hold and their ties; who is in transit; the items with any
+ * pending offer; and the history. In the operator region, which the harness never reads: what each
+ * person values; what each person knows; what has passed between each person and each other; and
+ * one person's received copies.
  */
 import { encountersSection } from "./encounters.js";
 import { knowledgeSection } from "./knowledge.js";
+import { valuesSection } from "./values.js";
 
 function h(tag, attrs, ...children) {
   const el = document.createElement(tag);
@@ -37,13 +39,15 @@ function json(value) {
   return h("pre", {}, JSON.stringify(value, null, 1));
 }
 
-export async function mount(root, api) {
+export async function mount(regions, api) {
   const state = {
     snapshot: null,
     events: [],
     verbs: (await api.verbs()).body.verbs,
     viewer: null,
     received: [],
+    /** Every person's values body, in the snapshot's person order. */
+    values: [],
     /** Every person's knowledge body, in the snapshot's person order. */
     knowledge: [],
     /** Every person's encounters body, in the snapshot's person order. */
@@ -57,7 +61,9 @@ export async function mount(root, api) {
     resetRefusal: null,
   };
   const view = h("div");
-  root.append(view);
+  const side = h("div");
+  regions.player.append(view);
+  regions.operator.append(side);
 
   async function refresh() {
     state.snapshot = (await api.snapshot()).body;
@@ -68,6 +74,7 @@ export async function mount(root, api) {
     state.form.actor ??= people[0] ?? null;
     state.form.verb ??= state.verbs[0]?.verb ?? null;
     state.received = state.viewer === null ? [] : (await api.received(state.viewer)).body.copies;
+    state.values = await Promise.all(people.map(async (person) => (await api.values(person)).body));
     state.knowledge = await Promise.all(
       people.map(async (person) => (await api.knowledge(person)).body),
     );
@@ -382,6 +389,11 @@ export async function mount(root, api) {
     );
   }
 
+  /**
+   * The player region gets what the player acts with and whose world state its decisions read; the
+   * operator region gets the per-person panels, all open. A panel added later goes to the operator
+   * region unless its work order puts it in the player's.
+   */
   function render() {
     view.replaceChildren(
       actSection(),
@@ -390,10 +402,13 @@ export async function mount(root, api) {
       roomsSection(),
       transitSection(),
       itemsSection(),
+      historySection(),
+    );
+    side.replaceChildren(
+      valuesSection(h, state.values),
       knowledgeSection(h, state.knowledge),
       encountersSection(h, state.encounters),
       receivedSection(),
-      historySection(),
     );
   }
 

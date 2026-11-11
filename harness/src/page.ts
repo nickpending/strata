@@ -1,7 +1,7 @@
 /**
  * Reading a page as a person does: its accessible text, and every control with the label a person
- * reads it by. Controls are found and worked by role and label, never by a selector a person
- * cannot see.
+ * reads it by, from the page's player region, its one main landmark, alone. Controls are found and
+ * worked by role and label, never by a selector a person cannot see.
  */
 import { existsSync } from "node:fs";
 import { homedir, userInfo } from "node:os";
@@ -70,8 +70,8 @@ export type Control = {
 
 export type PageRead = { text: string; controls: Control[] };
 
-/** Every button, select, input and textarea on the page, read in the browser. */
-function controlsInBrowser(): Control[] {
+/** Every button, select, input and textarea inside `root`, read in the browser. */
+function controlsInBrowser(root: Element): Control[] {
   const roleOf = (el: Element): string => {
     const explicit = el.getAttribute("role");
     if (explicit !== null) return explicit;
@@ -106,7 +106,7 @@ function controlsInBrowser(): Control[] {
       .map((label) => labelText(label, el))
       .join(" ");
   };
-  return Array.from(document.querySelectorAll("button, select, input, textarea")).map((el, id) => {
+  return Array.from(root.querySelectorAll("button, select, input, textarea")).map((el, id) => {
     const field = el as HTMLInputElement;
     return {
       id,
@@ -122,10 +122,34 @@ function controlsInBrowser(): Control[] {
   });
 }
 
-/** The page's accessible text and every control on it. */
+/**
+ * A page whose player region cannot be found: it has no main landmark, or more than one. The
+ * player never falls back to reading the whole page, which would put every operator panel back.
+ */
+export class NoPlayerRegion extends Error {
+  constructor(readonly mains: number) {
+    super(
+      `the page has ${mains} main landmarks, not exactly one: the player reads only the page's one main region`,
+    );
+  }
+}
+
+/** The page's player region: its one main landmark, where the player's text and controls are. */
+async function playerRegion(page: Page): Promise<Locator> {
+  const main = page.locator("main");
+  const mains = await main.count();
+  if (mains !== 1) throw new NoPlayerRegion(mains);
+  return main;
+}
+
+/**
+ * The player region's accessible text and every control in it; nothing outside the page's main
+ * landmark is read. Throws NoPlayerRegion when the page has no main landmark or more than one.
+ */
 export async function readPage(page: Page): Promise<PageRead> {
-  const text = await page.locator("body").ariaSnapshot();
-  const controls = await page.evaluate(controlsInBrowser);
+  const main = await playerRegion(page);
+  const text = await main.ariaSnapshot();
+  const controls = await main.evaluate(controlsInBrowser);
   return { text, controls };
 }
 
@@ -141,9 +165,9 @@ export function nameOf(control: Control): string {
     : `${control.kind} "${control.label}"`;
 }
 
-/** The control as a person finds it: by its role and its label. */
+/** The control as a person finds it: by its role and its label, in the player region it was read from. */
 export function locate(page: Page, control: Control): Locator {
-  return page.getByRole(control.role as Parameters<Page["getByRole"]>[0], {
+  return page.locator("main").getByRole(control.role as Parameters<Page["getByRole"]>[0], {
     name: control.label,
     exact: true,
   });

@@ -3,3 +3,15 @@ name = "Mux"
 location = "yard"
 places = ["hall", "yard"]
 ties = []
+
+[values]
+self_direction = 2
+stimulation = 2
+hedonism = 2
+achievement = 2
+power = 2
+security = 2
+conformity = 2
+tradition = 2
+benevolence = 2
+universalism = 2

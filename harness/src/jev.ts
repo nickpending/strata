@@ -3,7 +3,9 @@
  *
  * The Jev client: one POST to OpenRouter's decisions endpoint per `decide`, keyed by a named apiconf
  * key, else OPENROUTER_API_KEY, else the apiconf key `sable-openrouter`; an endpoint override is
- * sent no key unless one is named for it. A
+ * sent no key unless one is named for it. It asks noul, choice and score questions of a state sent
+ * as given, a string or a JSON object whose fields the instructions name, and returns each answer
+ * as the wire gives it, a score with no level derived from it. A
  * question that cannot be answered is a typed refusal, never a throw and never an empty answer;
  * the caller branches on `refusal.kind`. Each call is made once: a refusal stops the caller, which
  * names its kind.
@@ -44,7 +46,9 @@ export type ChoiceQuestion = {
   instructions: string;
   criteria: Record<string, string>;
 };
-export type JevQuestion = NoulQuestion | ChoiceQuestion;
+/** A position on a spectrum: `criteria` describes 2 to 10 ordered levels, lowest first. */
+export type ScoreQuestion = { type: "score"; instructions: string; criteria: string[] };
+export type JevQuestion = NoulQuestion | ChoiceQuestion | ScoreQuestion;
 
 export type NoulAnswer = { noul: number };
 export type ChoiceAnswer = {
@@ -52,7 +56,20 @@ export type ChoiceAnswer = {
   confidence: number;
   probabilities: Record<string, number>;
 };
-export type JevAnswer = NoulAnswer | ChoiceAnswer;
+/**
+ * A score as the wire gives it: the position between levels, the confidence, and per level its
+ * description and probability. No level is derived from it here; a caller buckets the score itself.
+ */
+export type ScoreAnswer = {
+  score: number;
+  confidence: number;
+  legend: Record<string, string>;
+  probabilities: Record<string, number>;
+};
+export type JevAnswer = NoulAnswer | ChoiceAnswer | ScoreAnswer;
+
+/** What a question is asked of: text, or a JSON object whose fields the instructions name. */
+export type JevState = string | Record<string, unknown>;
 
 export type DecideResult =
   | { ok: true; answers: Record<string, JevAnswer>; costUsd: number | null }
@@ -181,11 +198,46 @@ export async function postJson(
   }
 }
 
+const isString = (value: unknown): value is string => typeof value === "string";
+const isNumber = (value: unknown): value is number => typeof value === "number";
+
+/** `value` as a record whose every value `is` accepts, or undefined when it is not one. */
+function recordOf<T>(
+  value: unknown,
+  is: (inner: unknown) => inner is T,
+): Record<string, T> | undefined {
+  if (!isRecord(value)) return undefined;
+  const out: Record<string, T> = {};
+  for (const [key, inner] of Object.entries(value)) {
+    if (!is(inner)) return undefined;
+    out[key] = inner;
+  }
+  return out;
+}
+
+/**
+ * A score answer, when it has every field and its legend and probabilities are each keyed by exactly
+ * the question's levels, numbered from "0" as the live body keys them.
+ */
+function scoreOf(value: Record<string, unknown>, question: ScoreQuestion): ScoreAnswer | undefined {
+  const { score, confidence } = value;
+  if (typeof score !== "number" || typeof confidence !== "number") return undefined;
+  const legend = recordOf(value.legend, isString);
+  const probabilities = recordOf(value.probabilities, isNumber);
+  if (legend === undefined || probabilities === undefined) return undefined;
+  const levels = question.criteria.map((_, level) => String(level)).sort();
+  const keyedByLevels = (record: Record<string, unknown>) =>
+    Bun.deepEquals(Object.keys(record).sort(), levels);
+  if (!keyedByLevels(legend) || !keyedByLevels(probabilities)) return undefined;
+  return { score, confidence, legend, probabilities };
+}
+
 function answerOf(value: unknown, question: JevQuestion): JevAnswer | undefined {
   if (!isRecord(value)) return undefined;
   if (question.type === "noul") {
     return typeof value.noul === "number" ? { noul: value.noul } : undefined;
   }
+  if (question.type === "score") return scoreOf(value, question);
   if (typeof value.choice !== "string") return undefined;
   if (typeof value.confidence !== "number" || !isRecord(value.probabilities)) return undefined;
   const probabilities: Record<string, number> = {};
@@ -196,9 +248,12 @@ function answerOf(value: unknown, question: JevQuestion): JevAnswer | undefined 
   return { choice: value.choice, confidence: value.confidence, probabilities };
 }
 
-/** Ask `questions` of `state` in one call; every question must come back answered. */
+/**
+ * Ask `questions` of `state` in one call; every question must come back answered. The state is sent
+ * as given: a JSON object nested in the body as an object, a string as a string.
+ */
 export async function decide(
-  state: string,
+  state: JevState,
   questions: Record<string, JevQuestion>,
   options: ClientOptions = {},
 ): Promise<DecideResult> {

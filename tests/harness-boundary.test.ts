@@ -7,6 +7,7 @@ import {
   realpathSync,
   rmSync,
   symlinkSync,
+  writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, sep } from "node:path";
@@ -80,6 +81,35 @@ describe("H1: the harness package reaches nothing outside itself and its depende
   test("no file of the old player remains under src/player", () => {
     expect(existsSync(join(ROOT, "src", "player"))).toBe(false);
   });
+});
+
+describe("V11: the harness's own source, copied alone, reaches nothing outside itself", () => {
+  const { copy, modules } = copyAlone();
+  // The source alone, under the harness's own compiler options: what the harness ships.
+  writeFileSync(
+    join(copy, "tsconfig.src.json"),
+    JSON.stringify({ extends: "./tsconfig.json", include: ["src/**/*.ts"] }),
+  );
+
+  test("its source typechecks, and every file that program lists lies under the copy or the linked node_modules", async () => {
+    const checked = await run([process.execPath, TSC, "--noEmit", "-p", "tsconfig.src.json"], copy);
+    expect({ exitCode: checked.exitCode, output: checked.output }).toEqual({
+      exitCode: 0,
+      output: "",
+    });
+    const ran = await run(
+      [process.execPath, TSC, "--listFilesOnly", "-p", "tsconfig.src.json"],
+      copy,
+    );
+    expect(ran.exitCode).toBe(0);
+    const listed = ran.output.split("\n").filter((line) => line.trim() !== "");
+    expect(listed.some((file) => file.endsWith(`${sep}src${sep}jev.ts`))).toBe(true);
+    const outside = listed.filter((file) => {
+      const real = existsSync(file) ? realpathSync(file) : file;
+      return !real.startsWith(copy + sep) && !real.startsWith(modules + sep);
+    });
+    expect(outside).toEqual([]);
+  }, 120_000);
 });
 
 /** Every value a manifest gives under a key named `name`, with the path of keys that leads to it. */
