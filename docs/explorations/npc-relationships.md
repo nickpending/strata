@@ -52,6 +52,9 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 16. **Values: a fixed, comprehensive catalogue (rudy).** It is one list for the world that every NPC draws on. Values may conflict, and conflicts are to be tested both when an NPC holds conflicting values and when one event touches both. The starting point is Schwartz's theory of basic human values: ten broad values, arranged so that neighbours fit together and opposites conflict. A refined version has 19.
 17. **Beliefs sit a layer below values (rudy).** "Cops are the enemy" is not a value. It is a specific stance a layer down, and rudy named that layer belief. Gossip's told-and-maybe-false content, which the knowledge exploration called belief, is renamed claim. Sources to model on: real psychology, game theory (repeated games, where trust builds or breaks over many exchanges) and tabletop RPGs (D&D's ideals, bonds and flaws; Burning Wheel's Beliefs).
 
+18. **Who applies importance: four experiments (corpus/experiments/value-weighting*).** The first two misused Jev, which led to `docs/jev.md`. The third, run under docs/jev.md, tied on accuracy and favoured code-applied importance on robustness. The fourth tested an extra "what the act shows about the actor" question. It added nothing, because the deed questions already covered it and the earlier misses came from weighting. Design B was settled (rudy). Jev asks, per value and without seeing importances, whether the encounter helped or hurt the NPC's own stake, whether the other acted for or against the value, and whether it touched the NPC at all, with a follow-up strength score. Code weights the answers by the NPC's importance. Measured on fresh held-out cases, direction was right on 77%, and on 83% where both labellers agree; the labellers themselves agree on 86 to 93%. Most remaining misses turn on what an act exposes the NPC to (heat, debt). They need the NPC's knowledge in the judgment's state, and the world does not yet carry such facts.
+19. **Values on NPCs (rudy).** Importance is 0 to 4, "for now". The values of Rogue, Glitch and Mux are drafted by the assistant as experiment-grade content.
+
 ## Decisions
 
 **Settled**
@@ -93,7 +96,6 @@ Open, still being explored:
 - How the kind of relationship (friend, rival, client) emerges.
 - Whether a conversation is one encounter or many.
 - When the summary is generated.
-- Whether values are ranked per NPC, and whether the first slice holds Schwartz's ten or the refined 19.
 - Whether beliefs join values in the first mind slice.
 - Whether a stranger carries any standing.
 
