@@ -1,0 +1,314 @@
+{
+  "workOrder": "npc-values",
+  "what": "The first mind slice and its two prerequisites: world/values.toml holds Schwartz's ten values (id and description) and the 0 to 4 importance words; every person file rates all ten (Rogue, Glitch and Mux with drafted, experiment-grade importances), validated at boot with file, path and rule; Engine.values serves each person's values on GET /api/values/<person> and a labelled Values section shows them with the importance as number and words; harness/src/jev.ts sends a JSON-object state and asks and parses score questions (score, legend, probabilities, confidence), pinned by a live body saved as a fixture; encountersOf forms one encounter per other recipient of each event, read by knowledge's people too; and the four goal sets re-run once as a page regression.",
+  "why": "Design B judges each encounter per value and weights the answers by the NPC's importance in code; that needs values on NPCs, a Jev client that asks in docs/jev.md's shapes, and encounters with everyone an NPC experienced in an event. Design: docs/work/npc-values/shape/design.md.",
+  "issues": [
+    16,
+    15
+  ],
+  "stakes": [
+    "The world's values are exactly the entries of world/values.toml, in its order, each an id and a description; no value id or description is written in code.",
+    "The importance words for 0 to 4 are authored in world/values.toml and are the only source of the words the bench shows.",
+    "Every person file rates every catalogue value with an integer from 0 to 4 and names no other value; a world that breaks this, or whose catalogue is missing, malformed or repeats an id, does not boot, and the refusal names the file, the path inside it and the rule.",
+    "Rogue, Glitch and Mux carry the drafted importances this design lists, each file marked as a draft.",
+    "Values are read from the loaded definitions on request and are never written to the state table or carried in the snapshot.",
+    "The bench serves each person's values on one route and shows them in a Values section, each line labelled with the value's id, its importance as a number and in words, and its description, adding no control and no text the target's vocabulary reads.",
+    "A person's encounters from an event it received are exactly one per other person who received that event, with role direct when it is the event's actor or a target and witnessed otherwise, read with no payload field and no subkind case.",
+    "Who a copy is with is computed only in encountersOf, and knowledge's people read it.",
+    "The Jev client sends a JSON-object state as an object and a string state as a string, and parses score answers (score, legend, probabilities, confidence) beside noul and choice, refusing as parse any answer missing a field or with level keys other than the question's levels as the live body keys them.",
+    "The harness imports nothing from the engine.",
+    "The score parser is tested against a raw body from one live call, saved as a fixture.",
+    "The live probe and the four real-run sets spend at most $0.10 together, use the default model and overwrite no committed score file.",
+    "No per-encounter judgment, standing, edge, belief or summary is built."
+  ],
+  "criteria": [
+    {
+      "id": "V1",
+      "given": "world/ as committed",
+      "when": "tests/values.test.ts calls loadWorld(\"world\")",
+      "then": "it is wrong if the catalogue differs from the authored file or is held anywhere but definitions: defs.values is exactly ten entries, in world/values.toml's order, whose ids and descriptions equal, entry for entry, the values in corpus/experiments/value-weighting-3/catalogue.json; defs.importanceWords is the five phrases of catalogue.json's importance_scale for 0 to 4 in order; and no file under src/ contains any of the ten value ids or the five phrases as a literal (grep over src/)",
+      "atBase": "loadWorld returns no values or importanceWords and world/values.toml does not exist, so the equality fails",
+      "proof": [
+        "tests/values.test.ts"
+      ],
+      "mutations": [
+        {
+          "id": "V1-M1",
+          "change": "hard-code the ten ids in definitions.ts instead of reading them from the file"
+        },
+        {
+          "id": "V1-M2",
+          "change": "read the importance words from a constant in code"
+        }
+      ]
+    },
+    {
+      "id": "V2",
+      "given": "a fresh temporary copy of world/ per case, each with one break",
+      "when": "tests/values.test.ts calls boot() on each copy: values.toml removed; world.toml removed; a values.toml whose second entry repeats the first's id; a values.toml with importance key 4 removed; mux.toml's [values] missing benevolence; mux.toml's [values] naming greed = 2; mux.toml's power = 5; mux.toml's power = 2.5",
+      "then": "it is wrong if any boots, creates a database, or names the wrong place: each returns ok false with refusal file, path and rule, respectively: values.toml, \"\", missing-file; world.toml, \"\", missing-file; values.toml, values.1.id, unique-value-id; values.toml, importance.4, zod's code; people/mux.toml, values.benevolence, value-rated; people/mux.toml, values.greed, value-names-catalogue; people/mux.toml, values.power, zod's code for too big; people/mux.toml, values.power, zod's code for a non-integer; and no database file exists at the dbPath after any of them",
+      "atBase": "base has no values.toml check, its personSchema refuses any [values] table and a missing file reads as toml-syntax, so the expected files, paths and rules differ",
+      "proof": [
+        "tests/values.test.ts"
+      ],
+      "mutations": [
+        {
+          "id": "V2-M1",
+          "change": "read an unrated catalogue value as importance 0 instead of refusing"
+        },
+        {
+          "id": "V2-M2",
+          "change": "drop the unknown-value check"
+        },
+        {
+          "id": "V2-M3",
+          "change": "accept importances outside 0 to 4"
+        }
+      ]
+    },
+    {
+      "id": "V3",
+      "given": "world/people/rogue.toml, glitch.toml and mux.toml as committed",
+      "when": "tests/values.test.ts loads world/ and reads each file's text",
+      "then": "it is wrong if a draft is missing, unmarked or altered: in catalogue order (self_direction, stimulation, hedonism, achievement, power, security, conformity, tradition, benevolence, universalism) Rogue's importances are 3, 0, 1, 2, 4, 4, 1, 0, 1, 0, Glitch's 2, 1, 1, 1, 0, 4, 3, 0, 1, 1 and Mux's 1, 0, 1, 3, 2, 2, 2, 1, 3, 1, and each file's text holds the comment line '# Draft importances (experiment-grade, drafted by the assistant, rudy 2026-11-10); derived from this world's ties.' directly above its [values] table",
+      "atBase": "no person file has a [values] table, so every importance read is missing",
+      "proof": [
+        "tests/values.test.ts"
+      ]
+    },
+    {
+      "id": "V4",
+      "given": "world/ booted fresh, the engine and the bench's routes over it",
+      "when": "tests/values.test.ts calls Engine.values for each person, acts rogue whisper glitch and steps once, calls it again, and reads readState(); tests/server.test.ts GETs /api/values/rogue, /api/values/nobody and /api/values/%E0%A4%A",
+      "then": "it is wrong if values are not read from definitions or the route differs: Engine.values(\"rogue\") is { person: \"rogue\", name: \"Rogue\", values } with ten entries in catalogue order, each { id, description, importance, words } where words is the importance's phrase (power: 4, \"central to who this person is\"); the result is equal before and after the act and step; no state row has part values; Engine.values(\"data-shard\") throws; the route answers 200 with a body equal to Engine.values(\"rogue\"), 404 naming nobody, and 400 for the malformed encoding",
+      "atBase": "Engine has no values() and /api/values/ answers 404 for every person",
+      "proof": [
+        "tests/values.test.ts",
+        "tests/server.test.ts"
+      ],
+      "mutations": [
+        {
+          "id": "V4-M1",
+          "change": "store values as a person part written to the state table"
+        },
+        {
+          "id": "V4-M2",
+          "change": "show the importance number without its words"
+        }
+      ]
+    },
+    {
+      "id": "V5",
+      "given": "the bench served over world/ booted fresh, read by tests/page.test.ts's page reader",
+      "when": "the page is read fresh and again after rogue whisper glitch",
+      "then": "it is wrong if the Values section is missing, unlabelled or changes what the player reads: a heading 'Values' stands before the 'Knowledge' heading; under it each person has a level-3 heading 'What <name> values' with no parentheses, then ten list items in catalogue order each reading '<id>: importance <n>, <words>, <description>' (Rogue's power line reads 'power: importance 4, central to who this person is, status and prestige, control or dominance over people and resources'); the page's controls are the same as before the section, no control is unlabelled, and vocabulary() over the page gives exactly the world's people, items, rooms and exits",
+      "atBase": "base's page has no Values heading, so the section lookup finds nothing",
+      "proof": [
+        "tests/page.test.ts"
+      ]
+    },
+    {
+      "id": "V6",
+      "given": "world/ booted fresh, driven only through Engine.act and Engine.step, each case from its own fresh boot",
+      "when": "tests/encounters.test.ts performs: mux departs west and the clock brings the arrive; then, from that state, glitch say; and separately rogue whisper glitch; and on a fresh boot glitch departs east with mux in the back room; and a refused action (mux offer stimpak to rogue), an invalid one (verb fly) and a tick-only step",
+      "then": "it is wrong if an encounter is missing, extra, or of the wrong role: the depart gives mux none; the arrive gives mux one direct encounter with glitch and one with rogue, kind physical.arrive, and rogue and glitch each one witnessed with mux; glitch's say gives glitch one direct with mux and one with rogue, and mux and rogue each one witnessed with glitch and one witnessed with each other; rogue's whisper gives rogue one direct with glitch and one with mux, glitch one direct with mux and one with rogue, and mux one witnessed with glitch and one with rogue; glitch's depart east gives glitch one direct with rogue and rogue one witnessed with glitch, and mux, holding no copy, none from it; within a copy the others come sorted by id, each with that event's subkind, tick and id; the refused, invalid and tick-only steps leave every person's encounters unchanged",
+      "atBase": "base's rule takes only actor and targets, so the say and the arrive give the actor no encounter and bystanders none with each other",
+      "proof": [
+        "tests/encounters.test.ts"
+      ],
+      "mutations": [
+        {
+          "id": "V6-M1",
+          "change": "restore the actor-and-targets rule"
+        },
+        {
+          "id": "V6-M2",
+          "change": "read an arrive's payload present instead of the event's recipients"
+        },
+        {
+          "id": "V6-M3",
+          "change": "set role direct for every holder whose encounter is with the actor"
+        }
+      ]
+    },
+    {
+      "id": "V7",
+      "given": "world/ booted fresh",
+      "when": "tests/encounters.test.ts walks mux to the bar, then rogue whisper glitch, rogue say-to mux, mux say-to glitch, and reads each person's knowledge",
+      "then": "it is wrong if knowledge's people keep the old rule: mux's people are the authored glitch then rogue as of the arrive (tick, source the arrive's id, subkind physical.arrive); glitch's are the authored rogue then mux as of the arrive; rogue's the authored glitch then mux as of the arrive",
+      "atBase": "base takes mux's first encounter with rogue from the whisper, so mux's second person has the whisper as source",
+      "proof": [
+        "tests/encounters.test.ts"
+      ]
+    },
+    {
+      "id": "V8",
+      "given": "a local stand-in for the decisions endpoint that keeps each request body, passed as ClientOptions.endpoint",
+      "when": "harness/test/jev.test.ts calls decide with the state { event: { text: \"Rogue lets Glitch stay.\" } } and one noul question, then with the string state \"Rogue lets Glitch stay.\"",
+      "then": "it is wrong if the state is not sent as given: the first request body's state is the object, deep-equal to what was passed, not a string; the second's is the string; both carry model typesafe/jev-1.13 and the questions as given",
+      "atBase": "decide's state parameter is typed string, so passing an object fails the harness typecheck that tests/harness-boundary.test.ts H1 runs over harness/test",
+      "proof": [
+        "harness/test/jev.test.ts",
+        "tests/harness-boundary.test.ts"
+      ]
+    },
+    {
+      "id": "V9",
+      "given": "harness/test/fixtures/jev-score-body.json, the live body V12 saved, served by a local stand-in endpoint",
+      "when": "harness/test/jev.test.ts calls decide with the probe's three questions (a noul, a choice and a three-level score), then with the fixture altered once per case: legend removed; a probabilities key outside the score's levels; score a string; confidence removed",
+      "then": "it is wrong if the score answer is not returned as the wire gave it or a malformed one passes: the noul answer is the fixture's noul, the choice answer its choice, confidence and probabilities, and the score answer exactly { score, confidence, legend, probabilities } with the fixture's values, legend keyed by the levels as the fixture keys them; each altered body gives ok false with refusal kind parse naming the score question",
+      "atBase": "base's parser reads a score answer as a choice, finds no string choice and refuses with parse, so the unaltered fixture fails",
+      "proof": [
+        "harness/test/jev.test.ts"
+      ],
+      "mutations": [
+        {
+          "id": "V9-M1",
+          "change": "accept a score answer with no legend"
+        },
+        {
+          "id": "V9-M2",
+          "change": "derive and return a most-probable level in place of probabilities"
+        }
+      ]
+    },
+    {
+      "id": "V10",
+      "holds": true,
+      "given": "a local stand-in endpoint answering fixed noul and choice bodies",
+      "when": "harness/test/jev.test.ts calls decide with a noul and a choice question and a string state, and with a body missing the choice's probabilities",
+      "then": "it is wrong if noul or choice parsing changed: the noul answer is { noul } and the choice { choice, confidence, probabilities } as served, costUsd is usage.cost or null, and the body missing probabilities gives a parse refusal naming the choice question",
+      "atBase": "base parses noul and choice answers this way already",
+      "proof": [
+        "harness/test/jev.test.ts"
+      ]
+    },
+    {
+      "id": "V11",
+      "holds": true,
+      "given": "harness/ copied alone into a fresh directory, as tests/harness-boundary.test.ts H1 does",
+      "when": "its typecheck and tests run",
+      "then": "it is wrong if the harness reaches the engine: the typecheck passes, the tests pass, and every file its program lists lies under the copy or the linked node_modules",
+      "atBase": "base's harness imports nothing outside itself",
+      "proof": [
+        "tests/harness-boundary.test.ts"
+      ]
+    },
+    {
+      "id": "V12",
+      "given": "The approved spend (strata-d3 for rudy, 2026-11-10): at most $0.10 USD in all for the one live probe call of V12 and the four real-run sets of V13 together, default model and default Jev; no further approval is needed within it, and the builder stops and reports if a run would pass it. The built jev.ts, before its score key rule is final.",
+      "when": "the builder runs bun corpus/experiments/npc-values/probe.ts once, which sends through decide() the JSON state { event: { text } } with one noul, one choice and one three-level score question, each instruction naming event.text",
+      "then": "it is wrong if the fixture is not a real, scrubbed body: harness/test/fixtures/jev-score-body.json exists, its top-level keys are exactly answers, model and usage, its answers hold the three question names, and corpus/experiments/npc-values/probe.txt records the run's date, its costUsd and the parsed answers; harness/test/jev.test.ts asserts the fixture's keys",
+      "atBase": "no fixture exists at base, so reading it fails",
+      "proof": [
+        "harness/test/jev.test.ts"
+      ]
+    },
+    {
+      "id": "V13",
+      "given": "The approved spend (strata-d3 for rudy, 2026-11-10): at most $0.10 USD in all for the one live probe call of V12 and the four real-run sets of V13 together, default model and default Jev; no further approval is needed within it, and the builder stops and reports if a run would pass it. The job's built code passing the gate, and corpus/goals/knowledge.json, blind-1.json, blind-2.json and blind-2-spent.json copied unchanged to corpus/experiments/npc-values/.",
+      "when": "bun run score --goals corpus/experiments/npc-values/<set>.json --tick-minutes 10 runs once for each of the four with the default model",
+      "then": "it is wrong if a committed score file changes or a loss goes unexplained: each copy's sha256 equals its corpus/goals original's; git diff -- corpus/goals is empty; four score files exist under corpus/experiments/npc-values/; docs/work/npc-values/real-runs.md gives held and costUsd per set beside npc-encounters' run of the same sets (corpus/experiments/npc-encounters/<set>.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json), the total spend with the probe's, the page size each set's first loop read, and every goal not held with its cause from its loops.jsonl and run.json; any loss a code path decided (a vocabulary or checked() refusal) is fixed before merge",
+      "atBase": "no copies, score files or real-runs.md exist under the npc-values paths, so the checks fail",
+      "proof": [
+        "tests/experiment-copies.test.ts"
+      ]
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "V5",
+      "when": "after merge, on main: bun run start --tick-minutes 10, open http://127.0.0.1:4800, act mux depart west, press Step",
+      "then": "a Values section stands before Knowledge with 'What Rogue values', 'What Glitch values' and 'What Mux values', each ten lines such as 'power: importance 4, central to who this person is, ...' under Rogue; the Encounters section under 'What has passed between Mux and others' shows 'with glitch' and 'with rogue', each a line 'role direct (actor or target), kind physical.arrive, tick 1, event <id>'; every line reads as labelled",
+      "by": "operator",
+      "operatorOnly": "Whether the Values and Encounters sections read clearly to a person at a glance is a human reading of the rendered page; the page test proves the text and the vocabulary, but no command can judge legibility."
+    }
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "An actor now holds an encounter with every other person who received its act, so a depart, an arrive or a say to the room makes encounters for the actor with everyone who saw it.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/sacrifices.py . (output docs/work/npc-values/shape/sacrifices.txt)",
+        "records": "corpus/runs/**/received.jsonl: actor's encounters with a recipient outside its act's targets, of all corrected-rule encounters",
+        "count": 1357,
+        "total": 5552
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Two bystanders of the same event, such as a whisper between two others, now hold a witnessed encounter with each other.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/sacrifices.py . (output docs/work/npc-values/shape/sacrifices.txt)",
+        "records": "corpus/runs/**/received.jsonl: bystander-with-bystander encounters, of all corrected-rule encounters",
+        "count": 394,
+        "total": 5552
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Knowledge's people change: an arriver lists the room's people as of its arrival, and a bystander lists other bystanders.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/sacrifices.py . (output docs/work/npc-values/shape/sacrifices.txt)",
+        "records": "corpus/runs/**/received.jsonl: arrive events with another recipient besides the mover, of all arrive events",
+        "count": 565,
+        "total": 565
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The importances of Rogue, Glitch and Mux are the assistant's draft from three ties notes, not authored by rudy.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/sweep.py . (output docs/work/npc-values/shape/sweep.txt)",
+        "records": "world/people/*.toml: people files with no [values] table, each drafted here, of all people files",
+        "count": 3,
+        "total": 3
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Every world, test worlds included, must author the full catalogue and every person's full table; there is no default.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/sacrifices.py . (output docs/work/npc-values/shape/sacrifices.txt)",
+        "records": "world/ and tests/worlds/*: world directories with a people/ folder that must author the catalogue and full tables, of all such directories",
+        "count": 2,
+        "total": 2
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Every loop's page text grows by a Values section of one line per person per value, and by the added encounters.",
+      "frequency": {
+        "kind": "measured",
+        "command": "python3 -I docs/work/npc-values/shape/sacrifices.py . (output docs/work/npc-values/shape/sacrifices.txt)",
+        "records": "corpus/runs/**/loops.jsonl: loops, each of which reads the whole page",
+        "count": 8164,
+        "total": 8164
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The client returns a score answer as the wire gives it, with no most-probable level; a caller buckets the score itself.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "No caller asks a score question yet (grep -rn '\"score\"' harness/src src outside jev.ts counts 0); the first, the per-encounter judgment, buckets its score itself per docs/jev.md rule 6."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The draft importances are derived from the ties notes, and the tie shape is rejected reverie baggage due for redesign, so the drafts are revisited when ties are redone.",
+      "frequency": {
+        "kind": "measured",
+        "command": "grep -l '^\\[\\[ties\\]\\]' world/people/*.toml | wc -l",
+        "records": "world/people/*.toml: people files whose drafted importances rest on a ties note, of all people files",
+        "count": 3,
+        "total": 3
+      }
+    }
+  ]
+}

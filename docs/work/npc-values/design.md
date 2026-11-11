@@ -1,0 +1,85 @@
+---
+type: design
+date: 2026-11-11
+title: "Design: npc-values"
+description: "The first mind slice and its two prerequisites: Schwartz's ten values as one authored world catalogue with each person's 0 to 4 importance per value, validated at boot and shown per NPC on the bench with the importance in words; a Jev client that sends a JSON-object state and asks and parses score questions beside noul and choice; and encounters formed with every other person who received the same event."
+purpose: "The recorded design of the npc-values work order, read by its plan and its builders."
+producer: cli:shape
+---
+
+# Design: npc-values
+
+## Purpose
+
+The first mind slice and its two prerequisites: Schwartz's ten values as one authored world catalogue with each person's 0 to 4 importance per value, validated at boot and shown per NPC on the bench with the importance in words; a Jev client that sends a JSON-object state and asks and parses score questions beside noul and choice; and encounters formed with every other person who received the same event.
+
+## Form
+
+Three changes, each extending what exists; nothing judges, rolls up or stores anything new.
+
+1. The catalogue (`world/values.toml`, new; `src/engine/definitions.ts`). The file holds an `[importance]` table with exactly the keys 0 to 4, each a non-empty phrase, transcribed from corpus/experiments/value-weighting-3/catalogue.json:3: 0 "does not matter to this person", 1 "matters a little", 2 "matters", 3 "matters a lot", 4 "central to who this person is"; and `[[values]]`, Schwartz's ten in the catalogue.json order, each `id` and `description` transcribed verbatim from catalogue.json (self_direction, stimulation, hedonism, achievement, power, security, conformity, tradition, benevolence, universalism). A comment heads the file citing Schwartz (2012) as catalogue.json's note does. definitions.ts gains `valuesFileSchema = z.strictObject({ importance: z.strictObject({ "0".."4": z.string().min(1) }), values: z.array(z.strictObject({ id, description: z.string().min(1) })).min(1) })`, `ValueDef = { id, description }`, and WorldDefs gains `values: ValueDef[]` (file order) and `importanceWords: string[]` (index 0 to 4). loadWorld() (definitions.ts:157) parses `values.toml` with parseFile() before the people; a repeated value id refuses at `values.<i>.id` with rule `unique-value-id`. parseFile() (definitions.ts:66) refuses a file that does not exist with rule `missing-file` and path empty, before reading it, so a missing values.toml (or world.toml) is named as missing rather than as toml-syntax. No value id or description is named anywhere in code: code tracks ids only as data read from the file.
+
+2. Importances (`src/engine/definitions.ts`; `world/people/*.toml`; `tests/worlds/two-tick/`). personSchema (definitions.ts:22) gains `values: z.record(id, z.number().int().min(0).max(4))`, so a non-integer or out-of-range importance refuses at `values.<id>` with zod's code as the rule. checkReferences() (definitions.ts:107) gains the catalogue: each key of a person's values must name a catalogue value, else refuse at `values.<key>` with rule `value-names-catalogue`; each catalogue value must be rated, else refuse at `values.<id>` with rule `value-rated` (resolved-1: every person rates all ten). Each of world/people/rogue.toml, glitch.toml and mux.toml gains a `[values]` table, headed by a comment `# Draft importances (experiment-grade, drafted by the assistant, rudy 2026-11-10); derived from this world's ties.`, with these draft values in catalogue order (self_direction, stimulation, hedonism, achievement, power, security, conformity, tradition, benevolence, universalism): Rogue 3, 0, 1, 2, 4, 4, 1, 0, 1, 0 (power and security from her tie: the runner lies low "in her grid" and she "weighs ... whether he is worth the heat he drags toward her door"; self_direction from "She lets him, for now"); Glitch 2, 1, 1, 1, 0, 4, 3, 0, 1, 1 (security from "lying low" and "he is a <host> to her"; conformity from "careful never to give her a reason"); Mux 1, 0, 1, 3, 2, 2, 2, 1, 3, 1 (achievement and power from "one of Mux's regulars for cells and parts"; benevolence from "the closest thing he has to a friend who talks back"). The two-tick test world gains a copy of world/values.toml and a full [values] table on each of bo, cy and mux. Nothing else reads the importances in this work order.
+
+3. The values reader, route and section (`src/engine/engine.ts`, `src/server/routes.ts`, `bench/app.js`, `bench/panels/values.js` new, `bench/panels/world.js`). `type ValuesView = { person: string; name: string; values: { id: string; description: string; importance: number; words: string }[] }`, exported from engine.ts. `Engine.values(person)` throws on a non-person as knowledge() does (engine.ts:131-133) and returns the catalogue in file order, each with the person's importance and `importanceWords[importance]`, read from the loaded definitions; nothing in act(), step() or record() calls it, and it writes no state row. PERSON_ROUTES (routes.ts:99) gains `/api/values/`, answered with `this.engine.values(person) satisfies ValuesBody`, with the siblings' 404 and 400. app.js's api gains `values(thing)`. world.js reads every person's values body in refresh() beside knowledge and encounters and renders `valuesSection(h, state.values)` right before the Knowledge section. The section is an h2 `Values`, then per person an h3 `What <name> values`, with no parentheses in any heading, then one list item per value in catalogue order reading `<id>: importance <n>, <words>, <description>` (for example `power: importance 4, central to who this person is, status and prestige, control or dominance over people and resources`). No line has the form `<id>: held by` or contains `exits:` or ` -> `, and the section adds no control.
+
+4. Encounters with every other recipient (`src/engine/store.ts`, `src/engine/encounters.ts`, `src/engine/engine.ts`, `src/engine/knowledge.ts`, `bench/panels/encounters.js`). Store gains `corecipients(witness): Map<string, string[]>`, one query joining the witnessed table to itself on event, `WHERE w1.witness = ? AND w2.witness <> ?`, giving for each event the witness holds the other witnesses, sorted by id. encountersOf() (encounters.ts:22) becomes `encountersOf(copies, holder, others: (event: string) => string[])`: per copy in the order given, one encounter per id in `others(copy.id)` (each another recipient of the same event), `role` direct when the holder is the copy's actor or among its targets and witnessed otherwise, `subkind`, `tick` and `event` from the copy; it reads no payload, no registry entry and no subkind-specific case. Every recipient is a person by construction (engine.ts:52), so the isPerson filter goes. Engine.encounters() and Engine.knowledge() each pass `(event) => corecipients.get(event) ?? []` from one store read; KnowledgeOf (knowledge.ts:102) gains `others: (event: string) => string[]` and peopleOf() passes it to encountersOf(), so knowledge's people follow the same rule (resolved-4). The encounters.ts and encounters.js header comments state the new rule; the panel's line text is unchanged. The /api/encounters/ route and EncountersView keep their shape.
+
+5. The Jev client (`harness/src/jev.ts`). `ScoreQuestion = { type: "score"; instructions: string; criteria: string[] }` (2 to 10 level descriptions, lowest first, docs/jev.md:24) joins JevQuestion; `ScoreAnswer = { score: number; confidence: number; legend: Record<string, string>; probabilities: Record<string, number> }` joins JevAnswer; `JevState = string | Record<string, unknown>`. decide(state: JevState, ...) sends the state as given, a JSON object nested in the body as an object and a string as a string. answerOf() parses a score answer only when score and confidence are numbers, legend maps each key to a string, probabilities each key to a number, and legend's and probabilities' keys are each exactly the question's levels as the live body in step 6 keys them (the docs give "0" to String(criteria.length - 1); the saved body decides, and the fixture test pins it); otherwise the decide is a `parse` refusal naming the question, as today. No derived level and no interpolation is computed (docs/jev.md:35). The module comment names the score type and the JSON state. rule.ts is unchanged. jev3.ts is left as the experiment's record.
+
+6. Proof of the wire shape (approved spend). One live decisions call, run once by the builder with `bun corpus/experiments/npc-values/probe.ts` (new, beside the run copies of step 7), sends a JSON-object state `{ "event": { "text": ... } }` with one noul, one choice and one score question of three levels, each instruction naming `event.text`, through decide(); it writes the raw response body, scrubbed of any id, provider or account field other than `answers`, `model` and `usage`, to `harness/test/fixtures/jev-score-body.json`, and its printed parse to `corpus/experiments/npc-values/probe.txt`. The probe runs before the parser's key rule is finalised, so the parser is written against the body it saved. A harness test serves that fixture from a local endpoint (ClientOptions.endpoint) and asserts decide() parses each of the three answers from it.
+
+7. Real runs (approved spend). corpus/goals/knowledge.json, blind-1.json, blind-2.json and blind-2-spent.json are copied unchanged to corpus/experiments/npc-values/, and `bun run score --goals corpus/experiments/npc-values/<set>.json --tick-minutes 10` runs for each with the default model, so the score files land beside the copies and overwrite no committed file. docs/work/npc-values/real-runs.md reports held and costUsd per set against npc-encounters' run (corpus/experiments/npc-encounters/<set>.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json), names every goal not held with its cause from its run's loops.jsonl and run.json, and records the page size each set's first loop read, as a data point for #10. A loss a code path decided is a defect fixed before merge; a loss in the model's or Jev's answers is reported as such. The probe and the runs together spend at most $0.10.
+
+Acts on the gap: It supplies each missing piece the gap names: a catalogue and every person's importances, validated at boot and shown on the bench; a client that sends a JSON state and asks and parses score questions; and encounters with every other recipient of an event, so encounters no longer miss anyone the person experienced.
+
+## Size
+
+Net product lines: +220
+
+- extends `src/engine/definitions.ts`
+- new `world/values.toml`: The catalogue is world data that no existing definition kind holds: it is one list for the whole world, not a room, person or item, and world.toml holds only rules.
+- replaces `src/engine/encounters.ts`
+- extends `src/engine/store.ts`
+- extends `src/engine/knowledge.ts`
+- extends `src/engine/engine.ts`
+- extends `src/server/routes.ts`
+- new `bench/panels/values.js`: Each per-person bench section is its own panel module (knowledge.js, encounters.js); the values section joins them the same way rather than growing world.js.
+- extends `bench/panels/world.js`
+- extends `harness/src/jev.ts`
+- new `corpus/experiments/npc-values/probe.ts`: A one-off live call that captures a real score body for the fixture; no existing script asks Jev a score question.
+
+## Commitments
+
+- The world's values are exactly the entries of world/values.toml, in its order, each an id and a description; no value id or description is written in code.
+- The importance words for 0 to 4 are authored in world/values.toml and are the only source of the words the bench shows.
+- Every person file rates every catalogue value with an integer from 0 to 4 and names no other value; a world that breaks this, or whose catalogue is missing, malformed or repeats an id, does not boot, and the refusal names the file, the path inside it and the rule.
+- Rogue, Glitch and Mux carry the drafted importances this design lists, each file marked as a draft.
+- Values are read from the loaded definitions on request and are never written to the state table or carried in the snapshot.
+- The bench serves each person's values on one route and shows them in a Values section, each line labelled with the value's id, its importance as a number and in words, and its description, adding no control and no text the target's vocabulary reads.
+- A person's encounters from an event it received are exactly one per other person who received that event, with role direct when it is the event's actor or a target and witnessed otherwise, read with no payload field and no subkind case.
+- Who a copy is with is computed only in encountersOf, and knowledge's people read it.
+- The Jev client sends a JSON-object state as an object and a string state as a string, and parses score answers (score, legend, probabilities, confidence) beside noul and choice, refusing as parse any answer missing a field or with level keys other than the question's levels as the live body keys them.
+- The harness imports nothing from the engine.
+- The score parser is tested against a raw body from one live call, saved as a fixture.
+- The live probe and the four real-run sets spend at most $0.10 together, use the default model and overwrite no committed score file.
+- No per-encounter judgment, standing, edge, belief or summary is built.
+
+## Sacrifices
+
+- An actor now holds an encounter with every other person who received its act, so a depart, an arrive or a say to the room makes encounters for the actor with everyone who saw it. (1357 of 5552 corpus/runs/**/received.jsonl: actor's encounters with a recipient outside its act's targets, of all corrected-rule encounters)
+- Two bystanders of the same event, such as a whisper between two others, now hold a witnessed encounter with each other. (394 of 5552 corpus/runs/**/received.jsonl: bystander-with-bystander encounters, of all corrected-rule encounters)
+- Knowledge's people change: an arriver lists the room's people as of its arrival, and a bystander lists other bystanders. (565 of 565 corpus/runs/**/received.jsonl: arrive events with another recipient besides the mover, of all arrive events)
+- The importances of Rogue, Glitch and Mux are the assistant's draft from three ties notes, not authored by rudy. (3 of 3 world/people/*.toml: people files with no [values] table, each drafted here, of all people files)
+- Every world, test worlds included, must author the full catalogue and every person's full table; there is no default. (2 of 2 world/ and tests/worlds/*: world directories with a people/ folder that must author the catalogue and full tables, of all such directories)
+- Every loop's page text grows by a Values section of one line per person per value, and by the added encounters. (8164 of 8164 corpus/runs/**/loops.jsonl: loops, each of which reads the whole page)
+- The client returns a score answer as the wire gives it, with no most-probable level; a caller buckets the score itself. (not a case: No caller asks a score question yet (grep -rn '"score"' harness/src src outside jev.ts counts 0); the first, the per-encounter judgment, buckets its score itself per docs/jev.md rule 6.)
+- The draft importances are derived from the ties notes, and the tie shape is rejected reverie baggage due for redesign, so the drafts are revisited when ties are redone. (3 of 3 world/people/*.toml: people files whose drafted importances rest on a ties note, of all people files)
+
+## Risk
+
+If a value id or description lived in code, code would decide on meaning and a catalogue change would need a code change; both live in values.toml. If a missing importance read as 0, silence would author 'does not matter'; boot refuses it. If the words lived in code, Jev and the bench could read different words for one number; they are authored once. If values were a snapshot part, they would add state rows and copy the rejected ties shape; they are a route over definitions. If the encounter rule read an arrive's present or special-cased subkinds, the rule the exploration fixed (every recipient, no special cases) would be broken; it reads only who received the event. If knowledge's people kept the old rule, who a copy is with would have two homes; it reads encountersOf. If the score parser trusted docs alone, a wire difference would surface only in the first judgment; one live body becomes the fixture. If a Values line matched vocabulary()'s patterns, every target would be offered false names; a page test pins the vocabulary. If the runs wrote committed score paths they would overwrite history; the sets are copied to a new folder.
+
+## Licensed by
+
+docs/explorations/npc-relationships.md:56
