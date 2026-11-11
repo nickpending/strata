@@ -198,3 +198,61 @@ judgments stay local under `corpus/runs/size-judgment/` (gitignored).
 | author | opus | the dev split, this file, `contract.ts`, `run.ts`, `docs/jev.md`, v3/v4 reports and arms, v4's logged `how` answers | the held-out split, both labellers' briefs, the second labels |
 | scorer | sonnet | this file, `contract.ts`, the judgment log format, the labels' format | the arm modules' source |
 | orchestrator (this session) | opus | everything; writes `contract.ts`, `run.ts`, this file, the briefs and the report | writes no arm, no label and no scoring code |
+
+## Freeze addendum
+
+Written after tuning and before any held-out run. The three modules are frozen in the commit that adds this
+addendum, and nothing in `arms/` changes after it.
+
+### Orchestrator checks at the freeze
+
+- **A is verbatim.** All 128 questions A sent on dev appear exactly in the `how` stake questions logged in
+  `corpus/runs/value-weighting-4/`. The level criteria and the state's five keys match too.
+- **What the arms import and name.** Every arm imports only `contract.ts` (and C imports B's wording helpers), so
+  none receives an importance or a label. A script compared each module with the dev material. No module names a dev
+  case id or scenario id, a capitalised name from a dev script or identity that is absent from `world/`, or any
+  4-word sequence from a dev line.
+- **The scorer is checked on dev.** `score.ts` on the author's dev log gives M1 0.556 for A and 0.842 for C. An
+  independent recomputation gives the same per-rep values (0.554 and 0.559; 0.842 and 0.842).
+
+### The finals
+
+| arm | final | levels | toLabel | contenders |
+|---|---|---|---|---|
+| A | `as-is` (v3's `how`, verbatim) | 3 | [2, 3, 4] | none |
+| B | `b5c-given` | 5 | [1, 2, 3, 4, 5] | `b5c-given-st`, `b5c-asked`, `b4-given` |
+| C | `c5-given` | 5 | [1, 2, 3, 4, 5] | `c5-given-st`, `c5-asked`, `c4-given` |
+
+- **B's question.** It states the given direction as fact: v3's stake statement turned into a statement, then "How
+  big a change is that for you?". It has five shared levels, Trivial to Life-changing, each a concrete situation.
+- **C's question.** It is the same as B's. Its five levels are anchored separately for each of the ten values.
+- **Both B and C** use A's five-field state and one request per case, and read the most probable level only.
+- **No D.** The author argued that a chained form adds a request without a gap to close. The composite
+  two-score form docs/jev.md suggests would yield a level no score answered, which the contract bars.
+
+### Dev (32 items, 6 pairs; 2 reps, the author's frozen run, by `score.ts`)
+
+| | M1 | up / down | pairs | exact / ±1 | USD per judgment |
+|---|---|---|---|---|---|
+| A `as-is` | 0.556 | 0.63 / 0.46 | 6/6 | 0.33 / 0.88 | 3.3e-5 |
+| B `b5c-given` | 0.730 | 0.88 / 0.51 | 6/6 | 0.38 / 0.94 | 4.6e-5 |
+| C `c5-given` | 0.842 | 0.91 / 0.74 | 6/6 | 0.66 / 0.97 | 3.9e-5 |
+
+### Deviations and limits, named now
+
+- **B and C each change two things against A**: the levels, and the question form ("If so, how big is it?"
+  becomes a statement of fact). The contenders `b5c-asked` and `c5-asked` keep A's question with the new levels,
+  and the secondary run reports them. They separate the two effects descriptively; they never decide.
+- **The arms saw the size scale.** The author read this file, which lists the labellers' five size words and the
+  wording of size 5. C's anchors echo it ("life, livelihood or home on the line"). That is not a held-out leak:
+  the scale defines what standing should mean by size. It does align B and C to the labellers' scale in a way A's
+  wording, written earlier, is not.
+- **The dev log's flag for B.** In the author's frozen dev log, B's `final` flag sits on `b5c-given-st`. The
+  module's final is `b5c-given`; the module decides, and the held-out run uses it.
+- **The second labeller** sized all 65 held-out items blind before this freeze. `labels2.json` has sha256
+  `eaed174722c0a8383e0eda1aeeaefa6951d9dc50f7aa8daf4de5ed8607c29b7a`. The author never saw it.
+- **Spend so far:** 0.046 USD on dev, across 1,104 judgments.
+- **Next runs:**
+  - held-out finals: A, B and C, 49 cases × 5 reps, 735 judgments, about 0.03 USD;
+  - secondary: 6 contenders, 49 cases × 3 reps, 882 judgments, about 0.04 USD.
+- **The comparison** has m = 2 challengers, so each interval is the 97.5% percentile interval.
