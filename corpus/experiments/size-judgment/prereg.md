@@ -64,6 +64,30 @@ The coin is the sha256 of `labels.json` as delivered, read as an integer mod 3: 
 makes C dev. The other two sets are held out. The held-out material and labels stay outside the repository, in the
 orchestrator's scratchpad, until the arms are frozen. Their sha256 is recorded here before any arm exists.
 
+**Done, before any arm was written.**
+- `labels.json` as delivered has sha256 `929cba2d…4179f2`, and the material `fd3ae260…9365f9`. As an integer mod
+  3 the label hash is 1, so **B is dev**: 23 cases, 32 items and 6 pairs, in `dev-material.json` and
+  `dev-labels.json`.
+- **A and C are held out**: 49 cases, 65 items and 12 pairs.
+- All 72 cases build through the engine with no error. The orchestrator's own check confirmed:
+  - items match `touched`;
+  - every pair shares its holder, value, direction, set and target subkind, with sizes at least 2 apart;
+  - no scenario spans two sets.
+- The held-out files have these sha256:
+  - `heldout-material.json` `409de79715eafb57619a2d217bbcf4dd730f87bd0a0c93ee6f4a160b90734aa8`
+  - `heldout-labels.json` `f625576a6e4999a2540ba78b11470dea323b49e2cc8bfc3bfc3e34b9966c5ad5`
+- Make-up as delivered:
+
+  | | A | B | C |
+  |---|---|---|---|
+  | cases / items / pairs | 26 / 35 / 6 | 23 / 32 / 6 | 23 / 30 / 6 |
+  | items at sizes 1 to 5 | 3, 10, 10, 8, 4 | 3, 10, 10, 6, 3 | 3, 8, 8, 7, 4 |
+  | up / down | 14 / 21 | 19 / 13 | 12 / 18 |
+
+  Security holds 39 of the 97 items. Power, benevolence, achievement and self-direction have 4 to 7 per set.
+- The second labeller reads the held-out cases with scenario ids and variant tags removed.
+- The scorer (`score.ts`, sonnet, written from this file before any label existed) is committed with the split.
+
 ## Second labeller (opus, `briefs/labeller2.md`)
 
 After the split and before the freeze, a second opus labeller sizes every held-out item blind. It sees the rendered
