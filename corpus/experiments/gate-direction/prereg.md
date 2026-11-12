@@ -154,3 +154,45 @@ The held-out files stay outside the repository until the freeze. Their sha256:
 
 That stays under the 2 USD line the brief set. The scorer (`score.ts`, sonnet, written from this file with no labels
 in hand) is committed with this split.
+
+## Freeze addendum
+
+This addendum was written after tuning and before any held-out run. The arms are frozen in the commit that adds it,
+and nothing in `arms/` changes after that commit. The orchestrator checked these things:
+- A's 40 question texts and its five-field state match v4's logged gate request (case A01a) key for key. That is 40
+  of 40, with no mismatch.
+- No arm imports a label, and no `judge` receives an importance.
+- No challenger's wording names a proper noun or fact from a dev scenario. A script scanned the string literals
+  against dev text not found in the identities or `world/`, and found only generic words.
+
+**Finals.** Dev figures are 36 cases × 2 reps, as M1 / M2 / M3, and dev spend was 0.196 USD.
+- **A `as-is`:** 0.380 / 0.882 / 0.743.
+- **B `mg3-45`:** 0.585 / 0.876 / 0.898. Per value and channel, two gate nouls ("does it change X, either way" and
+  "is X one of the main ways"), read as their minimum G. A direction choice is chained where G ≥ 0.45. The reading is
+  G signed by the choice, else 0. Contenders: `m3-45`, `g3-40`, `mg3-50`.
+- **C `cw3-z50`:** 0.603 / 0.906 / 0.926. A's shape of one-sided up and down nouls, each reworded as a concrete
+  situation with an "Answer no if ..." boundary. The reading is the stronger noul signed by its side, and 0 when it is
+  under 0.5. Contenders: `cw3-z60`, `cw-z50`. `cw-z50` is the wording written before any dev answer was read, kept as
+  a check on fitting.
+
+**A flaw in M1, found on dev and named before held-out.**
+- About 88% of items are untouched (y = 0). Under that mix, a reading with no exact zeros cannot reach a Spearman
+  much above 0.56, even with a perfect ranking.
+- B and C each read weak items as exactly 0, so part of their M1 lead over A comes from that zeroing, which is a code
+  choice, not from how they ask.
+- **The rule above stands unchanged and decides the verdict.** Changing it now would be a change made after seeing
+  dev results.
+- To separate wording from zeroing, one analysis is fixed now. It is reported and never decides: **A-z50**, A's own
+  held-out answers rescored with C's reading rule, at no Jev cost. The reading is sign × max(P(up), P(down)) when
+  that max is ≥ 0.5, else 0, with the sign + when P(up) ≥ P(down).
+- The report compares B and C with A-z50 on M1, M2 and M3, and names how much of each challenger's M1 lead the
+  zeroing alone recovers.
+- M2 and M3, which are threshold-free on wording, are reported beside M1 throughout.
+
+**Second labeller.** It labelled all 79 held-out cases blind under opaque ids before this freeze.
+`heldout-labels2.json` has sha256 `0c640adc5cffa7883405fb3bb9d3fc64c79c4abf2e9c4681a3f4a57c7f8b1534`. The arm author
+never saw it.
+
+**Held-out runs, named now.**
+- **Finals:** `--arms a,b,c --variants final --reps 5`, 79 × 5 × 3 = 1,185 judgments.
+- **Secondary:** `--arms b,c --variants contenders --reps 3`, 79 × 3 × 5 = 1,185 judgments.
