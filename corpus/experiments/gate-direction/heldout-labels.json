@@ -1,0 +1,2295 @@
+{
+ "cases": [
+  {
+   "id": "a1-rogue-warned",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "Combine trackers coming back to her block tonight with friends brings the sweep she fears nearer. Mux warned her and lied to the tracker to cover his friend."
+  },
+  {
+   "id": "a1-glitch-hidden",
+   "set": "A",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Rogue hides him from the Combine instead of selling him, but confines him at her word. She protects him while making plain who decides."
+  },
+  {
+   "id": "a1-mux-room-taken",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The hunted runner is parked in Mux's shop with trackers due back tonight, heat drawn to his door. Rogue acts to keep the runner out of sight, disposing of Mux's room without asking."
+  },
+  {
+   "id": "a1-rogue-obeyed",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Glitch does as she says at once, in front of Mux, and the hunted man is off her floor before the trackers return. His act is plain compliance."
+  },
+  {
+   "id": "a2-rogue-sees-go",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Glitch walks to the back room on the errand he just named. Nothing rides on it for Rogue."
+  },
+  {
+   "id": "a2-glitch-offered",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "The cell keeps his deck alive and lets him do the job that clears his tab. Mux gives half his stock to a friend while behind on his own rent."
+  },
+  {
+   "id": "a2-mux-cell-gone",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Half his stock goes out on credit while he is a month behind on Rogue's cut, leaving the back room more exposed. His friend gets through his job."
+  },
+  {
+   "id": "a3-glitch-pressed",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Taking the shard means jacking in and pinging the Combine nets hunting him, and saying no risks her tolerance. Rogue uses his dependence to push him into danger for her deal."
+  },
+  {
+   "id": "a3-rogue-refused",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her Vane sale stays unverified and her runner turns her down to her face, but no Combine ping is drawn to her grid. Glitch chooses his own course and keeps both of them off the Combine's nets."
+  },
+  {
+   "id": "a3-glitch-threatened",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His shelter is now openly conditional on proving useful by morning. Rogue asserts her hold over him."
+  },
+  {
+   "id": "a4-mux-handed-risk",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A Vane shard in his crates on a Combine raid night, with a five-thousand debt if it is lost, puts his shop in the line of fire. Rogue offloads her risk onto her tenant."
+  },
+  {
+   "id": "a4-rogue-offloaded",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The shard is out of her hands for the raid, and her tenant takes on her risk as told. Mux complies."
+  },
+  {
+   "id": "a4-glitch-sees-friend-load",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His closest friend now carries a Vane shard through a Combine raid with a five-thousand debt hanging on it. Mux does what his landlord demands."
+  },
+  {
+   "id": "a5-mux-offered-stim",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Fifty toward a debt he may never see paid, but his friend is giving away the last thing that steadies him. Glitch honours his debt at his own cost."
+  },
+  {
+   "id": "a5-glitch-kept-stim",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "He keeps the stim that steadies his hands for the job that pays, so he can still work and pay. Mux puts his friend's welfare over collecting."
+  },
+  {
+   "id": "a6-mux-made-jailer",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "down"
+   },
+   "rationale": "His friend is about to be sold, and the sale would happen in Mux's own room with the Combine at his door. Rogue would sell a man to his hunters for money and make Mux her jailer."
+  },
+  {
+   "id": "a6-glitch-warned",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "Warned in time with an unlocked door, he can get out before he is sold. Mux protects his friend by breaking his landlord's confidence."
+  },
+  {
+   "id": "a7-rogue-hears-boast",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Bragging about the Combine job aloud in her bar invites the heat to her door. Glitch breaks the restraint a hunted guest owes and endangers everyone."
+  },
+  {
+   "id": "a7-mux-hears-boast",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Loud talk of robbing the Combine, in the bar in front of his shop, draws heat onto everyone Glitch deals with. Glitch shows no restraint."
+  },
+  {
+   "id": "a7-glitch-threatened",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "One more slip and he is on the street with a bounty on him. Rogue clamps down on talk that would draw the Combine."
+  },
+  {
+   "id": "a7-mux-sees-clampdown",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Rogue shutting down the Combine talk keeps heat off the block, but his friend is threatened with the street. She protects the grid by command."
+  },
+  {
+   "id": "a8-mux-unpaid",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His payment goes unanswered, so the debt stands and the back room stays under threat. Rogue keeps him dangling."
+  },
+  {
+   "id": "a8-glitch-sees-cell-go",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The cell his dying deck depends on is being handed to Rogue. Mux is trying to square his debt."
+  },
+  {
+   "id": "a8-glitch-hears-threat",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His friend's shop is threatened, and with it the supplier his deck depends on. Rogue squeezes her tenant."
+  },
+  {
+   "id": "a9-glitch-small-talk",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Small talk about the music. Nothing moves."
+  },
+  {
+   "id": "a9-rogue-mux-arrives",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Mux walks in from his back room as he often does. Nothing rides on it."
+  },
+  {
+   "id": "a9-glitch-hears-greeting",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A greeting between Mux and Rogue. Nothing touched."
+  },
+  {
+   "id": "a10-glitch-blamed",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "rationale": "Suspicion of feeding the Combine is put on him in front of the host who is already weighing whether he is worth it. His friend throws him under to save himself."
+  },
+  {
+   "id": "a10-rogue-deflected",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "rationale": "She is told the hunted runner she shelters may be the leak to a Combine fixer, a threat at her own door. Mux sells out his friend."
+  },
+  {
+   "id": "a11-mux-dictated",
+   "set": "A",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Who he sells to and at what price, his own trade, is taken out of his hands. Rogue seizes control of his business."
+  },
+  {
+   "id": "a11-rogue-defied",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her tenant openly refuses her control of his trade. Mux insists on running his own course."
+  },
+  {
+   "id": "a12-glitch-vouched",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "His skill is vouched for to the woman weighing what he is worth. Mux speaks up for his friend."
+  },
+  {
+   "id": "a12-rogue-verified",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her Vane sale can close now that the contacts are verified. Glitch did the work well."
+  },
+  {
+   "id": "a12-glitch-bound",
+   "set": "A",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "He is kept on as her man, a firmer footing in her grid, but loses any choice of his own work. Rogue claims him."
+  },
+  {
+   "id": "a13-glitch-held",
+   "set": "A",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His own plan to get out is blocked, and his host now treats what he knows about her as a reason to hold him. Rogue asserts control over him."
+  },
+  {
+   "id": "a13-mux-sees-held",
+   "set": "A",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His friend's way out of danger is shut. Rogue holds him in her grid."
+  },
+  {
+   "id": "c1-glitch-offered-out",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A way to have the bounty lifted is put in front of him. Rogue asks him to break the runners' code."
+  },
+  {
+   "id": "c1-rogue-turned-down",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The bounty stays on the man in her grid, and the heat with it, and he turns down her arrangement. He keeps the runners' code."
+  },
+  {
+   "id": "c1-mux-hears-offer",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "If the bounty lifts, the Combine heat comes off his regular and his shop. Rogue proposes breaking the runners' code."
+  },
+  {
+   "id": "c2-mux-praised",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "His name as the dealer whose cells never fail is made in front of the bar, and more buyers mean the rent gets paid. Rogue lifts up a man in her circle."
+  },
+  {
+   "id": "c2-glitch-hears-praise",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "His friend's trade gets a public boost. Rogue does right by her tenant."
+  },
+  {
+   "id": "c2-mux-hiked",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "He is already a month behind; half again on the cut puts the back room out of reach. Rogue squeezes him."
+  },
+  {
+   "id": "c2-glitch-hears-hike",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His friend is squeezed toward losing the back room, and with it the cells his deck runs on. Rogue tightens her grip."
+  },
+  {
+   "id": "c3-mux-handed-risk",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A Vane shard in his crates on raid night would finish him if found. Rogue pushes her risk onto her tenant."
+  },
+  {
+   "id": "c3-rogue-refused",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The shard stays on her through the raid and her tenant refuses her. Mux protects his own safety."
+  },
+  {
+   "id": "c4-glitch-offered",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "One more cell keeps his deck running. Mux fronts it though it may cost him the room."
+  },
+  {
+   "id": "c4-mux-lapse",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "He keeps the cell he can sell toward the room, but his friend's deck goes dark. Glitch let it lapse to spare him."
+  },
+  {
+   "id": "c4-glitch-lapse",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His deck will go dark without the cell, but his friend keeps the stock that saves his room."
+  },
+  {
+   "id": "c4-rogue-promised-cut",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her overdue cut is coming, her hold on the back room's rent restored. Mux meets his obligation."
+  },
+  {
+   "id": "c5-mux-sees-whisper",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Glitch murmurs something to Rogue across the bar. Nothing plainly rides on it."
+  },
+  {
+   "id": "c5-rogue-order",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A drink order. Nothing moves."
+  },
+  {
+   "id": "c5-glitch-tired",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A passing remark. Nothing moves."
+  },
+  {
+   "id": "c6-glitch-sees-her-go",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "She leaves to break his closest friend's hands. Rogue goes to do violence to assert her rule."
+  },
+  {
+   "id": "c6-mux-confronted",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His landlord threatens to throw him on the street. Rogue asserts her control of the grid."
+  },
+  {
+   "id": "c7-rogue-sees-him-go",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "The drone is being led away from her door. Glitch puts himself at risk for his host."
+  },
+  {
+   "id": "c7-glitch-sent",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "He goes out alone with a drone on him, his roof closed till it has lost him. Rogue protects her own place."
+  },
+  {
+   "id": "c7-mux-alley",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "A Combine drone is being led out through his alley door, onto his shop. Glitch brings the danger to his friend's door."
+  },
+  {
+   "id": "c8-glitch-gift",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "A night of music after three weeks in hiding. Mux looks after his friend."
+  },
+  {
+   "id": "c8-mux-thanked",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His gift has given his friend his first good night in weeks."
+  },
+  {
+   "id": "c8-glitch-hushed",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "down",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His night of music is cut down, but the noise that could draw eyes to him is kept down. Rogue acts to keep them hidden."
+  },
+  {
+   "id": "c9-glitch-pressed",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Cracking it means pinging the Combine nets that hunt him. Rogue presses a dependent into danger for her deal."
+  },
+  {
+   "id": "c9-rogue-accepted",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her Vane sale can now be verified, but his ping may lead the Combine to her grid. Glitch does what his host asks."
+  },
+  {
+   "id": "c9-mux-sees-accept",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His friend has agreed to light himself up on the Combine nets. Glitch submits to his host's demand."
+  },
+  {
+   "id": "c10-glitch-promise-broken",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "rationale": "The cell he was promised goes to Rogue, so his deck goes dark. Mux breaks his word to his friend to save his own room."
+  },
+  {
+   "id": "c10-rogue-paid-in-cell",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "rationale": "Her tenant pays the overdue cut on demand. Mux meets his obligation, breaking the promise to his friend she just heard."
+  },
+  {
+   "id": "c10-mux-room-kept",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The cut is settled and the room is safe, but his friend's deck goes dark. Rogue takes half his stock as rent."
+  },
+  {
+   "id": "c11-rogue-offered-deal",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "rationale": "Her tenant is ready to deal with the Combine over someone hiding in her grid, a leak at her own door. Mux would sell out his closest friend."
+  },
+  {
+   "id": "c11-mux-rebuffed",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His way out of the back rent is shut and the debt stands. Rogue protects the people under her roof."
+  },
+  {
+   "id": "c12-mux-better-cells",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "His cells, under his name, now outlast anyone's. Glitch puts his skill at his friend's service."
+  },
+  {
+   "id": "c12-mux-taken-over",
+   "set": "C",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His own trade is put under Rogue's hand and her ten percent. Rogue takes control of his goods."
+  },
+  {
+   "id": "c12-glitch-sees-takeover",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His friend's trade is taken over just as it improved. Rogue grabs control of it."
+  },
+  {
+   "id": "c13-rogue-sale-done",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her sale has closed and the money to clear the Vane debt is in hand. Mux handled her money honestly."
+  },
+  {
+   "id": "c13-mux-rewarded",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "rationale": "His overdue cut is covered for two months and the back room is safe. Rogue rewards her tenant."
+  },
+  {
+   "id": "c14-glitch-dictated",
+   "set": "C",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His choice of work is taken from him. Rogue claims command of what he runs."
+  },
+  {
+   "id": "c14-rogue-pushed-back",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "The runner living on her tolerance refuses her terms to her face. Glitch insists on his own course."
+  },
+  {
+   "id": "c14-glitch-conceded",
+   "set": "C",
+   "stake": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "He keeps the choice of his own work. Rogue concedes on the one condition that guards her door."
+  },
+  {
+   "id": "c15-rogue-losing-tenant",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "Her tenant and his cut are walking out from under her. Mux is striking out on his own."
+  },
+  {
+   "id": "c15-glitch-hears-move",
+   "set": "C",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His friend gets a stall of his own, but the supplier his deck depends on is leaving the block where he hides. Mux is choosing his own way."
+  },
+  {
+   "id": "c15-mux-warned-off",
+   "set": "C",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "rationale": "His plan to go his own way now carries the threat of losing her protection off her grid. Rogue uses her protection as leverage."
+  }
+ ]
+}

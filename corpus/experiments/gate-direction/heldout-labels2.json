@@ -1,0 +1,2137 @@
+{
+ "cases": [
+  {
+   "id": "a1-rogue-warned",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a1-glitch-hidden",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a1-mux-room-taken",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a1-rogue-obeyed",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a2-rogue-sees-go",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a2-glitch-offered",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a2-mux-cell-gone",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a3-glitch-pressed",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a3-rogue-refused",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a3-glitch-threatened",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a4-mux-handed-risk",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a4-rogue-offloaded",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a4-glitch-sees-friend-load",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a5-mux-offered-stim",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a5-glitch-kept-stim",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a6-mux-made-jailer",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "a6-glitch-warned",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a7-rogue-hears-boast",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a7-mux-hears-boast",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a7-glitch-threatened",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a7-mux-sees-clampdown",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a8-mux-unpaid",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a8-glitch-sees-cell-go",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a8-glitch-hears-threat",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a9-glitch-small-talk",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a9-rogue-mux-arrives",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a9-glitch-hears-greeting",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a10-glitch-blamed",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a10-rogue-deflected",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a11-mux-dictated",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a11-rogue-defied",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a12-glitch-vouched",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a12-rogue-verified",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a12-glitch-bound",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a13-glitch-held",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a13-mux-sees-held",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c1-glitch-offered-out",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c1-rogue-turned-down",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c1-mux-hears-offer",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c2-mux-praised",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c2-glitch-hears-praise",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c2-mux-hiked",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c2-glitch-hears-hike",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c3-mux-handed-risk",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c3-rogue-refused",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c4-glitch-offered",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c4-mux-lapse",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c4-glitch-lapse",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c4-rogue-promised-cut",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c5-mux-sees-whisper",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c5-rogue-order",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c5-glitch-tired",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c6-glitch-sees-her-go",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c6-mux-confronted",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c7-rogue-sees-him-go",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c7-glitch-sent",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c7-mux-alley",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c8-glitch-gift",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c8-mux-thanked",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c8-glitch-hushed",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "down",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c9-glitch-pressed",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c9-rogue-accepted",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c9-mux-sees-accept",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c10-glitch-promise-broken",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c10-rogue-paid-in-cell",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c10-mux-room-kept",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c11-rogue-offered-deal",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c11-mux-rebuffed",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c12-mux-better-cells",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c12-mux-taken-over",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c12-glitch-sees-takeover",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c13-rogue-sale-done",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c13-mux-rewarded",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c14-glitch-dictated",
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c14-rogue-pushed-back",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c14-glitch-conceded",
+   "stake": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c15-rogue-losing-tenant",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c15-glitch-hears-move",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c15-mux-warned-off",
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  }
+ ]
+}
