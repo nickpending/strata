@@ -181,3 +181,34 @@ fact only a dev scenario holds.
 Basis: v4's B costs 2.3e-4 USD per judgment and gate-direction's `mg3-45` 2.5e-4 before the touches and size steps;
 each bound assumes 4.5e-4. Agent work besides: two opus labellers, one opus author, one sonnet scorer. Raw judgments
 stay local under `corpus/runs/gate-first-e2e/` (gitignored).
+
+## Freeze addendum
+
+Written after tuning and before any held-out run. `arms/b.ts` and `arms/g.ts` are frozen in the commit that adds this
+addendum; nothing in `arms/` changes after it. The orchestrator checked `g.ts` against "Arms": its per-value stage is
+gate-direction B's judge, imported (the final) or copied (the 0.35 contender; all 281 copied lines appear verbatim in
+`../gate-direction/arms/b.ts`); the size step is `arms/b.ts` `strength4` on the picked direction's statement, chained
+in a request `how`; touches is `arms/b.ts` `TOUCHES` in a parallel request `touches`; effect = r × L; no importance
+reaches `judge`; no question names a dev case or scenario.
+
+- **G final: `m3-45`**, gate-direction B's main-ness gate ("Is this one of the main ways what {o} did changes things
+  for you: <topic>?"; for a deed, "... one of the main things what {o} did shows"), a direction choice at 0.45, then
+  the size step. 34.1 questions and 2.6e-4 USD per judgment on dev. Contenders: `m3-35` (the same gate at 0.35),
+  `mg3-45` (gate-direction's per-value final, both gates), `g3-40` (the touched gate).
+- **No arm C.** The author ran gate-direction's `cw3-z50` with the same size step on dev: E1 21/35, E3 0.428, P1
+  0.76, below G on E3, E1 and P1. So it was not written, and only two comparisons are made (k = 2, 97.5% intervals).
+- **G loses to B on dev.** On the fresh dev run, scored beside B's (2 reps each):
+
+  | | E1 | E2 | E3 | E4 build / detract | P1 |
+  |---|---|---|---|---|---|
+  | B-lin | 26/35 | 6/12 | 0.515 | 0.383 / 0.373 | 0.70 |
+  | G `m3-45` | 24/35 | 5/12 | 0.447 | 0.313 / 0.438 | 0.80 |
+  | G-sq | 24/35 | 5/12 | 0.467 | 0.313 / 0.421 | |
+
+  The author found no gate or threshold from 0.35 to 0.55 above B on dev E3. By the scorer's attribution, G's dev
+  loss is direction, not gate: its direction oracle lifts E3 to 0.69, its gate oracle to 0.51. The held-out run tests
+  the pre-registered question as written; the dev result is recorded here so the report can't read it otherwise.
+- **Second labeller.** It labelled all 80 held-out cases blind before this freeze. `labels2.json` sha256
+  `7c3190fdd957bb444e23f06cddfab3a6792cc1388aa26323751c29a3c97fba8d`. The author never saw it.
+- **Spend so far:** 0.215 USD (B dev 0.020, author 0.195). Held-out next: finals B and G, 80 × 5 reps = 800
+  judgments (about 0.21 USD); secondary, the three G contenders, 80 × 3 reps = 720 (about 0.19 USD).
