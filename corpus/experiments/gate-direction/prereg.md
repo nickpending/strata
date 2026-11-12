@@ -127,3 +127,30 @@ The secondary run (contenders, 3 reps) and the consensus subset never change a v
 
 The basis is v4's B: 2.3e-4 USD per judgment for 54 questions in two requests. Each bound assumes 4e-4. Raw judgments
 stay local under `corpus/runs/gate-direction/` (gitignored).
+
+## Split, done before any arm was written
+
+`labels.json` as delivered has sha256 `eceb3f59…6f41c8bf3` (material `2dff7420…829a7910`). As an integer mod 3 it is
+1, so **B is dev**: 12 scenarios, 36 cases, 720 items, in `dev-material.json` and `dev-labels.json`. **A and C are
+held out**: 28 scenarios, 79 cases, 1,580 items.
+- Held-out stake has 39 `up` and 61 `down`; deed has 68 `up` and 20 `down`.
+- Set C came in larger than the make-up's minimum (43 cases, against 36 for A and B). Every set meets every minimum.
+- All 115 cases build through the engine with no error, and no scenario spans two sets.
+- The labeller noted that security takes about 40% of stake touches in each set.
+
+The held-out files stay outside the repository until the freeze. Their sha256:
+
+- `heldout-material.json` `a9d4237416e53de319dd3212419377202b49d25adbff3d0f472142b2a04eac36`
+- `heldout-labels.json` `11f00944de36f9be01e0c3639756e3d869e10033d04d1e3176543090fed50b09`
+
+**Cost, restated for 79 held-out cases.** This is before any spend.
+
+| run | at most |
+|---|---|
+| author dev | 0.40 USD |
+| finals: 79 × 5 × 3 = 1,185 judgments | 0.47 USD |
+| contenders: up to 79 × 3 × 6 = 1,422 judgments | 0.57 USD |
+| **ceiling** | **1.44 USD** |
+
+That stays under the 2 USD line the brief set. The scorer (`score.ts`, sonnet, written from this file with no labels
+in hand) is committed with this split.
