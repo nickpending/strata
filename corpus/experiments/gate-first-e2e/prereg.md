@@ -84,6 +84,22 @@ One set is dev, two are held out. The coin is the sha256 of `labels.json` as del
 makes A dev, 1 B, 2 C. The labeller never sees this rule. The held-out files stay outside the repository until the
 arms are frozen; their sha256 is recorded here before any arm is written. Held out: 80 cases, 24 opposite pairs.
 
+**Done, before any challenger arm was written.** `labels.json` as delivered has sha256 `864b1e60…7e102fb9` (material
+`01a6c809…5362ba`). As an integer mod 3 it is 1, so **B is dev**: 28 scenarios, 40 cases, in `dev-material.json` and
+`dev-labels.json`. **A and C are held out**: 56 scenarios, 80 cases, 24 opposite pairs.
+- Every set has 40 cases: 12 opposite pairs, 5 conflict, 5 neutral and 6 plain cases forming 3 size pairs. Every
+  build and detract magnitude 1 to 5 appears at least twice per set. `character` cases number 7 (A), 9 (B) and 13 (C).
+- All 120 cases build through the engine with no error, and no scenario spans two sets. The `-w` variants equal the
+  world's tables.
+- In all 36 opposite pairs, the two cases carry identical per-value labels, as the brief asked.
+- Security and power lead stake touches in every set. Conformity and benevolence are thin (stake benevolence 1 to 5
+  per set).
+- The held-out files, kept outside the repository until the freeze, have these sha256:
+  - `heldout-material.json` `e04f6d9e578e4d0a5d4428fc91692c6b31267293da9cf431f6eda3516f578fcc`
+  - `heldout-labels.json` `69e854c64b079dba384e5b8b5daaf00d597ae1b3e7f5ddfb59abf5a629304558`
+- `score.ts` was written by the sonnet scorer before any challenger arm existed. On a dev run of arm B (2 reps, 0.020
+  USD), its E1 (26/35) and E3 (0.515) match an independent recomputation.
+
 ## Jev
 
 Every request goes through `harness/src/jev.ts` `decide`. A refused request makes the judgment refused.
