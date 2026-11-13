@@ -187,3 +187,55 @@ two opus labellers, two opus authors and one sonnet scorer. Raw judgments stay l
     in each.
   - It was least sure of A07b and A13 on dev.
   - Some opposite pairs carry the holder's own earlier line in their shared history.
+
+## Freeze addendum
+
+Written after tuning and before any held-out run. `arms/b.ts`, `arms/s.ts` and `arms/f.ts` are frozen in the commit
+that adds this addendum; nothing in `arms/` changes after it.
+
+- **Questions kept.** `check-arms.ts` runs each final and contender on every dev and held-out case against a stub Jev
+  (no call, no label). It confirms:
+  - the 40 statements are asked once each, character for character;
+  - touches is asked once, in TOUCHES' words up to field names;
+  - each strength score keeps its levels and words after the preamble, chained after its noul over that noul's
+    state.
+
+  It passes for `b:as-is`, `s:t5`, `s:t1`, `f:g4-prose` and `f:pv`.
+- **Identity facts.**
+  - The orchestrator read S's typed facts against the three identity texts. Each states only what its quoted
+    sentence states. Each person's facts are pinned to the identity text's sha256, which the held-out cases share.
+  - F's final sends the identity's own sentences, chosen by tags, and checks every source sentence against the
+    case's text at run time.
+- **S final: `t5`.**
+  - State: B's five fields. `now` and `earlier` are typed compact events (act, by, to, item, room, speech words as
+    text), with offer windows in words. `who_you_are` holds typed facts nested by topic. `your_part` is the role.
+  - Preamble: B's `READ`, unchanged.
+  - Requests: 2. Cost: 2.6e-4 USD per judgment.
+  - Dev, 4 reps: E1 28/35, E2 8/12, E3 0.700, P1 0.745. B read E3 0.631 and P1 0.773. Against B, E3 is +0.069
+    [−0.070, 0.187], a tie.
+  - Contender `t1`: the same typed state, with a preamble naming the sub-fields. Dev E3 0.677, 3.5e-4 USD.
+- **No arm K.** The S author's probe `k1` was t5 plus locations, holders and the holder's authored ties. On dev it
+  read E3 0.666 against t5's 0.693 in the same run, E1 26 against 28, and P1 0.741 against 0.744. The known rows
+  mostly repeat `earlier` and `now`. So only two comparisons are made: k = 2, with 97.5% intervals.
+- **F final: `g4-prose`.**
+  - Stake goes in four groups: safety (security, power, achievement), self (self_direction, stimulation,
+    hedonism), norms (conformity, tradition) and people (benevolence, universalism). Each group's state holds the
+    identity sentences tagged for it, the event, the earlier lines with the other, and the role.
+  - All 20 deed nouls share one state: the event, the lines with the other, and the identity sentences that name
+    the other.
+  - Touches is asked over the full stake state.
+  - Requests: 10.3 per judgment, 2 in sequence. Cost: 4.0e-4 USD.
+  - Dev, 4 reps: E1 29/35, E2 8/12, E3 0.582, P1 0.745.
+  - Contender `pv`: one typed stake state per value. Dev E3 0.576, 6.5e-4 USD.
+  - Its header records that the typed form read stake P1 0.03 to 0.07 lower than the same content in prose on dev,
+    so the final bends "typed fields". It also records that relevance-noul selection (`rel`) read lowest, E3 0.480.
+- **On dev, no challenger beat B on E3 or P1 outside noise.** S leads on E3 and F trails, and both trail on P1. The
+  held-out run tests the pre-registered question as written. The dev result is recorded here so the report can't
+  read it otherwise.
+- **Second labeller.** It labelled all 80 held-out cases blind before this freeze. `labels2.json` has sha256
+  `51c87d63ac41cf96ad521c4146ff483e39bf767f0c87a646c0fb901b5e0f3bb7`. It marks more items touched than the first
+  labeller: stake 144 of 800, against 115.
+- **Spend so far:** 0.579 USD. That is B dev 0.019, S author 0.207 and F author 0.353.
+- **Held-out next:**
+  - finals B, S and F, 80 cases × 5 reps = 1,200 judgments, about 0.36 USD;
+  - secondary, `s:t1` and `f:pv`, 80 × 3 reps = 480 judgments, about 0.24 USD.
