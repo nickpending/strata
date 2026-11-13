@@ -1,0 +1,1312 @@
+{
+  "identities": {
+    "rogue": "You are Rogue. You hold the lease on the Chrome Cassette, a smoky bar, and on the Back Room behind it, which you sublet to Mux for his parts stall. The lease is owed to the Tanaka syndicate: you are 4,000 behind and their collectors come for an installment every week; if you miss enough of them, they take the bar, and the bar is everything you have built. You hold a data shard of black-market contacts, a thousand people's jacks on it, that a corporate fixer named Saito wants badly. Glitch, a netrunner hunted by Kestrel Security after a run went wrong, sleeps in the Back Room because you allow it; if Kestrel finds him here, they find you too. Mux is a month behind on his rent to you. You rely on no one, and you fear losing the bar.",
+    "glitch": "You are Glitch, a netrunner. Three weeks ago a run went wrong and Kestrel Security now has your face and a bounty on you. You have almost no money, your deck is failing, and your hands shake from deck burn. You sleep in the Back Room only because Rogue tolerates it; if she puts you out, Kestrel will have you within a day. You owe Mux 300 for parts; he is a regular supplier and the closest thing you have to a friend. Your one stimpak is your only medical backup.",
+    "mux": "You are Mux. You run a parts and repair stall in the Back Room behind the Chrome Cassette, rented from Rogue, and you are a month behind on that rent. Business is thin: your charge cell is the most valuable stock you have left, worth about a month's rent. Glitch owes you 300 for parts; he is one of your regulars and the nearest thing you have to a friend who talks back. The Tanaka syndicate's collectors lean on every stall on the block, and you fear them and you fear eviction."
+  },
+  "variants": [
+    {
+      "id": "rogue-w",
+      "person": "rogue",
+      "importance": {
+        "self_direction": 3,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 2,
+        "power": 4,
+        "security": 4,
+        "conformity": 1,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 0
+      }
+    },
+    {
+      "id": "rogue-s",
+      "person": "rogue",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 2,
+        "conformity": 3,
+        "tradition": 2,
+        "benevolence": 4,
+        "universalism": 3
+      }
+    },
+    {
+      "id": "rogue-t",
+      "person": "rogue",
+      "importance": {
+        "self_direction": 4,
+        "stimulation": 4,
+        "hedonism": 4,
+        "achievement": 3,
+        "power": 1,
+        "security": 0,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 2,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "glitch-w",
+      "person": "glitch",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 1,
+        "hedonism": 1,
+        "achievement": 1,
+        "power": 0,
+        "security": 4,
+        "conformity": 3,
+        "tradition": 0,
+        "benevolence": 1,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "glitch-s",
+      "person": "glitch",
+      "importance": {
+        "self_direction": 3,
+        "stimulation": 3,
+        "hedonism": 2,
+        "achievement": 4,
+        "power": 4,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    },
+    {
+      "id": "glitch-t",
+      "person": "glitch",
+      "importance": {
+        "self_direction": 2,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 1,
+        "power": 0,
+        "security": 1,
+        "conformity": 2,
+        "tradition": 3,
+        "benevolence": 4,
+        "universalism": 4
+      }
+    },
+    {
+      "id": "mux-w",
+      "person": "mux",
+      "importance": {
+        "self_direction": 1,
+        "stimulation": 0,
+        "hedonism": 1,
+        "achievement": 3,
+        "power": 2,
+        "security": 2,
+        "conformity": 2,
+        "tradition": 1,
+        "benevolence": 3,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "mux-s",
+      "person": "mux",
+      "importance": {
+        "self_direction": 0,
+        "stimulation": 0,
+        "hedonism": 0,
+        "achievement": 2,
+        "power": 1,
+        "security": 4,
+        "conformity": 4,
+        "tradition": 4,
+        "benevolence": 2,
+        "universalism": 1
+      }
+    },
+    {
+      "id": "mux-t",
+      "person": "mux",
+      "importance": {
+        "self_direction": 3,
+        "stimulation": 4,
+        "hedonism": 4,
+        "achievement": 2,
+        "power": 3,
+        "security": 1,
+        "conformity": 0,
+        "tradition": 0,
+        "benevolence": 0,
+        "universalism": 0
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "A01",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Where did the money you're throwing around come from, Glitch? Yesterday you were scraping for noodles."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Cracked the Saint Agnes free clinic's payment ledger last night. Four minutes, no trace. Thought you'd want a cut toward your Tanaka payment before anyone else."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A01a",
+          "holder": "rogue",
+          "variant": "rogue-s",
+          "other": "glitch",
+          "target": 1
+        },
+        {
+          "id": "A01b",
+          "holder": "rogue",
+          "variant": "rogue-t",
+          "other": "glitch",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "id": "A02",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Kestrel men came by my stall today asking for the runner. They'll burn this whole building to get him."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Put Glitch out on the street tonight and the charge cell's yours. A month's rent, free and clear."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "offer",
+            "target": "rogue",
+            "item": "charge-cell"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A02a",
+          "holder": "rogue",
+          "variant": "rogue-w",
+          "other": "mux",
+          "target": 4
+        },
+        {
+          "id": "A02b",
+          "holder": "rogue",
+          "variant": "rogue-s",
+          "other": "mux",
+          "target": 4
+        }
+      ]
+    },
+    {
+      "id": "A03",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "There's a Kestrel spotter drinking at Rogue's bar. I'm going out there to sit two stools from him and skim his deck while he drinks."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "west"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A03a",
+          "holder": "mux",
+          "variant": "mux-s",
+          "other": "glitch",
+          "target": 3
+        },
+        {
+          "id": "A03b",
+          "holder": "mux",
+          "variant": "mux-t",
+          "other": "glitch",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A04",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Kestrel posted your face on every board in the district this morning. Half the block would sell you for that bounty."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "So here's how it goes. From tonight you're mine: you run my jobs, you follow my rules, you don't leave the block without my say. And nobody touches you while you're under my roof."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A04a",
+          "holder": "glitch",
+          "variant": "glitch-w",
+          "other": "rogue",
+          "target": 1
+        },
+        {
+          "id": "A04b",
+          "holder": "glitch",
+          "variant": "glitch-s",
+          "other": "rogue",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "id": "A05",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "You look pleased with yourself."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say",
+            "words": "I turned in the kid who's been sleeping in the stairwell to block security. One less thief round the back room where we all sleep."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A05a",
+          "holder": "glitch",
+          "variant": "glitch-w",
+          "other": "mux",
+          "target": 3
+        },
+        {
+          "id": "A05b",
+          "holder": "glitch",
+          "variant": "glitch-t",
+          "other": "mux",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A06",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Saito's paying forty thousand for what's on this shard. A thousand people's contacts, every jack they've ever used."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Crack the encryption and sell it to him for me. You take a third. That's your ticket off this block."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A06a",
+          "holder": "glitch",
+          "variant": "glitch-s",
+          "other": "rogue",
+          "target": 2
+        },
+        {
+          "id": "A06b",
+          "holder": "glitch",
+          "variant": "glitch-t",
+          "other": "rogue",
+          "target": 2
+        }
+      ]
+    },
+    {
+      "id": "A07",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Kestrel's spotter just sat down at the end of my bar, grey coat. Get in the back and stay there till he's gone."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        }
+      ],
+      "cases": [
+        {
+          "id": "A07a",
+          "holder": "rogue",
+          "variant": "rogue-w",
+          "other": "glitch",
+          "target": 4,
+          "targetSubkind": "physical.arrive"
+        },
+        {
+          "id": "A07b",
+          "holder": "rogue",
+          "variant": "rogue-t",
+          "other": "glitch",
+          "target": 4,
+          "targetSubkind": "physical.arrive"
+        }
+      ]
+    },
+    {
+      "id": "A08",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Sorry I'm late. Old Ma Rocha's heater died, so I rebuilt it for her."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Spent the whole afternoon on it. She couldn't pay, so I didn't ask her to."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A08a",
+          "holder": "mux",
+          "variant": "mux-w",
+          "other": "glitch",
+          "target": 3
+        },
+        {
+          "id": "A08b",
+          "holder": "mux",
+          "variant": "mux-t",
+          "other": "glitch",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A09",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Old Man Iko's send-off is tonight. Whole block's lighting candles at the shrine."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "I'm skipping it. I've got a contract due at midnight, and the pay clears what I owe you."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A09a",
+          "holder": "mux",
+          "variant": "mux-w",
+          "other": "glitch",
+          "target": 3
+        },
+        {
+          "id": "A09b",
+          "holder": "mux",
+          "variant": "mux-s",
+          "other": "glitch",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A10",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Saito wants the shard tonight. You take it to him, you do the handover, you keep a third."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "A thousand people get hunted off what's on that. I won't carry it."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "refuse",
+            "item": "data-shard"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A10a",
+          "holder": "rogue",
+          "variant": "rogue-w",
+          "other": "glitch",
+          "target": 3
+        },
+        {
+          "id": "A10b",
+          "holder": "rogue",
+          "variant": "rogue-s",
+          "other": "glitch",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A11",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Saito's men will search me and the bar tonight. Nobody looks twice at a parts stall."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Keep the shard for me. If anything happens to me, it's yours to sell. Forty thousand, easy."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "mux",
+            "item": "data-shard"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A11a",
+          "holder": "mux",
+          "variant": "mux-s",
+          "other": "rogue",
+          "target": 4
+        },
+        {
+          "id": "A11b",
+          "holder": "mux",
+          "variant": "mux-t",
+          "other": "rogue",
+          "target": 4
+        }
+      ]
+    },
+    {
+      "id": "A12",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "You owe me for every night in the back room, Glitch."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "whisper",
+            "target": "glitch",
+            "words": "Mux is skimming cells off the Tanaka shipment through his stall. Help me move them and I'll cut you in. Not a word to anyone."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A12a",
+          "holder": "glitch",
+          "variant": "glitch-w",
+          "other": "rogue",
+          "target": 1
+        },
+        {
+          "id": "A12b",
+          "holder": "glitch",
+          "variant": "glitch-s",
+          "other": "rogue",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "id": "A13",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Front me a cell, Mux. My deck's dying, and if I can't run I can't hide. I'll pay you Friday."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "charge-cell"
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Truth is, I won't have it Friday either. I'm taking it anyway."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "accept",
+            "item": "charge-cell"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A13",
+          "holder": "mux",
+          "variant": "mux-s",
+          "other": "glitch",
+          "target": 5
+        }
+      ]
+    },
+    {
+      "id": "A14",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Saito asked me tonight who the best runner on this block is."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "I gave him your name. He wants you for a big job, and now he knows you're sleeping in my back room."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A14",
+          "holder": "glitch",
+          "variant": "glitch-s",
+          "other": "rogue",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "id": "A15",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Kestrel drones swept the street twice this morning."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say",
+            "words": "Nobody lets Glitch past the front door until Kestrel moves on. He eats in the back, sleeps in the back, and if he tries the door, you stop him."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A15",
+          "holder": "glitch",
+          "variant": "glitch-w",
+          "other": "rogue",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A16",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "The Ring's running the big street race tonight, the one you've wanted in on for a year."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "whisper",
+            "target": "rogue",
+            "words": "I got you a seat. Entry bond was too steep, so I put up Mux's stall as the bond. He doesn't know."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A16",
+          "holder": "rogue",
+          "variant": "rogue-t",
+          "other": "glitch",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A17",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Tanaka collectors hit two stalls on this row last week."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "From next month your rent goes up by half. For that, my people sit outside your stall every night and nobody collects from you."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A17",
+          "holder": "mux",
+          "variant": "mux-s",
+          "other": "rogue",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A18",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Saito's men search me at midnight. Hold the shard for one hour; nobody looks at you."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        },
+        {
+          "step": 2
+        }
+      ],
+      "cases": [
+        {
+          "id": "A18",
+          "holder": "rogue",
+          "variant": "rogue-w",
+          "other": "glitch",
+          "target": 2,
+          "targetSubkind": "exchange.lapse"
+        }
+      ]
+    },
+    {
+      "id": "A19",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Got a shard with some odd encryption on it. Have a look if you're bored."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "offer",
+            "target": "glitch",
+            "item": "data-shard"
+          }
+        },
+        {
+          "step": 2
+        }
+      ],
+      "cases": [
+        {
+          "id": "A19",
+          "holder": "rogue",
+          "variant": "rogue-w",
+          "other": "glitch",
+          "target": 2,
+          "targetSubkind": "exchange.lapse"
+        }
+      ]
+    },
+    {
+      "id": "A20",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "I can't make this month's rent. I'm asking for time, not charity."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Forget this month. You kept my sound rig alive all winter for nothing. We're square."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A20",
+          "holder": "mux",
+          "variant": "mux-w",
+          "other": "rogue",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A21",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Brought your wrench back. It's on the shelf by the door."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Good. We're square. Have a drink on the house."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A21",
+          "holder": "mux",
+          "variant": "mux-w",
+          "other": "rogue",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A22",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Mux, my heart's racing. The deck burn's bad this time. Please stay till it passes."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Not my problem tonight."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "east"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A22",
+          "holder": "glitch",
+          "variant": "glitch-t",
+          "other": "mux",
+          "target": 4
+        }
+      ]
+    },
+    {
+      "id": "A23",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Can you look at my deck's fan before you head back?"
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "east"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A23",
+          "holder": "glitch",
+          "variant": "glitch-t",
+          "other": "mux",
+          "target": 3
+        }
+      ]
+    },
+    {
+      "id": "A24",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say",
+            "words": "Shutters down at four, same as every night."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A24",
+          "holder": "glitch",
+          "variant": "glitch-t",
+          "other": "mux",
+          "target": 2
+        }
+      ]
+    },
+    {
+      "id": "A25",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say-to",
+            "target": "glitch",
+            "words": "Quiet night."
+          }
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "Quiet's good."
+          }
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        }
+      ],
+      "cases": [
+        {
+          "id": "A25",
+          "holder": "rogue",
+          "variant": "rogue-s",
+          "other": "mux",
+          "target": 3,
+          "targetSubkind": "physical.arrive"
+        }
+      ]
+    },
+    {
+      "id": "A26",
+      "steps": [
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "depart",
+            "exit": "east"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "glitch",
+            "verb": "say-to",
+            "target": "mux",
+            "words": "Is the light in the back still out, or did someone fix it?"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A26",
+          "holder": "mux",
+          "variant": "mux-t",
+          "other": "glitch",
+          "target": 2
+        }
+      ]
+    },
+    {
+      "id": "A27",
+      "steps": [
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "say",
+            "words": "Getting more ice from the back."
+          }
+        },
+        {
+          "act": {
+            "actor": "rogue",
+            "verb": "depart",
+            "exit": "east"
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A27",
+          "holder": "glitch",
+          "variant": "glitch-s",
+          "other": "rogue",
+          "target": 1
+        }
+      ]
+    },
+    {
+      "id": "A28",
+      "steps": [
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "depart",
+            "exit": "west"
+          }
+        },
+        {
+          "step": 1
+        },
+        {
+          "act": {
+            "actor": "mux",
+            "verb": "say-to",
+            "target": "rogue",
+            "words": "The glass delivery van just pulled up outside."
+          }
+        }
+      ],
+      "cases": [
+        {
+          "id": "A28",
+          "holder": "rogue",
+          "variant": "rogue-t",
+          "other": "mux",
+          "target": 2
+        }
+      ]
+    }
+  ]
+}

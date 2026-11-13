@@ -164,3 +164,26 @@ each other's arm.
 Basis: B costs 2.6e-4 USD per judgment (gate-first-e2e). Each challenger is capped at 8e-4. Agent work besides:
 two opus labellers, two opus authors and one sonnet scorer. Raw judgments stay local under `corpus/runs/jev-state/`
 (gitignored).
+
+## Split, done before any challenger arm was written
+
+- **Coin:** `labels.json` as delivered has sha256 `4a810f2d54a8feeb701b3b38e2a95184e4809b930daec00f52735f033ecbf9c2`
+  (material `a703075aac4b8039c2ab4e19b4ca4e19790e2f4972495bdb0214d1af6132a2cc`). As an integer mod 3 it is 0, so
+  **A is dev**: 28 scenarios and 40 cases, in `dev-material.json` and `dev-labels.json`.
+- **Held out:** B and C, 56 scenarios, 80 cases, 24 opposite pairs.
+- **Checks:**
+  - every set has the make-up;
+  - all 120 cases build through the engine with no error;
+  - `check-build.ts` passes on both splits;
+  - the `-w` variants equal the world's tables;
+  - in all 36 opposite pairs the two cases share their 20 value labels.
+- **Held-out files,** outside the repository until the freeze:
+  - `heldout-material.json` `36bbd815dac897171946322af282732ba0d000d7dede255bb42608da627cf3fe`
+  - `heldout-labels.json` `1a739704f0a4971424725af15a4e902430ab305d8b42015d663c02ea63c0dacb`
+- **B on dev** (2 reps, 80 judgments, 0 refused) cost 0.019 USD. Its log is
+  `corpus/runs/jev-state/2026-11-13T00-28-48-558Z-dev-b/judgments.jsonl`.
+- **The labeller's own notes:**
+  - Security leads stake touches in every set (20 to 24 of about 50), and at least five values reach four touches
+    in each.
+  - It was least sure of A07b and A13 on dev.
+  - Some opposite pairs carry the holder's own earlier line in their shared history.
