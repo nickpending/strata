@@ -174,3 +174,26 @@ every statement at the freeze for any fact one identity or a dev scenario holds.
 
 Basis: B costs 2.4e-4 USD per judgment (jev-state), and W is capped at 5e-4. Agent work besides: two opus labellers,
 one opus author and one sonnet scorer. Raw judgments stay local under `corpus/runs/jev-statements/` (gitignored).
+
+## Split, done before any challenger arm was written
+
+- **Coin:** `labels.json` as delivered has sha256 `93181daf41a67d090c7c5396b0b7e3fcfefde76d9259a4d9d796bf8eb21b67b4`
+  (material `5ade12d0bba3b6cdad487617a20c4d6771be4e25ed343e353df891bf8d3cced2`). As an integer mod 3 it is 0, so
+  **A is dev**: 28 scenarios and 40 cases, in `dev-material.json` and `dev-labels.json`.
+- **Held out:** B and C, 56 scenarios, 80 cases, 24 opposite pairs.
+- **Checks:**
+  - the labeller's validator found every set meets the make-up, the `-w` variants equal the world's tables, and every
+    `pair` and `size_pair` points both ways;
+  - no scenario spans two sets, and in all 36 opposite pairs the two cases share their 20 value labels;
+  - `../jev-state/check-build.ts` passes on both splits;
+  - `check-ask.ts` passes on all 120 cases.
+- **Held-out files,** outside the repository until the freeze:
+  - `heldout-material.json` `f62d01e843e14a83db2efbfe76a287a900f2fea04e7aebe0d2be516cf0430ed3`
+  - `heldout-labels.json` `d27b1a64a1de483ab7f46d17799a28fc6c760afa700351f12a9ef032e0096f89`
+- **B on dev** (2 reps, 80 judgments, 0 refused) cost 0.020 USD. Its log is
+  `corpus/runs/jev-statements/2026-11-13T01-18-32-465Z-dev-b/judgments.jsonl`.
+- **The labeller's own notes:**
+  - Security is about 45% of stake touches in every set (25 to 27 of about 57). At least five values reach four
+    stake touches in each set, so the make-up's rule holds, but security dominates more than in jev-state (about a
+    third).
+  - Least sure: A10 and A22 on dev; B11, B14, C02 and C22 held out.
