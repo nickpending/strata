@@ -100,17 +100,17 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 
 ## Candidate features
 
-None yet. The exploration is open.
+- **What an encounter does to an NPC is never measured.** Encounters record who was involved and in what role, but nothing reads, from the NPC's side, what an encounter did to each of its values: how much it helped or hurt the NPC's own stake, and whether the other person acted for or against the value. Without that, no relationship can change in response to what happens. The operator can't see why an NPC would think better or worse of someone.
+- **NPCs hold no standing toward anyone, and relationships never form.** No NPC carries a record of where it stands with each other person. Boot relationships exist only as the rejected prose ties. Nothing marks when encounters between two people have added up to a relationship. So no later block (speech, plans, perception) has a relationship to read, and the operator can't watch one change or form.
 
 ## Deferred
 
-Open, still being explored:
+Left open at close (2026-11-13), none blocking the first build:
 - Which entity types an edge can point at: people, organizations, the world.
 - Asymmetry: whether one betrayal outweighs many favors.
 - Personality as a lens on the weighting.
 - How the kind of relationship (friend, rival, client) emerges.
 - Whether a conversation is one encounter or many.
-- When the summary is generated.
+- When the summary is generated. Until it is decided, the summary is only the authored starting line.
 - Whether beliefs join values in the first mind slice.
-
-Proposed smallest first slice: encounters only, recorded and visible on the bench, with nothing rolled up yet.
+- Squared weighting and an explicit gate stage: issue #17.
