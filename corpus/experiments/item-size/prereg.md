@@ -132,3 +132,18 @@ The report marks every one of these as post-hoc: the arms were chosen after jev-
 
 Basis: B 2.42e-4 and W 2.34e-4 USD per judgment on jev-statements' held-out, so about 0.29 USD expected. Agent work
 besides: two opus labellers and one sonnet scorer.
+
+## Addendum: fresh material delivered, before any Jev run on it
+
+- The scorer was committed at 3022e31, with the post-hoc rescores of the three seen held-out sets. Those decide
+  nothing.
+- The labeller delivered 120 cases in 84 scenarios: three sets of 40, each with 12 opposite pairs, 5 conflict, 5
+  neutral and 6 plain in 3 size pairs. Its validator passes on every make-up rule. No scenario spans two sets.
+  `../jev-state/check-build.ts` passes ("120 cases: typed builder equals size-judgment's; 446 known facts, none after
+  its target").
+- `material.json` sha256 `14d6a1ac97ec6b938754ae73fa2ef438ac12927ffcb2f1cece06ca8281b5c71d`.
+- `labels.json` sha256 `4a822c31f5cad19eeea8a5abaa4ddaca6c2be483fba3867dd3b08e7a66954420`.
+- Both stay outside the repository until the run is scored.
+- Security is the most-touched stake value in every set: 24, 23 and 28 of about 62 to 69 stake touches, as in
+  jev-statements.
+- The second labeller is labelling all 120 cases from `cases2.ts`'s rendering, in parallel with the Jev run.
