@@ -55,6 +55,16 @@ The question: what a relationship is, how one forms, what it holds, and the smal
 18. **Who applies importance: four experiments (corpus/experiments/value-weighting*).** The first two misused Jev, which led to `docs/jev.md`. The third, run under docs/jev.md, tied on accuracy and favoured code-applied importance on robustness. The fourth tested an extra "what the act shows about the actor" question. It added nothing, because the deed questions already covered it and the earlier misses came from weighting. Design B was settled (rudy). Jev asks, per value and without seeing importances, whether the encounter helped or hurt the NPC's own stake, whether the other acted for or against the value, and whether it touched the NPC at all, with a follow-up strength score. Code weights the answers by the NPC's importance. Measured on fresh held-out cases, direction was right on 77%, and on 83% where both labellers agree; the labellers themselves agree on 86 to 93%. Most remaining misses turn on what an act exposes the NPC to (heat, debt). They need the NPC's knowledge in the judgment's state, and the world does not yet carry such facts.
 19. **Values on NPCs (rudy).** Importance is 0 to 4, "for now". The values of Rogue, Glitch and Mux are drafted by the assistant as experiment-grade content.
 
+20. **Ten experiments on the judgment (corpus/experiments: value-weighting-3 and -4, size-judgment, gate-direction, gate-first-e2e, jev-state, jev-statements, item-size).**
+    - The combine is sound: true per-value answers through it reach 0.81 to 0.88.
+    - The size step holds in isolation.
+    - Jev's state shape is not the lever.
+    - The loss is Jev's per-value gate, which fires on untouched values. B's confidence × size product acts as a soft gate on those false fires.
+    - W's concrete, rewritten statements improve the gate on two fresh sets (+0.07 and +0.08), with no case-level loss.
+    - Squared weighting never won a pre-registered test.
+    - Every case-level comparison tied, partly because 56 to 84 scenarios leave intervals of about ±0.1.
+21. **Adopted (rudy, 2026-11-13):** design B with W's statements, and linear weights. An explicit gate stage, with a threshold from blind labels and size not scaled by probability, waits for one powered run (issue #17).
+
 ## Decisions
 
 **Settled**
