@@ -65,6 +65,13 @@ The question: what a relationship is, how one forms, what it holds, and the smal
     - Every case-level comparison tied, partly because 56 to 84 scenarios leave intervals of about ±0.1.
 21. **Adopted (rudy, 2026-11-13):** design B with W's statements, and linear weights. An explicit gate stage, with a threshold from blind labels and size not scaled by probability, waits for one powered run (issue #17).
 
+22. **Standing (rudy, 2026-11-13).**
+    - **What it holds:** one running tally per value, toward one other person. Weights are applied when it is read, so "a prick, but I need him" survives as two separate tallies.
+    - **What moves it:** each encounter adds Jev's per-value effect, weighted by role (direct counts more than witnessed). Decisions read the numbers. Speech reads one generated summary line.
+    - **Its starting value** is authored as typed per-value tallies plus a summary line for voice only. That replaces the rejected ties, and a boot relationship starts formed.
+    - **No fading for now.** If standing ever fades, it fades glacially toward stranger. Memory fading belongs to the memory block.
+    - **Formation is one familiarity total per pair:** every encounter adds a fixed amount plus the size of its weighted effect, good or bad, and the relationship forms when the total crosses a line. Familiarity only grows; good and bad live in the tallies. Before formation the tallies still update, but nothing that reads relationships sees the pair. The fixed amount, the line and the role weights are rudy's numbers, required with no default.
+
 ## Decisions
 
 **Settled**
@@ -99,14 +106,11 @@ None yet. The exploration is open.
 
 Open, still being explored:
 - Which entity types an edge can point at: people, organizations, the world.
-- The standing calculation.
-- Fading over time.
 - Asymmetry: whether one betrayal outweighs many favors.
 - Personality as a lens on the weighting.
 - How the kind of relationship (friend, rival, client) emerges.
 - Whether a conversation is one encounter or many.
 - When the summary is generated.
 - Whether beliefs join values in the first mind slice.
-- Whether a stranger carries any standing.
 
 Proposed smallest first slice: encounters only, recorded and visible on the bench, with nothing rolled up yet.
