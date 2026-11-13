@@ -1,0 +1,3484 @@
+{
+ "cases": [
+  {
+   "id": "a01-rw",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "a01-rs",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "a02-ms",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "a02-mt",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "a03-gw",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a03-gs",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a04-rw",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a04-rt",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "up",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a05-ms",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "a05-mt",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "a06-gw",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a06-gt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a07-gs",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a07-gt",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a08-rw",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a08-rt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a09-mw",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a09-ms",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a10-gs",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a10-gt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a11-rs",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a11-rt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a12-mt",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a12-mw",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-sp1-lo",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-sp1-hi",
+   "direction": "build",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-sp2-lo",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-sp2-hi",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-sp3-lo",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-sp3-hi",
+   "direction": "build",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-c1-rw",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-c2-gt",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-c3-ms",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "a-c4-rs",
+   "direction": "build",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "a-c5-rw",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-n1-rt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-n2-ms",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-n3-gt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-n4-gw",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "a-n5-mw",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b01-gw",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "b01-gs",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "b02-rw",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b02-rs",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b03-ms",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b03-mt",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b04-rw",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b04-rs",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b05-gs",
+   "direction": "build",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "b05-gt",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "b06-gt",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b06-gw",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b07-rs",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b07-rt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b08-ms",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b08-mt",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b09-gs",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b09-gw",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b10-mt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b10-mw",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b11-rs",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b11-rt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b12-mw",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b12-mt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-sp1-lo",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-sp1-hi",
+   "direction": "build",
+   "magnitude": 5,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-sp2-lo",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-sp2-hi",
+   "direction": "detract",
+   "magnitude": 5,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-sp3-lo",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-sp3-hi",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-c1-gw",
+   "direction": "build",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-c2-rs",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-c3-ms",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-c4-gt",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "up",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-c5-rt",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "up",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-n1-gs",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-n2-rw",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-n3-mt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-n4-gt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "b-n5-mw",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c01-rw",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c01-rs",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c02-rt",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c02-rw",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "down",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c03-rt",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c03-rs",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "up",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c04-gw",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c04-gs",
+   "direction": "detract",
+   "magnitude": 4,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c05-gt",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c05-gw",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c06-gs",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "c06-gt",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "c07-ms",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c07-mt",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "down",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "up",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c08-mw",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c08-ms",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c09-mt",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c09-mw",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c10-rt",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c10-rw",
+   "direction": "detract",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c11-gs",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c11-gw",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c12-ms",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "c12-mt",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "up",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "c-sp1-lo",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-sp1-hi",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-sp2-lo",
+   "direction": "detract",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-sp2-hi",
+   "direction": "detract",
+   "magnitude": 5,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "down",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "down",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-sp3-lo",
+   "direction": "build",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-sp3-hi",
+   "direction": "build",
+   "magnitude": 3,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-c1-rw",
+   "direction": "detract",
+   "magnitude": 2,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "down",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-c2-gs",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "up"
+   }
+  },
+  {
+   "id": "c-c3-mt",
+   "direction": "build",
+   "magnitude": 1,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "down",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "up",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-c4-gw",
+   "direction": "build",
+   "magnitude": 5,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "down",
+    "tradition": "none",
+    "benevolence": "up",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-c5-ms",
+   "direction": "detract",
+   "magnitude": 5,
+   "stake": {
+    "self_direction": "down",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "up",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "up",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "down",
+    "benevolence": "down",
+    "universalism": "down"
+   }
+  },
+  {
+   "id": "c-n1-rs",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-n2-gs",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-n3-mt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-n4-gt",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  },
+  {
+   "id": "c-n5-mw",
+   "direction": "neutral",
+   "magnitude": 0,
+   "stake": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   },
+   "deed": {
+    "self_direction": "none",
+    "stimulation": "none",
+    "hedonism": "none",
+    "achievement": "none",
+    "power": "none",
+    "security": "none",
+    "conformity": "none",
+    "tradition": "none",
+    "benevolence": "none",
+    "universalism": "none"
+   }
+  }
+ ]
+}
