@@ -197,3 +197,47 @@ one opus author and one sonnet scorer. Raw judgments stay local under `corpus/ru
     stake touches in each set, so the make-up's rule holds, but security dominates more than in jev-state (about a
     third).
   - Least sure: A10 and A22 on dev; B11, B14, C02 and C22 held out.
+
+## Freeze addendum
+
+Written after tuning and before any held-out run. `arms/b.ts` and `arms/w.ts` are frozen in the commit that adds this
+addendum; nothing in `arms/` changes after it.
+
+- **Only the statements differ.** `check-arms.ts` runs W's final and contender on all 120 dev and held-out cases
+  against a stub Jev, beside B (no call, no label). For `w:w4` and `w:w1` it confirms the same steps over B's state,
+  the same keys, touches unchanged, `READ` unchanged, and the strength levels and words unchanged, with only the
+  statement swapped. No statement names a person, room or item, and none holds a double quote.
+- **W final: `w4`.**
+  - Stake asks "Does what {o} did ...?" and deed asks "In `now`, did {o} ...?". Each statement lists the concrete acts
+    or changes the judgment turns on: orders, debts, shelter, threats brought closer or kept away, help given at the
+    other's own cost. Several carry a boundary clause, such as "other than yourself", "Count only danger that {o}'s
+    act adds" or "rather than only asking someone else to take the risk".
+  - Dev, 4 reps, against B's 2-rep dev run:
+
+    | | E1 | E2 | E3 | E4 build / detract | P1 | P2 among fired | security P1 | benevolence P1 |
+    |---|---|---|---|---|---|---|---|---|
+    | B | 27/35 | 5/12 | 0.661 | 0.266 / 0.221 | 0.750 | 42/43 | 0.748 | 0.511 |
+    | `w4` | 31/35 | 8/12 | 0.781 | 0.262 / 0.186 | 0.893 | 62/62 | 0.768 | 0.890 |
+
+  - Requests: 2. Questions: 48.7 per judgment, against B's 55.3. Cost: 2.35e-4 USD per judgment.
+  - The selection follows "Tuning": w5 had the best P1 (0.896), w3 (0.894) and w4 (0.893) sat within 0.01, and w4
+    had the highest E3 (0.781 against 0.754 and 0.761). The orchestrator rescored that run with `score.ts` and got
+    the same figures.
+- **Contender: `w1`**, the first wording, written before any W answer was read. Dev, 2 reps: E1 28/35, E3 0.710,
+  P1 0.844. It bounds how much of `w4` is fitted to dev.
+- **Read at the freeze.** The orchestrator read all 40 of `w4`'s statements. None names a fact only one identity
+  holds. Some list kinds of things these identities also contain:
+  - "rent" appears in two of the three identities, which held-out shares. It also appears in jev-state's
+    independently written identities.
+  - "a run" and "stim" come from world/.
+  - "a raid", "arrest" and "shelter" appear in neither world/ nor the identities.
+
+  Listing "rent" among the holds a person can use is a kind of thing in this world, not one person's fact. It may
+  still help held-out a little, because held-out shares these identities. The report names this as a limit.
+- **Seen on dev but deciding nothing:** `w4` squared reads E3 0.859, against B-sq's 0.705. W-sq is described only.
+- **Second labeller.** It labelled all 80 held-out cases blind before this freeze. `labels2.json` has sha256
+  `6609d1b78537dc2d91dbf93954c07d216cb25ac08c637518e5470bb0dba95462`.
+- **Spend so far: 0.227 USD.** That is B dev 0.020 and the W author's tuning 0.207.
+- **Held-out next:**
+  - finals B and W, 80 cases × 5 reps = 800 judgments, about 0.19 USD;
+  - secondary, `w:w1`, 80 × 3 reps = 240 judgments, about 0.06 USD.
