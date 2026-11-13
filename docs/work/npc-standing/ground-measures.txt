@@ -1,0 +1,18 @@
+# npc-standing ground measures (2026-11-13)
+
+## M1: earlier-history length in the adopted arm's held-out run (W final)
+$ jq -s '[.[] | select(.final and .arm=="W") | .requests[0].state.earlier | length] | {n: length, max: max, mean: (add/length)}' corpus/runs/jev-statements/2026-11-13T01-36-18-961Z-heldout-final/judgments.jsonl
+{"n":400,"max":5,"mean":2.375}
+
+## M2: who acted in the target event of every measured act case (held-out sets of jev-statements and item-size)
+$ jq '[.scenarios[] as $s | $s.cases[] | ($s.steps[.target]) as $st | select($st.act != null) | {own: ($st.act.actor == .holder), otherActs: ($st.act.actor == .other)}] | group_by(.own, .otherActs) | map({own: .[0].own, otherActs: .[0].otherActs, n: length})' corpus/experiments/jev-statements/heldout-material.json
+[{"own":false,"otherActs":true,"n":70},{"own":true,"otherActs":false,"n":1}]
+$ jq '[.scenarios[] as $s | $s.cases[] | ($s.steps[.target]) as $st | select($st.act != null) | {own: ($st.act.actor == .holder), otherActs: ($st.act.actor == .other)}] | group_by(.own, .otherActs) | map({own: .[0].own, otherActs: .[0].otherActs, n: length})' corpus/experiments/item-size/heldout-material.json
+[{"own":false,"otherActs":true,"n":104}]
+
+## M3: encounters in npc-values' 44 player runs (the four goal sets), by who acted
+runs: perGoal[].run of corpus/experiments/npc-values/{knowledge,blind-1,blind-2,blind-2-spent}.z-ai_glm-5.3-flash.json-object-z-ai-retry.score.json; one encounter per (holder, other recipient, event) from each run's received.jsonl
+{"encounters":178,"otherIsActor":82,"holderIsActor":82,"neither":14}
+
+## M4: size of the adopted arm's weighted case effect, unnormalised (|lin score| x the holder variant's importance sum), role weight 1
+{"n":400,"p10":0.38249999999999984,"p25":1.692,"median":6.054400000000001,"p75":11.3187,"p90":18.955,"max":34.122600000000006}
