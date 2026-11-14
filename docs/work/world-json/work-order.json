@@ -67,8 +67,8 @@
       "unit": "src/engine/definitions.ts",
       "given": "the committed schemas/world.schema.json, values.schema.json, room.schema.json, person.schema.json and item.schema.json",
       "when": "each is parsed and compared with worldJsonSchemas() for its kind",
-      "then": "each equals it, and a rule or description change in definitions.ts without rerunning bun run schemas makes the comparison differ",
-      "atBase": "Base exports no worldJsonSchemas and no schemas/ file exists; the test fails at base.",
+      "then": "each equals it, one committed file exists for every kind in WORLD_FILES and no other, and a rule or description change in definitions.ts without rerunning bun run schemas makes the comparison differ",
+      "atBase": "Base exports no WORLD_FILES or worldJsonSchemas and no schemas/ file exists; the test fails at base.",
       "proof": [
         "tests/world-json.test.ts"
       ]
@@ -89,7 +89,7 @@
       "unit": "world",
       "given": "the JSON files under world/ and tests/worlds/two-tick",
       "when": "each file's $schema is resolved relative to the file",
-      "then": "all 18 files exist (world.json, values.json, each room, person and item) and each names the committed schema of its kind: world.json the world schema, values.json the values schema, rooms/ the room schema, people/ the person schema, items/ the item schema",
+      "then": "all 18 files exist (world.json, values.json, each room, person and item) and each names the committed schema of the kind WORLD_FILES assigns its file name or directory: world.json the world schema, values.json the values schema, rooms/ the room schema, people/ the person schema, items/ the item schema",
       "atBase": "Base holds no JSON world file, so the 18 expected files are missing; the test fails at base.",
       "proof": [
         "tests/world-json.test.ts"
@@ -242,7 +242,7 @@
     }
   ],
   "stakes": [
-    "One source of rules: the zod schemas in src/engine/definitions.ts check the JSON and generate the JSON Schema; the committed schema is a derived artifact, held equal to its source by a test.",
+    "One source of rules: the zod schemas in src/engine/definitions.ts check the JSON and generate the JSON Schema, and one table (WORLD_FILES) maps each kind to its file and schema for the loader, the generator and the tests; the committed schema is a derived artifact, held equal to its source by a test.",
     "Every refusal the TOML loader named still refuses with the same path and rule, the file named .json; a JSON syntax error refuses as json-syntax with an empty path.",
     "The loaded definitions are what they were: $schema and $comment are dropped at the loader and reach no def, snapshot or reader; values_draft is the only added field, typed, by strata-d3's ruling.",
     "No TOML comment's meaning is dropped: field explanations become schema descriptions an editor shows; provenance becomes $comment; the draft mark becomes the typed values_draft.",
