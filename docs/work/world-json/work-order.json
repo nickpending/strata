@@ -1,0 +1,252 @@
+{
+  "workOrder": "world-json",
+  "what": "World definitions gain a JSON form, read by the same rules, and a JSON Schema derived from those rules that each file names in $schema, so an editor validates the file as written; the TOML form is removed and a test keeps it removed.",
+  "why": "rudy wants no TOML in strata's world (#20: \"I dont want any toml..no. json\"); TOML is a reverie carry-over, NPC definitions are about to grow nested data, and a derived JSON Schema lets an editor validate a world file as it is written.",
+  "criteria": [
+    {
+      "id": "C1",
+      "unit": "src/engine/definitions.ts",
+      "holds": true,
+      "given": "world/ and tests/worlds/two-tick as committed",
+      "when": "loadWorld loads each directory",
+      "then": "offerWindowTicks, the values in authored order, the five importance words, every room, every item and every person's id, name, location, ties, places and values equal a hand-written literal of what the TOML files held",
+      "atBase": "Base loads the TOML files into these same definitions; the test passes at base and must keep passing over the JSON files at head.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C2",
+      "unit": "src/engine/definitions.ts",
+      "given": "world/ and tests/worlds/two-tick as committed, and a copy of world/ whose people/mux.json sets values_draft to the string \"yes\"",
+      "when": "loadWorld loads each",
+      "then": "the rogue, glitch and mux definitions carry values_draft true, no two-tick person carries values_draft, and the copy refuses naming people/mux.json, path values_draft and rule invalid_type",
+      "atBase": "Base personSchema has no values_draft, so the loaded definitions lack it and the copy (JSON files only) refuses with missing-file for world.toml; the test fails at base.",
+      "proof": [
+        "tests/values.test.ts"
+      ]
+    },
+    {
+      "id": "C3",
+      "unit": "src/engine/definitions.ts",
+      "given": "a copy of world/ whose files carry $schema and $comment at their root, and a second copy whose rooms/back-room.json adds a root key extra",
+      "when": "loadWorld loads each",
+      "then": "the first loads with no definition carrying a $schema or $comment key, and the second refuses naming rooms/back-room.json, an empty path and rule unrecognized_keys",
+      "atBase": "Base reads world.toml, which the JSON copy lacks, so both loads refuse with missing-file; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C4",
+      "unit": "src/engine/definitions.ts",
+      "given": "a copy of world/ whose items/stimpak.json is cut off mid-object",
+      "when": "the engine boots on it",
+      "then": "boot refuses naming items/stimpak.json, an empty path and rule json-syntax, and no database file is created",
+      "atBase": "Base reads world.toml, which the copy lacks, so it refuses with missing-file and rule missing-file, not json-syntax; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C5",
+      "unit": "src/engine/definitions.ts",
+      "given": "each refusal case the TOML tests broke today (boot C2's five, values V2's eight, knowledge's place case, server's two reset cases), applied as a JSON edit or removal of the same field in a copy of world/",
+      "when": "the engine boots or the server resets on it",
+      "then": "each refuses with the path and rule it refused with under TOML, naming the same file with .json in place of .toml, and no database is created",
+      "atBase": "Base reads world.toml, which the JSON copies lack, so every case refuses with missing-file for world.toml; the tests fail at base.",
+      "proof": [
+        "tests/boot.test.ts",
+        "tests/values.test.ts",
+        "tests/knowledge.test.ts",
+        "tests/server.test.ts"
+      ]
+    },
+    {
+      "id": "C6",
+      "unit": "src/engine/definitions.ts",
+      "given": "the committed schemas/world.schema.json, values.schema.json, room.schema.json, person.schema.json and item.schema.json",
+      "when": "each is parsed and compared with worldJsonSchemas() for its kind",
+      "then": "each equals it, and a rule or description change in definitions.ts without rerunning bun run schemas makes the comparison differ",
+      "atBase": "Base exports no worldJsonSchemas and no schemas/ file exists; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C7",
+      "unit": "src/engine/write-schemas.ts",
+      "given": "an empty temporary directory",
+      "when": "write-schemas runs with that directory as its output",
+      "then": "it holds exactly world.schema.json, values.schema.json, room.schema.json, person.schema.json and item.schema.json, each parsing equal to worldJsonSchemas() for its kind",
+      "atBase": "Base has no write-schemas command; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C8",
+      "unit": "world",
+      "given": "the JSON files under world/ and tests/worlds/two-tick",
+      "when": "each file's $schema is resolved relative to the file",
+      "then": "all 18 files exist (world.json, values.json, each room, person and item) and each names the committed schema of its kind: world.json the world schema, values.json the values schema, rooms/ the room schema, people/ the person schema, items/ the item schema",
+      "atBase": "Base holds no JSON world file, so the 18 expected files are missing; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C9",
+      "unit": "world",
+      "given": "world/ and tests/worlds/",
+      "when": "every file under them is listed recursively",
+      "then": "no file name ends .toml",
+      "atBase": "Base holds 18 .toml world files; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C10",
+      "unit": "src/engine/definitions.ts",
+      "given": "worldJsonSchemas()",
+      "when": "the world, values and person schemas are read",
+      "then": "rules.offer_window_ticks's description says ticks an offer stays open before it lapses unanswered, the values importance description and the person values description each say every value is rated with an integer from 0 to 4 read by the importance words, and the person values_draft description says the importances are a draft",
+      "atBase": "Base schemas carry no descriptions and base exports no worldJsonSchemas; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C11",
+      "unit": "world",
+      "given": "world/values.json, tests/worlds/two-tick/values.json and world/people/rogue.json, glitch.json and mux.json",
+      "when": "each is parsed",
+      "then": "both values.json carry a $comment citing Schwartz (2012), An Overview of the Schwartz Theory of Basic Values, and each of the three person files carries a $comment saying the importances were drafted by the assistant, experiment-grade, rudy 2026-11-10, derived from this world's ties",
+      "atBase": "Base holds no JSON world file; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C12",
+      "unit": "corpus/experiments",
+      "holds": true,
+      "given": "every .ts file under corpus/experiments",
+      "when": "each import specifier naming a path under world/ is resolved from its file",
+      "then": "every one resolves to an existing file",
+      "atBase": "Base's 16 imports name world/values.toml, which exists at base; the test passes there and fails at head unless each import moves with the file.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C13",
+      "unit": "README.md",
+      "given": "README.md",
+      "when": "its repository map is read",
+      "then": "the world/ row says the definitions are JSON, a schemas/ row says it holds the JSON Schemas derived from the loader's rules, and no line names TOML world definitions",
+      "atBase": "Base README says world/ holds the definitions in TOML and has no schemas/ row; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C14",
+      "unit": "docs/work/npc-standing/parked.md",
+      "given": "docs/work/npc-standing/parked.md",
+      "when": "it is read",
+      "then": "it names world/values.json and world.json where it named world/values.toml and world.toml, and names no .toml world file",
+      "atBase": "Base parked.md names world/values.toml and world.toml; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
+    },
+    {
+      "id": "C15",
+      "unit": "bunfig.toml",
+      "holds": true,
+      "given": "bunfig.toml",
+      "when": "harness-boundary parses it",
+      "then": "it is still TOML and pins the install linker to hoisted",
+      "atBase": "Base bunfig.toml is TOML with linker hoisted; the test passes at base and must keep passing.",
+      "proof": [
+        "tests/harness-boundary.test.ts"
+      ]
+    }
+  ],
+  "issues": [
+    20
+  ],
+  "outOfScope": [
+    {
+      "kind": "cost",
+      "summary": "A JSON world file with a duplicate key loads with the last value, where TOML refused it; biome's noDuplicateObjectKeys refuses it in every committed world, so only a world kept outside the repository and loaded by --world goes unchecked.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/world-json/shape/evidence/frequencies.txt: git grep of --world, worldDir and WORLD over src, tests and harness/src",
+        "records": "every world directory strata's code and tests load",
+        "count": 0,
+        "total": 2
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "No test runs the committed JSON Schema as a validator over the world files: no JSON Schema validator is a dependency, so acceptance rests on the schema equalling zod's derivation of the rules that accept every file, and on the operator's editor walk.",
+      "frequency": {
+        "kind": "not-a-case",
+        "reason": "It is a check left to derivation and the operator's editor walk, not a usage path: every committed world file is loaded by the zod rules the schema is derived from, and the drift test holds the schema equal to that derivation."
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "The JSON Schema carries shape rules only: the seven cross-reference rules (exit to names a room, location, tie target, place, value names the catalogue, every value rated, holder) are not expressible in it, so an editor does not flag them and boot still refuses them.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/world-json/shape/evidence/frequencies.txt: grep -oE '\"[a-z]+(-[a-z]+)+\"' src/engine/definitions.ts | sort -u",
+        "records": "every named refusal rule in the loader",
+        "count": 7,
+        "total": 12
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "unique-id (an id defined in two files of one kind) and unique-value-id (a value id repeated in values.json) are not expressible in a per-file JSON Schema either, so an editor does not flag them and boot still refuses them.",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/world-json/shape/evidence/frequencies.txt: grep -oE '\"[a-z]+(-[a-z]+)+\"' src/engine/definitions.ts | sort -u",
+        "records": "every named refusal rule in the loader",
+        "count": 2,
+        "total": 12
+      }
+    },
+    {
+      "kind": "cost",
+      "summary": "Dated records keep the .toml paths they recorded: corpus preregistrations, briefs and comments, closed docs/work design and work-order files, and the closed npc-knowledge and npc-relationships explorations (strata-d3's ruling).",
+      "frequency": {
+        "kind": "measured",
+        "command": "docs/work/world-json/shape/evidence/toml-records.txt: git grep -n .toml over corpus non-.ts files and corpus .ts non-import lines; git grep -l -i toml over docs/work and docs/explorations",
+        "records": "48 corpus prose lines and 13 docs files naming TOML, less parked.md which moves",
+        "count": 60,
+        "total": 61
+      }
+    }
+  ],
+  "walks": [
+    {
+      "criterion": "C8",
+      "when": "after merge, the operator opens world/people/mux.json in VS Code, sets values.power to 5, then hovers rules.offer_window_ticks in world/world.json",
+      "then": "the editor marks power as above the maximum of 4, and the hover shows that ticks are how long an offer stays open before it lapses unanswered",
+      "by": "operator",
+      "operatorOnly": "An editor's live schema diagnostics and hover text render only in the operator's editor window; no session, worker or command can see what the editor shows."
+    }
+  ],
+  "stakes": [
+    "One source of rules: the zod schemas in src/engine/definitions.ts check the JSON and generate the JSON Schema; the committed schema is a derived artifact, held equal to its source by a test.",
+    "Every refusal the TOML loader named still refuses with the same path and rule, the file named .json; a JSON syntax error refuses as json-syntax with an empty path.",
+    "The loaded definitions are what they were: $schema and $comment are dropped at the loader and reach no def, snapshot or reader; values_draft is the only added field, typed, by strata-d3's ruling.",
+    "No TOML comment's meaning is dropped: field explanations become schema descriptions an editor shows; provenance becomes $comment; the draft mark becomes the typed values_draft.",
+    "No TOML file remains under world/ or tests/worlds/, and a test fails when one appears; bunfig.toml stays TOML.",
+    "Every runnable world reader, including the 16 corpus scripts, reads .json; dated records keep the paths they recorded."
+  ]
+}
