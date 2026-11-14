@@ -44,7 +44,7 @@ async function main() {
       touched.set(c.id, c.touched);
     }
   const cases: BuiltCase[] = build(material);
-  const catalogue = (await import("../../../world/values.toml")).default as { values: Value[] };
+  const catalogue = (await import("../../../world/values.json")).default as { values: Value[] };
   const values = catalogue.values;
   for (const [id, items] of touched)
     for (const i of items)

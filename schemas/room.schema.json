@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "exits": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "to": {
+            "type": "string",
+            "minLength": 1
+          },
+          "travel_ticks": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": ["to", "travel_ticks"],
+        "additionalProperties": false
+      }
+    },
+    "$schema": {
+      "description": "The JSON Schema this file follows, for an editor.",
+      "type": "string"
+    },
+    "$comment": {
+      "description": "A note for whoever reads this file.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": ["id", "name", "description", "exits"],
+  "additionalProperties": false
+}

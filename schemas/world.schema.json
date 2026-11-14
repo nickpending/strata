@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "rules": {
+      "type": "object",
+      "properties": {
+        "offer_window_ticks": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Ticks an offer stays open before it lapses unanswered."
+        }
+      },
+      "required": ["offer_window_ticks"],
+      "additionalProperties": false
+    },
+    "$schema": {
+      "description": "The JSON Schema this file follows, for an editor.",
+      "type": "string"
+    },
+    "$comment": {
+      "description": "A note for whoever reads this file.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": ["rules"],
+  "additionalProperties": false
+}

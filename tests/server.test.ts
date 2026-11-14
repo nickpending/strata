@@ -1,6 +1,6 @@
 import { Database } from "bun:sqlite";
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { z } from "zod";
@@ -356,9 +356,10 @@ describe("a reset that cannot boot keeps the current world", () => {
     const [depart] = await api.act({ actor: "glitch", verb: "depart", exit: "east" });
     const before = await api.snapshot();
 
-    const file = join(served.world, "items", "stimpak.toml");
+    const file = join(served.world, "items", "stimpak.json");
+    expect(existsSync(file)).toBe(true);
     const text = readFileSync(file, "utf8");
-    writeFileSync(file, text.replace('holder = "glitch"', 'holder = "nobody"'));
+    writeFileSync(file, JSON.stringify({ ...JSON.parse(text), holder: "nobody" }));
     const refused = await api.post("/api/reset");
     expect(refused.status).toBe(422);
     expect(await refused.json()).toMatchObject({
@@ -572,9 +573,10 @@ describe("the bench page keeps refusals, invalid actions and refused resets apar
       await shows("refused: self-target");
       expect(root.text).not.toContain("invalid action");
 
-      const file = join(served.world, "items", "stimpak.toml");
+      const file = join(served.world, "items", "stimpak.json");
+      expect(existsSync(file)).toBe(true);
       const text = readFileSync(file, "utf8");
-      writeFileSync(file, text.replace('holder = "glitch"', 'holder = "nobody"'));
+      writeFileSync(file, JSON.stringify({ ...JSON.parse(text), holder: "nobody" }));
       root.find("button", "Reset")[0]?.fire("click", {});
       await shows("reset refused");
       expect(root.text).toContain("holder-names-person");

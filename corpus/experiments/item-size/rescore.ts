@@ -23,7 +23,7 @@ const { values: a } = parseArgs({
   options: { calls: { type: "string" }, material: { type: "string" }, out: { type: "string" }, arms: { type: "string" } },
 });
 if (!a.calls || !a.material || !a.out) throw new Error("usage: --calls a.jsonl[,b.jsonl] --material m.json --out f.jsonl");
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 const material = JSON.parse(readFileSync(a.material, "utf8")) as {
   variants: { id: string; importance: Importance }[];
   scenarios: { cases: { id: string; variant: string }[] }[];

@@ -12,7 +12,13 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative } from "node:path";
-import { loadWorld, type WorldDefs } from "../src/engine/definitions.ts";
+import {
+  type ItemDef,
+  loadWorld,
+  type PersonDef,
+  type RoomDef,
+  type WorldDefs,
+} from "../src/engine/definitions.ts";
 import { boot, type Engine } from "../src/engine/engine.ts";
 
 const WORLD = join(import.meta.dir, "..", "world");
@@ -99,48 +105,71 @@ describe("C2: a broken definition refuses naming file, path and rule", () => {
   const cases: {
     name: string;
     file: string;
-    from: string;
-    to: string;
+    /** Break the parsed file in place, returning the value it replaced. */
+    breakIt: (def: Partial<ItemDef & RoomDef & PersonDef>) => unknown;
+    from: unknown;
     path: string;
     rule: string;
   }[] = [
     {
       name: "an item whose holder names no person",
-      file: "items/stimpak.toml",
-      from: 'holder = "glitch"',
-      to: 'holder = "nobody"',
+      file: "items/stimpak.json",
+      breakIt: (item) => {
+        const was = item.holder;
+        item.holder = "nobody";
+        return was;
+      },
+      from: "glitch",
       path: "holder",
       rule: "holder-names-person",
     },
     {
       name: "a room exit whose to names no room",
-      file: "rooms/chrome-cassette.toml",
-      from: 'to = "back-room"',
-      to: 'to = "nowhere"',
+      file: "rooms/chrome-cassette.json",
+      breakIt: (room) => {
+        const exit = room.exits?.east;
+        const was = exit?.to;
+        if (exit) exit.to = "nowhere";
+        return was;
+      },
+      from: "back-room",
       path: "exits.east.to",
       rule: "exit-to-names-room",
     },
     {
       name: "a person whose location names no room",
-      file: "people/mux.toml",
-      from: 'location = "back-room"',
-      to: 'location = "nowhere"',
+      file: "people/mux.json",
+      breakIt: (person) => {
+        const was = person.location;
+        person.location = "nowhere";
+        return was;
+      },
+      from: "back-room",
       path: "location",
       rule: "location-names-room",
     },
     {
       name: "a ties target naming no person",
-      file: "people/rogue.toml",
-      from: 'target = "glitch"',
-      to: 'target = "nobody"',
+      file: "people/rogue.json",
+      breakIt: (person) => {
+        const tie = person.ties?.[0];
+        const was = tie?.target;
+        if (tie) tie.target = "nobody";
+        return was;
+      },
+      from: "glitch",
       path: "ties.0.target",
       rule: "tie-target-names-person",
     },
     {
       name: "a missing required field",
-      file: "items/data-shard.toml",
-      from: 'holder = "rogue"',
-      to: "",
+      file: "items/data-shard.json",
+      breakIt: (item) => {
+        const was = item.holder;
+        delete item.holder;
+        return was;
+      },
+      from: "rogue",
       path: "holder",
       rule: "invalid_type",
     },
@@ -152,9 +181,10 @@ describe("C2: a broken definition refuses naming file, path and rule", () => {
       const world = join(dir, "world");
       cpSync(WORLD, world, { recursive: true });
       const file = join(world, broken.file);
-      const text = readFileSync(file, "utf8");
-      expect(text).toContain(broken.from);
-      writeFileSync(file, text.replace(broken.from, broken.to));
+      expect(existsSync(file)).toBe(true);
+      const def = JSON.parse(readFileSync(file, "utf8"));
+      expect(broken.breakIt(def)).toBe(broken.from);
+      writeFileSync(file, JSON.stringify(def));
 
       const dbPath = join(dir, "world.sqlite");
       const booted = boot(world, { tickMinutes: 10, dbPath });

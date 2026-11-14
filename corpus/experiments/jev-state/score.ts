@@ -201,7 +201,7 @@ if (!args.calls || !args.material || !args.labels) {
 const SEED = Number(args.seed);
 const RESAMPLES = Number(args.resamples);
 const readJson = <T>(p: string) => JSON.parse(readFileSync(p, "utf8")) as T;
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 const KEYS = CHANNELS.flatMap((ch) => values.map((v) => ({ key: itemKey(ch, v.id), ch, v: v.id })));
 
 const material = readJson<MaterialShape>(args.material);

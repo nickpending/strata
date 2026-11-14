@@ -1,0 +1,13 @@
+{
+  "walls": false,
+  "testPaths": {
+    "src/engine/definitions.ts": "tests/world-json.test.ts",
+    "src/engine/write-schemas.ts": "tests/world-json.test.ts",
+    "world": "tests/world-json.test.ts",
+    "schemas": "tests/world-json.test.ts",
+    "corpus/experiments": "tests/world-json.test.ts",
+    "README.md": "tests/world-json.test.ts",
+    "docs/work/npc-standing/parked.md": "tests/world-json.test.ts",
+    "bunfig.toml": "tests/harness-boundary.test.ts"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/room.schema.json",
+  "id": "yard",
+  "name": "Yard",
+  "description": "A bare yard under a flickering lamp.",
+  "exits": {
+    "north": { "to": "hall", "travel_ticks": 2 }
+  }
+}

@@ -22,7 +22,7 @@ import { CHANNELS, type JevQuestion, type JevState, type StateArmModule, type Va
 const [path, list] = Bun.argv.slice(2);
 if (!path || !list) throw new Error("usage: bun check-arms.ts <material.json> <arm>:<variant>,...");
 const cases = buildTyped(JSON.parse(readFileSync(path, "utf8")) as Material);
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 const unticked = (s: string) => s.replace(/`[^`]*`/g, "`_`");
 const READ_LEN = (strength4("security", "X", "stake", "up").instructions as string).indexOf(" Asked:");
 

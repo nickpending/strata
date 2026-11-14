@@ -1,6 +1,0 @@
-id = "chrome-cassette"
-name = "The Chrome Cassette"
-description = "A cramped bar thick with smoke and bass."
-
-[exits]
-east = { to = "back-room", travel_ticks = 1 }

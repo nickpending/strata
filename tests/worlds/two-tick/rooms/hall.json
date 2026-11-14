@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../schemas/room.schema.json",
+  "id": "hall",
+  "name": "Hall",
+  "description": "A long hall that smells of rain.",
+  "exits": {
+    "south": { "to": "yard", "travel_ticks": 2 }
+  }
+}

@@ -107,14 +107,15 @@ describe("K1: a fresh boot knows its authored places and ties, and nothing locat
     }
   });
 
-  test("a place naming no room refuses boot naming people/mux.toml, places.0 and place-names-room", () => {
+  test("a place naming no room refuses boot naming people/mux.json, places.0 and place-names-room", () => {
     const dir = tempDir();
     const world = join(dir, "world");
     cpSync(WORLD, world, { recursive: true });
-    const file = join(world, "people", "mux.toml");
-    const text = readFileSync(file, "utf8");
-    expect(text).toContain('places = ["back-room", "chrome-cassette"]');
-    writeFileSync(file, text.replace(/places = \[[^\]]*\]/, 'places = ["nowhere"]'));
+    const file = join(world, "people", "mux.json");
+    expect(existsSync(file)).toBe(true);
+    const mux = JSON.parse(readFileSync(file, "utf8"));
+    expect(mux.places).toEqual(["back-room", "chrome-cassette"]);
+    writeFileSync(file, JSON.stringify({ ...mux, places: ["nowhere"] }));
     const dbPath = join(dir, "world.sqlite");
     const booted = boot(world, { tickMinutes: 10, dbPath });
     expect(booted.ok).toBe(false);

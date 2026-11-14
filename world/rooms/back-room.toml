@@ -1,6 +1,0 @@
-id = "back-room"
-name = "Back Room"
-description = "A dim room stacked with crates and dead screens."
-
-[exits]
-west = { to = "chrome-cassette", travel_ticks = 1 }

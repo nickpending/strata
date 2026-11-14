@@ -1,0 +1,28 @@
+{
+  "$schema": "../../schemas/person.schema.json",
+  "$comment": "Draft importances: drafted by the assistant, experiment-grade, rudy 2026-11-10, derived from this world's ties.",
+  "id": "glitch",
+  "name": "Glitch",
+  "location": "chrome-cassette",
+  "places": ["back-room", "chrome-cassette"],
+  "ties": [
+    {
+      "target": "rogue",
+      "kind": "lying low on her tolerance",
+      "note": "He knows she is weighing him and that he is a danger to her, and is careful never to give her a reason to decide he is not worth it."
+    }
+  ],
+  "values_draft": true,
+  "values": {
+    "self_direction": 2,
+    "stimulation": 1,
+    "hedonism": 1,
+    "achievement": 1,
+    "power": 0,
+    "security": 4,
+    "conformity": 3,
+    "tradition": 0,
+    "benevolence": 1,
+    "universalism": 1
+  }
+}

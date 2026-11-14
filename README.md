@@ -75,7 +75,8 @@ How strata asks Jev, and where Jev fails: [docs/jev.md](docs/jev.md).
 | `src/adapter/` | strata's side of the harness: hosting a bench for it |
 | `harness/` | The browser harness, its own package with no path into the engine; it reads everything over the bench's routes |
 | `bench/` | The bench page |
-| `world/` | The authored world definitions, in TOML |
+| `world/` | The authored world definitions, in JSON |
+| `schemas/` | The JSON Schemas of the world files, derived from the loader's rules by `bun run schemas`; each world file names its own in `$schema` |
 | `corpus/goals/` | Goal sets, and their committed scores |
 | `corpus/experiments/` | The summaries of model comparisons and experiments |
 | `docs/explorations/` | Design explorations: what was considered, rejected and chosen |

@@ -5,7 +5,13 @@ import { z } from "zod";
 const id = z.string().min(1);
 
 export const worldFileSchema = z.strictObject({
-  rules: z.strictObject({ offer_window_ticks: z.number().int().positive() }),
+  rules: z.strictObject({
+    offer_window_ticks: z
+      .number()
+      .int()
+      .positive()
+      .describe("Ticks an offer stays open before it lapses unanswered."),
+  }),
 });
 
 export const exitSchema = z.strictObject({ to: id, travel_ticks: z.number().int().positive() });
@@ -20,11 +26,15 @@ export const roomSchema = z.strictObject({
 const phrase = z.string().min(1);
 
 /**
- * values.toml: the words for each importance from 0 to 4, and the world's values in their authored
+ * values.json: the words for each importance from 0 to 4, and the world's values in their authored
  * order. Every value id and description is data read from this file, never named in code.
  */
 export const valuesFileSchema = z.strictObject({
-  importance: z.strictObject({ "0": phrase, "1": phrase, "2": phrase, "3": phrase, "4": phrase }),
+  importance: z
+    .strictObject({ "0": phrase, "1": phrase, "2": phrase, "3": phrase, "4": phrase })
+    .describe(
+      "The words for each importance. Every value is rated with an integer from 0 to 4, read by the importance words.",
+    ),
   values: z.array(z.strictObject({ id, description: phrase })).min(1),
 });
 
@@ -37,8 +47,15 @@ export const personSchema = z.strictObject({
   ties: z.array(tieSchema),
   /** The rooms the person knows of from boot. */
   places: z.array(id),
-  /** How much each catalogue value matters to the person, from 0 to 4; every value is rated. */
-  values: z.record(id, z.number().int().min(0).max(4)),
+  values: z
+    .record(id, z.number().int().min(0).max(4))
+    .describe(
+      "How much each catalogue value matters to the person. Every value is rated with an integer from 0 to 4, read by the importance words.",
+    ),
+  values_draft: z
+    .boolean()
+    .optional()
+    .describe("True when this person's importances are a draft, not yet settled."),
 });
 
 export const itemSchema = z.strictObject({
@@ -47,6 +64,41 @@ export const itemSchema = z.strictObject({
   description: z.string().min(1),
   holder: id,
 });
+
+/** The keys any world file may carry at its root for an editor or a reader; the loader drops them. */
+const annotations = {
+  $schema: z.string().optional().describe("The JSON Schema this file follows, for an editor."),
+  $comment: z.string().min(1).optional().describe("A note for whoever reads this file."),
+};
+
+type Annotated<T> = T & { $schema?: string; $comment?: string };
+
+/**
+ * Every kind of world file: the one file it is, or the directory holding one file per definition,
+ * and the schema each file is checked against, its kind's rules plus the root annotations. The
+ * loader and `worldJsonSchemas`, which schemas/ is written from, read this table alone.
+ */
+export const WORLD_FILES = {
+  world: { file: "world.json", schema: worldFileSchema.extend(annotations) },
+  values: { file: "values.json", schema: valuesFileSchema.extend(annotations) },
+  room: { dir: "rooms", schema: roomSchema.extend(annotations) },
+  person: { dir: "people", schema: personSchema.extend(annotations) },
+  item: { dir: "items", schema: itemSchema.extend(annotations) },
+} as const;
+
+export type WorldKind = keyof typeof WORLD_FILES;
+
+export type WorldJsonSchema = z.core.JSONSchema.BaseSchema;
+
+/** Each kind's JSON Schema, derived from its WORLD_FILES schema; `bun run schemas` commits them. */
+export function worldJsonSchemas(): Record<WorldKind, WorldJsonSchema> {
+  return Object.fromEntries(
+    Object.entries(WORLD_FILES).map(([kind, { schema }]): [string, WorldJsonSchema] => [
+      kind,
+      z.toJSONSchema(schema),
+    ]),
+  ) as Record<WorldKind, WorldJsonSchema>;
+}
 
 export type RoomDef = z.infer<typeof roomSchema>;
 export type PersonDef = z.infer<typeof personSchema>;
@@ -58,7 +110,7 @@ export type ValueDef = { id: string; description: string };
 export type WorldDefs = {
   dir: string;
   offerWindowTicks: number;
-  /** The world's values, in values.toml's order. */
+  /** The world's values, in values.json's order. */
   values: ValueDef[];
   /** The words for each importance, indexed 0 to 4. */
   importanceWords: string[];
@@ -82,13 +134,14 @@ function refuse(file: string, path: string, rule: string, message: string): neve
   throw new Refused({ file, path, rule, message: `${file} ${path || "(root)"}: ${message}` });
 }
 
-function parseFile<T>(file: string, schema: z.ZodType<T>): T {
+/** `file` parsed as JSON and checked by `schema`, its root annotations dropped. */
+function parseFile<T>(file: string, schema: z.ZodType<Annotated<T>>): T {
   if (!existsSync(file)) refuse(file, "", "missing-file", "the world directory has no such file");
   let raw: unknown;
   try {
-    raw = Bun.TOML.parse(readFileSync(file, "utf8"));
+    raw = JSON.parse(readFileSync(file, "utf8"));
   } catch (error) {
-    refuse(file, "", "toml-syntax", error instanceof Error ? error.message : String(error));
+    refuse(file, "", "json-syntax", error instanceof Error ? error.message : String(error));
   }
   const parsed = schema.safeParse(raw);
   if (!parsed.success) {
@@ -96,24 +149,27 @@ function parseFile<T>(file: string, schema: z.ZodType<T>): T {
     if (issue === undefined) refuse(file, "", "schema", "failed its schema");
     refuse(file, issue.path.map(String).join("."), issue.code, issue.message);
   }
-  return parsed.data;
+  const def = parsed.data;
+  delete def.$schema;
+  delete def.$comment;
+  return def;
 }
 
-function listToml(dir: string): string[] {
+function listJson(dir: string): string[] {
   if (!existsSync(dir) || !statSync(dir).isDirectory()) {
     refuse(dir, "", "missing-directory", "the world directory has no such subdirectory");
   }
   return readdirSync(dir)
-    .filter((name) => name.endsWith(".toml"))
+    .filter((name) => name.endsWith(".json"))
     .sort()
     .map((name) => join(dir, name));
 }
 
 function loadKind<T extends { id: string }>(
   dir: string,
-  schema: z.ZodType<T>,
+  schema: z.ZodType<Annotated<T>>,
 ): { file: string; def: T }[] {
-  const loaded = listToml(dir).map((file) => ({ file, def: parseFile(file, schema) }));
+  const loaded = listJson(dir).map((file) => ({ file, def: parseFile(file, schema) }));
   const seen = new Set<string>();
   for (const { file, def } of loaded) {
     if (seen.has(def.id)) refuse(file, "id", "unique-id", `id "${def.id}" is defined twice`);
@@ -122,9 +178,9 @@ function loadKind<T extends { id: string }>(
   return loaded.sort((a, b) => a.def.id.localeCompare(b.def.id));
 }
 
-/** values.toml read and checked: its values in file order, each id once, and the importance words. */
+/** values.json read and checked: its values in file order, each id once, and the importance words. */
 function loadValues(file: string): { values: ValueDef[]; importanceWords: string[] } {
-  const parsed = parseFile(file, valuesFileSchema);
+  const parsed = parseFile(file, WORLD_FILES.values.schema);
   const seen = new Set<string>();
   parsed.values.forEach(({ id }, i) => {
     if (seen.has(id)) {
@@ -192,7 +248,7 @@ function checkReferences(
           file,
           `values.${value}`,
           "value-names-catalogue",
-          `value "${value}" names no value in values.toml`,
+          `value "${value}" names no value in values.json`,
         );
       }
     }
@@ -210,17 +266,17 @@ function checkReferences(
 }
 
 /**
- * Read and validate every definition under `dir` (world.toml, values.toml, rooms/, people/,
+ * Read and validate every definition under `dir` (world.json, values.json, rooms/, people/,
  * items/). Nothing is written. The first broken definition refuses the load, naming its file, path
  * and rule.
  */
 export function loadWorld(dir: string): LoadResult {
   try {
-    const world = parseFile(join(dir, "world.toml"), worldFileSchema);
-    const { values, importanceWords } = loadValues(join(dir, "values.toml"));
-    const rooms = loadKind(join(dir, "rooms"), roomSchema);
-    const people = loadKind(join(dir, "people"), personSchema);
-    const items = loadKind(join(dir, "items"), itemSchema);
+    const world = parseFile(join(dir, WORLD_FILES.world.file), WORLD_FILES.world.schema);
+    const { values, importanceWords } = loadValues(join(dir, WORLD_FILES.values.file));
+    const rooms = loadKind(join(dir, WORLD_FILES.room.dir), WORLD_FILES.room.schema);
+    const people = loadKind(join(dir, WORLD_FILES.person.dir), WORLD_FILES.person.schema);
+    const items = loadKind(join(dir, WORLD_FILES.item.dir), WORLD_FILES.item.schema);
     checkReferences(values, rooms, people, items);
     return {
       ok: true,

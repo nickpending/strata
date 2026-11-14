@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": ["target", "kind", "note"],
+        "additionalProperties": false
+      }
+    },
+    "places": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "values": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 4
+      },
+      "description": "How much each catalogue value matters to the person. Every value is rated with an integer from 0 to 4, read by the importance words."
+    },
+    "values_draft": {
+      "description": "True when this person's importances are a draft, not yet settled.",
+      "type": "boolean"
+    },
+    "$schema": {
+      "description": "The JSON Schema this file follows, for an editor.",
+      "type": "string"
+    },
+    "$comment": {
+      "description": "A note for whoever reads this file.",
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "required": ["id", "name", "location", "ties", "places", "values"],
+  "additionalProperties": false
+}

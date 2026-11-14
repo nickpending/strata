@@ -37,15 +37,15 @@ jev-state never ran arm K on held-out. On dev, adding known facts read slightly 
 - **Spend:** a $0.15 ceiling is approved across R1 and R2, and it goes in the criteria's given.
   - R1 is a scripted real-engine run of the judgment on world/.
   - R2 is the four player sets with the judge live, against npc-values' 43 of 44.
-- **Statements:** the 40 per-value statements live in world/values.toml beside each value as `{other}` templates. They are generated from jev-statements' W4 by putting "{other}" for the name, and a test checks them against W4. That keeps value ids out of code, as npc-values committed.
+- **Statements:** the 40 per-value statements live in world/values.json beside each value as `{other}` templates. They are generated from jev-statements' W4 by putting "{other}" for the name, and a test checks them against W4. That keeps value ids out of code, as npc-values committed.
 
 ## Design draft (not recorded)
 
-1. **world.toml `[standing]`:**
+1. **world.json `standing` key:**
    - `familiarity_per_encounter`, `formation_line`, `role_weights.direct` and `role_weights.witnessed` are all required.
    - Boot refuses a missing one with its file, path and rule, and refuses witnessed ≥ direct.
    - The two-tick test world authors them too.
-2. **Person files:** `[[standing]]` entries replace `[[ties]]`. Each has `toward`, `summary` (voice only) and `[standing.tallies]` over every catalogue value.
+2. **Person files:** a `standing` array replaces `ties`. Each entry has `toward`, `summary` (voice only) and a `tallies` object over every catalogue value.
    - Drafts come from the ties notes, marked as drafts: Rogue→Glitch security −4, power +2; Glitch→Rogue security +3, self_direction −2; Mux→Glitch achievement +3, benevolence +3. Every other value is 0.
    - Each summary is the tie's kind and note.
    - Authored pairs start formed. If the NPC-structure exploration gives people more typed facts, redraft from them.

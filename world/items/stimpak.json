@@ -1,0 +1,7 @@
+{
+  "$schema": "../../schemas/item.schema.json",
+  "id": "stimpak",
+  "name": "stimpak",
+  "description": "A street-grade stim injector, its charge gauge flickering amber. One jolt of borrowed steadiness.",
+  "holder": "glitch"
+}

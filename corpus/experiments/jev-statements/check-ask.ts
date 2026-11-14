@@ -14,7 +14,7 @@ import type { Jev, JevQuestion, JevState, Value } from "./contract.ts";
 
 const list = Bun.argv[2];
 if (!list) throw new Error("usage: bun check-ask.ts <material.json>[,...]");
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 const b = g.variants.find((v) => v.id === "as-is")?.judge;
 if (!b) throw new Error("no B as-is");
 const w = judgeWith(statementB);

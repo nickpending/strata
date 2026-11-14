@@ -1,0 +1,6 @@
+{
+  "$schema": "../../../schemas/world.schema.json",
+  "rules": {
+    "offer_window_ticks": 2
+  }
+}

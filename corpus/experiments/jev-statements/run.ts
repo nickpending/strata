@@ -38,7 +38,7 @@ async function main() {
   if (!a.material || !a.tag) throw new Error("--material and --tag are required");
   const material = JSON.parse(readFileSync(a.material, "utf8")) as Material;
   const cases: TypedCase[] = buildTyped(material);
-  const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+  const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
   const keys = CHANNELS.flatMap((ch) => values.map((v) => itemKey(ch, v.id)));
   const importanceOf = (c: TypedCase) => {
     const v = material.variants.find((x) => x.id === c.holder.variant);

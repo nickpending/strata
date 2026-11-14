@@ -10,7 +10,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { loadWorld, type WorldDefs } from "../src/engine/definitions.ts";
+import { loadWorld, type PersonDef, type WorldDefs } from "../src/engine/definitions.ts";
 import { boot, type Engine } from "../src/engine/engine.ts";
 
 const ROOT = join(import.meta.dir, "..");
@@ -57,7 +57,24 @@ function filesUnder(dir: string): string[] {
     .map((entry) => join(entry.parentPath, entry.name));
 }
 
-describe("V1: the world's values and importance words are world/values.toml's, held in definitions", () => {
+type ValuesFile = {
+  importance: Record<string, string>;
+  values: { id: string; description: string }[];
+};
+
+/** Parse `file` in the world copy at `world`, change it in place and write it back changed. */
+function edit<T>(world: string, file: string, change: (json: T) => void): void {
+  const at = join(world, file);
+  expect({ file, exists: existsSync(at) }).toEqual({ file, exists: true });
+  const text = readFileSync(at, "utf8");
+  const json: T = JSON.parse(text);
+  change(json);
+  const changed = JSON.stringify(json);
+  expect(changed).not.toBe(JSON.stringify(JSON.parse(text)));
+  writeFileSync(at, changed);
+}
+
+describe("V1: the world's values and importance words are world/values.json's, held in definitions", () => {
   test("defs.values and defs.importanceWords equal the catalogue entry for entry, and src/ names neither", () => {
     const defs = committedDefs();
     const { values, importance_scale } = catalogue();
@@ -97,79 +114,81 @@ describe("V2: a broken catalogue or importance table refuses boot naming file, p
     /** Break the copy at `world`. */
     breakIt: (world: string) => void;
   };
-  const edit = (world: string, file: string, change: (text: string) => string) => {
-    const at = join(world, file);
-    expect({ file, exists: existsSync(at) }).toEqual({ file, exists: true });
-    const text = readFileSync(at, "utf8");
-    const changed = change(text);
-    expect(changed).not.toBe(text);
-    writeFileSync(at, changed);
-  };
   const cases: Broken[] = [
     {
-      name: "values.toml removed",
-      file: "values.toml",
+      name: "values.json removed",
+      file: "values.json",
       path: "",
       rule: "missing-file",
-      breakIt: (world) => rmSync(join(world, "values.toml"), { force: true }),
+      breakIt: (world) => rmSync(join(world, "values.json"), { force: true }),
     },
     {
-      name: "world.toml removed",
-      file: "world.toml",
+      name: "world.json removed",
+      file: "world.json",
       path: "",
       rule: "missing-file",
-      breakIt: (world) => rmSync(join(world, "world.toml")),
+      breakIt: (world) => rmSync(join(world, "world.json"), { force: true }),
     },
     {
-      name: "a values.toml whose second entry repeats the first's id",
-      file: "values.toml",
+      name: "a values.json whose second entry repeats the first's id",
+      file: "values.json",
       path: "values.1.id",
       rule: "unique-value-id",
       breakIt: (world) =>
-        edit(world, "values.toml", (text) =>
-          text.replace('id = "stimulation"', 'id = "self_direction"'),
-        ),
+        edit<ValuesFile>(world, "values.json", (file) => {
+          const second = file.values[1];
+          if (second) second.id = "self_direction";
+        }),
     },
     {
-      name: "a values.toml with importance key 4 removed",
-      file: "values.toml",
+      name: "a values.json with importance key 4 removed",
+      file: "values.json",
       path: "importance.4",
       rule: "invalid_type",
-      breakIt: (world) => edit(world, "values.toml", (text) => text.replace(/^4 = .*\n/m, "")),
+      breakIt: (world) =>
+        edit<ValuesFile>(world, "values.json", (file) => {
+          delete file.importance["4"];
+        }),
     },
     {
-      name: "mux.toml's [values] missing benevolence",
-      file: "people/mux.toml",
+      name: "mux.json's values missing benevolence",
+      file: "people/mux.json",
       path: "values.benevolence",
       rule: "value-rated",
       breakIt: (world) =>
-        edit(world, "people/mux.toml", (text) => text.replace(/^benevolence = .*\n/m, "")),
+        edit<PersonDef>(world, "people/mux.json", (mux) => {
+          delete mux.values.benevolence;
+        }),
     },
     {
-      name: "mux.toml's [values] naming greed = 2",
-      file: "people/mux.toml",
+      name: "mux.json's values naming greed: 2",
+      file: "people/mux.json",
       path: "values.greed",
       rule: "value-names-catalogue",
       breakIt: (world) =>
-        edit(world, "people/mux.toml", (text) =>
-          text.replace(/^universalism = (.*)\n/m, "universalism = $1\ngreed = 2\n"),
-        ),
+        edit<PersonDef>(world, "people/mux.json", (mux) => {
+          mux.values.greed = 2;
+        }),
     },
     {
-      name: "mux.toml's power = 5",
-      file: "people/mux.toml",
+      name: "mux.json's power: 5",
+      file: "people/mux.json",
       path: "values.power",
       rule: "too_big",
       breakIt: (world) =>
-        edit(world, "people/mux.toml", (text) => text.replace(/^power = .*$/m, "power = 5")),
+        edit<PersonDef>(world, "people/mux.json", (mux) => {
+          mux.values.power = 5;
+        }),
     },
     {
-      name: "mux.toml's power = 2.5",
-      file: "people/mux.toml",
+      name: "mux.json's power: 2.5",
+      file: "people/mux.json",
       path: "values.power",
       rule: "invalid_type",
       breakIt: (world) =>
-        edit(world, "people/mux.toml", (text) => text.replace(/^power = .*$/m, "power = 2.5")),
+        edit<PersonDef>(world, "people/mux.json", (mux) => {
+          mux.values.power = 2.5;
+        }),
     },
   ];
 
@@ -192,9 +211,6 @@ describe("V2: a broken catalogue or importance table refuses boot naming file, p
     });
   }
 });
-
-const DRAFT_COMMENT =
-  "# Draft importances (experiment-grade, drafted by the assistant, rudy 2026-11-10); derived from this world's ties.";
 
 describe("V3: Rogue, Glitch and Mux carry the drafted importances, each file marked as a draft", () => {
   const ORDER = [
@@ -227,14 +243,36 @@ describe("V3: Rogue, Glitch and Mux carry the drafted importances, each file mar
     }
   });
 
-  test("each file's text holds the draft comment directly above its [values] table", () => {
-    for (const person of Object.keys(DRAFTS)) {
-      const text = readFileSync(join(WORLD, "people", `${person}.toml`), "utf8");
-      expect({ person, marked: text.includes(`${DRAFT_COMMENT}\n[values]\n`) }).toEqual({
-        person,
-        marked: true,
-      });
-    }
+  test("each drafted person's definition is marked values_draft, and no two-tick person is", () => {
+    const defs = committedDefs();
+    expect(defs.people.map(({ id, values_draft }) => ({ id, values_draft }))).toEqual(
+      Object.keys(DRAFTS)
+        .sort()
+        .map((id) => ({ id, values_draft: true })),
+    );
+    const twoTick = loadWorld(join(ROOT, "tests", "worlds", "two-tick"));
+    if (!twoTick.ok) throw new Error(twoTick.refusal.message);
+    expect(twoTick.defs.people.length).toBeGreaterThan(0);
+    expect(twoTick.defs.people.filter((person) => "values_draft" in person)).toEqual([]);
+  });
+
+  test("a values_draft that is not a boolean refuses boot naming people/mux.json, values_draft and invalid_type", () => {
+    const dir = tempDir();
+    const world = join(dir, "world");
+    cpSync(WORLD, world, { recursive: true });
+    edit<Record<string, unknown>>(world, "people/mux.json", (mux) => {
+      mux.values_draft = "yes";
+    });
+    const dbPath = join(dir, "world.sqlite");
+    const booted = boot(world, { tickMinutes: 10, dbPath });
+    expect(booted.ok).toBe(false);
+    if (booted.ok) return;
+    expect(booted.refusal).toMatchObject({
+      file: join(world, "people", "mux.json"),
+      path: "values_draft",
+      rule: "invalid_type",
+    });
+    expect(existsSync(dbPath)).toBe(false);
   });
 });
 

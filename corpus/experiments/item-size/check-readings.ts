@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 import type { Value } from "../jev-statements/contract.ts";
 import { ARMS, ASK_STRENGTH_FROM, answersOf, type LoggedRequest, readingsOf } from "./readings.ts";
 
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 const files = (Bun.argv[2] ?? "").split(",").filter(Boolean);
 if (!files.length) throw new Error("usage: bun check-readings.ts <judgments.jsonl>[,...]");
 const only = Bun.argv[3] ? new Set(Bun.argv[3].split(",")) : null;

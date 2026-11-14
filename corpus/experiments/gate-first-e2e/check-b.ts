@@ -25,7 +25,7 @@ const material = JSON.parse(readFileSync(materialPath, "utf8")) as {
   scenarios: { cases: { id: string; variant: string }[] }[];
 };
 const variantOf = new Map(material.scenarios.flatMap((s) => s.cases.map((c) => [c.id, c.variant] as const)));
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 
 const toHarness = (a: V4Answer): JevAnswer =>
   a.type === "noul"

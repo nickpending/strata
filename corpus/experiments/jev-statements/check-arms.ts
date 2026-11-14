@@ -24,7 +24,7 @@ import { CHANNELS, type Dir, type Jev, type JevQuestion, type JevState, type Sta
 
 const [paths, list] = Bun.argv.slice(2);
 if (!paths || !list) throw new Error("usage: bun check-arms.ts <material.json>[,...] w:<variant>[,...]");
-const values = ((await import("../../../world/values.toml")).default as { values: Value[] }).values;
+const values = ((await import("../../../world/values.json")).default as { values: Value[] }).values;
 const cases = paths.split(",").flatMap((p) => buildTyped(JSON.parse(readFileSync(p, "utf8")) as Material));
 const b = g.variants.find((v) => v.id === "as-is")?.judge;
 if (!b) throw new Error("no B as-is");
