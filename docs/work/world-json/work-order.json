@@ -173,6 +173,17 @@
       "proof": [
         "tests/harness-boundary.test.ts"
       ]
+    },
+    {
+      "id": "C16",
+      "unit": "schemas",
+      "given": "the committed schemas/<kind>.schema.json files and the 18 JSON world files under world/ and tests/worlds/two-tick, and a copy of world/people/mux.json with values.power set to 5",
+      "when": "ajv (Ajv2020) compiles each kind's committed schema and validates every world file of that kind against it, then validates the copy against the person schema",
+      "then": "every committed world file is valid, and the copy is invalid with an error at instance path /values/power for keyword maximum",
+      "atBase": "Base has no schemas/ files, no JSON world files and no ajv dependency; the test fails at base.",
+      "proof": [
+        "tests/world-json.test.ts"
+      ]
     }
   ],
   "issues": [
@@ -188,14 +199,6 @@
         "records": "every world directory strata's code and tests load",
         "count": 0,
         "total": 2
-      }
-    },
-    {
-      "kind": "cost",
-      "summary": "No test runs the committed JSON Schema as a validator over the world files: no JSON Schema validator is a dependency, so acceptance rests on the schema equalling zod's derivation of the rules that accept every file, and on the operator's editor walk.",
-      "frequency": {
-        "kind": "not-a-case",
-        "reason": "It is a check left to derivation and the operator's editor walk, not a usage path: every committed world file is loaded by the zod rules the schema is derived from, and the drift test holds the schema equal to that derivation."
       }
     },
     {
@@ -236,13 +239,14 @@
     {
       "criterion": "C8",
       "when": "after merge, the operator opens world/people/mux.json in VS Code, sets values.power to 5, then hovers rules.offer_window_ticks in world/world.json",
-      "then": "the editor marks power as above the maximum of 4, and the hover shows that ticks are how long an offer stays open before it lapses unanswered",
+      "then": "the editor resolves each file's relative $schema: it marks power as above the maximum of 4, and the hover shows that ticks are how long an offer stays open before it lapses unanswered",
       "by": "operator",
-      "operatorOnly": "An editor's live schema diagnostics and hover text render only in the operator's editor window; no session, worker or command can see what the editor shows."
+      "operatorOnly": "Whether an editor resolves a relative $schema path and renders its diagnostics and hover text shows only in the operator's editor window; ajv's validation is the test's, the editor's resolution of the path is not observable by any session, worker or command."
     }
   ],
   "stakes": [
     "One source of rules: the zod schemas in src/engine/definitions.ts check the JSON and generate the JSON Schema, and one table (WORLD_FILES) maps each kind to its file and schema for the loader, the generator and the tests; the committed schema is a derived artifact, held equal to its source by a test.",
+    "The committed JSON Schema is run, not inferred: ajv validates every committed world file against its kind's schema and rejects a known-bad file.",
     "Every refusal the TOML loader named still refuses with the same path and rule, the file named .json; a JSON syntax error refuses as json-syntax with an empty path.",
     "The loaded definitions are what they were: $schema and $comment are dropped at the loader and reach no def, snapshot or reader; values_draft is the only added field, typed, by strata-d3's ruling.",
     "No TOML comment's meaning is dropped: field explanations become schema descriptions an editor shows; provenance becomes $comment; the draft mark becomes the typed values_draft.",
